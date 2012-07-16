@@ -1,0 +1,15 @@
+{
+    "name": "superdweebie/sijit",
+    "description": "Provides Dojo extensions",
+    "type": "library",
+    "keywords": [
+        "dojo"
+    ],
+    "homepage": "http://github.com/superdweebie/sijit",
+    "authors": [
+        {
+            "name": "Tim Roediger",
+            "email": "superdweebie@gmail.com"
+        }
+    ]
+}
