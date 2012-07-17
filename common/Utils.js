@@ -2,14 +2,12 @@ define ([
         'dojo/_base/declare',
         'dojo/_base/config'
     ],
-    function(declare, config)
-    {
+    function (declare, config) {
         // module:
-        //		sijit/Utils
+        //		sijit/common/Utils
 
-        var utils = declare
-        (
-            'sijit.Utils',
+        var utils = declare (
+            'sijit.common.Utils',
             null,
             {
                 // summary:

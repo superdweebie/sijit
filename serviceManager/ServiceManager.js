@@ -4,7 +4,7 @@ define([
         'dojo/_base/lang',
         'dijit/registry',
         'dojo/aspect',
-        'sijit/Utils'
+        'sijit/common/Utils'
     ],
     function (
         declare,
@@ -19,7 +19,7 @@ define([
 
         var serviceManager = declare
         (
-            'sds.serviceManager.ServiceManager',
+            'sijit.serviceManager.ServiceManager',
             null,
             {
                 // summary:
@@ -32,38 +32,43 @@ define([
                 // example:
                 // |    errorService: {
                 // |        moduleName: 'sijit/errorService/ErrorService',
-                // |        vars: {
+                // |        variable: {
                 // |            dialogTitle: 'Ahhhh Error!'
                 // |        }
-                // |        syncObj: {
+                // |        syncObject: {
                 // |            errorApi: 'errorApi'
                 // |        }
-                // |        asyncObj: {
+                // |        asyncObject: {
                 // |            status: 'status',
-                // |            errorDialog: 'sds/services/ErrorService/ErrorDialog'
+                // |            errorDialog: 'sijit/errorController/ErrorDialog'
                 // |        }
                 // |    }
                 //
                 // The above config describes how to create an instance of the 'sijit/errorService/ErrorService'.
-                // When `serviceManager.get('errorService')` this object will be returned.
+                // When `serviceManager.getObject('errorService')` this object will be returned.
                 //
                 // The moduleName attribute defines which module to load. If not already loaded, it will be loaded
                 // async.
                 //
-                // The vars object is an associatvie array of values to inject into the object. In this case,
+                // The variable object is an associatvie array of values to inject into the object. In this case,
                 // errorService.dialogTitle will be set to 'Ahhhh Error!'
                 //
-                // The syncObj is an associative array of object to load with the serviceManager and inject. Once injected,
-                // they can be used as normal.
+                // The syncObject is an associative array of object to load with the serviceManager
+                // and inject. Once injected, they can be used as normal.
                 //
-                // The asyncObj is an associatvie array of objects to inject loading functions for.
-                // An asyncObj doesn't inject the object itself, but four functions:
+                // The asyncObject is an associatvie array of objects to inject loading functions for.
+                // An asyncObject doesn't inject the object itself, but some functions:
+                //    createObject
+                //    getObject
+                //
+                // If the asyncObject's config is marked as stateful: true, then it has and additional three functions
+                // injected:
                 //    get
                 //    set
                 //    watch
-                //    use
                 //
-                // AsyncObj injections allow the lazy loading of dependencies - they are only loaded when they are called.
+                // AsyncObject injections allow the lazy loading of dependencies - they are only
+                // loaded when they are called.
                 //
                 // At this point in time, the ServiceManager is meant to be used as a singleton, retrived with
                 // `getInstance()`
@@ -73,7 +78,7 @@ define([
                 //      more than once, it is retrieved from this array
                 _instances: [],
 
-                // config: Object
+                // _config: Object
                 //      The configuration object. Defines what to inject into objects
                 _config: {},
 
@@ -83,28 +88,13 @@ define([
                     //     Attatches to the registry, so that declarively created dijits can be injected
                     aspect.after(registry, 'add', lang.hitch(this, function(widget){this.injectDijit(widget)}), true);
                 },
-
-                _get: function(/* String */identifier){
+                _createObject: function(/*string*/ identifier) {
                     // summary:
-                    //     Used to get an object with the supplied identifier
+                    //     Used to create an object with the supplied identifier
                     // tags:
                     //     protected
 
-                    //Check for already created instance
-                    for(var index in this._instances){
-                        if (this._instances[index].identifier == identifier){
-                            return this._instances[index].object;
-                        }
-                    }
-
-                    var config = this.getSingleConfig(identifier);
-
-                    //Check to see if a dijit is wanted
-                    if (config && config.dijitId){
-                        var object = registry.byId(config.dijitId);
-                        object = this._inject(object, config);
-                        return object;
-                    }
+                    var config = this.getObjectConfig(identifier);
 
                     //Check for moduleName alias
                     var moduleName = identifier;
@@ -126,9 +116,64 @@ define([
 
                     return deferredObject;
                 },
-                _inject: function(object, config){
+                _getObject: function(/*string*/ identifier){
                     // summary:
-                    //     Used to inject an object
+                    //     Used to get an object with the supplied identifier
+                    // tags:
+                    //     protected
+
+                    var index;
+
+                    //Check for already created instance
+                    for(index in this._instances){
+                        if (this._instances[index].identifier == identifier){
+                            return this._instances[index].object;
+                        }
+                    }
+
+                    var config = this.getObjectConfig(identifier);
+
+                    //Check to see if a dijit is wanted
+                    var object = this._getRawDijitObject(identifier);
+                    if (object) {
+                        return this._inject(object, config);
+                    }
+
+                    //Create instance
+                    return this._createObject(identifier);
+                },
+                _getRawDijitObject: function(/*string*/ identifier){
+                    // summary:
+                    //     Returns an uninjected dijit
+                    // tags:
+                    //     protected
+
+                    var config = this.getObjectConfig(identifier);
+
+                    var dijitId = identifier
+                    if (config && config.dijitId) {
+                        dijitId = config.dijitId;
+                    }
+                    return registry.byId(dijitId);
+                },
+                _isStateful: function(/*string*/ identifier){
+                    // summary:
+                    //     Checks if an identifier is a dijit, or marked as isStateful=true
+                    // tags:
+                    //     protected
+
+                    var config = this.getObjectConfig(identifier);
+
+                    if (this._getRawDijitObject(identifier) || (config && config.isStateful)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                },
+                _inject: function(/* object */ object, /* object */ config){
+                    // summary:
+                    //     Used to inject an object with the objects defined in the
+                    //     supplied config
                     //
                     // tags:
                     //     protected
@@ -138,47 +183,61 @@ define([
                         return object;
                     }
 
+                    var attr;
+
                     //Inject variables
-                    for (var attr in config.vars){
-                        object[attr] = config.vars[attr];
+                    for (attr in config.variable){
+                        object[attr] = config.variable[attr];
                     }
 
                     //Inject async object functions
-                    for (var attr in config.asyncObj){
-                        object[attr] = this._injectAsyncObj(config.asyncObj[attr]);
+                    for (attr in config.asyncObject){
+                        object[attr] = this._injectAsyncObject(config.asyncObject[attr]);
                     }
 
                     //Inject sync objects
-                    for (var attr in config.syncObj){
-                        this.get(config.syncObj[attr]).when(function(syncObj){
-                            object[attr] = syncObj;
+                    for (attr in config.syncObject){
+                        Deferred.when(this.getObject(config.syncObject[attr]), function(syncObject){
+                            object[attr] = syncObject;
                         });
                     }
                     return object;
                 },
-                _injectAsyncObj: function(asyncIdentity){
+                _injectAsyncObject: function(asyncIdentity){
                     // summary:
                     //     Injects a set of functions that can be used to access an object async
                     //
                     // tags:
                     //      protected
 
-                    return {
-                        get: lang.hitch(this, function(){
-                            return this.get(asyncIdentity);
+                    var asyncObject = {
+                        createObject: lang.hitch(this, function(){
+                            return this.createObject(asyncIdentity);
                         }),
-                        set: lang.hitch(this, function(property, value){
-                            return this.set(asyncIdentity, property, value);
-                        }),
-                        watch: lang.hitch(this, function(property, callback){
-                            Deferred.when(this.get(asyncIdentity), function(object){
-                                object.watch(property, callback);
-                            });
-                        }),
-                        use: lang.hitch(this, function(callback){
-                            Deferred.when(this.get(asyncIdentity), callback);
+                        getObject: lang.hitch(this, function(){
+                            return this.getObject(asyncIdentity);
                         })
                     };
+
+                    // Inject objects which are dijits, or marked as isStateful with extra methods
+                    if (this._isStateful(asyncIdentity)) {
+                        asyncObject.get = lang.hitch(this, function(property){
+                            return this.get(asyncIdentity, property);
+                        });
+                        asyncObject.set = lang.hitch(this, function(property, value){
+                            return this.set(asyncIdentity, property, value);
+                        });
+                        asyncObject.watch = lang.hitch(this, function(property, callback){
+                            return this.watch(asyncIdentity, property, callback);
+                        });
+                    }
+                    return asyncObject;
+                },
+                clearInstanceCache: function(){
+                    // summary:
+                    //     Empties the cached instance array
+                    
+                    this._instances = [];
                 },
                 mergeConfig: function(/* object */merge){
                     // summary:
@@ -195,40 +254,106 @@ define([
                 setConfig: function(/* object */ config){
                     this._config = config;
                 },
-                setSingleConfig: function(/* string */ identifier, /* object */ config) {
+                setObjectConfig: function(/* string */ identifier, /* object */ config) {
                     // summary:
                     //     Set the config object for a particular identifier
-                    
+
                     this._config[identifier] = config;
                 },
-                getSingleConfig: function(/* string */identifier){
+                getObjectConfig: function(/* string */identifier){
                     // summary:
                     //     Return the config object for a particular identifier
 
                     for(var alias in this._config){
                         if (alias == identifier){
-                            return this.config[alias];
+                            return this._config[alias];
                         }
                     }
                     return null;
                 },
-                get: function(identifier){
-                    return this._get(identifier);
+                createObject: function(/*string*/ identifier){
+                    // summary:
+                    //     Create a new instance of identifier.
+                    //     Will replace cached copy of identifier, if it exists
+
+                    return this._createObject(identifier);
                 },
-                set: function(identifier, property, value){
-                    Deferred.when(this.get(identifier), function(object){
+                getObject: function(/*string*/ identifier){
+                    // summary:
+                    //     Return a deferred that will resolve to the identifier requested.
+                    //     Will return cached instance if one exists.
+
+                    return this._getObject(identifier);
+                },
+                get: function(/*string*/ identifier, /*string*/ property) {
+                    // summary:
+                    //     Get the property value of the identifier. This may happen async.
+                    //     The returned deferred will resovle to the property value when the get is complete.
+                    //     This will only work for objects are dijits or configured as isStateful
+                    var deferredSet = new Deferred();
+
+                    if (!this._isStateful(identifier)){
+                        throw ({
+                            name: 'ObjectNotStateful',
+                            message: 'get only works for dijits and objects marked as isStateful'
+                        });
+                    }
+
+                    Deferred.when(this.getObject(identifier), function(object){
+                        deferredSet.resolve(object.get(property));
+                    });
+
+                    return deferredSet;
+                },
+                set: function(/*string*/ identifier, /*string*/ property, /*mixed*/ value){
+                    // summary:
+                    //     Set the property of the identifier to a value. This may happen async.
+                    //     The returned deferred will resovle to true when the set is complete.
+                    //     This will only work for objects that are configured as dojo\Stateful
+
+                    var deferredSet = new Deferred();
+
+                    if (!this._isStateful(identifier)){
+                        throw ({
+                            name: 'ObjectNotStateful',
+                            message: 'set only works for dijits and objects marked as isStateful'
+                        });
+                    }
+
+                    Deferred.when(this.getObject(identifier), function(object){
                         object.set(property, value);
+                        deferredSet.resolve(true);
                     });
+
+                    return deferredSet;
                 },
-                watch: function(identifier, property, callback){
-                    Deferred.when(this.get(identifier), function(object){
-                        object.watch(property, callback);
+                watch: function(/* string */ identifier, /* string */ property, /* function */ callback){
+                    // summary:
+                    //     Apply a watch on the property of the identifier. Callback will
+                    //     be called when the watch is activated. Applying the watch may happen async.
+                    //     The returned deferred will resovle to the watchHandle when the watch apply is complete.
+                    //     This will only work for objects that are configured as dojo\Stateful
+
+                    var deferredWatch = new Deferred();
+
+                    if (!this._isStateful(identifier)){
+                        throw ({
+                            name: 'ObjectNotStateful',
+                            message: 'watch only works for dijits and objects marked as isStateful'
+                        });
+                    }
+
+                    Deferred.when(this.getObject(identifier), function(object){
+                        deferredWatch.resolve(object.watch(property, callback));
                     });
+
+                    return deferredWatch;
                 },
-                use: function(identifier, callback){
-                    Deferred.when(this.get(identifier), callback);
-                },
-                inject: function(object, identifier){
+                inject: function(/* object */ object, /* string */ identifier){
+                    // summary:
+                    //     Use inject to inject an object created outside the serviceManager
+                    //     with the serviceManager config
+
                     var config = this.getObjectConfig(identifier);
                     if (config){
                         object = this._inject(object, config);
@@ -236,9 +361,14 @@ define([
                     return object;
                 },
                 injectDijit: function(widget){
-                    for(var alias in this.config){
-                        var config = this.config[alias];
-                        if (config.dijitId == widget.id){
+                    // summary:
+                    //     Use injectDijit to inject a dijit instance with the serviceManager config
+
+                    var dijitId = widget.get('id');
+
+                    for(var alias in this._config){
+                        var config = this._config[alias];
+                        if (alias == dijitId || config.dijitId == dijitId){
                             this._inject(widget, config);
                         }
                     }
@@ -246,8 +376,12 @@ define([
             }
         );
         serviceManager._instance = undefined;
+
         serviceManager.getInstance = function ()
         {
+            // summary:
+            //     Get the singleton instance of the serviceManager
+
             if (!serviceManager._instance)
             {
                 serviceManager._instance = new serviceManager();
@@ -257,5 +391,3 @@ define([
         return serviceManager;
     }
 );
-
-

@@ -1,6 +1,6 @@
 define ([
         'dojo/_base/declare',
-        'sijit/service/ServiceManager'
+        'sijit/serviceManager/ServiceManager'
     ],
     function (
         declare,

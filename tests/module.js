@@ -1,8 +1,7 @@
 define([
-    'sijit/tests/testUtils',
-	'sijit/bootstrap/tests/module',
-    'sijit/serviceManager/tests/module'
-    //'sijit/AuthService/tests/module',
-    //'sijit/ErrorService/tests/module',
-    //'sijit/ObjectService/tests/module'
+    'sijit/common/tests/module',
+    'sijit/bootstrap/tests/module',
+    'sijit/serviceManager/tests/module',
+    'sijit/authController/tests/module',
+    'sijit/errorController/tests/module'
 ], 1);

@@ -1,7 +1,7 @@
 define([
         'doh/main',
-        'sijit/service/ServiceManagerAwareMixin',
-        'sijit/service/ServiceManager'
+        'sijit/serviceManager/ServiceManagerAwareMixin',
+        'sijit/serviceManager/ServiceManager'
     ],
     function(
         doh,
@@ -9,7 +9,7 @@ define([
         ServiceManager
     ){
 
-        doh.register("sijit.tests.ServiceManagerAwareMixin", [
+        doh.register("sijit.serviceManager.tests.ServiceManagerAwareMixin", [
             function serviceManagerAwareMixinTest(doh){
                 var serviceManagerAwareMixin = new ServiceManagerAwareMixin();
 

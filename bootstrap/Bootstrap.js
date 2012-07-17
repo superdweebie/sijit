@@ -1,7 +1,7 @@
 define ([
         'dojo/_base/declare',
         'dojo/_base/connect',
-        'sijit/service/ServiceManagerAwareMixin',
+        'sijit/serviceManager/ServiceManagerAwareMixin',
         'dijit/_Widget'
     ],
     function (
@@ -71,7 +71,7 @@ define ([
                     //		Configures the serviceManager
 
                     var serviceManager = this.serviceManager();
-                    serviceManager.config = this.serviceManagerDefaultConfig;
+                    serviceManager.setConfig(this.serviceManagerDefaultConfig);
                     serviceManager.mergeConfig(this.serviceManagerConfig);
                 },
                 startup: function() {
