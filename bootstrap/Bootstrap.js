@@ -29,8 +29,8 @@ define ([
                 // serviceManagerDefaultConfig: object
                 //		Default config to define injections in to object
                 serviceManagerDefaultConfig: {
-                    authService: {
-                        moduleName: 'sijit/service/authService/AuthService',
+                    authController: {
+                        moduleName: 'sijit/authController/AuthController',
                         vars: {
                             authApiMap: undefined,
                             loginPostBootstrap: undefined,
@@ -39,33 +39,26 @@ define ([
                         },
                         asyncObj: {
                             status: 'status',
-                            objectService: 'objectService',
-                            pageLoaderService: 'pageLoaderService',
-                            errorService: 'errorService',
-                            recoverPasswordDialog: 'sijit/service/authService/RecoverPasswordDialog',
-                            registerDialog: 'sijit/service/authService/RegisterDialog',
-                            loginDialog: 'sijit/service/authService/LoginDialog'
+                            errorService: 'errorController',
+                            recoverPasswordDialog: 'sijit/authController/RecoverPasswordDialog',
+                            registerDialog: 'sijit/service/authController/RegisterDialog',
+                            loginDialog: 'sijit/service/authController/LoginDialog'
                         }
                     },
-                    objectService: {
-                        moduleName: 'sijit/service/objectService/ObjectService'
-                    },
-                    errorService: {
-                        moduleName: 'sijit/service/errorService/ErrorService',
+                    errorController: {
+                        moduleName: 'sijit/errorController/ErrorController',
                         asyncObj: {
                             status: 'status',
-                            errorDialog: 'sijit/service/errorService/ErrorDialog'
+                            errorDialog: 'sijit/errorController/ErrorDialog'
                         }
                     },
                     activeUser: {
                         dijitId: undefined,
                         asyncObj: {
-                            authService: 'authService'
+                            authController: 'authController'
                         }
                     }
                 },
-
-
                 postCreate: function() {
                     // summary:
                     //		Configures the serviceManager

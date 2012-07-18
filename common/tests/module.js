@@ -1,4 +1,4 @@
 define([
-    'sijit/common/tests/testUtils',
-    'sijit/common/tests/testSubscribeMixin'
+    'sijit/common/tests/Utils',
+    'sijit/common/tests/SubscribeMixin'
 ], 1);

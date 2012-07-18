@@ -1,4 +1,4 @@
 define([
-    'sijit/serviceManager/tests/testServiceManager',
-    'sijit/serviceManager/tests/testServiceManagerAwareMixin'
+    'sijit/serviceManager/tests/ServiceManager',
+    'sijit/serviceManager/tests/ServiceManagerAwareMixin'
 ], 1);
