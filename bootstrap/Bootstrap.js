@@ -1,12 +1,18 @@
 define ([
         'dojo/_base/declare',
+        'dojo/_base/Deferred',
         'dojo/_base/connect',
+        'dojo/_base/lang',
+        'sijit/common/Utils',
         'sijit/serviceManager/ServiceManagerAwareMixin',
         'dijit/_Widget'
     ],
     function (
         declare,
+        Deferred,
         connect,
+        lang,
+        Utils,
         ServiceManagerAwareMixin,
         _Widget
     ) {
@@ -18,56 +24,68 @@ define ([
             [_Widget, ServiceManagerAwareMixin],
             {
                 // summary:
-                //		Widget for bootstrapping other sijit modules, in particular
+                //		Widget for bootstrapping other modules, in particular
                 //      the serviceManager
 
-                // serviceManagerConfig: object
-                //		User defined serviceManagerConfig
-                //		This config will be merged with serviceManagerDefaultConfig
-                serviceManagerConfig: undefined,
+                // config: object
+                //		User defined config
+                config: undefined,
 
-                // serviceManagerDefaultConfig: object
-                //		Default config to define injections in to object
-                serviceManagerDefaultConfig: {
-                    authController: {
-                        moduleName: 'sijit/authController/AuthController',
-                        vars: {
-                            authApiMap: undefined,
-                            loginPostBootstrap: undefined,
-                            pageRefreshTarget: undefined,
-                            activeUser: undefined
-                        },
-                        asyncObj: {
-                            status: 'status',
-                            errorService: 'errorController',
-                            recoverPasswordDialog: 'sijit/authController/RecoverPasswordDialog',
-                            registerDialog: 'sijit/service/authController/RegisterDialog',
-                            loginDialog: 'sijit/service/authController/LoginDialog'
-                        }
-                    },
-                    errorController: {
-                        moduleName: 'sijit/errorController/ErrorController',
-                        asyncObj: {
-                            status: 'status',
-                            errorDialog: 'sijit/errorController/ErrorDialog'
-                        }
-                    },
-                    activeUser: {
-                        dijitId: undefined,
-                        asyncObj: {
-                            authController: 'authController'
-                        }
-                    }
-                },
+                mergedConfig: {},
+
+                _unmergedConfigs: [],
+
                 postCreate: function() {
                     // summary:
                     //		Configures the serviceManager
 
-                    var serviceManager = this.serviceManager();
-                    serviceManager.setConfig(this.serviceManagerDefaultConfig);
-                    serviceManager.mergeConfig(this.serviceManagerConfig);
+                    // Get config modules
+                    if (!(this.config && this.config.mergeConfigs)) {
+                        return;
+                    }
+
+                    var index;
+                    var numToLoad =  this.config.mergeConfigs.length;
+                    var loadConfigsDeferred = new Deferred();
+
+                    for (index in this.config.mergeConfigs) {
+                        Deferred.when(this.loadConfigModule(this.config.mergeConfigs[index]), function(){
+                            --numToLoad;
+                            if (numToLoad == 0) {
+                                loadConfigsDeferred.resolve();
+                            }
+                        });
+                    }
+
+                    loadConfigsDeferred.then(lang.hitch(this, function(){this._mergeConfigs()}));
                 },
-                startup: function() {
+                loadConfigModule: function(moduleName) {
+
+                    var deferredConfig = new Deferred();
+                    var index = this._unmergedConfigs.length;
+                    this._unmergedConfigs.push({moduleName: moduleName, config: {}, promise: deferredConfig});
+
+                    require([moduleName], lang.hitch(this, function(Config){
+                        this._unmergedConfigs[index].config = Config;
+                        this._unmergedConfigs[index].promise.resolve();
+                    }));
+
+                    return deferredConfig;
+                },
+                _mergeConfigs: function(){
+
+                    for (var index in this._unmergedConfigs) {
+                        this.mergedConfig = Utils.mixinDeep(this.mergedConfig, this._unmergedConfigs[index].config);
+                    }
+                    this.mergedConfig = Utils.mixinDeep(this.mergedConfig, this.config);
+                    this._completeBootstrap();
+                },
+                _completeBootstrap: function(){
+
+                    if (this.mergedConfig.serviceManager) {
+                        var serviceManager = this.serviceManager();
+                        serviceManager.setConfig(this.mergedConfig.serviceManager);
+                    }
                     this._postBootstrap();
                 },
                 _postBootstrap: function() {

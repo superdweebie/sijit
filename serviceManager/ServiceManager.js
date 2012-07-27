@@ -236,7 +236,7 @@ define([
                 clearInstanceCache: function(){
                     // summary:
                     //     Empties the cached instance array
-                    
+
                     this._instances = [];
                 },
                 mergeConfig: function(/* object */merge){
