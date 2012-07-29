@@ -11,13 +11,13 @@ define([
         ServiceManager
     ){
 
-        doh.register("sijit.serviceManager.tests.ServiceManager", [
+        doh.register("sijit.serviceManager.tests.TestServiceManager", [
             function configTest(doh){
 
                 var defaultConfig = {
                     testButton: {
                         moduleName: 'dijit/form/Button',
-                        vars: {
+                        values: {
                             label: 'Test Button'
                         }
                     }
@@ -26,7 +26,7 @@ define([
                 var customConfig = {
                     testButton: {
                         moduleName: 'dijit/form/Button',
-                        vars: {
+                        values: {
                             showLabel: false
                         }
                     }
@@ -35,7 +35,7 @@ define([
                 var mergedConfig = {
                     testButton: {
                         moduleName: 'dijit/form/Button',
-                        vars: {
+                        values: {
                             label: 'Test Button',
                             showLabel: false
                         }
@@ -44,7 +44,7 @@ define([
 
                 var changedConfig = {
                     moduleName: 'dijit/form/Button',
-                    vars: {
+                    values: {
                         label: 'changed'
                     }
                 };
@@ -91,7 +91,7 @@ define([
                 var serviceManager = ServiceManager.getInstance();
                 serviceManager.setConfig({
                     'sijit/serviceManager/tests/asset/Zoo': {
-                        variable: {
+                        values: {
                             name: 'injected zoo'
                         }
                     }
@@ -112,7 +112,7 @@ define([
                 serviceManager.setConfig({
                     'zoo': {
                         moduleName: 'sijit/serviceManager/tests/asset/Zoo',
-                        variable: {
+                        values: {
                             name: 'alias zoo'
                         }
                     }
@@ -128,15 +128,15 @@ define([
 
                 return deferredTest;
             },
-            function syncObjectTest(){
+            function getObjectsTest(){
                 var serviceManager = ServiceManager.getInstance();
                 serviceManager.setConfig({
                     'zoo': {
                         moduleName: 'sijit/serviceManager/tests/asset/Zoo',
-                        variable: {
-                            name: 'sync zoo'
+                        values: {
+                            name: 'get zoo'
                         },
-                        syncObject: {
+                        getObjects: {
                             lion: 'sijit/serviceManager/tests/asset/Lion'
                         }
                     }
@@ -145,7 +145,7 @@ define([
                 var deferredTest = new Deferred;
 
                 Deferred.when(serviceManager.createObject('zoo'), function(zoo){
-                    doh.assertEqual('sync zoo', zoo.name);
+                    doh.assertEqual('get zoo', zoo.name);
                     doh.assertEqual('lucy', zoo.lion.name);
                     deferredTest.resolve(true);
                 });
@@ -157,10 +157,10 @@ define([
                 serviceManager.setConfig({
                     'zoo': {
                         moduleName: 'sijit/serviceManager/tests/asset/Zoo',
-                        variable: {
+                        values: {
                             name: 'async zoo'
                         },
-                        asyncObject: {
+                        refObjects: {
                             tiger: 'sijit/serviceManager/tests/asset/Tiger'
                         }
                     }
@@ -185,10 +185,10 @@ define([
                 serviceManager.setConfig({
                     'zoo': {
                         moduleName: 'sijit/serviceManager/tests/asset/Zoo',
-                        variable: {
+                        values: {
                             name: 'stateful zoo'
                         },
-                        asyncObject: {
+                        refObjects: {
                             tiger: 'sijit/serviceManager/tests/asset/Tiger'
                         }
                     },
@@ -219,10 +219,10 @@ define([
                 serviceManager.setConfig({
                     'zoo': {
                         moduleName: 'sijit/serviceManager/tests/asset/Zoo',
-                        variable: {
+                        values: {
                             name: 'stateful zoo'
                         },
-                        asyncObject: {
+                        refObjects: {
                             tiger: 'sijit/serviceManager/tests/asset/Tiger'
                         }
                     },
@@ -262,10 +262,10 @@ define([
                 serviceManager.setConfig({
                     'zoo': {
                         moduleName: 'sijit/serviceManager/tests/asset/Zoo',
-                        variable: {
+                        values: {
                             name: 'stateful zoo'
                         },
-                        asyncObject: {
+                        refObjects: {
                             tiger: 'sijit/serviceManager/tests/asset/Tiger'
                         }
                     },
@@ -311,7 +311,7 @@ define([
                 var serviceManager = ServiceManager.getInstance();
                 serviceManager.setConfig({
                     'testButton': {
-                        variable: {
+                        values: {
                             label: 'test Button'
                         }
                     }
@@ -331,7 +331,7 @@ define([
                 var serviceManager = ServiceManager.getInstance();
                 serviceManager.setConfig({
                     'injectedButton': {
-                        variable: {
+                        values: {
                             label: 'injected Button'
                         }
                     }
@@ -346,7 +346,7 @@ define([
                 serviceManager.setConfig({
                     'aliasButton': {
                         dijitId: 'anotherButton',
-                        variable: {
+                        values: {
                             label: 'alias Button'
                         }
                     }

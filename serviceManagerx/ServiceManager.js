@@ -32,14 +32,15 @@ define([
                 // example:
                 // |    errorService: {
                 // |        moduleName: 'sijit/errorService/ErrorService',
-                // |        variable: {
+                // |        values: {
                 // |            dialogTitle: 'Ahhhh Error!'
-                // |        }
-                // |        syncObject: {
+                // |        },
+                // |        createObjects: {
+                // |        },
+                // |        getObjects: {
                 // |            errorApi: 'errorApi'
                 // |        }
-                // |        asyncObject: {
-                // |            status: 'status',
+                // |        refObjects: {
                 // |            errorDialog: 'sijit/errorController/ErrorDialog'
                 // |        }
                 // |    }
@@ -50,24 +51,19 @@ define([
                 // The moduleName attribute defines which module to load. If not already loaded, it will be loaded
                 // async.
                 //
-                // The variable object is an associatvie array of values to inject into the object. In this case,
+                // The values object is an associatvie array of values to inject into the object. In this case,
                 // errorService.dialogTitle will be set to 'Ahhhh Error!'
                 //
-                // The syncObject is an associative array of object to load with the serviceManager
+                // The createObjects is an associative array of objects to create with the serviceManager
                 // and inject. Once injected, they can be used as normal.
                 //
-                // The asyncObject is an associatvie array of objects to inject loading functions for.
-                // An asyncObject doesn't inject the object itself, but some functions:
-                //    createObject
-                //    getObject
+                // The getObjects is an associative array of objects to load with the serviceManager
+                // and inject. Once injected, they can be used as normal.
                 //
-                // If the asyncObject's config is marked as stateful: true, then it has and additional three functions
-                // injected:
-                //    get
-                //    set
-                //    watch
+                // The refObjects is an associatvie array of objects to inject a sijit.serviceManager.Ref instance for.
+                // An refObject doesn't inject the object itself, but a reference to get or use the object later.
                 //
-                // AsyncObject injections allow the lazy loading of dependencies - they are only
+                // refObject injections allow the lazy loading of dependencies - they are only
                 // loaded when they are called.
                 //
                 // At this point in time, the ServiceManager is meant to be used as a singleton, retrived with
@@ -186,8 +182,8 @@ define([
                     var attr;
 
                     //Inject variables
-                    for (attr in config.variable){
-                        object[attr] = config.variable[attr];
+                    for (attr in config.values){
+                        object[attr] = config.values[attr];
                     }
 
                     //Inject async object functions
@@ -196,9 +192,9 @@ define([
                     }
 
                     //Inject sync objects
-                    for (attr in config.syncObject){
-                        Deferred.when(this.getObject(config.syncObject[attr]), function(syncObject){
-                            object[attr] = syncObject;
+                    for (attr in config.getObjects){
+                        Deferred.when(this.getObject(config.getObjects[attr]), function(object){
+                            object[attr] = object;
                         });
                     }
                     return object;
