@@ -4,10 +4,10 @@ define ([
     ],
     function (declare, config) {
         // module:
-        //		sijit/common/Utils
+        //		sijit/Common/Utils
 
         var utils = declare (
-            'sijit.common.Utils',
+            'sijit.Common.Utils',
             null,
             {
                 // summary:
@@ -43,7 +43,9 @@ define ([
         };
 
         utils.mixinDeep = function(dest, source) {
-            //Recursively mix the properties of two objects
+            // summary:
+            //      Recursively mix the properties of two objects
+
             var empty = {};
             for (var name in source) {
                 if(!(name in dest) || (dest[name] !== source[name] && (!(name in empty) || empty[name] !== source[name]))){
@@ -60,6 +62,20 @@ define ([
                 };
             }
             return dest;
+        };
+
+        utils.countProperties = function (/*object*/ object) {
+            //summary:
+            //     Count the properties of an object
+
+            var count = 0;
+
+            for(var property in object) {
+                if(object.hasOwnProperty(property)){
+                    ++count;
+                }
+            }
+            return count;
         };
 
         return utils;

@@ -6,12 +6,10 @@ define ([
     ){
 
         return declare (
-            'sijit.serviceManager.tests.asset.Zoo',
+            'sijit.ServiceManager.Test.Asset.Lion',
             null,
             {
-                name: 'the sijit zoo',
-                lion: undefined,
-                tiger: undefined
+                name: 'lucy'
             }
         );
     }

@@ -1,0 +1,17 @@
+.activeuser
+{
+    float: right;
+    text-align: right;
+}
+
+.activeuser p 
+{
+    float: right;
+    margin: 4px;
+    color: #7A7B7A;
+}
+
+activeuser .link 
+{
+    color: #7A7B7A;
+}

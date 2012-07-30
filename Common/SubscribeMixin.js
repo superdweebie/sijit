@@ -11,10 +11,10 @@ define ([
         topic
     ) {
         // module:
-        //		sijit/common/SubscribeMixin
+        //		sijit/Common/SubscribeMixin
 
         return declare (
-            'sijit.common.SubscribeMixin',
+            'sijit.Common.SubscribeMixin',
             null,
             {
                 // summary:
@@ -40,6 +40,7 @@ define ([
                 subscribe: function(/*string*/ topicName, /*string*/ method){
                     // summary:
                     //      Subscribe to a topic
+                    
                     var handle = topic.subscribe(topicName, lang.hitch(this, method));
                     this._connects.push(handle);
                     return handle;		// _Widget.Handle

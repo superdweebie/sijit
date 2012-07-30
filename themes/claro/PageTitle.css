@@ -1,0 +1,15 @@
+.pageTitleBlock
+{
+    padding: 12px;
+    color: #BEBCBD;    
+}
+
+.pageTitleBlock h2
+{
+    margin: 0px;  
+}
+
+.pageTitleSub
+{
+    font-weight: lighter;
+}

@@ -4,7 +4,8 @@ define([
         'dojo/_base/lang',
         'dijit/registry',
         'dojo/aspect',
-        'sijit/common/Utils'
+        'sijit/ServiceManager/Ref',
+        'sijit/Common/Utils'
     ],
     function (
         declare,
@@ -12,14 +13,15 @@ define([
         lang,
         registry,
         aspect,
+        Ref,
         Utils
     ) {
         // module:
-        //		sijit/serviceManager/ServiceManager
+        //		sijit/ServiceManager/ServiceManager
 
-        var serviceManager = declare
+        return declare
         (
-            'sijit.serviceManager.ServiceManager',
+            'sijit.ServiceManager.ServiceManager',
             null,
             {
                 // summary:
@@ -65,9 +67,6 @@ define([
                 //
                 // refObject injections allow the lazy loading of dependencies - they are only
                 // loaded when they are called.
-                //
-                // At this point in time, the ServiceManager is meant to be used as a singleton, retrived with
-                // `getInstance()`
 
                 // _instances: array
                 //      An array of all object created through the ServiceManager. If an object is requested
@@ -91,7 +90,7 @@ define([
                     //     protected
 
                     var config = this.getObjectConfig(identifier);
-
+                    
                     //Check for moduleName alias
                     var moduleName = identifier;
                     if (config && config.moduleName){
@@ -101,13 +100,14 @@ define([
                     //Create instance
                     var deferredObject = new Deferred();
                     var index = this._instances.length;
-                    this._instances[index] = {identifier: identifier, object: deferredObject};
+                    this._instances[index] = {identifier: identifier, object: null, promise: deferredObject};
 
                     require([moduleName], lang.hitch(this, function(Module){
                         var object = new Module;
-                        object = this._inject(object, config);
-                        this._instances[index].object.resolve(object);
-                        this._instances[index].object = object;
+                        Deferred.when(this._inject(object, config), lang.hitch(this, function(object){
+                            this._instances[index].object = object;
+                            this._instances[index].promise.resolve(object);
+                        }))
                     }));
 
                     return deferredObject;
@@ -175,59 +175,68 @@ define([
                     //     protected
 
                     //return early if there are not injections to do
-                    if (config == undefined){
+                    if ( ! config){
                         return object;
                     }
 
                     var attr;
+                    var deferredObject = new Deferred();
+                    var injectionsRemaining = 0;
+                    var earlyResolve = false;
+
+                    //Determine how many async object loads need to finish before object is ready
+                    if (config.createObjects) {
+                        injectionsRemaining += Utils.countProperties(config.createObjects);
+                    }
+                    if (config.getObjects) {
+                        injectionsRemaining += Utils.countProperties(config.getObjects);
+                    }
+
+                    if (injectionsRemaining == 0) {
+                        earlyResolve = true;
+                    }
 
                     //Inject variables
                     for (attr in config.values){
                         object[attr] = config.values[attr];
                     }
 
-                    //Inject async object functions
-                    for (attr in config.asyncObject){
-                        object[attr] = this._injectAsyncObject(config.asyncObject[attr]);
+                    //Inject create objects
+                    for (attr in config.createObjects){
+                        Deferred.when(this.createObject(config.createObjects[attr]), function(injectionObject){
+                            object[attr] = injectionObject;
+                            --injectionsRemaining;
+                            if (injectionsRemaining == 0){
+                                deferredObject.resolve(object);
+                            }
+                        });
                     }
 
-                    //Inject sync objects
+                    //Inject get objects
                     for (attr in config.getObjects){
-                        Deferred.when(this.getObject(config.getObjects[attr]), function(object){
-                            object[attr] = object;
+                        Deferred.when(this.getObject(config.getObjects[attr]), function(injectionObject){
+                            object[attr] = injectionObject;
+                            --injectionsRemaining;
+                            if (injectionsRemaining == 0){
+                                deferredObject.resolve(object);
+                            }
                         });
                     }
-                    return object;
-                },
-                _injectAsyncObject: function(asyncIdentity){
-                    // summary:
-                    //     Injects a set of functions that can be used to access an object async
-                    //
-                    // tags:
-                    //      protected
 
-                    var asyncObject = {
-                        createObject: lang.hitch(this, function(){
-                            return this.createObject(asyncIdentity);
-                        }),
-                        getObject: lang.hitch(this, function(){
-                            return this.getObject(asyncIdentity);
-                        })
-                    };
-
-                    // Inject objects which are dijits, or marked as isStateful with extra methods
-                    if (this._isStateful(asyncIdentity)) {
-                        asyncObject.get = lang.hitch(this, function(property){
-                            return this.get(asyncIdentity, property);
-                        });
-                        asyncObject.set = lang.hitch(this, function(property, value){
-                            return this.set(asyncIdentity, property, value);
-                        });
-                        asyncObject.watch = lang.hitch(this, function(property, callback){
-                            return this.watch(asyncIdentity, property, callback);
-                        });
+                    //Inject ref objects
+                    for (attr in config.refObjects){
+                        object[attr] = new Ref(
+                            config.refObjects[attr],
+                            this._isStateful(config.refObjects[attr]),
+                            this
+                        );
                     }
-                    return asyncObject;
+
+                    //Resove deferred if there were no async injections
+                    if (earlyResolve) {
+                        deferredObject.resolve(object);
+                    }
+                    return deferredObject;
                 },
                 clearInstanceCache: function(){
                     // summary:
@@ -371,19 +380,5 @@ define([
                 }
             }
         );
-        serviceManager._instance = undefined;
-
-        serviceManager.getInstance = function ()
-        {
-            // summary:
-            //     Get the singleton instance of the serviceManager
-
-            if (!serviceManager._instance)
-            {
-                serviceManager._instance = new serviceManager();
-            }
-            return serviceManager._instance;
-        }
-        return serviceManager;
     }
 );

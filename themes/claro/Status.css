@@ -1,0 +1,13 @@
+.status {
+	float: right;
+}
+
+.statusMessage {
+	color: white;
+	float: right;
+}
+
+.statusIcon {
+	float: right;
+	padding-right: 10px;
+}

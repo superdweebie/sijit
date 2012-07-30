@@ -8,7 +8,7 @@ define ([
     ){
 
         return declare (
-            'sijit.serviceManager.tests.asset.Tiger',
+            'sijit.ServiceManager.Test.Asset.Tiger',
             [Stateful],
             {
                 name: 'toby'
