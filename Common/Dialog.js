@@ -5,6 +5,7 @@ define
         'dojo/_base/lang',
         'dojo/_base/Deferred',
         'dojo/on',
+        'dojo/keys',
         'dijit/_Widget',
         'dijit/_TemplatedMixin',
         'dijit/_WidgetsInTemplateMixin',
@@ -19,6 +20,7 @@ define
         lang,
         Deferred,
         on,
+        keys,
         widget,
         templatedMixin,
         widgetsInTemplateMixin,
@@ -33,6 +35,7 @@ define
                 templateString: template,
                 title: undefined,
                 validator: undefined,
+                _onPressEnterHandle: undefined,
                 getFormValue: function()
                 {
                     return this.formNode.get('value');
@@ -53,10 +56,23 @@ define
                     if(state == '')
                     {
                         this.okButtonNode.set('disabled', false);
+
+                        // set up ENTER keyhandling for the search keyword input field
+                        this._onPressEnterHandle = on(this.dialogNode, 'keydown', lang.hitch(this, function(event){
+                            if(event.keyCode == keys.ENTER){
+                                event.preventDefault();
+                                this._onPressEnterHandle.remove();
+                                this.hide();
+                            }
+                        }));
                     } else {
                         this.okButtonNode.set('disabled', true);
+                        if (this._onPressEnterHandle) {
+                            this._onPressEnterHandle.remove();
+                        }
                     }
                 },
+
                 show: function()
                 {
                     this._returnValueDeferred = new Deferred();
