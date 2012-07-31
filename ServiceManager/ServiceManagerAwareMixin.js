@@ -1,14 +1,8 @@
 define ([
-        'dojo/_base/declare',
-        'dojo/_base/connect',
-        'dojo/_base/lang',
-        'dojo/_base/Deferred'
+        'dojo/_base/declare'
     ],
     function (
-        declare,
-        connect,
-        lang,
-        Deferred
+        declare
     ){
         // module:
         //		sijit/ServiceManager/ServiceManagerAwareMixin
@@ -22,23 +16,16 @@ define ([
                 //		of the ServiceManager
                 //
                 // description:
-                //      The ServiceManager can be retrieved by calling `this.serviceManager()`
+                //      The ServiceManager will be automaticall injected
 
+                // isServiceManagerAware: boolean
+                //      The serviceManager looks for this property. If it is found,
+                //      then the serivceManager instance is injected.
+                isServiceManagerAware: true,
+                
                 // serviceManager: Object
-                //		The serviceManager instace
-                serviceManager: undefined,
-
-                // serviceManagerDeferred: Object
-                //		Will resolve when the serviceManager is set
-                serviceManagerDeferred: undefined,
-
-                constructor: function(){
-                    this.serviceManagerDeferred = new Deferred();
-                    connect.subscribe('postBootstrap', lang.hitch(this, function(object){
-                        this.serviceManager = object.serviceManager;
-                        this.serviceManagerDeferred.resolve(object.serviceManager);
-                    }));
-                }
+                //		The serviceManager instance
+                serviceManager: undefined
             }
         );
     }

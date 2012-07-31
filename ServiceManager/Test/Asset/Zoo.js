@@ -1,13 +1,15 @@
 define ([
-        'dojo/_base/declare'
+        'dojo/_base/declare',
+        'sijit/ServiceManager/ServiceManagerAwareMixin'
     ],
     function (
-        declare
+        declare,
+        ServiceManagerAwareMixin
     ){
 
         return declare (
             'sijit.ServiceManager.Test.Asset.Zoo',
-            null,
+            [ServiceManagerAwareMixin],
             {
                 name: 'the sijit zoo',
                 lion: undefined,

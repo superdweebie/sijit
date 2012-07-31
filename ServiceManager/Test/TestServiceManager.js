@@ -49,9 +49,8 @@ define([
                     }
                 };
 
-                var serviceManager = new ServiceManager;
+                var serviceManager = new ServiceManager(defaultConfig);
 
-                serviceManager.setConfig(defaultConfig);
                 doh.assertEqual(defaultConfig, serviceManager.getConfig());
 
                 serviceManager.mergeConfig(customConfig);
@@ -88,8 +87,7 @@ define([
                 return deferredTest;
             },
             function valuesConfigTest(){
-                var serviceManager = new ServiceManager();
-                serviceManager.setConfig({
+                var serviceManager = new ServiceManager({
                     'sijit/ServiceManager/Test/Asset/Zoo': {
                         values: {
                             name: 'injected zoo'
@@ -129,8 +127,7 @@ define([
                 return deferredTest;
             },
             function getObjectsTest(){
-                var serviceManager = new ServiceManager();
-                serviceManager.setConfig({
+                var serviceManager = new ServiceManager({
                     'zoo': {
                         moduleName: 'sijit/ServiceManager/Test/Asset/Zoo',
                         values: {
@@ -153,8 +150,7 @@ define([
                 return deferredTest;
             },
             function createObjectsTest(){
-                var serviceManager = new ServiceManager();
-                serviceManager.setConfig({
+                var serviceManager = new ServiceManager({
                     'zoo': {
                         moduleName: 'sijit/ServiceManager/Test/Asset/Zoo',
                         values: {
@@ -182,8 +178,7 @@ define([
                 return deferredTest;
             },
             function refObjectTest(){
-                var serviceManager = new ServiceManager();
-                serviceManager.setConfig({
+                var serviceManager = new ServiceManager({
                     'zoo': {
                         moduleName: 'sijit/ServiceManager/Test/Asset/Zoo',
                         values: {
@@ -210,8 +205,7 @@ define([
                 return deferredTest;
             },
             function refStatefulGetTest(){
-                var serviceManager = new ServiceManager();
-                serviceManager.setConfig({
+                var serviceManager = new ServiceManager({
                     'zoo': {
                         moduleName: 'sijit/ServiceManager/Test/Asset/Zoo',
                         values: {
@@ -241,10 +235,7 @@ define([
             },
             function refStatefulSetTest(){
 
-                var serviceManager = new ServiceManager();
-                serviceManager.clearInstanceCache();
-
-                serviceManager.setConfig({
+                var serviceManager = new ServiceManager({
                     'zoo': {
                         moduleName: 'sijit/ServiceManager/Test/Asset/Zoo',
                         values: {
@@ -284,10 +275,7 @@ define([
             },
             function refStatefulWatchTest(){
 
-                var serviceManager = new ServiceManager();
-                serviceManager.clearInstanceCache();
-
-                serviceManager.setConfig({
+                var serviceManager = new ServiceManager({
                     'zoo': {
                         moduleName: 'sijit/ServiceManager/Test/Asset/Zoo',
                         values: {
@@ -336,8 +324,7 @@ define([
 
                 var button = new Button({id: 'testButton'});
 
-                var serviceManager = new ServiceManager();
-                serviceManager.setConfig({
+                var serviceManager = new ServiceManager({
                     'testButton': {
                         values: {
                             label: 'test Button'
@@ -356,8 +343,7 @@ define([
             },
             function injectDijitOnCreateTest(){
 
-                var serviceManager = new ServiceManager();
-                serviceManager.setConfig({
+                var serviceManager = new ServiceManager({
                     'injectedButton': {
                         values: {
                             label: 'injected Button'
@@ -370,8 +356,7 @@ define([
                 doh.assertEqual('injected Button', button.get('label'));
             },
             function dijitIdAliasTest(){
-                var serviceManager = new ServiceManager();
-                serviceManager.setConfig({
+                var serviceManager = new ServiceManager({
                     'aliasButton': {
                         dijitId: 'anotherButton',
                         values: {
@@ -385,7 +370,7 @@ define([
                 doh.assertEqual('alias Button', button.get('label'));
             },
             function getTest(){
-                var serviceManager = new ServiceManager();
+                var serviceManager = new ServiceManager({});
 
                 var button = new Button({id: 'getButton'});
                 button.set('label', 'get button');
@@ -400,7 +385,7 @@ define([
                 return deferredTest;
             },
             function setTest(){
-                var serviceManager = new ServiceManager();
+                var serviceManager = new ServiceManager({});
 
                 var button = new Button({id: 'setButton'});
 
@@ -411,7 +396,7 @@ define([
             },
             function watchTest(){
 
-                var serviceManager = new ServiceManager();
+                var serviceManager = new ServiceManager({});
 
                 var button = new Button({id: 'watchButton'});
 
@@ -426,6 +411,21 @@ define([
                 button.set('label', 'watch button');
 
                 return deferredTest;
+            },
+            function serviceManagerAwareTest(){
+
+                var serviceManager = new ServiceManager({
+                    'zoo': {
+                        moduleName: 'sijit/ServiceManager/Test/Asset/Zoo',
+                        values: {
+                            name: 'stateful zoo'
+                        }
+                    }
+                });
+
+                Deferred.when(serviceManager.getObject('zoo'), function(zoo){
+                    doh.assertEqual(serviceManager, zoo.serviceManager);
+                });
             }
         ]);
     }

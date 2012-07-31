@@ -1,5 +1,6 @@
 define([
         'dojo/_base/declare',
+        'dojo/_base/config',
         'dojo/_base/Deferred',
         'dojo/_base/lang',
         'dijit/registry',
@@ -9,6 +10,7 @@ define([
     ],
     function (
         declare,
+        dojoConfig,
         Deferred,
         lang,
         registry,
@@ -78,10 +80,19 @@ define([
                 _config: {},
 
 
-                constructor: function(){
+                constructor: function(/* object */ config){
                     // summary:
                     //     Attatches to the registry, so that declarively created dijits can be injected
                     aspect.after(registry, 'add', lang.hitch(this, function(widget){this.injectDijit(widget)}), true);
+
+                    this._instances = [];
+
+                    // Default to dojo config object if no config object is supplied
+                    if ( ! config) {
+                        config = dojoConfig.serviceManager;
+                    }
+
+                    this._config = config;
                 },
                 _createObject: function(/*string*/ identifier) {
                     // summary:
@@ -90,7 +101,7 @@ define([
                     //     protected
 
                     var config = this.getObjectConfig(identifier);
-                    
+
                     //Check for moduleName alias
                     var moduleName = identifier;
                     if (config && config.moduleName){
@@ -230,6 +241,11 @@ define([
                             this._isStateful(config.refObjects[attr]),
                             this
                         );
+                    }
+
+                    //Inject serviceManager, if object is ServiceManagerAware
+                    if (object.isServiceManagerAware) {
+                        object.serviceManager = this;
                     }
 
                     //Resove deferred if there were no async injections
