@@ -38,10 +38,13 @@ define ([
                         var numToLoad =  dojoConfig.mergeConfigs.length;
                         var loadConfigsDeferred = new Deferred();
                         var unmergedConfigs = [];
+                        for (index = 0; index < numToLoad; index++) unmergedConfigs[index] = undefined;
 
                         for (index in dojoConfig.mergeConfigs) {
-                            Deferred.when(this._loadConfigModule(dojoConfig.mergeConfigs[index]), function(configModule){
-                                unmergedConfigs.push(configModule);
+                            Deferred.when(this._loadConfigModule(dojoConfig.mergeConfigs[index], index), function(
+                                result
+                            ){
+                                unmergedConfigs[result.moduleIndex] = result.configModule;
                                 --numToLoad;
                                 if (numToLoad == 0) {
                                     loadConfigsDeferred.resolve(unmergedConfigs);
@@ -64,7 +67,7 @@ define ([
 
                     return dojoConfigUpdated;
                 },
-                _loadConfigModule: function(moduleName) {
+                _loadConfigModule: function(moduleName, moduleIndex) {
                     // summary:
                     //		Load a single config module
                     // tags:
@@ -73,7 +76,10 @@ define ([
                     var deferredConfig = new Deferred();
 
                     require([moduleName], lang.hitch(this, function(configModule){
-                        deferredConfig.resolve(configModule);
+                        deferredConfig.resolve({
+                            configModule: configModule,
+                            moduleIndex: moduleIndex
+                        });
                     }));
 
                     return deferredConfig;

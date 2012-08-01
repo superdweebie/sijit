@@ -3,11 +3,6 @@
 <html>
 	<head>
 		<title>Testing sijit.ConfigManager.ConfigManager</title>
-		<style type="text/css">
-			@import "../../../dojo/resources/dojo.css";
-            @import "../../../dijit/themes/claro/claro.css";
-            @import "../../../sijit/themes/claro/claro.css";
-		</style>
 		<script
             type="text/javascript"
             src="../../../dojo/dojo.js"
@@ -24,55 +19,39 @@
 		<script type="text/javascript">
 			require([
                 'doh/main',
-                'dojo/_base/Deferred',
                 'dojo/_base/config',
-                'sijit/ConfigManager/ConfigManager',
+                'sijit/ConfigManager/ConfigReady!',
                 'dojo/domReady!'
             ],
             function(
                 doh,
-                Deferred,
-                dojoConfig,
-                ConfigManager
+                dojoConfig
             ){
-
-                var testConfigMergeDeferred = new Deferred;
-                var testConfigMerge = function(){
-                    var expectedConfig = {
-                        test1: {
-                            moduleName: 'Test1',
-                            values: {
-                                value1: 1,
-                                value2: 22
-                            }
-                        },
-                        test2: {
-                            moduleName: 'Test2',
-                            values: {
-                                value1: 1
-                            }
-                        }
-                    }
-
-                    doh.assertEqual(expectedConfig, dojoConfig.serviceManager);
-                    testConfigMergeDeferred.resolve(true);
-                };
-
                 doh.register([
                    function testConfigMerge(){
-                       return testConfigMergeDeferred;
+                        var expectedConfig = {
+                            test1: {
+                                moduleName: 'Test1',
+                                values: {
+                                    value1: 1,
+                                    value2: 22
+                                }
+                            },
+                            test2: {
+                                moduleName: 'Test2',
+                                values: {
+                                    value1: 1
+                                }
+                            }
+                        }
+                        doh.assertEqual(expectedConfig, dojoConfig.serviceManager);
                    }
                 ]);
                 doh.runOnLoad();
-
-                var configManager = new ConfigManager();
-                Deferred.when(configManager.merge(), function(){
-                    testConfigMerge();
-                });
             });
 		</script>
 	</head>
-	<body class="claro">
+	<body>
         <h1>Testing sijit.ConfigManager.ConfigManager</h1>
 	</body>
 </html>
