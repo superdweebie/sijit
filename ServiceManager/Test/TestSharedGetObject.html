@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Testing sijit.ServiceManager.Shared.GetObject</title>
+		<script
+            type="text/javascript"
+            src="../../../dojo/dojo.js"
+            data-dojo-config="
+                isDebug: true,
+                popup: true,
+                async: true,
+                mergeConfigs: [
+                    'sijit/ServiceManager/Test/Asset/Config'
+                ]
+            ">
+        </script>
+		<script type="text/javascript">
+			require([
+                'doh/main',
+                'sijit/ServiceManager/Shared/GetObject!zoo',
+                'dojo/domReady!'
+            ],
+            function(
+                doh,
+                zoo
+            ){
+                doh.register([
+                    function testSharedGetObject(){
+                        doh.assertEqual('shared zoo', zoo.name);
+                    }
+                ]);
+                doh.runOnLoad();
+            });
+		</script>
+	</head>
+	<body>
+        <h1>Testing sijit.ServiceManager.Shared.GetObject</h1>
+	</body>
+</html>
