@@ -14,18 +14,6 @@
 	float: right;
 }
 
-.clickable
-{
-    cursor: pointer;
-    font-weight: bold;
-    text-decoration:none;
-}
-
-.clickable:hover
-{
-    text-decoration:underline;
-}
-
 .tableContainer-labelCell
 {
     vertical-align: top;

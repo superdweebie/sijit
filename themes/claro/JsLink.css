@@ -1,0 +1,12 @@
+.jsLink p
+{
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration:none;
+}
+
+.jsLink p:hover
+{
+    text-decoration:underline;
+}
+
