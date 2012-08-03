@@ -16,13 +16,13 @@ define ([
                 //		of the ServiceManager
                 //
                 // description:
-                //      The ServiceManager will be automaticall injected
+                //      The ServiceManager will be automatically injected
 
                 // isServiceManagerAware: boolean
                 //      The serviceManager looks for this property. If it is found,
                 //      then the serivceManager instance is injected.
                 isServiceManagerAware: true,
-                
+
                 // serviceManager: Object
                 //		The serviceManager instance
                 serviceManager: undefined

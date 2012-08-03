@@ -3,7 +3,7 @@ define([
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_OnDijitClickMixin',
-    'dojo/text!./Template/JsLink.html',
+    'dojo/text!./Template/JsLink.html'
 ],
 function(
     declare,
@@ -22,4 +22,3 @@ function(
         }
     );
 });
-

@@ -1,15 +1,17 @@
 define ([
         'dojo/_base/declare',
-        'sijit/ServiceManager/ServiceManagerAwareMixin'
+        'sijit/ServiceManager/ServiceManagerAwareMixin',
+        'sijit/ServiceManager/SafeGetPropertyMixin'
     ],
     function (
         declare,
-        ServiceManagerAwareMixin
+        ServiceManagerAwareMixin,
+        SafeGetPropertyMixin
     ){
 
         return declare (
             'sijit.ServiceManager.Test.Asset.Zoo',
-            [ServiceManagerAwareMixin],
+            [ServiceManagerAwareMixin, SafeGetPropertyMixin],
             {
                 name: 'the sijit zoo',
                 lion: undefined,

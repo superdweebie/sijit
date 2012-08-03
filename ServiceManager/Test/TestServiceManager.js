@@ -426,6 +426,27 @@ define([
                 Deferred.when(serviceManager.getObject('zoo'), function(zoo){
                     doh.assertEqual(serviceManager, zoo.serviceManager);
                 });
+            },
+            function safeGetPropertyMixinTest(){
+
+                var serviceManager = new ServiceManager({
+                    'zoo': {
+                        moduleName: 'sijit/ServiceManager/Test/Asset/Zoo',
+                        values: {
+                            name: 'safe get zoo'
+                        },
+                        refObjects: {
+                            tiger: 'sijit/ServiceManager/Test/Asset/Tiger'
+                        }
+                    }
+                });
+
+                Deferred.when(serviceManager.getObject('zoo'), function(zoo){
+                    doh.assertEqual('safe get zoo', zoo.name);
+                    Deferred.when(zoo.safeGetProperty('tiger'), function(tiger){
+                        doh.assertEqual('toby', tiger.name);
+                    });
+                });
             }
         ]);
     }
