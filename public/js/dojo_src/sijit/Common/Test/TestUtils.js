@@ -59,7 +59,7 @@ define([
                     prop2: [2, ,3],
                     prop3: {three: 3}
                 };
-                
+
                 doh.assertEqual(3, Utils.countProperties(object));
             }
         ]);
