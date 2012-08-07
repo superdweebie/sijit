@@ -5,7 +5,7 @@ namespace Sijit\Test;
 use PHPUnit_Framework_TestCase;
 use WebDriver\WebDriver;
 
-class AbstractTest extends PHPUnit_Framework_TestCase {
+class AbstractWebDriverTest extends PHPUnit_Framework_TestCase {
 
     protected static $baseUrl;
 

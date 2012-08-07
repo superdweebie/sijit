@@ -15,4 +15,4 @@ chdir($applicationRoot);
 $loader = require_once($loaderPath);
 $loader->add('Sijit\\Test', __DIR__);
 
-\Sijit\Test\AbstractTest::setBaseUrl('http://localhost/ZendSkeletionApplication/js/dojo_src/');
+\Sijit\Test\AbstractWebDriverTest::setBaseUrl('http://localhost/ZendSkeletionApplication/js/dojo_src/');

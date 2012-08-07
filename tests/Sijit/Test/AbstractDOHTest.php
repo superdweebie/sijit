@@ -2,12 +2,15 @@
 
 namespace Sijit\Test;
 
-class DOHRunnerTest extends AbstractTest {
+abstract class AbstractDOHTest extends AbstractWebDriverTest {
+
+    // url to the page which launches the test runner
+    protected $testPageUrl;
 
     public function testDOHRunner(){
         $session = $this->session;
 
-        $this->open('sijit/Test/runTests.html');
+        $this->open($this->testPageUrl);
 
         $timeout = 15;
         $time = 0;
