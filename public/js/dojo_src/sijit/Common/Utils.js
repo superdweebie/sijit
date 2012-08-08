@@ -1,83 +1,82 @@
 define ([
-        'dojo/_base/declare',
-        'dojo/_base/config'
-    ],
-    function (declare, config) {
-        // module:
-        //		sijit/Common/Utils
+    'dojo/_base/declare',
+    'dojo/_base/config'
+],
+function (declare, config) {
+    // module:
+    //		sijit/Common/Utils
 
-        var utils = declare (
-            'sijit.Common.Utils',
-            null,
-            {
-                // summary:
-                //		Module providing simple utility methods
-            }
-        );
-
-        utils.ucFirst = function(string) {
+    var utils = declare (
+        'sijit.Common.Utils',
+        null,
+        {
             // summary:
-            //		Makes the first letter of a string uppercase
+            //		Module providing simple utility methods
+        }
+    );
 
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        };
+    utils.ucFirst = function(string) {
+        // summary:
+        //		Makes the first letter of a string uppercase
 
-        utils.isInt = function(value) {
-            // summary:
-            //		Checks if a value is an integer
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    };
 
-            if((parseFloat(value) == parseInt(value)) && !isNaN(value))
-            {
-                return true;
-            } else {
-                return false;
-            }
-        };
+    utils.isInt = function(value) {
+        // summary:
+        //		Checks if a value is an integer
 
-        utils.fullUrl = function(string) {
-            // summary:
-            //		Appends a relative url to the full site url. Requires
-            //		config.siteUrl to be set
+        if((parseFloat(value) == parseInt(value)) && !isNaN(value))
+        {
+            return true;
+        } else {
+            return false;
+        }
+    };
 
-            return config.siteUrl + '/' + string;
-        };
+    utils.fullUrl = function(string) {
+        // summary:
+        //		Appends a relative url to the full site url. Requires
+        //		config.siteUrl to be set
 
-        utils.mixinDeep = function(dest, source) {
-            // summary:
-            //      Recursively mix the properties of two objects
+        return config.siteUrl + '/' + string;
+    };
 
-            var empty = {};
-            for (var name in source) {
-                if(!(name in dest) || (dest[name] !== source[name] && (!(name in empty) || empty[name] !== source[name]))){
-                    try {
-                            if ( source[name].constructor==Object ) {
-                                dest[name] = utils.mixinDeep(dest[name], source[name]);
-                            } else {
-                                dest[name] = source[name];
-                            };
-                    } catch(e) {
-                            // Property in destination object not set. Create it and set its value.
+    utils.mixinDeep = function(dest, source) {
+        // summary:
+        //      Recursively mix the properties of two objects
+
+        var empty = {};
+        for (var name in source) {
+            if(!(name in dest) || (dest[name] !== source[name] && (!(name in empty) || empty[name] !== source[name]))){
+                try {
+                        if ( source[name].constructor==Object ) {
+                            dest[name] = utils.mixinDeep(dest[name], source[name]);
+                        } else {
                             dest[name] = source[name];
-                    };
+                        };
+                } catch(e) {
+                        // Property in destination object not set. Create it and set its value.
+                        dest[name] = source[name];
                 };
+            };
+        }
+        return dest;
+    };
+
+    utils.countProperties = function (/*object*/ object) {
+        //summary:
+        //     Count the properties of an object
+
+        var count = 0;
+
+        for(var property in object) {
+            if(object.hasOwnProperty(property)){
+                ++count;
             }
-            return dest;
-        };
+        }
+        return count;
+    };
 
-        utils.countProperties = function (/*object*/ object) {
-            //summary:
-            //     Count the properties of an object
-
-            var count = 0;
-
-            for(var property in object) {
-                if(object.hasOwnProperty(property)){
-                    ++count;
-                }
-            }
-            return count;
-        };
-
-        return utils;
-    }
-);
+    return utils;
+});

@@ -3,11 +3,11 @@ define(
     function(){
         return {
             serviceManager: {
-                errorController: {
+                errorManager: {
                     moduleName: 'sijit/errorController/ErrorController',
                     asyncObj: {
                         status: 'status',
-                        errorDialog: 'sijit/errorController/ErrorDialog'
+                        errorForm: 'sijit/errorController/ErrorDialogForm'
                     }
                 }
             }
