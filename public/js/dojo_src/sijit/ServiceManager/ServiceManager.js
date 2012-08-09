@@ -115,9 +115,9 @@ define([
 
                     require([moduleName], lang.hitch(this, function(Module){
                         var object = new Module;
-                        Deferred.when(this._inject(object, config), lang.hitch(this, function(object){
-                            this._instances[index].object = object;
-                            this._instances[index].promise.resolve(object);
+                        Deferred.when(this._inject(object, config), lang.hitch(this, function(injectedObject){
+                            this._instances[index].object = injectedObject;
+                            this._instances[index].promise.resolve(injectedObject);
                         }))
                     }));
 
@@ -214,8 +214,9 @@ define([
 
                     //Inject create objects
                     for (attr in config.createObjects){
-                        Deferred.when(this.createObject(config.createObjects[attr]), function(injectionObject){
-                            object[attr] = injectionObject;
+                        var attrCreate = attr;
+                        Deferred.when(this.createObject(config.createObjects[attrCreate]), function(injectionObject){
+                            object[attrCreate] = injectionObject;
                             --injectionsRemaining;
                             if (injectionsRemaining == 0){
                                 deferredObject.resolve(object);
@@ -225,8 +226,9 @@ define([
 
                     //Inject get objects
                     for (attr in config.getObjects){
-                        Deferred.when(this.getObject(config.getObjects[attr]), function(injectionObject){
-                            object[attr] = injectionObject;
+                        var attrGet = attr;
+                        Deferred.when(this.getObject(config.getObjects[attrGet]), function(injectionObject){
+                            object[attrGet] = injectionObject;
                             --injectionsRemaining;
                             if (injectionsRemaining == 0){
                                 deferredObject.resolve(object);
