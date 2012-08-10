@@ -2,12 +2,14 @@ define ([
         'dojo/_base/declare',
         'dojo/_base/Deferred',
         'dojo/_base/lang',
+        'dojo/Stateful',
         'sijit/ServiceManager/Ref'
     ],
     function (
         declare,
         Deferred,
         lang,
+        Stateful,
         Ref
     ){
         // module:
@@ -26,22 +28,17 @@ define ([
                     // If not, the property is returned.
                     var propertyDeferred = new Deferred;
 
-                    var hasGet = false;
-                    if (this.get && typeof(this.get) == 'function') {
-                        hasGet = true;
-                    }
-
                     if (this[property] instanceof Ref){
                         Deferred.when(this[property].getObject(), lang.hitch(this, function(object){
                             this[property] = object;
-                            if (this.hasGet) {
+                            if (this instanceof Stateful) {
                                 propertyDeferred.resolve(this.get(property));
                             } else {
                                 propertyDeferred.resolve(this[property]);
                             }
                         }));
                     } else {
-                        if (this.hasGet) {
+                        if (this instanceof Stateful) {
                             propertyDeferred.resolve(this.get(property));
                         } else {
                             propertyDeferred.resolve(this[property]);

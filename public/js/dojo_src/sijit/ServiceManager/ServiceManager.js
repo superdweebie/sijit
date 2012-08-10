@@ -5,7 +5,7 @@ define([
         'dojo/_base/lang',
         'dijit/registry',
         'dojo/aspect',
-        'sijit/ServiceManager/Ref',
+        'sijit/ServiceManager/RefFactory',
         'sijit/Common/Utils'
     ],
     function (
@@ -15,7 +15,7 @@ define([
         lang,
         registry,
         aspect,
-        Ref,
+        RefFactory,
         Utils
     ) {
         // module:
@@ -34,29 +34,34 @@ define([
                 //		defines what to inject.
                 //
                 // example:
-                // |    errorService: {
-                // |        moduleName: 'sijit/errorService/ErrorService',
+                // |    myThingForm: {
+                // |        moduleName: 'my/Thing/Form',
+                // |        plugins: [
+                // |            'sijit/ServiceManager/Plugin/Form'
+                // |        ],
                 // |        values: {
-                // |            dialogTitle: 'Ahhhh Error!'
+                // |            title: 'my formt title'
                 // |        },
                 // |        createObjects: {
                 // |        },
                 // |        getObjects: {
-                // |            errorApi: 'errorApi'
-                // |        }
+                // |            alterApi: 'alertApi'
+                // |        },
                 // |        refObjects: {
-                // |            errorDialog: 'sijit/errorController/ErrorDialog'
+                // |            errorManager: 'sijit/ErrorManager/ErrorManager'
                 // |        }
                 // |    }
                 //
-                // The above config describes how to create an instance of the 'sijit/errorService/ErrorService'.
-                // When `serviceManager.getObject('errorService')` this object will be returned.
+                // The above config describes how to create an instance of the 'my/Thing/Form'.
+                // When `serviceManager.getObject('myThingForm')` this object will be returned.
                 //
                 // The moduleName attribute defines which module to load. If not already loaded, it will be loaded
                 // async.
                 //
-                // The values object is an associatvie array of values to inject into the object. In this case,
-                // errorService.dialogTitle will be set to 'Ahhhh Error!'
+                // The plugins array is an array of ServiceManager plugins that this object will use.
+                // Plugins may add extra methods to the ServiceManager and Ref objects.
+                //
+                // The values object is an associatvie array of values to inject into the object.
                 //
                 // The createObjects is an associative array of objects to create with the serviceManager
                 // and inject. Once injected, they can be used as normal.
@@ -79,6 +84,11 @@ define([
                 //      The configuration object. Defines what to inject into objects
                 _config: {},
 
+                // _plugins: array
+                //      An associtave array of ServiceManager plugins that are loaded
+                _plugins: {},
+
+                _refFactory: undefined,
 
                 constructor: function(/* object */ config){
                     // summary:
@@ -93,6 +103,21 @@ define([
                     }
 
                     this._config = config;
+
+                    // Search config for required plugins and load them
+                    this._plugins = {};
+
+                    var index;
+                    var pluginIndex;
+                    for (index in config){
+                        if (lang.isArray(config[index].plugins)) {
+                            for (pluginIndex in config[index].plugins){
+                                this.loadPlugin(config[index].plugins[pluginIndex]);
+                            }
+                        }
+                    }
+
+                    this._refFactory = new RefFactory(this);
                 },
                 _createObject: function(/*string*/ identifier) {
                     // summary:
@@ -163,20 +188,6 @@ define([
                     }
                     return registry.byId(dijitId);
                 },
-                _isStateful: function(/*string*/ identifier){
-                    // summary:
-                    //     Checks if an identifier is a dijit, or marked as isStateful=true
-                    // tags:
-                    //     protected
-
-                    var config = this.getObjectConfig(identifier);
-
-                    if (this._getRawDijitObject(identifier) || (config && config.isStateful)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                },
                 _inject: function(/* object */ object, /* object */ config){
                     // summary:
                     //     Used to inject an object with the objects defined in the
@@ -238,11 +249,23 @@ define([
 
                     //Inject ref objects
                     for (attr in config.refObjects){
-                        object[attr] = new Ref(
-                            config.refObjects[attr],
-                            this._isStateful(config.refObjects[attr]),
-                            this
-                        );
+
+                        // Get required plugins
+                        var extendClasses = {};
+                        var refConfig = this.getObjectConfig(config.refObjects[attr]);
+                        if (refConfig && refConfig.plugins){
+                            var index
+                            for (index in refConfig.plugins){
+                                extendClasses = lang.mixin(extendClasses, this._getRefExtendClasses(refConfig.plugins[index]));
+                            }
+                        }
+
+                        var extendArray= [];
+                        for (index in extendClasses){
+                            extendArray.push(extendClasses[index]);
+                        }
+                        // Use factory to create ref with plugin extensions
+                        object[attr] = this._refFactory.create(config.refObjects[attr], extendArray);
                     }
 
                     //Inject serviceManager, if object is ServiceManagerAware
@@ -255,6 +278,51 @@ define([
                         deferredObject.resolve(object);
                     }
                     return deferredObject;
+                },
+                _getRefExtendClasses: function(/*string*/ pluginName){
+
+                    var extendClasses = {};
+                    if (this._plugins[pluginName].refExtend) {
+                        extendClasses[pluginName] = this._plugins[pluginName].refExtend;
+                    }
+
+                    //Also get dependencies
+                    var index
+                    for (index in this._plugins[pluginName].dependencies){
+                        extendClasses = lang.mixin(extendClasses, this._getRefExtendClasses(this._plugins[pluginName].dependencies[index]));
+                    }
+
+                    return extendClasses;
+                },
+                loadPlugin: function(pluginName){
+                    // summary:
+                    //     Mixes a plugin into the ServiceManager
+
+                    // Check if already loaded
+                    if (this.hasPlugin(pluginName)){
+                        return;
+                    }
+
+                    this._plugins[pluginName] = pluginName;
+                    require([pluginName], lang.hitch(this, function(Plugin){
+                        this._plugins[pluginName] = Plugin;
+                        lang.mixin(this, Plugin.serviceManagerMixin);
+
+                        // Load any plugin dependencies
+                        var index
+                        for (index in Plugin.dependencies){
+                            this.loadPlugin(Plugin.dependencies[index]);
+                        }
+                    }));
+                },
+                hasPlugin: function(pluginName){
+                    // summary:
+                    //     Checks if the supplied plugin has been loaded (or is loading)
+
+                    if (this._plugins[pluginName]){
+                        return true;
+                    }
+                    return false;
                 },
                 clearInstanceCache: function(){
                     // summary:
@@ -307,70 +375,6 @@ define([
                     //     Will return cached instance if one exists.
 
                     return this._getObject(identifier);
-                },
-                get: function(/*string*/ identifier, /*string*/ property) {
-                    // summary:
-                    //     Get the property value of the identifier. This may happen async.
-                    //     The returned deferred will resovle to the property value when the get is complete.
-                    //     This will only work for objects are dijits or configured as isStateful
-                    var deferredSet = new Deferred();
-
-                    if (!this._isStateful(identifier)){
-                        throw ({
-                            name: 'ObjectNotStateful',
-                            message: 'get only works for dijits and objects marked as isStateful'
-                        });
-                    }
-
-                    Deferred.when(this.getObject(identifier), function(object){
-                        deferredSet.resolve(object.get(property));
-                    });
-
-                    return deferredSet;
-                },
-                set: function(/*string*/ identifier, /*string*/ property, /*mixed*/ value){
-                    // summary:
-                    //     Set the property of the identifier to a value. This may happen async.
-                    //     The returned deferred will resovle to true when the set is complete.
-                    //     This will only work for objects that are configured as dojo\Stateful
-
-                    var deferredSet = new Deferred();
-
-                    if (!this._isStateful(identifier)){
-                        throw ({
-                            name: 'ObjectNotStateful',
-                            message: 'set only works for dijits and objects marked as isStateful'
-                        });
-                    }
-
-                    Deferred.when(this.getObject(identifier), function(object){
-                        object.set(property, value);
-                        deferredSet.resolve(true);
-                    });
-
-                    return deferredSet;
-                },
-                watch: function(/* string */ identifier, /* string */ property, /* function */ callback){
-                    // summary:
-                    //     Apply a watch on the property of the identifier. Callback will
-                    //     be called when the watch is activated. Applying the watch may happen async.
-                    //     The returned deferred will resovle to the watchHandle when the watch apply is complete.
-                    //     This will only work for objects that are configured as dojo\Stateful
-
-                    var deferredWatch = new Deferred();
-
-                    if (!this._isStateful(identifier)){
-                        throw ({
-                            name: 'ObjectNotStateful',
-                            message: 'watch only works for dijits and objects marked as isStateful'
-                        });
-                    }
-
-                    Deferred.when(this.getObject(identifier), function(object){
-                        deferredWatch.resolve(object.watch(property, callback));
-                    });
-
-                    return deferredWatch;
                 },
                 inject: function(/* object */ object, /* string */ identifier){
                     // summary:
