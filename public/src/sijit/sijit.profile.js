@@ -1,12 +1,11 @@
 var profile = (function(){
-    copyOnly = function(filename, mid){
+    var copyOnly = function(filename, mid){
         var list = {
             "sijit/package.json":1
         };
         return
             (mid in list) ||
-            /^dojo\/_base\/config\w+$/.test(mid) ||
-            (/^dojo\/resources\//.test(mid) && !/\.css$/.test(filename)) ||
+            (/^sijit\/resources\//.test(mid) && !/\.css$/.test(filename)) ||
             /(png|jpg|jpeg|gif|tiff)$/.test(filename);
     };
 
