@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Testing Sds.Common.JsLink</title>
+		<style type="text/css">
+			@import "../../../dojo/resources/dojo.css";
+            @import "../../../dijit/themes/claro/claro.css";
+            @import "../../../Sds/themes/claro/claro.css";
+		</style>
+		<script
+            type="text/javascript"
+            src="../../../dojo/dojo.js"
+            data-dojo-config="
+                isDebug: true,
+                popup: true,
+                async: true
+            ">
+        </script>
+		<script type="text/javascript">
+			require([
+                'doh/main',
+                'dojo/parser',
+                'Sds/Common/JsLink',
+                'dojo/domReady!'
+            ],
+            function(
+                doh,
+                parser
+            ){
+                parser.parse();
+
+                doh.register([
+                    function testSharedCreateObject(){
+                        doh.assertTrue(true);
+                    }
+                ]);
+                doh.runOnLoad();
+            });
+		</script>
+	</head>
+	<body>
+        <h1>Testing Sds.Common.JsLink</h1>
+        <div data-dojo-type="Sds.Common.JsLink" data-dojo-attach-event="onClick:_onTest">Test</div>
+	</body>
+</html>

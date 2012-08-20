@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Testing Sds.ConfigManager.ConfigManager</title>
+		<script
+            type="text/javascript"
+            src="../../../dojo/dojo.js"
+            data-dojo-config="
+                isDebug: true,
+                popup: true,
+                async: true,
+                mergeConfigs: [
+                    'Sds/Test/ConfigManager/Asset/Config1',
+                    'Sds/Test/ConfigManager/Asset/Config2'
+                ]
+            ">
+        </script>
+		<script type="text/javascript">
+			require([
+                'doh/main',
+                'dojo/_base/config',
+                'Sds/ConfigManager/ConfigReady!',
+                'dojo/domReady!'
+            ],
+            function(
+                doh,
+                dojoConfig
+            ){
+                doh.register([
+                   function testConfigMerge(){
+                        var expectedConfig = {
+                            test1: {
+                                moduleName: 'Test1',
+                                values: {
+                                    value1: 1,
+                                    value2: 22
+                                }
+                            },
+                            test2: {
+                                moduleName: 'Test2',
+                                values: {
+                                    value1: 1
+                                }
+                            }
+                        }
+                        doh.assertEqual(expectedConfig, dojoConfig.serviceManager);
+                   }
+                ]);
+                doh.runOnLoad();
+            });
+		</script>
+	</head>
+	<body>
+        <h1>Testing Sds.ConfigManager.ConfigManager</h1>
+	</body>
+</html>
