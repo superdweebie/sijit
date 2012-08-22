@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/InputAgent/FormFactory</title>
+		<style type="text/css">
+			@import "../../../../dojo/resources/dojo.css";
+            @import "../../../../dijit/themes/claro/claro.css";
+            @import "../../../../Sds/themes/claro/claro.css";
+		</style>
+		<script
+            type="text/javascript"
+            src="../../../../dojo/dojo.js"
+            data-dojo-config="
+                isDebug: true,
+                popup: true,
+                async: true,
+                mergeConfigs: [
+                    'Sds/InputAgent/Config'
+                ]
+            ">
+        </script>
+		<script type="text/javascript">
+			require([
+                'dojo/dom',
+                'dojo/when',
+                'Sds/ServiceManager/Shared/GetObject!formFactory',
+                'Sds/Test/InputAgent/Asset/TestInputAgentModel',
+                'dojo/domReady!',
+                'Sds/ConfigManager/ConfigReady!'
+            ],
+            function(
+                dom,
+                when,
+                formFactory,
+                TestInputAgentModel
+            ){
+                var model = new TestInputAgentModel;
+                when(formFactory.create(model, TestInputAgentModel.metadata), function(form){
+                    dom.byId('formContainer').appendChild(form.domNode);
+                });
+            })
+		</script>
+	</head>
+	<body class="claro">
+        <h1>Functional Testing Sds/InputAgent/FormFactory</h1>
+        <br />
+        <div id="formContainer">
+        </div>
+	</body>
+</html>

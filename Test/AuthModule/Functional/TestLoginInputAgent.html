@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds.AuthModule.LoginInputAgent</title>
+		<style type="text/css">
+			@import "../../../../dojo/resources/dojo.css";
+            @import "../../../../dijit/themes/claro/claro.css";
+            @import "../../../../Sds/themes/claro/claro.css";
+		</style>
+		<script
+            type="text/javascript"
+            src="../../../../dojo/dojo.js"
+            data-dojo-config="
+                isDebug: true,
+                popup: true,
+                async: true,
+                mergeConfigs: [
+                    'Sds/AuthModule/Config',
+                    'Sds/Test/AuthModule/Asset/Config'
+                ]
+            ">
+        </script>
+		<script type="text/javascript">
+			require([
+                'dojo/on',
+                'dojo/dom',
+                'Sds/ServiceManager/Shared/GetObject!loginInputAgent',
+                'dojo/domReady!'
+            ],
+            function(
+                on,
+                dom,
+                loginInputAgent
+            ){
+                on(dom.byId('formActivateButton'), 'click', function(){
+                    loginInputAgent.activate();
+                });
+            })
+		</script>
+	</head>
+	<body class="claro">
+        <h1>Functional Testing Sds.AuthModule.LoginInputAgent</h1>
+        <br />
+        <input id="formActivateButton" type="button" value="activate" />
+        <h3>MockUserControllerMessage:</h3>
+        <p id="MockUserControllerMessage"></p>
+	</body>
+</html>

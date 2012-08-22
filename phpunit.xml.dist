@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <phpunit
-    bootstrap="./tests/bootstrap.php"
+    bootstrap="./selenium/bootstrap.php"
     colors="true"
     backupGlobals="false"
 >
     <testsuites>
-        <testsuite name="sijit Test Suite">
-            <directory>./tests/Sijit/</directory>
+        <testsuite name="Sds Dojo Functional Test Suite">
+            <directory>./selenium/Sds/</directory>
         </testsuite>
     </testsuites>
 </phpunit>
