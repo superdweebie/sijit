@@ -4,16 +4,19 @@ define(
         return {
             serviceManager: {
                 exceptionManager: {
-                    moduleName: 'Sds/ExceptionManager/ExceptionController',
+                    moduleName: 'Sds/ExceptionManager/ExceptionManager',
                     plugins: [
                         'Sds/ServiceManager/Plugin/ExceptionManager'
                     ],
-                    asyncObj: {
+                    values: {
+                        serverUrl: 'http://localhost/ZendSkeletonApplication/exception/log'
+                    },
+                    refObjects: {
                         exceptionInputAgent: 'exceptionInputAgent'
                     }
                 },
                 exceptionInputAgent: {
-                    moduleName: 'Sds/ExceptionManger/ExceptionInputAgent',
+                    moduleName: 'Sds/ExceptionManager/ExceptionInputAgent',
                     plugins: [
                         'Sds/ServiceManager/Plugin/InputAgent'
                     ]

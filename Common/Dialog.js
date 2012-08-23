@@ -23,7 +23,12 @@ function (
     WidgetsInTemplateMixin,
     template
 ){
-    return declare(
+    var returnValues = {
+        OK: 'ok',
+        CANCEL: 'cancel'
+    };
+
+    var dialog = declare(
         'Sds/Common/Dialog',
         [Widget, TemplatedMixin, WidgetsInTemplateMixin],
         {
@@ -31,39 +36,27 @@ function (
 
             title: undefined,
 
-            validator: undefined,
+            state: '',
+
+            _returnValue: returnValues.CANCEL,
 
             _onPressEnterHandle: undefined,
 
-            _getValueAttr: function(){
-                return this.formNode.get('value');
-            },
-            _setValueAttr: function(value){
-                return this.formNode.set('value', value);
-            },
-            _getStateAttr: function(){
-                return this.formNode.get('state');
-            },
-            _setStateAttr: function(value)
-            {
-                this.formNode.set('state', value);
-            },
-            _updateState: function(){
-                var formState = this.formNode.get('state');
-                if(this.validator){
-                    formState = this.validator(formState, this.formNode.get('value'));
-                    this.formNode.set('state', formState);
-                }
-                if(formState == '')
+            _onOkButtonHandle: undefined,
+
+            _updateOkDisabled: function(){
+                // Enables and disables the ok button and ENTER key when the state is changed
+
+                if(this.state == '')
                 {
                     this.okButtonNode.set('disabled', false);
 
-                    // set up ENTER keyhandling for the search keyword input field
+                    // set up ENTER keyhandling
                     this._onPressEnterHandle = on(this.dialogNode, 'keydown', lang.hitch(this, function(event){
                         if(event.keyCode == keys.ENTER){
                             event.preventDefault();
                             this._onPressEnterHandle.remove();
-                            this.hide();
+                            this._onOk();
                         }
                     }));
                 } else {
@@ -73,17 +66,21 @@ function (
                     }
                 }
             },
-            reset: function(){
-                return this.formNode.reset();
+
+            _onOk: function(){
+                this._returnValue = returnValues.OK;
+                this.hide();
             },
+
             show: function()
             {
                 this._returnValueDeferred = new Deferred();
+
                 this.dialogNode.set('title', this.title);
-                this.formNode.watch('state', lang.hitch(this, '_updateState'));
-                on(this.okButtonNode, 'Click', lang.hitch(this, 'hide'));
+                this.watch('state', lang.hitch(this, '_updateOkDisabled'));
+                this._onOkButtonHandle = on(this.okButtonNode, 'Click', lang.hitch(this, '_onOk'));
                 this.dialogNode.show();
-                this._updateState();
+                this._updateOkDisabled();
                 this.onShow();
                 return this._returnValueDeferred;
             },
@@ -91,17 +88,21 @@ function (
             {},
             hide: function()
             {
-                var value = this.formNode.get('value');
+                this._onOkButtonHandle.remove();
                 if(this._returnValueDeferred)
                 {
-                    this._returnValueDeferred.resolve(value)
+                    this._returnValueDeferred.resolve(this._returnValue)
                 }
                 this.dialogNode.hide();
-                this.onHide(value);
+                this.onHide(this._returnValue);
             },
             onHide: function(value)
             {}
         }
     );
+
+    dialog.returnValues = returnValues;
+
+    return dialog;
 });
 

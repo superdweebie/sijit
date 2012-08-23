@@ -36,7 +36,7 @@ function(
 
             activate: function(value){
 
-                this.inherited(value);
+                this.inherited(arguments);
 
                 this.exceptionMessageNode.innerHTML = value.message;
                 when(this.exceptionDialogNode.show(), lang.hitch(this, function(){

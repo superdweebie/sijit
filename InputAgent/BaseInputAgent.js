@@ -59,9 +59,10 @@ function(
                 this._activateDeferred = new Deferred;
 
                 if (value) {
-                    if (
-                        ! value.isInstanceOf ||
-                        ! value.isInstanceOf(this.valueType)
+                    if (! value instanceof this.valueType && (
+                            ! value.isInstanceOf ||
+                            ! value.isInstanceOf(this.valueType)
+                        )
                     ){
                         this.exceptionManager.handle(new InvalidTypeException());
                         this._activateDeferred.reject();

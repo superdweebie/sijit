@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/Common/Dialog</title>
+		<style type="text/css">
+			@import "../../../../dojo/resources/dojo.css";
+            @import "../../../../dijit/themes/claro/claro.css";
+            @import "../../../../Sds/themes/claro/claro.css";
+		</style>
+		<script
+            type="text/javascript"
+            src="../../../../dojo/dojo.js"
+            data-dojo-config="
+                isDebug: true,
+                popup: true,
+                async: true
+            ">
+        </script>
+		<script type="text/javascript">
+			require([
+                'dojo/dom',
+                'dojo/on',
+                'dojo/parser',
+                'dijit/registry',
+                'dojo/domReady!'
+            ],
+            function(
+                dom,
+                on,
+                parser,
+                registry
+            ){
+                parser.parse().then(function(){
+                    on(dom.byId('showDialog'), 'click', function(){
+                        registry.byId('testDialog').show();
+                    });
+                    on(dom.byId('validState'), 'click', function(){
+                        registry.byId('testDialog').set('state', '');
+                    });
+                    on(dom.byId('invalidState'), 'click', function(){
+                        registry.byId('testDialog').set('state', 'bad');
+                    });
+                });
+            })
+		</script>
+	</head>
+	<body class="claro">
+        <h1>Functional Testing Sds/Common/Dialog</h1>
+        <br />
+        <input id="showDialog" type="button" value="show dialog" />
+
+        <div id="testDialog" data-dojo-type="Sds/Common/Dialog" title = "'Test Dialog'">
+            <div class="dialogMessage">
+                <div>This is a dialog test message.</div>
+                <input id="validState" type="button" value="valid state" />
+                <input id="invalidState" type="button" value="invalid state" />
+            </div>
+        </div>
+	</body>
+</html>

@@ -1,5 +1,6 @@
 define([
     'dojo/_base/declare',
+    'dojo/_base/lang',
     'dojo/request/script',
     'Sds/ExceptionManager/Exception/BaseException',
     'Sds/ExceptionManager/Exception/InvalidTypeException',
@@ -8,7 +9,9 @@ define([
 ],
 function(
     declare,
+    lang,
     script,
+    BaseException,
     InvalidTypeException,
     ServerLogFailedException,
     ExceptionManagerInterface
@@ -20,7 +23,7 @@ function(
             // summary:
             //     Module providing exception display and logging
 
-            // errorInputAgent: Sds.InputAgent.BaseInputAgent
+            // exceptionInputAgent: Sds.InputAgent.BaseInputAgent
             //     Responsible for displaying the error
             exceptionInputAgent: undefined,
 
@@ -30,13 +33,13 @@ function(
 
             handle: function(exception){
 
-                if ( ! exception.isInstanceOf || ! exception.isInstanceOf(BaseException)){
+                if ( ! exception instanceof BaseException){
                     // Supplied exception needs to be wrapped
                     this.handle(new InvalidTypeException(exception));
                 }
 
                 if (exception.display) {
-                    this.exceptionInputAgent.activate();
+                    this.exceptionInputAgent.activate(exception);
                 }
 
                 if (exception.log) {
@@ -44,9 +47,9 @@ function(
                         query: exception,
                         jsonp: 'callback',
                         timeout: this.jsonpTimeout
-                    }).then(null, function(error){
+                    }).then(null, lang.hitch(this, function(error){
                         this.handle(new ServerLogFailedException(error));
-                    });
+                    }));
                 }
             }
         }
