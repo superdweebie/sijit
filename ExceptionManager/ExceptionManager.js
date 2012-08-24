@@ -44,13 +44,19 @@ function(
 
                 if (exception.log) {
                     script.get(this.serverUrl, {
-                        query: exception,
+                        query: {query: '{"name": "test"}'},
                         jsonp: 'callback',
+                        preventCache: true,
                         timeout: this.jsonpTimeout
-                    }).then(null, lang.hitch(this, function(error){
+                    }).then(lang.hitch(this, function(result){this.onLogged(exception, result)}), lang.hitch(this, function(error){
                         this.handle(new ServerLogFailedException(error));
                     }));
                 }
+            },
+
+            onLogged: function(exception, result){
+                console.debug(result);
+                console.debug(exception);
             }
         }
     );
