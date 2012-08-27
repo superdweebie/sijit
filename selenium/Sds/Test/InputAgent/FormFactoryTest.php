@@ -4,7 +4,7 @@ namespace Sds\Test\AuthModule;
 
 use Sds\Test\AbstractWebDriverTest;
 
-class LoginInputAgentTest extends AbstractWebDriverTest {
+class FormFactoryTest extends AbstractWebDriverTest {
 
     public function setUp(){
         parent::setUp();

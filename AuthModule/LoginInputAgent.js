@@ -2,11 +2,14 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/when',
+    'dojo/dom',
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'Sds/ServiceManager/SafeGetPropertyMixin',
     'Sds/InputAgent/BaseInputAgent',
+    'Sds/AuthModule/InputAgentModel/Login',
+    'Sds/ServiceManager/Shared/GetObject!formFactory',
     'dojo/text!./Template/LoginInputAgent.html',
     'Sds/Common/Dialog',
     'Sds/Common/JsLink',
@@ -17,11 +20,14 @@ function(
     declare,
     lang,
     when,
+    dom,
     Widget,
     TemplatedMixin,
     WidgetsInTemplateMixin,
     SafeGetPropertyMixin,
     BaseInputAgent,
+    LoginInputAgentModel,
+    formFactory,
     template
 ){
     return declare(
@@ -36,30 +42,54 @@ function(
         {
             templateString: template,
 
-            // userController: Sds.UserModule.UserControllerInterface | Sds.ServiceManager.Ref
+            // userController: Sds/UserModule/UserControllerInterface | Sds/ServiceManager/Ref
             //     A userController or reference to one
             userController: undefined,
 
-            valueType: Object,
+            valueType: LoginInputAgentModel,
 
-            activate: function(){
+            form: undefined,
+
+            activate: function(value){
+
+                if ( ! value){
+                    value = new LoginInputAgentModel;
+                }
 
                 this.inherited(arguments);
 
-                when(this.loginDialogNode.show(), lang.hitch(this, function(){
-                    this._resolve();
+                when(formFactory.create(value, LoginInputAgentModel.metadata), lang.hitch(this, function(form){
+                    this.form = form;
+
+                    this.loginDialogNode.set('state', 'Incomplete');
+                    form.watch('state', lang.hitch(this, function(property, oldValue, newValue){
+                        this.loginDialogNode.set('state', newValue);
+                    }));
+                    dom.byId('loginFormContainer').appendChild(form.domNode);
+                    when(this.loginDialogNode.show(), lang.hitch(this, function(){
+                        this._resolve();
+                    }));
                 }));
 
                 return this._activateDeferred;
             },
             reset: function(){
-                return this.loginDialogNode.reset();
+                if (this.form) {
+                    return this.form.reset();
+                }
+                return null;
             },
             _getValueAttr: function(){
-                return this.loginDialogNode.get('value');
+                if (this.form){
+                    return this.form.get('value');
+                }
+                return null;
             },
             _getStateAttr: function(){
-                return this.loginDialogNode.get('state');
+                if (this.form){
+                    return this.form.get('state');
+                }
+                return null;
             },
             _onRecoverPassword: function(){
                 this.set('state', 'recoverPassword');
