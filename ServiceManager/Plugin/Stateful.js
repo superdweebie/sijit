@@ -70,7 +70,7 @@ define([
                 }
             },
             refExtend: declare(
-                'Sds.ServiceManager.Plugin.StatefulRef',
+                'Sds/ServiceManager/Plugin/StatefulRef',
                 [Stateful],
                 {
                     get: function(property){

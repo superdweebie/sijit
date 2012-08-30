@@ -2,18 +2,20 @@
 
 define ([
         'dojo/_base/declare',
-        'dojo/Stateful'
+        'dojo/Stateful', 
+        'Sds/InputAgent/BaseInputAgentModel'
     ],
     function (
         declare,
-        Stateful
+        Stateful, 
+        SdsInputAgentBaseInputAgentModel
     ){
         // module:
         //		Sds/UserModule/Model/User
 
-        return declare (
-            'Sds.UserModule.Model.User',
-            [Stateful],
+        var model = declare (
+            'Sds/UserModule/Model/User',
+            [Stateful, SdsInputAgentBaseInputAgentModel],
             {
                 // summary:
                 //		A mirror of doctrine document Sds\UserModule\Model\User
@@ -21,6 +23,10 @@ define ([
                 // description:
                 //      Use this to create documents in a browser which can the be passed to a doctrine server for
                 //      persistence
+
+                // _className: string
+                //      The doctrine document class name. Don't change this one!
+                _className: 'Sds\\UserModule\\Model\\User',
 
                 // id: custom_id
                 id: undefined,
@@ -31,9 +37,6 @@ define ([
                 // lastname: string
                 lastname: undefined,
 
-                // nickname: string
-                nickname: undefined,
-
                 // password: string
                 password: undefined,
 
@@ -41,9 +44,115 @@ define ([
                 roles: undefined,
 
                 // username: string
-                username: undefined
+                username: undefined,
 
+                toJSON: function(){
+                    // summary:
+                    //     Function to handle serialization
+
+                    var json = {};
+                    if (this.get('_1')) {
+                        json['_1'] = this.get('_1');
+                    }
+                    if (this.get('id')) {
+                        json['id'] = this.get('id');
+                    }
+                    if (this.get('firstname')) {
+                        json['firstname'] = this.get('firstname');
+                    }
+                    if (this.get('lastname')) {
+                        json['lastname'] = this.get('lastname');
+                    }
+                    if (this.get('password')) {
+                        json['password'] = this.get('password');
+                    }
+                    if (this.get('roles')) {
+                        json['roles'] = this.get('roles');
+                    }
+                    if (this.get('username')) {
+                        json['username'] = this.get('username');
+                    }
+
+                    return json;
+                }
             }
         );
+
+        model.metadata = {
+            "fields": [
+                {
+                    "id": "idField",
+                    "property": "id",
+                    "title": "Id:",
+                    "dataType": "custom_id",
+                    "inputType": "hidden"
+                },
+                {
+                    "id": "firstnameField",
+                    "property": "firstname",
+                    "title": "Firstname:",
+                    "dataType": "string",
+                    "required": true,
+                    "validators": [
+                        {
+                            "module": "Sds\/Validator\/PersonalNameValidator",
+                            "options": null
+                        }
+                    ]
+                },
+                {
+                    "id": "lastnameField",
+                    "property": "lastname",
+                    "title": "Lastname:",
+                    "dataType": "string",
+                    "required": true,
+                    "validators": [
+                        {
+                            "module": "Sds\/Validator\/PersonalNameValidator",
+                            "options": null
+                        }
+                    ]
+                },
+                {
+                    "id": "passwordField",
+                    "property": "password",
+                    "title": "Password:",
+                    "dataType": "string",
+                    "inputType": "password",
+                    "validators": [
+                        {
+                            "module": "Sds\\Validator\\PasswordValidator",
+                            "options": null
+                        }
+                    ]
+                },
+                {
+                    "id": "rolesField",
+                    "property": "roles",
+                    "title": "Roles:",
+                    "dataType": "hash",
+                    "validators": [
+                        {
+                            "module": "Sds\\Validator\\StandardNameArrayValidator",
+                            "options": null
+                        }
+                    ]
+                },
+                {
+                    "id": "usernameField",
+                    "property": "username",
+                    "title": "Username:",
+                    "dataType": "string",
+                    "validators": [
+                        {
+                            "module": "Sds\\Validator\\StandardNameValidator",
+                            "options": null
+                        }
+                    ]
+                }
+            ]
+        };
+
+        return model;
     }
 );

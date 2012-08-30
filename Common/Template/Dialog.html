@@ -1,8 +1,13 @@
-<div class="dialog">
-    <div data-dojo-type="dijit/Dialog" title = 'Dialog' data-dojo-attach-point="dialogNode">
-        <div data-dojo-attach-point='containerNode'></div>
-        <div class="dialogButtons">
-            <div data-dojo-type="dijit/form/Button" data-dojo-attach-point="okButtonNode">OK</div>
-        </div>
+<div class="dijitDialog" role="dialog" aria-labelledby="${id}_title">
+	<div data-dojo-attach-point="titleBar" class="dijitDialogTitleBar">
+		<span data-dojo-attach-point="titleNode" class="dijitDialogTitle" id="${id}_title"
+				role="header" level="1"></span>
+		<span data-dojo-attach-point="closeButtonNode" class="dijitDialogCloseIcon" data-dojo-attach-event="ondijitclick: onCancel" title="${buttonCancel}" role="button" tabIndex="-1">
+			<span data-dojo-attach-point="closeText" class="closeText" title="${buttonCancel}">x</span>
+		</span>
+	</div>
+	<div data-dojo-attach-point="containerNode" class="dijitDialogPaneContent"></div>
+    <div class="dialogButtons">
+        <div data-dojo-type="dijit/form/Button" data-dojo-attach-point="okButtonNode" data-dojo-attach-event="onClick: onOk">OK</div>
     </div>
 </div>

@@ -16,18 +16,33 @@ define ([
         );
 
         model.metadata = {
+            validators: [
+                {
+                    module:'Sds/UserModule/Validator/RecoverPasswordValidator'
+                }
+            ],
             fields: [
                 {
-                    name: username,
-                    type: string,
-                    required: true,
-                    validator: 'Sds/Validator/Username'
+                    id       : 'usernameInput',
+                    property : 'username',
+                    title    : 'Username:',
+                    dataType : 'string',
+                    validators: [
+                        {
+                            module: 'Sds/Validator/IdentifierValidator'
+                        }
+                    ]
                 },
                 {
-                    name: email,
-                    type: string,
-                    required: true,
-                    validator: 'Sds/Validator/Email'
+                    id       : 'emailInput',
+                    property : 'email',
+                    title    : 'Email:',
+                    dataType : 'string',
+                    validators: [
+                        {
+                            module: 'Sds/Validator/EmailAddressValidator'
+                        }
+                    ]
                 }
             ]
         };

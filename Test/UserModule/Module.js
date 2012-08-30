@@ -1,3 +1,3 @@
 define([
-	"dojo/has!host-browser?Sds/AuthModule/Test/TestUserController"
+    'Sds/Test/UserModule/TestRecoverPasswordValidator'
 ], 1);

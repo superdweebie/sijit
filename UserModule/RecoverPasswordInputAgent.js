@@ -2,13 +2,14 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/when',
-    'dijit/registry',
+    'dojo/Deferred',
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'Sds/InputAgent/BaseInputAgent',
     'Sds/UserModule/InputAgentModel/RecoverPassword',
-    'dojo/text!./templates/RecoverPasswordDialog.html',
+    'Sds/InputAgent/FormFactory',
+    'dojo/text!./Template/RecoverPasswordInputAgent.html',
     'sds/Common/Dialog',
     'dojox/layout/TableContainer',
     'dijit/form/ValidationTextBox',
@@ -18,12 +19,13 @@ function(
     declare,
     lang,
     when,
-    registry,
+    Deferred,
     Widget,
     TemplatedMixin,
     WidgetsInTemplateMixin,
     BaseInputAgent,
-    RecoverPasswordModel,
+    RecoverPasswordInputAgentModel,
+    FormFactory,
     template
 ){
     return declare(
@@ -37,35 +39,51 @@ function(
         {
             templateString: template,
 
-            valueType: RecoverPasswordModel,
+            valueType: RecoverPasswordInputAgentModel,
 
-            activate: function(){
+            inputsAppended: false,
+
+            activate: function(value){
 
                 this.inherited(arguments);
 
-                when(this.recoverPasswordDialogNode.show(), lang.hitch(this, function(){
-                    this._resolve();
+                if ( ! value){
+                    value = new RecoverPasswordInputAgentModel;
+                    this.set('value', value);
+                }
+
+                when(this._appendInputs(), lang.hitch(this, function(){
+                    this.recoverPasswordDialogNode.set('value', value);
+                    when(this.recoverPasswordDialogNode.show(), lang.hitch(this, function(){
+                        this._resolve();
+                    }));
                 }));
 
                 return this._activateDeferred;
             },
             reset: function(){
-                return this.recoverPasswordDialogNode.reset();
+                this.recoverPasswordDialogNode.reset();
             },
-            _getValueAttr: function(){
-                return this.recoverPasswordDialogNode.get('value');
+            _appendInputs: function(){
+                var appendInputsDeferred = new Deferred;
+
+                if ( ! this.inputsAppened){
+                    var formFactory = new FormFactory;
+                    when(formFactory.append(this.recoverPasswordDialogNode, RecoverPasswordInputAgentModel.metadata, true), lang.hitch(this, function(){
+                        this.inputsAppened = true;
+                        appendInputsDeferred.resolve();
+                    }));
+                } else {
+                    appendInputsDeferred.resolve();
+                }
+                return appendInputsDeferred;
             },
             _getStateAttr: function(){
                 return this.recoverPasswordDialogNode.get('state');
             },
-            validator: function(){
-                var username = registry.byId('passwordRecoveryUsername');
-                var email = registry.byId('passwordRecoveryEmail');
-                if ((username.get('value') && username.isValid()) ||
-                    (email.get('value') && email.isValid())){
-                    return '';
-                }
-                return 'Incomplete';
+            _getValueAttr: function(){
+                this.value = lang.mixin(this.value, this.recoverPasswordDialogNode.get('value').value);
+                return this.value;
             }
         }
     );

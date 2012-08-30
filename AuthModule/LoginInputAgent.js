@@ -2,32 +2,29 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/when',
-    'dojo/dom',
+    'dojo/Deferred',
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
-    'Sds/ServiceManager/SafeGetPropertyMixin',
     'Sds/InputAgent/BaseInputAgent',
     'Sds/AuthModule/InputAgentModel/Login',
-    'Sds/ServiceManager/Shared/GetObject!formFactory',
+    'Sds/InputAgent/FormFactory',
     'dojo/text!./Template/LoginInputAgent.html',
     'Sds/Common/Dialog',
     'Sds/Common/JsLink',
-    'dojox/layout/TableContainer',
     'dijit/form/ValidationTextBox'
 ],
 function(
     declare,
     lang,
     when,
-    dom,
+    Deferred,
     Widget,
     TemplatedMixin,
     WidgetsInTemplateMixin,
-    SafeGetPropertyMixin,
     BaseInputAgent,
     LoginInputAgentModel,
-    formFactory,
+    FormFactory,
     template
 ){
     return declare(
@@ -36,7 +33,6 @@ function(
             Widget,
             TemplatedMixin,
             WidgetsInTemplateMixin,
-            SafeGetPropertyMixin,
             BaseInputAgent
         ],
         {
@@ -48,24 +44,19 @@ function(
 
             valueType: LoginInputAgentModel,
 
-            form: undefined,
+            inputsAppended: false,
 
             activate: function(value){
 
-                if ( ! value){
-                    value = new LoginInputAgentModel;
-                }
-
                 this.inherited(arguments);
 
-                when(formFactory.create(value, LoginInputAgentModel.metadata), lang.hitch(this, function(form){
-                    this.form = form;
+                if ( ! value){
+                    value = new LoginInputAgentModel;
+                    this.set('value', value);
+                }
 
-                    this.loginDialogNode.set('state', 'Incomplete');
-                    form.watch('state', lang.hitch(this, function(property, oldValue, newValue){
-                        this.loginDialogNode.set('state', newValue);
-                    }));
-                    dom.byId('loginFormContainer').appendChild(form.domNode);
+                when(this._appendInputs(), lang.hitch(this, function(){
+                    this.loginDialogNode.set('value', value);
                     when(this.loginDialogNode.show(), lang.hitch(this, function(){
                         this._resolve();
                     }));
@@ -74,36 +65,38 @@ function(
                 return this._activateDeferred;
             },
             reset: function(){
-                if (this.form) {
-                    return this.form.reset();
-                }
-                return null;
+                this.loginDialogNode.reset();
             },
-            _getValueAttr: function(){
-                if (this.form){
-                    return this.form.get('value');
+            _appendInputs: function(){
+                var appendInputsDeferred = new Deferred;
+
+                if ( ! this.inputsAppened){
+                    var formFactory = new FormFactory;
+                    when(formFactory.append(this.loginDialogNode, LoginInputAgentModel.metadata, true), lang.hitch(this, function(){
+                        this.inputsAppened = true;
+                        appendInputsDeferred.resolve();
+                    }));
+                } else {
+                    appendInputsDeferred.resolve();
                 }
-                return null;
+                return appendInputsDeferred;
             },
             _getStateAttr: function(){
-                if (this.form){
-                    return this.form.get('state');
-                }
-                return null;
+                return this.loginDialogNode.get('state');
+            },
+            _getValueAttr: function(){
+                this.value = lang.mixin(this.value, this.loginDialogNode.get('value').value);
+                return this.value;
             },
             _onRecoverPassword: function(){
                 this.set('state', 'recoverPassword');
                 this.loginDialogNode.hide();
-                when(this.safeGetProperty('userController'), function(userController){
-                    userController.recoverPassword();
-                });
+                this.userController.recoverPassword();
             },
             _onRegister: function(){
                 this.set('state', 'register');
                 this.loginDialogNode.hide();
-                when(this.safeGetProperty('userController'), function(userController){
-                    userController.register();
-                });
+                this.userController.register();
             }
         }
     );

@@ -92,7 +92,6 @@ function(
                     this._activateDeferred.reject();
                     return;
                 }
-
                 this._activateDeferred.resolve({
                     state: this.get('state'),
                     value: value

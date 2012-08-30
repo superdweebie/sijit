@@ -17,28 +17,6 @@ define([
 
         doh.register("Sds.Test.ServiceManager.TestInputAgentPlugin", [
 
-            function activateTest(){
-                var serviceManager = new ServiceManager({
-                    testInputAgent: {
-                        moduleName: 'Sds/Test/ServiceManager/Asset/TestInputAgent',
-                        plugins: [
-                            'Sds/ServiceManager/Plugin/InputAgent'
-                        ]
-                    }
-                });
-
-                var deferredTest = new Deferred;
-
-                Deferred.when(serviceManager.activate('testInputAgent'), function(){
-                    Deferred.when(serviceManager.get('testInputAgent', 'value'), function(value){
-                        doh.assertEqual('good', value.test);
-                        deferredTest.resolve(true);
-                    })
-                });
-
-                return deferredTest;
-            },
-
             function refTest(){
                 var serviceManager = new ServiceManager({
                     testParent: {

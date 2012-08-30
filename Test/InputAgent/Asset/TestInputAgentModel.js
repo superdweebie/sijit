@@ -10,19 +10,30 @@ define ([
             'Sds/Test/InputAgent/Asset/TestInputAgentModel',
             [BaseInputAgentModel],
             {
-                username: 'username',
+                username: 'toby',
                 password: 'password1'
             }
         );
 
         model.metadata = {
+            validators : [
+                {
+                    module: 'Sds/Test/InputAgent/Asset/ClassValidator',
+                    options: null
+                }
+            ],
             fields: [
                 {
                     id       : 'testUsername',
                     property : 'username',
                     dataType : 'string',
                     required : true,
-                    validator: 'Sds/Validator/UsernameValidator'
+                    validators: [
+                        {
+                            module : 'Sds/Validator/IdentifierValidator',
+                            options: null
+                        }
+                    ]
                 },
                 {
                     id       : 'testPassword',
@@ -32,7 +43,12 @@ define ([
                     type     : 'password',
                     dijit    : 'dijit/form/ValidationTextBox',
                     required : true,
-                    validator: 'Sds/Validator/PasswordValidator'
+                    validators: [
+                        {
+                            module : 'Sds/Validator/PasswordValidator',
+                            options: null
+                        }
+                    ]
                 }
             ]
         };

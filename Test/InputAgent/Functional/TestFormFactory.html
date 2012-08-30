@@ -16,7 +16,6 @@
                 popup: true,
                 async: true,
                 mergeConfigs: [
-                    'Sds/InputAgent/Config'
                 ]
             ">
         </script>
@@ -24,19 +23,20 @@
 			require([
                 'dojo/dom',
                 'dojo/when',
-                'Sds/ServiceManager/Shared/GetObject!formFactory',
+                'Sds/InputAgent/FormFactory',
                 'Sds/Test/InputAgent/Asset/TestInputAgentModel',
-                'dojo/domReady!',
-                'Sds/ConfigManager/ConfigReady!'
+                'dojo/domReady!'
             ],
             function(
                 dom,
                 when,
-                formFactory,
+                FormFactory,
                 TestInputAgentModel
             ){
                 var model = new TestInputAgentModel;
-                when(formFactory.create(model, TestInputAgentModel.metadata), function(form){
+                var formFactory = new FormFactory;
+                when(formFactory.create(TestInputAgentModel.metadata, true), function(form){
+                    form.set('value', model);
                     dom.byId('formContainer').appendChild(form.domNode);
                 });
             })

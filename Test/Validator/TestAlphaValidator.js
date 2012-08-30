@@ -1,23 +1,21 @@
 define([
         'doh/main',
-        'Sds/Validator/PasswordValidator'
+        'Sds/Validator/AlphaValidator'
     ],
     function(
         doh,
-        PasswordValidator
+        AlphaValidator
     ){
-        doh.register("Sds.Test.Validator.TestPasswordValidator", [
+        doh.register("Sds.Test.Validator.TestAlphaValidator", [
 
             function ValidatorTest(doh){
-                var validator = new PasswordValidator;
+                var validator = new AlphaValidator;
 
                 var testArray = [
-                    [true, 'password1'],
-                    [true, 'password1@'],
-                    [false, '1abcd'],
-                    [false, '123456789'],
-                    [false, 'password'],
-                    [false, '123456789123456789123456789123456789password']
+                    [true, 'abc'],
+                    [true, 'ABC'],
+                    [false, 'a1'],
+                    [false, 'a&']
                 ];
 
                 var index;

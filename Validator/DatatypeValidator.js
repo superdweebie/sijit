@@ -25,8 +25,6 @@ function(
         'Sds/Validator/DatatypeValidator',
         [BaseValidator],
         {
-            messages: [],
-
             requiredType: undefined,
 
             constructor: function(requiredType){

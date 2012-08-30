@@ -21,6 +21,8 @@
 			require([
                 'dojo/dom',
                 'dojo/on',
+                'dojo/when',
+                'dojo/_base/json',
                 'dojo/parser',
                 'dijit/registry',
                 'dojo/domReady!'
@@ -28,12 +30,16 @@
             function(
                 dom,
                 on,
+                when,
+                json,
                 parser,
                 registry
             ){
                 parser.parse().then(function(){
                     on(dom.byId('showDialog'), 'click', function(){
-                        registry.byId('testDialog').show();
+                        when(registry.byId('testDialog').show(), function(result){
+                            dom.byId('ReturnValue').innerHTML = json.toJson(result);
+                        });
                     });
                     on(dom.byId('validState'), 'click', function(){
                         registry.byId('testDialog').set('state', '');
@@ -50,12 +56,14 @@
         <br />
         <input id="showDialog" type="button" value="show dialog" />
 
+        <h3>Return value</h3>
+        <p id="ReturnValue"></p>
         <div id="testDialog" data-dojo-type="Sds/Common/Dialog" title = "'Test Dialog'">
-            <div class="dialogMessage">
-                <div>This is a dialog test message.</div>
-                <input id="validState" type="button" value="valid state" />
-                <input id="invalidState" type="button" value="invalid state" />
-            </div>
+            <div>This is a dialog test message.</div>
+            <input id="validState" type="button" value="valid state" />
+            <input id="invalidState" type="button" value="invalid state" />
+            <br />
+            <input id="hello" data-dojo-type="dijit/form/TextBox" value="hello" name="helloInput"/>
         </div>
 	</body>
 </html>

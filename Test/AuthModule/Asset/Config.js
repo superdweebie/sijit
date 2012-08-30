@@ -35,7 +35,10 @@ define(
                     ]
                 },
                 mockUserController: {
-                    moduleName: 'Sds/Test/AuthModule/Asset/MockUserController'
+                    moduleName: 'Sds/Test/AuthModule/Asset/MockUserController',
+                    plugins: [
+                        'Sds/ServiceManager/Plugin/UserController'
+                    ]
                 }
             }
         }
