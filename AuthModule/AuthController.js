@@ -7,7 +7,7 @@ define([
     'Sds/Common/Status',
     'dojox/rpc/Service',
     'dojo/Stateful',
-    'Sds/ServiceManager/SafeGetPropertyMixin',
+    'Sds/ExceptionManager/throwEx',
     'Sds/AuthModule/Exception/AlreadyLoggedInException',
     'Sds/AuthModule/Exception/LoginFailedException',
     'dojox/rpc/JsonRPC'
@@ -21,13 +21,13 @@ function (
     Status,
     RpcService,
     Stateful,
-    SafeGetPropertyMixin,
+    throwEx,
     AlreadyLoggedInException,
     LoginFailedException
 ){
     return declare(
         'Sds.AuthModule.AuthController',
-        [Stateful, SafeGetPropertyMixin],
+        [Stateful],
         {
             // summary:
             //		Controlls user login and logout.
@@ -53,10 +53,6 @@ function (
             //status: Sds/Common/Status
             //    An object indicating the current status
             status: undefined,
-
-            //exceptionManager: Sds\ExceptionManager\ExceptionManagerInterface | Sds.ServiceManager.Ref
-            //    Will handle xhr errors
-            exceptionManager: undefined,
 
             // loginInputAgent: Sds.InputAgent.BaseInputAgent
             //     This form is shown to prompt login
@@ -168,9 +164,7 @@ function (
                         newException = exception;
                 }
 
-                when(this.safeGetProperty('exceptionManager'), function(exceptionManager){
-                    exceptionManager.handle(newException);
-                })
+                throwEx(newException);
 
                 if (this._loginDeferred && (! this._loginDeferred.isFulfilled())){
                     this._loginDeferred.reject(newException);

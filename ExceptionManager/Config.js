@@ -5,8 +5,11 @@ define(
             serviceManager: {
                 exceptionManager: {
                     moduleName: 'Sds/ExceptionManager/ExceptionManager',
-                    plugins: [
-                        'Sds/ServiceManager/Plugin/ExceptionManager'
+                    proxyMethods: [
+                        'handle',
+                        'get',
+                        'set',
+                        'watch'
                     ],
                     values: {
                         serverUrl: 'http://localhost/ZendSkeletonApplication/exception/log'
@@ -17,8 +20,12 @@ define(
                 },
                 exceptionInputAgent: {
                     moduleName: 'Sds/ExceptionManager/ExceptionInputAgent',
-                    plugins: [
-                        'Sds/ServiceManager/Plugin/InputAgent'
+                    proxyMethods: [
+                        'activate',
+                        'reset',
+                        'get',
+                        'set',
+                        'watch'
                     ]
                 }
             }

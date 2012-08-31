@@ -1,12 +1,14 @@
 define([
         'doh/main',
-        'dojo/_base/Deferred',
+        'dojo/Deferred',
+        'dojo/when',
         'dijit/form/Button',
         'Sds/ServiceManager/ServiceManager'
     ],
     function(
         doh,
         Deferred,
+        when,
         Button,
         ServiceManager
     ){
@@ -68,16 +70,16 @@ define([
                 var zoo;
 
                 // getObject with no config - just module name
-                Deferred.when(serviceManager.getObject('Sds/Test/ServiceManager/Asset/Zoo'), function(zoo){
+                when(serviceManager.getObject('Sds/Test/ServiceManager/Asset/Zoo'), function(zoo){
                     doh.assertEqual('the Sds zoo', zoo.name);
                     zoo.name = 'other zoo';
 
                     // getObject- should return cached Zoo cached with modified name
-                    Deferred.when(serviceManager.getObject('Sds/Test/ServiceManager/Asset/Zoo'), function(zoo){
+                    when(serviceManager.getObject('Sds/Test/ServiceManager/Asset/Zoo'), function(zoo){
                         doh.assertEqual('other zoo', zoo.name);
 
                         // createObject - should return new instance of Zoo - with original name
-                        Deferred.when(serviceManager.createObject('Sds/Test/ServiceManager/Asset/Zoo'), function(zoo){
+                        when(serviceManager.createObject('Sds/Test/ServiceManager/Asset/Zoo'), function(zoo){
                             doh.assertEqual('the Sds zoo', zoo.name);
                             deferredTest.resolve(true);
                         });
@@ -98,7 +100,7 @@ define([
                 var deferredTest = new Deferred;
 
                 // Create with var config
-                Deferred.when(serviceManager.createObject('Sds/Test/ServiceManager/Asset/Zoo'), function(zoo){
+                when(serviceManager.createObject('Sds/Test/ServiceManager/Asset/Zoo'), function(zoo){
                     doh.assertEqual('injected zoo', zoo.name);
                     deferredTest.resolve(true);
                 });
@@ -119,7 +121,7 @@ define([
                 var deferredTest = new Deferred;
 
                 // Create with values config
-                Deferred.when(serviceManager.createObject('zoo'), function(zoo){
+                when(serviceManager.createObject('zoo'), function(zoo){
                     doh.assertEqual('alias zoo', zoo.name);
                     deferredTest.resolve(true);
                 });
@@ -141,7 +143,7 @@ define([
 
                 var deferredTest = new Deferred;
 
-                Deferred.when(serviceManager.createObject('zoo'), function(zoo){
+                when(serviceManager.createObject('zoo'), function(zoo){
                     doh.assertEqual('get zoo', zoo.name);
                     doh.assertEqual('lucy', zoo.lion.name);
                     deferredTest.resolve(true);
@@ -165,7 +167,7 @@ define([
 
                 var deferredTest = new Deferred;
 
-                Deferred.when(serviceManager.createObject('zoo'), function(zoo){
+                when(serviceManager.createObject('zoo'), function(zoo){
                     doh.assertEqual('create zoo', zoo.name);
 
                     zoo.lion2.name = 'not lucy';
@@ -173,33 +175,6 @@ define([
                     doh.assertEqual('not lucy', zoo.lion2.name);
 
                     deferredTest.resolve(true);
-                });
-
-                return deferredTest;
-            },
-            function refObjectTest(){
-                var serviceManager = new ServiceManager({
-                    'zoo': {
-                        moduleName: 'Sds/Test/ServiceManager/Asset/Zoo',
-                        values: {
-                            name: 'ref zoo'
-                        },
-                        refObjects: {
-                            tiger: 'Sds/Test/ServiceManager/Asset/Tiger'
-                        }
-                    }
-                });
-
-                var deferredTest = new Deferred;
-
-                Deferred.when(serviceManager.createObject('zoo'), function(zoo){
-                    doh.assertEqual('ref zoo', zoo.name);
-                    doh.assertTrue(zoo.tiger.createObject instanceof Function);
-                    doh.assertTrue(zoo.tiger.getObject instanceof Function);
-                    Deferred.when(zoo.tiger.getObject(), function(tiger){
-                        doh.assertEqual('toby', tiger.name);
-                        deferredTest.resolve(true);
-                    });
                 });
 
                 return deferredTest;
@@ -218,7 +193,7 @@ define([
 
                 var deferredTest = new Deferred;
 
-                Deferred.when(serviceManager.getObject('testButton'), function(button){
+                when(serviceManager.getObject('testButton'), function(button){
                     doh.assertEqual('test Button', button.get('label'));
                     deferredTest.resolve(true);
                 });
@@ -264,29 +239,8 @@ define([
                     }
                 });
 
-                Deferred.when(serviceManager.getObject('zoo'), function(zoo){
+                when(serviceManager.getObject('zoo'), function(zoo){
                     doh.assertEqual(serviceManager, zoo.serviceManager);
-                });
-            },
-            function safeGetPropertyMixinTest(){
-
-                var serviceManager = new ServiceManager({
-                    'zoo': {
-                        moduleName: 'Sds/Test/ServiceManager/Asset/Zoo',
-                        values: {
-                            name: 'safe get zoo'
-                        },
-                        refObjects: {
-                            tiger: 'Sds/Test/ServiceManager/Asset/Tiger'
-                        }
-                    }
-                });
-
-                Deferred.when(serviceManager.getObject('zoo'), function(zoo){
-                    doh.assertEqual('safe get zoo', zoo.name);
-                    Deferred.when(zoo.safeGetProperty('tiger'), function(tiger){
-                        doh.assertEqual('toby', tiger.name);
-                    });
                 });
             }
         ]);

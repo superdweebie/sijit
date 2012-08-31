@@ -1,17 +1,15 @@
 define ([
         'dojo/_base/declare',
-        'Sds/ServiceManager/ServiceManagerAwareMixin',
-        'Sds/ServiceManager/SafeGetPropertyMixin'
+        'Sds/ServiceManager/ServiceManagerAwareMixin'
     ],
     function (
         declare,
-        ServiceManagerAwareMixin,
-        SafeGetPropertyMixin
+        ServiceManagerAwareMixin
     ){
 
         return declare (
             'Sds.Test.ServiceManager.Asset.Zoo',
-            [ServiceManagerAwareMixin, SafeGetPropertyMixin],
+            [ServiceManagerAwareMixin],
             {
                 name: 'the Sds zoo',
                 lion: undefined,

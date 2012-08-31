@@ -7,14 +7,14 @@ define([
         sharedServiceManager
     ){
         // module:
-        //		Sds/ServiceManager/Shared/GetObject
+        //		Sds/ServiceManager/Shared/GetRef
         //
-        // An AMD plugin that return an instance of the requested object from the
+        // An AMD plugin that return an reference to the requested object from the
         // shared ServiceManager
 
         return {
             load: function(id, require, callback){
-                Deferred.when(sharedServiceManager.getObject(id), function(object){
+                Deferred.when(sharedServiceManager.getRef(id), function(object){
                     callback(object);
                 });
             }

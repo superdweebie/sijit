@@ -5,15 +5,15 @@ define(
             serviceManager: {
                 userController: {
                     moduleName: 'Sds/UserModule/UserController',
-                    plugins: [
-                        'Sds/ServiceManager/Plugin/UserController'
+                    proxyMethods: [
+                        'recoverPassword',
+                        'register'
                     ],
                     values: {
                         userRestUrl: '/user/rest/'
                     },
                     refObjects: {
                         status: 'status',
-                        exceptionManager: 'exceptionManager',
                         recoverPasswordInputAgent: 'recoverPasswordInputAgent',
                         registerInputAgent: 'registerInputAgent'
                     }

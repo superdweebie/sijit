@@ -2,12 +2,14 @@ define([
     'dojo/_base/declare',
     'dojo/_base/Deferred',
     'dojo/Stateful',
+    'Sds/ExceptionManager/throwEx',
     'Sds/ExceptionManager/Exception/InvalidTypeException'
 ],
 function(
     declare,
     Deferred,
     Stateful,
+    throwEx,
     InvalidTypeException
 ){
     // module:
@@ -39,10 +41,6 @@ function(
             //      when it resolves
             valueType: undefined,
 
-            //exceptionManager: Sds\ExceptionManager\ExceptionManagerInterface | Sds.ServiceManager.Ref
-            //    Will handle xhr errors
-            exceptionManager: undefined,
-
             _activateDeferred: undefined,
 
             activate: function(value){
@@ -64,7 +62,7 @@ function(
                             ! value.isInstanceOf(this.valueType)
                         )
                     ){
-                        this.exceptionManager.handle(new InvalidTypeException());
+                        throwEx(new InvalidTypeException());
                         this._activateDeferred.reject();
                         return this._activateDeferred;
                     }
@@ -88,7 +86,7 @@ function(
                     ! value.isInstanceOf ||
                     ! value.isInstanceOf(this.valueType)
                 )){
-                    this.exceptionManager.handle(new InvalidTypeException('The return value of this InputAgent must be an instance of ' + this.valueType));
+                    throwEx(new InvalidTypeException('The return value of this InputAgent must be an instance of ' + this.valueType));
                     this._activateDeferred.reject();
                     return;
                 }

@@ -1,11 +1,9 @@
 define([
     'dojo/_base/declare',
-    'dojo/_base/Deferred',
     'Sds/InputAgent/BaseInputAgent'
 ],
 function(
     declare,
-    Deferred,
     BaseInputAgent
 ){
 
@@ -13,12 +11,10 @@ function(
         'Sds.Test.ServiceManager.Asset.TestInputAgent',
         [BaseInputAgent],
         {
-            value: {test: 'good'},
+            value: 'working',
 
-            activate: function(){
-                var result = new Deferred();
-                result.resolve();
-                return result;
+            activate: function(value){
+                return value;
             }
         }
     );

@@ -1,21 +1,23 @@
 define([
         'dojo/_base/declare',
         'dojo/_base/config',
-        'dojo/_base/Deferred',
+        'dojo/Deferred',
+        'dojo/when',
         'dojo/_base/lang',
         'dijit/registry',
         'dojo/aspect',
-        'Sds/ServiceManager/RefFactory',
+        'Sds/ServiceManager/Ref',
         'Sds/Common/Utils'
     ],
     function (
         declare,
         dojoConfig,
         Deferred,
+        when,
         lang,
         registry,
         aspect,
-        RefFactory,
+        Ref,
         Utils
     ) {
         // module:
@@ -36,8 +38,8 @@ define([
                 // example:
                 // |    myThingForm: {
                 // |        moduleName: 'my/Thing/Form',
-                // |        plugins: [
-                // |            'Sds/ServiceManager/Plugin/Form'
+                // |        proxyMethods: [
+                // |            'get', 'set', 'watch'
                 // |        ],
                 // |        values: {
                 // |            title: 'my formt title'
@@ -58,8 +60,8 @@ define([
                 // The moduleName attribute defines which module to load. If not already loaded, it will be loaded
                 // async.
                 //
-                // The plugins array is an array of ServiceManager plugins that this object will use.
-                // Plugins may add extra methods to the ServiceManager and Ref objects.
+                // The proxyMethods array is an array of method names that should be proxied if
+                // a Ref to the is object is created.
                 //
                 // The values object is an associatvie array of values to inject into the object.
                 //
@@ -84,12 +86,6 @@ define([
                 //      The configuration object. Defines what to inject into objects
                 _config: {},
 
-                // _plugins: array
-                //      An associtave array of ServiceManager plugins that are loaded
-                _plugins: {},
-
-                _refFactory: undefined,
-
                 constructor: function(/* object */ config){
                     // summary:
                     //     Attatches to the registry, so that declarively created dijits can be injected
@@ -103,21 +99,6 @@ define([
                     }
 
                     this._config = config;
-
-                    // Search config for required plugins and load them
-                    this._plugins = {};
-
-                    var index;
-                    var pluginIndex;
-                    for (index in config){
-                        if (lang.isArray(config[index].plugins)) {
-                            for (pluginIndex in config[index].plugins){
-                                this.loadPlugin(config[index].plugins[pluginIndex]);
-                            }
-                        }
-                    }
-
-                    this._refFactory = new RefFactory(this);
                 },
                 _createObject: function(/*string*/ identifier) {
                     // summary:
@@ -140,7 +121,7 @@ define([
 
                     require([moduleName], lang.hitch(this, function(Module){
                         var object = new Module;
-                        Deferred.when(this._inject(object, config), lang.hitch(this, function(injectedObject){
+                        when(this._inject(object, config), lang.hitch(this, function(injectedObject){
                             this._instances[index].object = injectedObject;
                             this._instances[index].promise.resolve(injectedObject);
                         }))
@@ -154,6 +135,56 @@ define([
                     // tags:
                     //     protected
 
+                    var object = this._getInstantatedObject(identifier);
+                    if (object){
+                        return object;
+                    }
+
+                    //Create instance
+                    return this._createObject(identifier);
+                },
+                _getRef: function(/*string*/ identifier){
+                    // summary:
+                    //     Used to get a reference to the object with the supplied identifier.
+                    //     If a shared object already exists, that will be returned instead of the
+                    //     reference.
+                    // tags:
+                    //     protected
+
+                    var object = this._getInstantatedObject(identifier);
+                    if (object){
+                        return object;
+                    }
+
+                    var config = this.getObjectConfig(identifier);
+                    var ref = new Ref(identifier, this);
+                    var method;
+                    var index;
+                    for (index in config.proxyMethods){
+                        method = config.proxyMethods[index];
+
+                        ref[method] = this._getProxyMethod(method);
+                    }
+
+                    return ref;
+                },
+                _getProxyMethod: function(/*string*/ method){
+                    return function(){
+                        var proxyArguments = arguments;
+                        var resultDeferred = new Deferred;
+                        when(this._serviceManager.getObject(this._identity), function(object){
+                            resultDeferred.resolve(object[method].apply(object, proxyArguments));
+                        });
+                        return resultDeferred;
+                    }
+                },
+                _getInstantatedObject: function(/*string*/ identifier){
+                    // summary:
+                    //     Will return an instance of object with the supplied identifier
+                    //     if it already exists. If not, will return null.
+                    // tags:
+                    //     protected
+
                     var index;
 
                     //Check for already created instance
@@ -163,16 +194,13 @@ define([
                         }
                     }
 
-                    var config = this.getObjectConfig(identifier);
-
                     //Check to see if a dijit is wanted
                     var object = this._getRawDijitObject(identifier);
                     if (object) {
-                        return this._inject(object, config);
+                        return this._inject(object, this.getObjectConfig(identifier));
                     }
 
-                    //Create instance
-                    return this._createObject(identifier);
+                    return null;
                 },
                 _getRawDijitObject: function(/*string*/ identifier){
                     // summary:
@@ -226,7 +254,7 @@ define([
                     //Inject create objects
                     for (attr in config.createObjects){
                         var attrCreate = attr;
-                        Deferred.when(this.createObject(config.createObjects[attrCreate]), function(injectionObject){
+                        when(this.createObject(config.createObjects[attrCreate]), function(injectionObject){
                             object[attrCreate] = injectionObject;
                             --injectionsRemaining;
                             if (injectionsRemaining == 0){
@@ -238,7 +266,7 @@ define([
                     //Inject get objects
                     for (attr in config.getObjects){
                         var attrGet = attr;
-                        Deferred.when(this.getObject(config.getObjects[attrGet]), function(injectionObject){
+                        when(this.getObject(config.getObjects[attrGet]), function(injectionObject){
                             object[attrGet] = injectionObject;
                             --injectionsRemaining;
                             if (injectionsRemaining == 0){
@@ -249,23 +277,7 @@ define([
 
                     //Inject ref objects
                     for (attr in config.refObjects){
-
-                        // Get required plugins
-                        var extendClasses = {};
-                        var refConfig = this.getObjectConfig(config.refObjects[attr]);
-                        if (refConfig && refConfig.plugins){
-                            var index
-                            for (index in refConfig.plugins){
-                                extendClasses = lang.mixin(extendClasses, this._getRefExtendClasses(refConfig.plugins[index]));
-                            }
-                        }
-
-                        var extendArray= [];
-                        for (index in extendClasses){
-                            extendArray.push(extendClasses[index]);
-                        }
-                        // Use factory to create ref with plugin extensions
-                        object[attr] = this._refFactory.create(config.refObjects[attr], extendArray);
+                        object[attr] = this._getRef(config.refObjects[attr]);
                     }
 
                     //Inject serviceManager, if object is ServiceManagerAware
@@ -278,51 +290,6 @@ define([
                         deferredObject.resolve(object);
                     }
                     return deferredObject;
-                },
-                _getRefExtendClasses: function(/*string*/ pluginName){
-
-                    var extendClasses = {};
-                    if (this._plugins[pluginName].refExtend) {
-                        extendClasses[pluginName] = this._plugins[pluginName].refExtend;
-                    }
-
-                    //Also get dependencies
-                    var index
-                    for (index in this._plugins[pluginName].dependencies){
-                        extendClasses = lang.mixin(extendClasses, this._getRefExtendClasses(this._plugins[pluginName].dependencies[index]));
-                    }
-
-                    return extendClasses;
-                },
-                loadPlugin: function(pluginName){
-                    // summary:
-                    //     Mixes a plugin into the ServiceManager
-
-                    // Check if already loaded
-                    if (this.hasPlugin(pluginName)){
-                        return;
-                    }
-
-                    this._plugins[pluginName] = pluginName;
-                    require([pluginName], lang.hitch(this, function(Plugin){
-                        this._plugins[pluginName] = Plugin;
-                        lang.mixin(this, Plugin.serviceManagerMixin);
-
-                        // Load any plugin dependencies
-                        var index
-                        for (index in Plugin.dependencies){
-                            this.loadPlugin(Plugin.dependencies[index]);
-                        }
-                    }));
-                },
-                hasPlugin: function(pluginName){
-                    // summary:
-                    //     Checks if the supplied plugin has been loaded (or is loading)
-
-                    if (this._plugins[pluginName]){
-                        return true;
-                    }
-                    return false;
                 },
                 clearInstanceCache: function(){
                     // summary:
@@ -375,6 +342,12 @@ define([
                     //     Will return cached instance if one exists.
 
                     return this._getObject(identifier);
+                },
+                getRef: function(/*string*/ identifier){
+                    // summary:
+                    //     Return a reference object that will proxy the identifier requested.
+
+                    return this._getRef(identifier)
                 },
                 inject: function(/* object */ object, /* string */ identifier){
                     // summary:

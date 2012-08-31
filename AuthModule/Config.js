@@ -9,17 +9,19 @@ define(
                         authApiSmd: authSmd
                     },
                     refObjects: {
-                        exceptionManager: 'exceptionManager',
                         loginInputAgent: 'loginInputAgent'
                     }
                 },
                 loginInputAgent: {
                     moduleName: 'Sds/AuthModule/LoginInputAgent',
-                    plugins: [
-                        'Sds/ServiceManager/Plugin/InputAgent'
+                    proxyMethods: [
+                        'activate',
+                        'reset',
+                        'get',
+                        'set',
+                        'watch'
                     ],
                     refObjects: {
-                        exceptionManager: 'exceptionManager',
                         userController: 'userController'
                     }
                 }

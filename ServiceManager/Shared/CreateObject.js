@@ -1,6 +1,6 @@
 define([
         'dojo/_base/Deferred',
-        'Sds/ServiceManager/SharedServiceManager!'
+        'Sds/ServiceManager/Shared/GetServiceManager!'
     ],
     function(
         Deferred,

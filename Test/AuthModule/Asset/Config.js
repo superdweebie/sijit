@@ -9,14 +9,12 @@ define(
                         authApi: 'mockAuthApi'
                     },
                     refObjects: {
-                        loginInputAgent: 'mockLoginInputAgent',
-                        exceptionManager: 'mockExceptionManager'
+                        loginInputAgent: 'mockLoginInputAgent'
                     }
                 },
                 loginInputAgent: {
                     refObjects: {
-                        userController: 'mockUserController',
-                        exceptionManager: 'mockExceptionManager'
+                        userController: 'mockUserController'
                     }
                 },
                 mockAuthApi: {
@@ -24,20 +22,25 @@ define(
                 },
                 mockLoginInputAgent: {
                     moduleName: 'Sds/Test/AuthModule/Asset/MockLoginInputAgent',
-                    plugins: [
-                        'Sds/ServiceManager/Plugin/InputAgent'
+                    proxyMethods: [
+                        'activate',
+                        'reset',
+                        'get',
+                        'set',
+                        'watch'
                     ]
                 },
-                mockExceptionManager: {
+                exceptionManager: {
                     moduleName: 'Sds/Test/AuthModule/Asset/MockExceptionManager',
-                    plugins: [
-                        'Sds/ServiceManager/Plugin/ExceptionManager'
+                    proxyMethods: [
+                        'handle'
                     ]
                 },
                 mockUserController: {
                     moduleName: 'Sds/Test/AuthModule/Asset/MockUserController',
-                    plugins: [
-                        'Sds/ServiceManager/Plugin/UserController'
+                    proxyMethods: [
+                        'recoverPassword',
+                        'register'
                     ]
                 }
             }

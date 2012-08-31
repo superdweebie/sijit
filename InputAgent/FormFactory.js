@@ -56,15 +56,41 @@ define ([
 
                     //Add form level validator - will be checked if all input elements have valid state
                     if (metadata.validators){
-                        this.validatorManager.createGroup(metadata.validators).then(function(validator){
+                        this.validatorManager.createGroup(metadata.validators).then(lang.hitch(this, function(validator){
                             form._validator = validator;
-                            aspect.after(form, '_getState', function(state){
-                                if (state == '' && ! this._validator.isValid(this.get('value'))){
-                                    state = 'Error';
-                                }
-                                return state;
-                            });
-                        });
+
+//                            this.createInput({
+//                                id: "hiddenValidatorField",
+//                                property: "hiddenValidator",
+//                                required: true,
+//                                //type: "hidden",
+//                                validators: [
+//                                    {
+//                                        "module": "Sds/InputAgent/Validator/HiddenValidator"
+//                                    }
+//                                ]
+//                            }).then(function(hiddenValidator){
+//                                form.domNode.appendChild(hiddenValidator.domNode);
+
+
+//                                form.watch('value', function(property, oldValue, newValue){
+//
+//                                    if (this._validator.isValid(newValue)){
+//                                        hiddenValidator.set('value', '');
+//                                    } else {
+//                                        hiddenValidator.set('value', this._validator.get('messages'));
+//                                    }
+//                                });
+//                            });
+
+
+//                            aspect.after(form, '_getState', function(state){
+//                                if (state == '' && ! this._validator.isValid(this.get('value'))){
+//                                    state = 'Error';
+//                                }
+//                                return state;
+//                            });
+                        }));
                     }
 
                     if (form.containerNode){
@@ -92,6 +118,16 @@ define ([
                         for (index in inputs){
                             var input = inputs[index][1];
                             containerNode.appendChild(input.domNode);
+                            aspect.after(input, 'isValid', function(result){
+                                if (result){
+                                console.debug('validator called');
+                                    if ( ! form._validator.isValid(form.get('value'))){
+                                console.debug('state Error');
+                                        form.set('state', 'Error');
+                                    }
+                                }
+                                console.debug('isValid called');
+                            });
                         }
 
                         if (tableWrap){

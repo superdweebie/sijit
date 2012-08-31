@@ -21,7 +21,8 @@ define ([
                     module:'Sds/UserModule/Validator/RecoverPasswordValidator'
                 }
             ],
-            fields: [
+            fields: {
+                username:
                 {
                     id       : 'usernameInput',
                     property : 'username',
@@ -33,6 +34,7 @@ define ([
                         }
                     ]
                 },
+                email:
                 {
                     id       : 'emailInput',
                     property : 'email',
@@ -44,7 +46,7 @@ define ([
                         }
                     ]
                 }
-            ]
+            }
         };
 
         return model;

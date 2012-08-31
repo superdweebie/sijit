@@ -2,20 +2,18 @@
 
 define ([
         'dojo/_base/declare',
-        'dojo/Stateful', 
-        'Sds/InputAgent/BaseInputAgentModel'
+        'dojo/Stateful'
     ],
     function (
         declare,
-        Stateful, 
-        SdsInputAgentBaseInputAgentModel
+        Stateful
     ){
         // module:
         //		Sds/UserModule/Model/User
 
         var model = declare (
             'Sds/UserModule/Model/User',
-            [Stateful, SdsInputAgentBaseInputAgentModel],
+            [Stateful],
             {
                 // summary:
                 //		A mirror of doctrine document Sds\UserModule\Model\User
@@ -79,15 +77,15 @@ define ([
         );
 
         model.metadata = {
-            "fields": [
-                {
+            "fields": {
+                "id": {
                     "id": "idField",
                     "property": "id",
                     "title": "Id:",
                     "dataType": "custom_id",
                     "inputType": "hidden"
                 },
-                {
+                "firstname": {
                     "id": "firstnameField",
                     "property": "firstname",
                     "title": "Firstname:",
@@ -100,7 +98,7 @@ define ([
                         }
                     ]
                 },
-                {
+                "lastname": {
                     "id": "lastnameField",
                     "property": "lastname",
                     "title": "Lastname:",
@@ -113,44 +111,46 @@ define ([
                         }
                     ]
                 },
-                {
+                "password": {
                     "id": "passwordField",
                     "property": "password",
                     "title": "Password:",
                     "dataType": "string",
                     "inputType": "password",
+                    "required": true,
                     "validators": [
                         {
-                            "module": "Sds\\Validator\\PasswordValidator",
+                            "module": "Sds\/Validator\/PasswordValidator",
                             "options": null
                         }
                     ]
                 },
-                {
+                "roles": {
                     "id": "rolesField",
                     "property": "roles",
                     "title": "Roles:",
                     "dataType": "hash",
                     "validators": [
                         {
-                            "module": "Sds\\Validator\\StandardNameArrayValidator",
+                            "module": "Sds\/Validator\/IdentifierArrayValidator",
                             "options": null
                         }
                     ]
                 },
-                {
+                "username": {
                     "id": "usernameField",
                     "property": "username",
                     "title": "Username:",
                     "dataType": "string",
+                    "required": true,
                     "validators": [
                         {
-                            "module": "Sds\\Validator\\StandardNameValidator",
+                            "module": "Sds\/Validator\/IdentifierValidator",
                             "options": null
                         }
                     ]
                 }
-            ]
+            }
         };
 
         return model;

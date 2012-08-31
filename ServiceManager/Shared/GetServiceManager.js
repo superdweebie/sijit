@@ -6,7 +6,7 @@ define([
         ServiceManager
     ){
         // module:
-        //		Sds/ServiceManager/SharedServiceManager
+        //		Sds/ServiceManager/Shared/GetServiceManager
         //
         // An AMD plugin that returns an instance of the ServiceManager configured
         // by dojo config

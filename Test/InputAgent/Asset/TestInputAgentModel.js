@@ -22,7 +22,8 @@ define ([
                     options: null
                 }
             ],
-            fields: [
+            fields: {
+                username:
                 {
                     id       : 'testUsername',
                     property : 'username',
@@ -35,6 +36,7 @@ define ([
                         }
                     ]
                 },
+                password:
                 {
                     id       : 'testPassword',
                     property : 'password',
@@ -50,7 +52,7 @@ define ([
                         }
                     ]
                 }
-            ]
+            }
         };
 
         return model;

@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<title>Testing Sds.ServiceManager.SharedServiceManager</title>
+		<title>Testing Sds/ServiceManager/Shared/GetRef</title>
 		<script
             type="text/javascript"
             src="../../../dojo/dojo.js"
@@ -18,24 +18,18 @@
 		<script type="text/javascript">
 			require([
                 'doh/main',
-                'dojo/_base/Deferred',
-                'Sds/ServiceManager/SharedServiceManager!',
+                'Sds/ServiceManager/Ref',
+                'Sds/ServiceManager/Shared/GetRef!zoo',
                 'dojo/domReady!'
             ],
             function(
                 doh,
-                Deferred,
-                sharedServiceManager
+                Ref,
+                zoo
             ){
                 doh.register([
-                    function testSharedServiceManager(){
-                        var deferredTest = new Deferred;
-
-                        Deferred.when(sharedServiceManager.getObject('zoo'), function(zoo){
-                            doh.assertEqual('shared zoo', zoo.name);
-                            deferredTest.resolve(true);
-                        });
-                        return deferredTest;
+                    function testSharedGetRef(){
+                        doh.assertTrue(zoo.isInstanceOf(Ref));
                     }
                 ]);
                 doh.runOnLoad();
@@ -43,6 +37,6 @@
 		</script>
 	</head>
 	<body>
-        <h1>Testing Sds.ServiceManager.SharedServiceManager</h1>
+        <h1>Testing Sds/ServiceManager/Shared/GetRef</h1>
 	</body>
 </html>

@@ -7,21 +7,17 @@ function(
     BaseValidator
 ){
     return declare(
-        'Sds/AuthModule/Validator/LoginPasswordValidator',
+        'Sds/InputAgent/Validator/HiddenValidator',
         [BaseValidator],
         {
-            messages: [],
-
-            lengthRegEx: /^.{3,40}$/,
-
             isValid: function(value){
+
                 this.messages = [];
 
                 var result = true;
-
-                if ( ! this.lengthRegEx.test(value)){
+                if ( value != '') {
+                    this.messages = value;
                     result = false;
-                    this.messages.push('Password must be between 3 and 40 characters long.');
                 }
 
                 return result;

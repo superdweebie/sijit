@@ -22,6 +22,10 @@ define ([
                 //      Use this to create documents in a browser which can the be passed to a doctrine server for
                 //      persistence
 
+                // _className: string
+                //      The doctrine document class name. Don't change this one!
+                _className: 'Sds\\UserModule\\Model\\Profile',
+
                 // email: string
                 email: undefined,
 
@@ -30,6 +34,9 @@ define ([
                     //     Function to handle serialization
 
                     var json = {};
+                    if (this.get('_1')) {
+                        json['_1'] = this.get('_1');
+                    }
                     if (this.get('email')) {
                         json['email'] = this.get('email');
                     }
@@ -40,14 +47,21 @@ define ([
         );
 
         model.metadata = {
-            "fields": [
-                {
+            "fields": {
+                "email": {
                     "id": "emailField",
                     "property": "email",
                     "title": "Email:",
-                    "dataType": "string"
+                    "dataType": "string",
+                    "required": true,
+                    "validators": [
+                        {
+                            "module": "Sds\/Validator\/EmailAddressValidator",
+                            "options": null
+                        }
+                    ]
                 }
-            ]
+            }
         };
 
         return model;

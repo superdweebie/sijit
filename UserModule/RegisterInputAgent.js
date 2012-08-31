@@ -7,9 +7,9 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'Sds/InputAgent/BaseInputAgent',
-    'Sds/UserModule/InputAgentModel/RecoverPassword',
+    'Sds/UserModule/InputAgentModel/Register',
     'Sds/InputAgent/FormFactory',
-    'dojo/text!./Template/RecoverPasswordInputAgent.html',
+    'dojo/text!./Template/RegisterInputAgent.html',
     'sds/Common/Dialog',
     'dojox/layout/TableContainer',
     'dijit/form/ValidationTextBox',
@@ -24,12 +24,12 @@ function(
     TemplatedMixin,
     WidgetsInTemplateMixin,
     BaseInputAgent,
-    RecoverPasswordInputAgentModel,
+    RegisterInputAgentModel,
     FormFactory,
     template
 ){
     return declare(
-        'Sds/UserModule/RecoverPasswordInputAgent',
+        'Sds/UserModule/RegisterInputAgent',
         [
             Widget,
             TemplatedMixin,
@@ -39,7 +39,7 @@ function(
         {
             templateString: template,
 
-            valueType: RecoverPasswordInputAgentModel,
+            valueType: RegisterInputAgentModel,
 
             inputsAppended: false,
 
@@ -48,13 +48,13 @@ function(
                 this.inherited(arguments);
 
                 if ( ! value){
-                    value = new RecoverPasswordInputAgentModel;
+                    value = new RegisterInputAgentModel;
                     this.set('value', value);
                 }
 
                 when(this._appendInputs(), lang.hitch(this, function(){
-                    this.recoverPasswordDialogNode.set('value', value);
-                    when(this.recoverPasswordDialogNode.show(), lang.hitch(this, function(){
+                    this.registerDialogNode.set('value', value);
+                    when(this.registerDialogNode.show(), lang.hitch(this, function(){
                         this._resolve();
                     }));
                 }));
@@ -70,7 +70,7 @@ function(
                 if ( ! this.inputsAppened){
                     var formFactory = new FormFactory;
                     when(
-                        formFactory.append(this.recoverPasswordDialogNode, RecoverPasswordInputAgentModel.metadata, true),
+                        formFactory.append(this.registerDialogNode, RegisterInputAgentModel.metadata, true),
                         lang.hitch(this, function(){
                             this.inputsAppened = true;
                             appendInputsDeferred.resolve();
@@ -82,10 +82,10 @@ function(
                 return appendInputsDeferred;
             },
             _getStateAttr: function(){
-                return this.recoverPasswordDialogNode.get('state');
+                return this.registerDialogNode.get('state');
             },
             _getValueAttr: function(){
-                this.value = lang.mixin(this.value, this.recoverPasswordDialogNode.get('value').value);
+                this.value = lang.mixin(this.value, this.registerDialogNode.get('value').value);
                 return this.value;
             }
         }
