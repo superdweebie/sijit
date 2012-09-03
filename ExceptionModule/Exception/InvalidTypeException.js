@@ -11,10 +11,10 @@ function(
     BaseException
 ){
 	return create(
-        "IncorrectTypeException",
+        "InvalidTypeException",
         function(message, options){
 
-            this.severity = Severity.ERROR;
+            this.severity = Severity.WARNING;
 
             this.display = false;
 

@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/_base/Deferred',
+    'dojo/Deferred',
     'dojo/on',
     'dojo/keys',
     'dijit/_WidgetsInTemplateMixin',

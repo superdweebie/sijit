@@ -1,9 +1,11 @@
 define([
-        'dojo/_base/Deferred',
+        'dojo/Deferred',
+        'dojo/when',
         'Sds/ConfigManager/ConfigManager'
     ],
     function(
         Deferred,
+        when,
         ConfigManager
     ){
         // module:
@@ -14,7 +16,7 @@ define([
         return {
             load: function(id, require, callback){
                 var configManager = new ConfigManager();
-                Deferred.when(configManager.merge(), function(){
+                when(configManager.merge(), function(){
                     callback();
                 });
             }

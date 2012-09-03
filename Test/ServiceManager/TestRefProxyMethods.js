@@ -22,11 +22,11 @@ define([
                     testParent: {
                         moduleName: 'Sds/Test/ServiceManager/Asset/TestParent',
                         refObjects: {
-                            testInputAgent: 'testInputAgent'
+                            testView: 'testView'
                         }
                     },
-                    testInputAgent: {
-                        moduleName: 'Sds/Test/ServiceManager/Asset/TestInputAgent',
+                    testView: {
+                        moduleName: 'Sds/Test/ServiceManager/Asset/TestView',
                         proxyMethods: [
                             'activate',
                             'reset',
@@ -41,11 +41,11 @@ define([
 
                 when(serviceManager.getObject('testParent'), function(parent){
 
-                    doh.assertTrue(parent.testInputAgent.isInstanceOf(Ref));
+                    doh.assertTrue(parent.testView.isInstanceOf(Ref));
 
                     var deferredList = new DeferredList([
-                        parent.testInputAgent.get('value'),
-                        parent.testInputAgent.activate('test')
+                        parent.testView.get('value'),
+                        parent.testView.activate('test')
                     ]);
 
                     deferredList.then(function(result){

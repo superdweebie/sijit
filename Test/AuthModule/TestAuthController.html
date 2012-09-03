@@ -24,22 +24,24 @@
 		<script type="text/javascript">
 			require([
                 'doh/main',
-                'dojo/_base/Deferred',
+                'dojo/Deferred',
+                'dojo/when',
                 'Sds/AuthModule/Exception/LoginFailedException',
                 'Sds/AuthModule/Exception/AlreadyLoggedInException',
                 'Sds/ServiceManager/Shared/GetObject!authController',
-                'Sds/ServiceManager/Shared/GetObject!mockLoginInputAgent',
-                'Sds/ServiceManager/Shared/GetObject!exceptionManager',
+                'Sds/ServiceManager/Shared/GetObject!mockLoginView',
+                'Sds/ServiceManager/Shared/GetObject!exceptionController',
                 'dojo/domReady!'
             ],
             function(
                 doh,
                 Deferred,
+                when,
                 LoginFailedException,
                 AlreadyLoggedInException,
                 authController,
-                mockLoginInputAgent,
-                mockExceptionManager
+                mockLoginView,
+                mockExceptionController
             ){
 
                 // Define and register the tests
@@ -48,11 +50,11 @@
 
                         var testResult = new Deferred();
 
-                        mockLoginInputAgent.value.username = 'toby';
-                        mockLoginInputAgent.value.password = 'wrong';
+                        mockLoginView.value.username = 'toby';
+                        mockLoginView.value.password = 'wrong';
 
-                        Deferred.when(authController.login(), null, function(){
-                            doh.assertTrue(mockExceptionManager.lastException instanceof LoginFailedException);
+                        when(authController.login(), null, function(){
+                            doh.assertTrue(mockExceptionController.lastException instanceof LoginFailedException);
                             testResult.resolve();
                         });
 
@@ -63,10 +65,10 @@
 
                         var testResult = new Deferred();
 
-                        mockLoginInputAgent.value.username = 'toby';
-                        mockLoginInputAgent.value.password = 'password';
+                        mockLoginView.value.username = 'toby';
+                        mockLoginView.value.password = 'password';
 
-                        Deferred.when(authController.login(), function(){
+                        when(authController.login(), function(){
                             doh.assertTrue(authController.get('loggedIn'));
                             doh.assertEqual('toby', authController.get('activeUser'));
                             testResult.resolve();
@@ -79,11 +81,11 @@
 
                         var testResult = new Deferred();
 
-                        mockLoginInputAgent.value.username = 'toby';
-                        mockLoginInputAgent.value.password = 'password';
+                        mockLoginView.value.username = 'toby';
+                        mockLoginView.value.password = 'password';
 
-                        Deferred.when(authController.login(), null, function(){
-                            doh.assertTrue(mockExceptionManager.lastException instanceof AlreadyLoggedInException);
+                        when(authController.login(), null, function(){
+                            doh.assertTrue(mockExceptionController.lastException instanceof AlreadyLoggedInException);
                             testResult.resolve();
                         });
 
@@ -94,7 +96,7 @@
 
                         var testResult = new Deferred();
 
-                        Deferred.when(authController.logout(), function(){
+                        when(authController.logout(), function(){
                             doh.assertFalse(authController.get('loggedIn'));
                             doh.assertFalse(authController.get('activeUser'));
                             testResult.resolve();

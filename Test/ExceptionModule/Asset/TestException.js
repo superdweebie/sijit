@@ -11,14 +11,14 @@ function(
     BaseException
 ){
 	return create(
-        "IncorrectTypeException",
+        "TestException",
         function(message, options){
 
             this.severity = Severity.ERROR;
 
             this.display = false;
 
-            this.log = true;
+            this.log = false;
 
             lang.mixin(this, options);
         },

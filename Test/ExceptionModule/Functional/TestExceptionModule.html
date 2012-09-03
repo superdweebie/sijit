@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/ExceptionModule/ExceptionController</title>
+		<style type="text/css">
+			@import "../../../../dojo/resources/dojo.css";
+            @import "../../../../dijit/themes/claro/claro.css";
+            @import "../../../../Sds/themes/claro/claro.css";
+		</style>
+		<script
+            type="text/javascript"
+            src="../../../../dojo/dojo.js"
+            data-dojo-config="
+                isDebug: true,
+                popup: true,
+                async: true,
+                mergeConfigs: [
+                    'Sds/ExceptionModule/Config'
+                ]
+            ">
+        </script>
+		<script type="text/javascript">
+			require([
+                'dojo/dom',
+                'dojo/on',
+                'Sds/ExceptionModule/throwEx',
+                'Sds/Test/ExceptionModule/Asset/TestException',
+                'dojo/domReady!',
+                'Sds/ConfigManager/ConfigReady!'
+            ],
+            function(
+                dom,
+                on,
+                throwEx,
+                TestException
+            ){
+                on(dom.byId('displayExceptionButton'), 'click', function(){
+                    var exception = new TestException('test exception', {display: true, log: false});
+                    throwEx(exception);
+                });
+
+                on(dom.byId('logExceptionButton'), 'click', function(){
+                    var exception = new TestException('test exception', {display: false, log: true});
+                    throwEx(exception);
+                });
+            })
+		</script>
+	</head>
+	<body class="claro">
+        <h1>Functional Testing Sds/ExceptionModule/ExceptionController</h1>
+        <br />
+        <input id="displayExceptionButton" type="button" value="display exception" />
+        <br />
+        <input id="logExceptionButton" type="button" value="log exception" />
+	</body>
+</html>

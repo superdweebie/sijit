@@ -36,14 +36,21 @@
                 registry
             ){
                 parser.parse().then(function(){
+
+                    registry.byId('testDialog').watch('state', function(property, oldValue, newValue){
+                        dom.byId('State').innerHTML = newValue;
+                    });
+
                     on(dom.byId('showDialog'), 'click', function(){
                         when(registry.byId('testDialog').show(), function(result){
                             dom.byId('ReturnValue').innerHTML = json.toJson(result);
                         });
                     });
+
                     on(dom.byId('validState'), 'click', function(){
                         registry.byId('testDialog').set('state', '');
                     });
+
                     on(dom.byId('invalidState'), 'click', function(){
                         registry.byId('testDialog').set('state', 'bad');
                     });
@@ -57,7 +64,10 @@
         <input id="showDialog" type="button" value="show dialog" />
 
         <h3>Return value</h3>
-        <p id="ReturnValue"></p>
+        <p id="ReturnValue">asdf</p>
+        <br />
+        <h3>State</h3>
+        <p id="State"></p>
         <div id="testDialog" data-dojo-type="Sds/Common/Dialog" title = "Test Dialog">
             <div>This is a dialog test message.</div>
             <input id="validState" type="button" value="valid state" />

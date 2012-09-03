@@ -1,9 +1,9 @@
 define([
-        'dojo/_base/Deferred',
+        'dojo/when',
         'Sds/ServiceManager/Shared/GetServiceManager!'
     ],
     function(
-        Deferred,
+        when,
         sharedServiceManager
     ){
         // module:
@@ -14,7 +14,7 @@ define([
 
         return {
             load: function(id, require, callback){
-                Deferred.when(sharedServiceManager.getRef(id), function(object){
+                when(sharedServiceManager.getRef(id), function(object){
                     callback(object);
                 });
             }

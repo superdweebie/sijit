@@ -18,20 +18,22 @@
 		<script type="text/javascript">
 			require([
                 'doh/main',
-                'dojo/_base/Deferred',
+                'dojo/Deferred',
+                'dojo/when',
                 'Sds/ServiceManager/Shared/GetServiceManager!',
                 'dojo/domReady!'
             ],
             function(
                 doh,
                 Deferred,
+                when,
                 sharedServiceManager
             ){
                 doh.register([
                     function testSharedServiceManager(){
                         var deferredTest = new Deferred;
 
-                        Deferred.when(sharedServiceManager.getObject('zoo'), function(zoo){
+                        when(sharedServiceManager.getObject('zoo'), function(zoo){
                             doh.assertEqual('shared zoo', zoo.name);
                             deferredTest.resolve(true);
                         });

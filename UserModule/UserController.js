@@ -1,7 +1,8 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/_base/Deferred',
+    'dojo/Deferred',
+    'dojo/when',
     'dojox/rpc/Service',
     'dojox/rpc/JsonRPC',
     'dojo/store/JsonRest',
@@ -11,6 +12,7 @@ function(
     declare,
     lang,
     Deferred,
+    when,
     RpcService,
     JsonRpc,
     JsonRest,
@@ -95,7 +97,7 @@ function(
                     }));
                     return;
                 }
-                Deferred.when(this.recoverPasswordDialog.show(), lang.hitch(this, function()
+                when(this.recoverPasswordDialog.show(), lang.hitch(this, function()
                 {
                     var formValues = this.recoverPasswordDialog.getFormValue();
                     this._setStatus({message: 'recovering password', icon: 'spinner'});
@@ -132,7 +134,7 @@ function(
                     }));
                     return;
                 }
-                Deferred.when(this.registerDialog.show(), lang.hitch(this, function()
+                when(this.registerDialog.show(), lang.hitch(this, function()
                 {
                     var formValues = this.registerDialog.getFormValue();
                     this._setStatus({message: 'registering new user', icon: 'spinner'});

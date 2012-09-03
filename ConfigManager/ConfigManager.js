@@ -1,7 +1,8 @@
 define ([
         'dojo/_base/declare',
         'dojo/_base/config',
-        'dojo/_base/Deferred',
+        'dojo/Deferred',
+        'dojo/when',
         'dojo/_base/lang',
         'Sds/Common/Utils'
     ],
@@ -9,6 +10,7 @@ define ([
         declare,
         dojoConfig,
         Deferred,
+        when,
         lang,
         Utils
     ) {
@@ -41,7 +43,7 @@ define ([
                         for (index = 0; index < numToLoad; index++) unmergedConfigs[index] = undefined;
 
                         for (index in dojoConfig.mergeConfigs) {
-                            Deferred.when(this._loadConfigModule(dojoConfig.mergeConfigs[index], index), function(
+                            when(this._loadConfigModule(dojoConfig.mergeConfigs[index], index), function(
                                 result
                             ){
                                 unmergedConfigs[result.moduleIndex] = result.configModule;

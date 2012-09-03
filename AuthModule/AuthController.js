@@ -7,7 +7,7 @@ define([
     'Sds/Common/Status',
     'dojox/rpc/Service',
     'dojo/Stateful',
-    'Sds/ExceptionManager/throwEx',
+    'Sds/ExceptionModule/throwEx',
     'Sds/AuthModule/Exception/AlreadyLoggedInException',
     'Sds/AuthModule/Exception/LoginFailedException',
     'dojox/rpc/JsonRPC'
@@ -54,9 +54,9 @@ function (
             //    An object indicating the current status
             status: undefined,
 
-            // loginInputAgent: Sds.InputAgent.BaseInputAgent
+            // loginView: Sds.View.BaseView
             //     This form is shown to prompt login
-            loginInputAgent: undefined,
+            loginView: undefined,
 
             login: function()
             {
@@ -68,7 +68,7 @@ function (
 
                 this._loginDeferred = new Deferred();
 
-                when(this.loginInputAgent.activate(), lang.hitch(this, function(result){
+                when(this.loginView.activate(), lang.hitch(this, function(result){
 
                     // Do nothing if form not valid.
                     if (!result.state == ''){
@@ -85,7 +85,7 @@ function (
                         lang.hitch(this, '_loginComplete'),
                         lang.hitch(this, '_handleException')
                     );
-                    this.loginInputAgent.reset();
+                    this.loginView.reset();
                 }));
 
                 return this._loginDeferred;
@@ -147,8 +147,7 @@ function (
             },
             _handleException: function(exception){
                 // summary:
-                //		Handles xhr exceptions during login and logout. Will pass the exception
-                //		off to the configured exceptionManager
+                //		Handles xhr exceptions during login and logout.
 
                 exception = json.fromJson(exception.response.text).error;
 

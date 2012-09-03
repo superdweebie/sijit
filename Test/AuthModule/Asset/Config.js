@@ -9,10 +9,10 @@ define(
                         authApi: 'mockAuthApi'
                     },
                     refObjects: {
-                        loginInputAgent: 'mockLoginInputAgent'
+                        loginView: 'mockLoginView'
                     }
                 },
-                loginInputAgent: {
+                loginView: {
                     refObjects: {
                         userController: 'mockUserController'
                     }
@@ -20,8 +20,8 @@ define(
                 mockAuthApi: {
                     moduleName: 'Sds/Test/AuthModule/Asset/MockAuthApi'
                 },
-                mockLoginInputAgent: {
-                    moduleName: 'Sds/Test/AuthModule/Asset/MockLoginInputAgent',
+                mockLoginView: {
+                    moduleName: 'Sds/Test/AuthModule/Asset/MockLoginView',
                     proxyMethods: [
                         'activate',
                         'reset',
@@ -30,8 +30,8 @@ define(
                         'watch'
                     ]
                 },
-                exceptionManager: {
-                    moduleName: 'Sds/Test/AuthModule/Asset/MockExceptionManager',
+                exceptionController: {
+                    moduleName: 'Sds/Test/AuthModule/Asset/MockExceptionController',
                     proxyMethods: [
                         'handle'
                     ]

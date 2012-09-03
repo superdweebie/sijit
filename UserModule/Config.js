@@ -14,18 +14,18 @@ define(
                     },
                     refObjects: {
                         status: 'status',
-                        recoverPasswordInputAgent: 'recoverPasswordInputAgent',
-                        registerInputAgent: 'registerInputAgent'
+                        recoverPasswordView: 'recoverPasswordView',
+                        registerView: 'registerView'
                     }
                 },
                 user: {
                     moduleName: 'Sds/UserModule/Model/User'
                 },
-                recoverPasswordInputAgent: {
-                    moduleName: 'Sds/UserModule/RecoverPasswordInputAgent'
+                recoverPasswordView: {
+                    moduleName: 'Sds/UserModule/RecoverPasswordView'
                 },
-                registerInputAgent: {
-                    moduleName: 'Sds/UserModule/RegisterInputAgent'
+                registerView: {
+                    moduleName: 'Sds/UserModule/RegisterView'
                 }
             }
         }

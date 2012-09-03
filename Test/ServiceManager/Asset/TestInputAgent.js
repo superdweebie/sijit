@@ -1,15 +1,15 @@
 define([
     'dojo/_base/declare',
-    'Sds/InputAgent/BaseInputAgent'
+    'Sds/View/BaseView'
 ],
 function(
     declare,
-    BaseInputAgent
+    BaseView
 ){
 
     return declare(
-        'Sds.Test.ServiceManager.Asset.TestInputAgent',
-        [BaseInputAgent],
+        'Sds.Test.ServiceManager.Asset.TestView',
+        [BaseView],
         {
             value: 'working',
 

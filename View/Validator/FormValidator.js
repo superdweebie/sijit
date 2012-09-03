@@ -7,21 +7,19 @@ function(
     BaseValidator
 ){
     return declare(
-        'Sds/UserModule/Validator/RegisterValidator',
+        'Sds/View/Validator/FormValidator',
         [BaseValidator],
         {
             isValid: function(value){
-                if (value.value){
-                    value = value.value;
-                }
 
                 this.messages = [];
 
                 var result = true;
-                if (value.password1 != value.password2) {
-                    this.messages.push('Both passwords are not the same.');
+                if (value) {
+                    this.messages = value;
                     result = false;
                 }
+
                 return result;
             }
         }

@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/View/FormFactory</title>
+		<style type="text/css">
+			@import "../../../../dojo/resources/dojo.css";
+            @import "../../../../dijit/themes/claro/claro.css";
+            @import "../../../../Sds/themes/claro/claro.css";
+		</style>
+        <style type=""text/css">
+            .testForm{
+                width: 300px;
+            }
+        </style>
+		<script
+            type="text/javascript"
+            src="../../../../dojo/dojo.js"
+            data-dojo-config="
+                isDebug: true,
+                popup: true,
+                async: true,
+                mergeConfigs: [
+                ]
+            ">
+        </script>
+		<script type="text/javascript">
+			require([
+                'dojo/dom',
+                'dojo/when',
+                'dojo/_base/json',
+                'Sds/View/FormFactory',
+                'Sds/Test/View/Asset/TestViewModel',
+                'dojo/domReady!'
+            ],
+            function(
+                dom,
+                when,
+                json,
+                FormFactory,
+                TestViewModel
+            ){
+                var formFactory = new FormFactory;
+
+                var validModel1 = new TestViewModel;
+                validModel1.username = 'Toby';
+                validModel1.password = 'password1';
+                when(formFactory.create(TestViewModel.metadata), function(form1){
+                    form1.watch('state', function(property, oldValue, newValue){
+                        dom.byId('state1').innerHTML = newValue;
+                    });
+                    dom.byId('formContainer1').appendChild(form1.domNode);
+                    form1.startup();
+                    form1.set('value', validModel1);
+                });
+
+                var inValidModel2 = new TestViewModel;
+                inValidModel2.username = 'NotToby';
+                inValidModel2.password = 'password1';
+                when(formFactory.create(TestViewModel.metadata), function(form2){
+                    form2.watch('state', function(property, oldValue, newValue){
+                        dom.byId('state2').innerHTML = newValue;
+                    });
+                    form2.watch('value', function(property, oldValue, newValue){
+                        dom.byId('value2').innerHTML = json.toJson(newValue);
+                    });
+                    dom.byId('formContainer2').appendChild(form2.domNode);
+                    form2.startup();
+                    form2.set('value', inValidModel2);
+                });
+
+                var inValidModel3 = new TestViewModel;
+                inValidModel3.username = 'Toby';
+                inValidModel3.password = 'x';
+                when(formFactory.create(TestViewModel.metadata), function(form3){
+                    form3.watch('state', function(property, oldValue, newValue){
+                        dom.byId('state3').innerHTML = newValue;
+                    });
+                    dom.byId('formContainer3').appendChild(form3.domNode);
+                    form3.startup();
+                    form3.set('value', inValidModel3);
+                });
+            })
+		</script>
+	</head>
+	<body class="claro">
+        <h1>Functional Testing Sds/View/FormFactory</h1>
+        <br />
+        <div id="formContainer1">
+            <h3>Valid Form (state: <span id="state1"></span>)</h3>
+        </div>
+        <div id="formContainer2">
+            <h3>Invalid Form Validator (state: <span id="state2"></span>, value: <span id="value2"></span>)</h3>
+        </div>
+        <div id="formContainer3">
+            <h3>Invalid Field Validator (state: <span id="state3"></span>)</h3>
+        </div>
+	</body>
+</html>

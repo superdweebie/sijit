@@ -11,14 +11,14 @@ function(
     BaseException
 ){
 	return create(
-        "IncorrectTypeException",
+        "ServerLogFailedException",
         function(message, options){
 
             this.severity = Severity.ERROR;
 
-            this.display = false;
+            this.display = true;
 
-            this.log = true;
+            this.log = false; //Make sure this stays false, or you'll start an endless loop
 
             lang.mixin(this, options);
         },

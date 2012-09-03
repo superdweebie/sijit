@@ -9,11 +9,11 @@ define(
                         authApiSmd: authSmd
                     },
                     refObjects: {
-                        loginInputAgent: 'loginInputAgent'
+                        loginView: 'loginView'
                     }
                 },
-                loginInputAgent: {
-                    moduleName: 'Sds/AuthModule/LoginInputAgent',
+                loginView: {
+                    moduleName: 'Sds/AuthModule/LoginView',
                     proxyMethods: [
                         'activate',
                         'reset',
