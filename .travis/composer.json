@@ -1,0 +1,8 @@
+{
+    "repositories": [{ "type": "composer", "url": "https://raw.github.com/superdweebie/dojo/master" }],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4",
+        "superdweebie/dojo": "dev-master"
+    }
+}
