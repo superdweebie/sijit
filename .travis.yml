@@ -10,6 +10,7 @@ before_script:
   - mkdir testSijit #begin composer install
   - cd sijit
   - cp ../sijit/.travis/composer.json ./
+  - curl -s http://getcomposer.org/installer | php  
   - php composer.phar install
   - rm -rf vendor/dojo/Sds
   - cp -r ../sijit vendor/dojo
