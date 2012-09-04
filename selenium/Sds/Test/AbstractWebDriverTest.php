@@ -31,5 +31,10 @@ class AbstractWebDriverTest extends PHPUnit_Framework_TestCase {
     protected function open($relativeUrl){
         $this->session->open(self::$baseUrl . $relativeUrl);
     }
+
+    protected function split_keys($toSend){
+        $payload = array("value" => preg_split("//u", $toSend, -1, PREG_SPLIT_NO_EMPTY));
+        return $payload;
+    }
 }
 

@@ -14,22 +14,25 @@ class LoginViewTest extends AbstractWebDriverTest {
     public function testRecoverPassword(){
 
         sleep(1);
+
+        // Test recover password link
         $this->session->element('id', 'formActivateButton')->click();
-        sleep(1);
-        $this->session->element('id', 'recoverPasswordLink')->click();
+        $this->session->element('id', 'recoverPasswordLink')->element('xpath', './/*[@data-dojo-attach-event]')->click();
+        $this->assertEquals('recoverPassword called', $this->session->element('id', 'MockUserControllerMessage')->text());
 
-        $text = $this->session->element('id', 'MockUserControllerMessage')->text();
-        $this->assertEquals('recoverPassword called', $text);
-    }
-
-    public function testRegister(){
-
-        sleep(1);
+        // Test register link
         $this->session->element('id', 'formActivateButton')->click();
-        sleep(1);
-        $this->session->element('id', 'registerLink')->click();
+        $this->session->element('id', 'registerLink')->element('xpath', './/*[@data-dojo-attach-event]')->click();
+        $this->assertEquals('register called', $this->session->element('id', 'MockUserControllerMessage')->text());
 
-        $text = $this->session->element('id', 'MockUserControllerMessage')->text();
-        $this->assertEquals('register called', $text);
+        // Test return value
+        $this->session->element('id', 'formActivateButton')->click();
+        $this->session->element('id', 'usernameInput')->value(['value' => str_split('Toby')]);
+        $this->session->element('id', 'passwordInput')->value(['value' => str_split('password1')]);
+        $this->session->element('class name', 'dialogButtons')->element('xpath', 'span//*[@data-dojo-attach-event]')->click();
+        $this->assertEquals(
+            '{"state":"","value":{"username":"Toby","password":"password1"}}',
+            $this->session->element('id', 'ViewValue')->text()
+        );
     }
 }

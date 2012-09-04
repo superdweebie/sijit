@@ -52,6 +52,7 @@
                     dom.byId('formContainer1').appendChild(form1.domNode);
                     form1.startup();
                     form1.set('value', validModel1);
+                    dom.byId('state1').innerHTML = form1.get('state');
                 });
 
                 var inValidModel2 = new TestViewModel;
@@ -67,6 +68,7 @@
                     dom.byId('formContainer2').appendChild(form2.domNode);
                     form2.startup();
                     form2.set('value', inValidModel2);
+                    dom.byId('state2').innerHTML = form2.get('state');
                 });
 
                 var inValidModel3 = new TestViewModel;
@@ -79,6 +81,7 @@
                     dom.byId('formContainer3').appendChild(form3.domNode);
                     form3.startup();
                     form3.set('value', inValidModel3);
+                    dom.byId('state3').innerHTML = form3.get('state');
                 });
             })
 		</script>

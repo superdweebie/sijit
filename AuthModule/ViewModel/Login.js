@@ -33,7 +33,7 @@ define ([
                 },
                 password:
                 {
-                    id       : 'password',
+                    id       : 'passwordInput',
                     property : 'password',
                     title    : 'Password:',
                     dataType : 'string',

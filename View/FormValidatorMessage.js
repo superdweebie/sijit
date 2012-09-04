@@ -1,12 +1,14 @@
 define ([
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/aspect',
     'dijit/Tooltip',
     'dijit/_Widget'
 ],
 function (
     declare,
     lang,
+    aspect,
     Tooltip,
     Widget
 ){
@@ -45,11 +47,21 @@ function (
                     } else {
                         this.owningForm._onChildChange('value');
                     }
+
                     this.displayMessage();
                 }
             },
 
             displayMessage: function(){
+
+                // If form hasn't started, delay message display until it has
+                if ( ! this.owningForm._started){
+                    aspect.after(this.owningForm, 'startup', lang.hitch(this, function(){
+                        this.displayMessage();
+                    }));
+                    return;
+                }
+
                 if( ! this.value || this.value == ''){
                     if (this._focusWatchHandle){
                         this._focusWatchHandle.unwatch();
