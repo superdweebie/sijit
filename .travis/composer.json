@@ -3,6 +3,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.4",
-        "superdweebie/dojo": "dev-master"
+        "superdweebie/dojo": "dev-master",
+        "instaclick/php-webdriver": "dev-master"        
     }
 }
