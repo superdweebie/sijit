@@ -8,3 +8,6 @@ before_script:
   - sh -e /etc/init.d/xvfb start
   - npm install connect
   - sudo node .travis/server.js &
+  
+script:
+  - phpunit
