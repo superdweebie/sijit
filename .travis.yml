@@ -7,7 +7,7 @@ before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start   
   - sleep 10
-  - curl --show-error http://selenium.googlecode.com/files/selenium-server-standalone-2.25.0.jar
+  - curl -O http://selenium.googlecode.com/files/selenium-server-standalone-2.25.0.jar
   - cd ..
   - mkdir testSijit
   - cd testSijit
