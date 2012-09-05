@@ -1,8 +1,8 @@
 define([
     'dojo/_base/declare',
-    'Sds/Validator/ValidatorGroup',
-    'Sds/Validator/LengthValidator',
-    'Sds/Validator/IdentifierCharsValidator'
+    'Sds/Common/Validator/ValidatorGroup',
+    'Sds/Common/Validator/LengthValidator',
+    'Sds/Common/Validator/IdentifierCharsValidator'
 ],
 function(
     declare,
@@ -11,7 +11,7 @@ function(
     IdentifierCharsValidator
 ){
     return declare(
-        'Sds/Validator/IdentifierValidator',
+        'Sds/Common/Validator/IdentifierValidator',
         [ValidatorGroup],
         {
             constructor: function(){

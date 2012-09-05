@@ -11,7 +11,7 @@ function(
     DeferredList
 ){
     return declare(
-        'Sds/Validator/ValidatorManager',
+        'Sds/Common/Validator/ValidatorManager',
         null,
         {
             createGroup: function(validators){
@@ -32,7 +32,7 @@ function(
                         instances.push(result[index][1]);
                     }
 
-                    this.create('Sds/Validator/ValidatorGroup', {validators: instances}).then(function(validatorGroup){
+                    this.create('Sds/Common/Validator/ValidatorGroup', {validators: instances}).then(function(validatorGroup){
                         deferredGroup.resolve(validatorGroup);
                     });
                 }));

@@ -15,4 +15,9 @@ chdir($applicationRoot);
 $loader = require_once($loaderPath);
 $loader->add('Sds\\Test', __DIR__);
 
-\Sds\Test\AbstractWebDriverTest::setBaseUrl('http://localhost:80/');
+$baseUrl = getenv('TEST_BASE_URL');
+if ( ! $baseUrl){
+    $baseUrl = 'http://localhost/ZendSkeletonApplication/js/dojo_src/';
+}
+
+\Sds\Test\AbstractWebDriverTest::setBaseUrl($baseUrl);

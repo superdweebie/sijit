@@ -27,7 +27,7 @@ define ([
                     required : true,
                     validators: [
                         {
-                            module: 'Sds/Validator/IdentifierValidator'
+                            module: 'Sds/Common/Validator/IdentifierValidator'
                         }
                     ]
                 },
@@ -41,7 +41,7 @@ define ([
                     required : true,
                     validators: [
                         {
-                            module: 'Sds/Validator/LengthValidator',
+                            module: 'Sds/Common/Validator/LengthValidator',
                             options: {min: 6, max: 40}
                         }
                     ]

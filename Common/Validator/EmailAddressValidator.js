@@ -1,6 +1,6 @@
 define([
     'dojo/_base/declare',
-    'Sds/Validator/BaseValidator',
+    'Sds/Common/Validator/BaseValidator',
     'dojox/validate/web'
 ],
 function(
@@ -9,7 +9,7 @@ function(
     xweb
 ){
     return declare(
-        'Sds/Validator/EmailAddressValidator',
+        'Sds/Common/Validator/EmailAddressValidator',
         [BaseValidator],
         {
             isValid: function(value){

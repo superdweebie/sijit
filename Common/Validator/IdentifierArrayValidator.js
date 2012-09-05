@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
-    'Sds/Validator/IdentifierValidator',
-    'Sds/Validator/BaseValidator'
+    'Sds/Common/Validator/IdentifierValidator',
+    'Sds/Common/Validator/BaseValidator'
 ],
 function(
     declare,
@@ -9,7 +9,7 @@ function(
     BaseValidator
 ){
     return declare(
-        'Sds/Validator/IdentifierArrayValidator',
+        'Sds/Common/Validator/IdentifierArrayValidator',
         [BaseValidator],
         {
             isValid: function(value){

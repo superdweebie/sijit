@@ -11,7 +11,7 @@ define ([
         'dijit/form/Form',
         'dijit/registry',
         'dojox/layout/TableContainer',
-        'Sds/Validator/ValidatorManager',
+        'Sds/Common/Validator/ValidatorManager',
         'Sds/Common/Utils',
         'dojox/layout/TableContainer',
     ],
@@ -91,14 +91,14 @@ define ([
 
                     //Add form validator
                     var formValidatorDeferred = new Deferred;
-                    if (metadata.validators){
-                        this.validatorManager.createGroup(metadata.validators).then(lang.hitch(this, function(validator){
+                    if (metadata.validatorGroup){
+                        this.validatorManager.createGroup(metadata.validatorGroup).then(lang.hitch(this, function(validator){
                             form._validator = validator;
 
                             this.createInput({
                                 id: "formValidatorMessage",
                                 dijit: "Sds/View/FormValidatorMessage",
-                                validators: [
+                                validatorGroup: [
                                     {
                                         "module": "Sds/View/Validator/FormValidator"
                                     }
@@ -186,14 +186,14 @@ console.dir(form._validator.get('messages'));
                     var deferredValidator = new Deferred;
                     var validators = []
                     if (field.dataType){
-                        validators.push({module: 'Sds/Validator/DatatypeValidator', options: null});
+                        validators.push({module: 'Sds/Common/Validator/DatatypeValidator', options: null});
                     }
-                    if (field.validators){
-                        validators = validators.concat(field.validators);
+                    if (field.validatorGroup){
+                        validators = validators.concat(field.validatorGroup);
                     }
 
                     if (validators.length > 0){
-                        when(this.validatorManager.createGroup(field.validators), function(validatorGroup){
+                        when(this.validatorManager.createGroup(field.validatorGroup), function(validatorGroup){
                             deferredValidator.resolve(validatorGroup);
                         });
                     } else {
@@ -203,12 +203,12 @@ console.dir(form._validator.get('messages'));
                     var resourcesDeferredList = new DeferredList([inputDeferred, deferredValidator]);
                     resourcesDeferredList.then(lang.hitch(this, function(result){
 
-                        if (field.validators) {
+                        if (field.validatorGroup) {
                             field._validator = result[1][1];
                         }
 
-                        if (field.dataType || field.validators) {
-                            // Wrap Sds/Validator/ValidatorGroup for consumption by ValidationTextBox
+                        if (field.dataType || field.validatorGroup) {
+                            // Wrap Sds/Common/Validator/ValidatorGroup for consumption by ValidationTextBox
                             field.validator = function(value){
 
                                 var result = true;

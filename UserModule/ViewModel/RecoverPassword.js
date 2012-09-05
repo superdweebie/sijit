@@ -31,7 +31,7 @@ define ([
                     dataType : 'string',
                     validators: [
                         {
-                            module: 'Sds/Validator/IdentifierValidator'
+                            module: 'Sds/Common/Validator/IdentifierValidator'
                         }
                     ]
                 },
@@ -43,7 +43,7 @@ define ([
                     dataType : 'string',
                     validators: [
                         {
-                            module: 'Sds/Validator/EmailAddressValidator'
+                            module: 'Sds/Common/Validator/EmailAddressValidator'
                         }
                     ]
                 }

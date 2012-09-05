@@ -18,7 +18,7 @@ define ([
         model.metadata = {
             cssClasses : ['testForm'],
             tableWrap  : true,
-            validators : [
+            validatorGroup : [
                 {
                     module: 'Sds/Test/View/Asset/ClassValidator',
                     options: null
@@ -31,9 +31,9 @@ define ([
                     property : 'username',
                     dataType : 'string',
                     required : true,
-                    validators: [
+                    validatorGroup: [
                         {
-                            module : 'Sds/Validator/IdentifierValidator',
+                            module : 'Sds/Common/Validator/IdentifierValidator',
                             options: null
                         }
                     ]
@@ -47,9 +47,9 @@ define ([
                     type     : 'password',
                     dijit    : 'dijit/form/ValidationTextBox',
                     required : true,
-                    validators: [
+                    validatorGroup: [
                         {
-                            module : 'Sds/Validator/PasswordValidator',
+                            module : 'Sds/Common/Validator/PasswordValidator',
                             options: null
                         }
                     ]

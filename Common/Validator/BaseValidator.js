@@ -7,7 +7,7 @@ function(
     Stateful
 ){
     return declare(
-        'Sds/Validator/BaseValidator',
+        'Sds/Common/Validator/BaseValidator',
         [Stateful],
         {
             messages: [],

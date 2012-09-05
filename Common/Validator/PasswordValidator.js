@@ -1,13 +1,13 @@
 define([
     'dojo/_base/declare',
-    'Sds/Validator/BaseValidator'
+    'Sds/Common/Validator/BaseValidator'
 ],
 function(
     declare,
     BaseValidator
 ){
     return declare(
-        'Sds/Validator/PasswordValidator',
+        'Sds/Common/Validator/PasswordValidator',
         [BaseValidator],
         {
             lengthRegEx: /^.{6,40}$/,

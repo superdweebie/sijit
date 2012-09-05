@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
     'Sds/Common/Utils',
-    'Sds/Validator/BaseValidator'
+    'Sds/Common/Validator/BaseValidator'
 ],
 function(
     declare,
@@ -22,7 +22,7 @@ function(
     };
 
     var validator = declare(
-        'Sds/Validator/DatatypeValidator',
+        'Sds/Common/Validator/DatatypeValidator',
         [BaseValidator],
         {
             requiredType: undefined,
