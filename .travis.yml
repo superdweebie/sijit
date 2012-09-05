@@ -7,8 +7,10 @@ before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start #start headless frame buffer
   - cd ..
+  - curl http://selenium.googlecode.com/files/selenium-server-standalone-2.25.0.jar #get selenium
+  - java -jar selenium-server-standalone-2.25.0.jar #start selenium
   - mkdir testSijit #begin composer install
-  - cd sijit
+  - cd testSijit
   - cp ../sijit/.travis/composer.json ./
   - curl -s http://getcomposer.org/installer | php  
   - php composer.phar install
@@ -17,7 +19,7 @@ before_script:
   - mv vendor/dojo/sijit vendor/dojo/Sds #complete composer install
   - npm install connect
   - sudo node vendor/dojo/Sds/.travis/server.js & #start webserver
-  
+
 script:
   - cd vendor/dojo/Sds
   - phpunit
