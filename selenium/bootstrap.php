@@ -15,4 +15,4 @@ chdir($applicationRoot);
 $loader = require_once($loaderPath);
 $loader->add('Sds\\Test', __DIR__);
 
-\Sds\Test\AbstractWebDriverTest::setBaseUrl('http://');
+\Sds\Test\AbstractWebDriverTest::setBaseUrl('http://localhost/');
