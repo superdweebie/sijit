@@ -5,20 +5,20 @@ php:
 
 before_script:
   - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start #start headless frame buffer
+  - sh -e /etc/init.d/xvfb start   
   - cd ..
   - curl http://selenium.googlecode.com/files/selenium-server-standalone-2.25.0.jar #get selenium
-  - java -jar selenium-server-standalone-2.25.0.jar #start selenium
-  - mkdir testSijit #begin composer install
+  - java -jar selenium-server-standalone-2.25.0.jar
+  - mkdir testSijit
   - cd testSijit
   - cp ../sijit/.travis/composer.json ./
   - curl -s http://getcomposer.org/installer | php  
   - php composer.phar install
   - rm -rf vendor/dojo/Sds
   - cp -r ../sijit vendor/dojo
-  - mv vendor/dojo/sijit vendor/dojo/Sds #complete composer install
+  - mv vendor/dojo/sijit vendor/dojo/Sds
   - npm install connect
-  - sudo node vendor/dojo/Sds/.travis/server.js & #start webserver
+  - sudo node vendor/dojo/Sds/.travis/server.js &
 
 script:
   - cd vendor/dojo/Sds
