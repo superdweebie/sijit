@@ -6,8 +6,9 @@ php:
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start   
-  - sleep 10
-  - curl -O http://selenium.googlecode.com/files/selenium-server-standalone-2.25.0.jar
+  - sleep 3
+  - curl -O -s http://selenium.googlecode.com/files/selenium-server-standalone-2.25.0.jar
+  - java -jar selenium-server-standalone-2.25.0.jar  
   - cd ..
   - mkdir testSijit
   - cd testSijit
@@ -19,7 +20,8 @@ before_script:
   - mv vendor/dojo/sijit vendor/dojo/Sds
   - npm install connect
   - sudo node vendor/dojo/Sds/.travis/server.js &
-
+  - sleep 3
+  
 script:
   - cd vendor/dojo/Sds
   - phpunit
