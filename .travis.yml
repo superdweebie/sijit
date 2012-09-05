@@ -24,4 +24,4 @@ before_script:
   
 script:
   - cd vendor/dojo/Sds
-  - curl http://localhost:80/Sds/README.md
+  - phpunit
