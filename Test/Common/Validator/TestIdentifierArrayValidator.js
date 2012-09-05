@@ -1,23 +1,19 @@
 define([
         'doh/main',
-        'Sds/Validator/PasswordValidator'
+        'Sds/Common/Validator/IdentifierArrayValidator'
     ],
     function(
         doh,
-        PasswordValidator
+        IdentifierArrayValidator
     ){
-        doh.register("Sds.Test.Validator.TestPasswordValidator", [
+        doh.register("Sds.Test.Common.Validator.TestIdentifierArrayValidator", [
 
             function ValidatorTest(doh){
-                var validator = new PasswordValidator;
+                var validator = new IdentifierArrayValidator;
 
                 var testArray = [
-                    [true, 'password1'],
-                    [true, 'password1@'],
-                    [false, '1abcd'],
-                    [false, '123456789'],
-                    [false, 'password'],
-                    [false, '123456789123456789123456789123456789password']
+                    [true, ['username', 'username1', '1username']],
+                    [false, ['username1', 'u']]
                 ];
 
                 var index;
@@ -29,6 +25,7 @@ define([
                     }
                 }
             },
+
         ]);
     }
 );

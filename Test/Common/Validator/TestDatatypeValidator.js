@@ -1,12 +1,12 @@
 define([
         'doh/main',
-        'Sds/Validator/DatatypeValidator'
+        'Sds/Common/Validator/DatatypeValidator'
     ],
     function(
         doh,
         DatatypeValidator
     ){
-        doh.register("Sds.Test.Validator.TestDatatypeValidator", [
+        doh.register("Sds.Test.Common.Validator.TestDatatypeValidator", [
 
             function StringTest(doh){
                 var validator = new DatatypeValidator(DatatypeValidator.datatypes.STRING);

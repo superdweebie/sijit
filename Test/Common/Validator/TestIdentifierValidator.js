@@ -1,12 +1,12 @@
 define([
         'doh/main',
-        'Sds/Validator/IdentifierValidator'
+        'Sds/Common/Validator/IdentifierValidator'
     ],
     function(
         doh,
         IdentifierValidator
     ){
-        doh.register("Sds.Test.Validator.TestIdentifierValidator", [
+        doh.register("Sds.Test.Common.Validator.TestIdentifierValidator", [
 
             function ValidatorTest(doh){
                 var validator = new IdentifierValidator;

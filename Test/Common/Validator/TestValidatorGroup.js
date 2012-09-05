@@ -1,8 +1,8 @@
 define([
         'doh/main',
-        'Sds/Validator/DatatypeValidator',
-        'Sds/Validator/IdentifierValidator',
-        'Sds/Validator/ValidatorGroup'
+        'Sds/Common/Validator/DatatypeValidator',
+        'Sds/Common/Validator/IdentifierValidator',
+        'Sds/Common/Validator/ValidatorGroup'
     ],
     function(
         doh,
@@ -10,7 +10,7 @@ define([
         IdentifierValidator,
         ValidatorGroup
     ){
-        doh.register("Sds.Test.Validator.TestValidatorGroup", [
+        doh.register("Sds.Test.Common.Validator.TestValidatorGroup", [
 
             function ValidatorTest(doh){
 

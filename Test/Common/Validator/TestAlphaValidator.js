@@ -1,19 +1,21 @@
 define([
         'doh/main',
-        'Sds/Validator/IdentifierArrayValidator'
+        'Sds/Common/Validator/AlphaValidator'
     ],
     function(
         doh,
-        IdentifierArrayValidator
+        AlphaValidator
     ){
-        doh.register("Sds.Test.Validator.TestIdentifierArrayValidator", [
+        doh.register("Sds.Test.Common.Validator.TestAlphaValidator", [
 
             function ValidatorTest(doh){
-                var validator = new IdentifierArrayValidator;
+                var validator = new AlphaValidator;
 
                 var testArray = [
-                    [true, ['username', 'username1', '1username']],
-                    [false, ['username1', 'u']]
+                    [true, 'abc'],
+                    [true, 'ABC'],
+                    [false, 'a1'],
+                    [false, 'a&']
                 ];
 
                 var index;
@@ -25,7 +27,6 @@ define([
                     }
                 }
             },
-
         ]);
     }
 );

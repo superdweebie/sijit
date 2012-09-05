@@ -1,21 +1,23 @@
 define([
         'doh/main',
-        'Sds/Validator/LengthValidator'
+        'Sds/Common/Validator/PasswordValidator'
     ],
     function(
         doh,
-        LengthValidator
+        PasswordValidator
     ){
-        doh.register("Sds.Test.Validator.TestLengthValidator", [
+        doh.register("Sds.Test.Common.Validator.TestPasswordValidator", [
 
             function ValidatorTest(doh){
-                var validator = new LengthValidator(1, 5);
+                var validator = new PasswordValidator;
 
                 var testArray = [
-                    [true, '1'],
-                    [true, '12345'],
-                    [false, ''],
-                    [false, '123456']
+                    [true, 'password1'],
+                    [true, 'password1@'],
+                    [false, '1abcd'],
+                    [false, '123456789'],
+                    [false, 'password'],
+                    [false, '123456789123456789123456789123456789password']
                 ];
 
                 var index;

@@ -1,12 +1,12 @@
 define([
         'doh/main',
-        'Sds/Validator/EmailAddressValidator'
+        'Sds/Common/Validator/EmailAddressValidator'
     ],
     function(
         doh,
         EmailAddressValidator
     ){
-        doh.register("Sds.Test.Validator.TestEmailValidator", [
+        doh.register("Sds.Test.Common.Validator.TestEmailValidator", [
 
             function ValidatorTest(doh){
                 var validator = new EmailAddressValidator;

@@ -1,21 +1,21 @@
 define([
         'doh/main',
-        'Sds/Validator/AlphaValidator'
+        'Sds/Common/Validator/LengthValidator'
     ],
     function(
         doh,
-        AlphaValidator
+        LengthValidator
     ){
-        doh.register("Sds.Test.Validator.TestAlphaValidator", [
+        doh.register("Sds.Test.Common.Validator.TestLengthValidator", [
 
             function ValidatorTest(doh){
-                var validator = new AlphaValidator;
+                var validator = new LengthValidator(1, 5);
 
                 var testArray = [
-                    [true, 'abc'],
-                    [true, 'ABC'],
-                    [false, 'a1'],
-                    [false, 'a&']
+                    [true, '1'],
+                    [true, '12345'],
+                    [false, ''],
+                    [false, '123456']
                 ];
 
                 var index;
