@@ -16,43 +16,44 @@ function(
     //		Sds/View/BaseView
     // summary:
     //		The module defines the base for an View.
-    //      A input agent is like a classic form, just slightly higher level.
-    //      A input agent has the task of collecting some kind of data, and returning
-    //      it. The most important function is `activate` which tells the input
-    //      agent to go to work.
+    //      A view is responsible for showing and hiding parts of the ui.
+    //      A view may also be responsible for displaying or collecting data.
+    //      The form of data to be displayed or collected should normally be 
+    //      defined by a ViewModel.
 
     return declare(
         'Sds.View.BaseView',
         [Stateful],
         {
             // state: string
-            //		Empty string if the form is valid. Otherwise, a string indicating state
+            //      Indicates if the view has a valid value.
+            //		Empty string if the value is valid. Otherwise, a string indicating invalid
+            //      value. Invalid string is norammly 'Incomplete', or 'Error'
             state: '',
 
             // value: object
-            //		Is the form value object.
-            //		An object with all the form values.
+            //		Is the view value object. This is normally a viewModel.
             value: undefined,
 
             // valueType: object
             //      Is the type of object that can be passed
             //      to the activate method, and the type of value object
             //      that will be returned from the activate method
-            //      when it resolves
+            //      when it resolves. Normally a ViewModel definition.
             valueType: undefined,
 
             _activateDeferred: undefined,
 
             activate: function(value){
                 // summary:
-                //		Makes the form visible/active
+                //		Makes the view visible/active
                 // value: object
-                //      Must be an instance of valueType
+                //      Optional. Must be an instance of this.valueType.
                 // returns: Deferred
                 //		A Deferred that resolves
-                //		when the data collection is complete.
+                //		when the view is hidden.
                 //      The Deferred should deliver an object with the structure:
-                //      {state: 'dataAgentState', value: 'dataAgentValueObject'}
+                //      {state: this.state, value: this.value}
 
                 this._activateDeferred = new Deferred;
 
@@ -74,7 +75,7 @@ function(
 
             reset: function(){
                 // summary:
-                //		Resets/clears the data
+                //		Resets/clears the view value
                 this.value = undefined;
             },
 
