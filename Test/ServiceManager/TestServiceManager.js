@@ -13,7 +13,7 @@ define([
         ServiceManager
     ){
 
-        doh.register("Sds.Test.ServiceManager.TestServiceManager", [
+        doh.register("Sds/Test/ServiceManager/TestServiceManager", [
             function configTest(doh){
 
                 var defaultConfig = {

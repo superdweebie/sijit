@@ -9,7 +9,7 @@ function (
 
     return declare
     (
-        'Sds.ServiceManager.Ref',
+        'Sds/ServiceManager/Ref',
         null,
         {
             // summary:

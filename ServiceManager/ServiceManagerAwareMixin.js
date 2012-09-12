@@ -8,7 +8,7 @@ define ([
         //		Sds/ServiceManager/ServiceManagerAwareMixin
 
         return declare (
-            'Sds.ServiceManager.ServiceManagerAwareMixin',
+            'Sds/ServiceManager/ServiceManagerAwareMixin',
             null,
             {
                 // summary:

@@ -1,9 +1,8 @@
 define([],
 function(){
 	return {
-        LOG    : 'log',
-        INFO   : 'info',
-        WARNING: 'warning',
-        ERROR  : 'error'
+        NOTICE   : 0,
+        WARNING  : 1,
+        ERROR    : 2
     }
 });

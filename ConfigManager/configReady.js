@@ -1,21 +1,18 @@
 define([
-        'dojo/Deferred',
         'dojo/when',
-        'Sds/ConfigManager/ConfigManager'
+        'Sds/ConfigManager/configManager'
     ],
     function(
-        Deferred,
         when,
-        ConfigManager
+        configManager
     ){
         // module:
-        //		Sds/ConfigManager/ConfigReady
+        //		Sds/ConfigManager/configReady
         //
         // An AMD plugin that will wait until merged config is created
 
         return {
             load: function(id, require, callback){
-                var configManager = new ConfigManager();
                 when(configManager.merge(), function(){
                     callback();
                 });

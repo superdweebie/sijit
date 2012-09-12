@@ -7,7 +7,7 @@ define([
         'dijit/registry',
         'dojo/aspect',
         'Sds/ServiceManager/Ref',
-        'Sds/Common/Utils'
+        'Sds/Common/utils'
     ],
     function (
         declare,
@@ -18,14 +18,14 @@ define([
         registry,
         aspect,
         Ref,
-        Utils
+        utils
     ) {
         // module:
         //		Sds/ServiceManager/ServiceManager
 
         return declare
         (
-            'Sds.ServiceManager.ServiceManager',
+            'Sds/ServiceManager/ServiceManager',
             null,
             {
                 // summary:
@@ -236,10 +236,10 @@ define([
 
                     //Determine how many async object loads need to finish before object is ready
                     if (config.createObjects) {
-                        injectionsRemaining += Utils.countProperties(config.createObjects);
+                        injectionsRemaining += utils.countProperties(config.createObjects);
                     }
                     if (config.getObjects) {
-                        injectionsRemaining += Utils.countProperties(config.getObjects);
+                        injectionsRemaining += utils.countProperties(config.getObjects);
                     }
 
                     if (injectionsRemaining == 0) {
@@ -301,7 +301,7 @@ define([
                     // summary:
                     //     Merge a config object with the existing config object.
 
-                    this._config = Utils.mixinDeep(this._config, merge);
+                    this._config = utils.mixinDeep(this._config, merge);
                 },
                 getConfig: function(){
                     // summary:

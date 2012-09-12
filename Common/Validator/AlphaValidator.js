@@ -7,7 +7,7 @@ function(
     BaseValidator
 ){
     return declare(
-        'Sds/Common/Validator/LengthValidator',
+        'Sds/Common/Validator/AlphaValidator',
         [BaseValidator],
         {
             regEx: /^[a-zA-Z]+$/,

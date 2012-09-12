@@ -1,31 +1,31 @@
 define([
         'doh/main',
         'dojo/_base/config',
-        'Sds/Common/Utils'
+        'Sds/Common/utils'
     ],
     function(
         doh,
         config,
-        Utils
+        utils
     ){
-        doh.register("Sds.Test.Common.TestUtils", [
+        doh.register("Sds/Test/Common/TestUtils", [
 
             function ucFirstTest(doh){
-                doh.assertEqual('Test', Utils.ucFirst('test'));
+                doh.assertEqual('Test', utils.ucFirst('test'));
             },
 
             function isIntTest(doh){
-                doh.assertTrue(Utils.isInt(1));
-                doh.assertTrue(Utils.isInt(1.0));
-                doh.assertTrue(Utils.isInt("1"));
-                doh.assertFalse(Utils.isInt(true));
-                doh.assertFalse(Utils.isInt(false));
-                doh.assertFalse(Utils.isInt(1.5));
+                doh.assertTrue(utils.isInt(1));
+                doh.assertTrue(utils.isInt(1.0));
+                doh.assertTrue(utils.isInt("1"));
+                doh.assertFalse(utils.isInt(true));
+                doh.assertFalse(utils.isInt(false));
+                doh.assertFalse(utils.isInt(1.5));
             },
 
             function fullUrlTest(doh){
                config.siteUrl = 'test.com';
-               doh.assertEqual('test.com/test.php', Utils.fullUrl('test.php'));
+               doh.assertEqual('test.com/test.php', utils.fullUrl('test.php'));
             },
 
             function mixinDeepTest(doh) {
@@ -33,23 +33,24 @@ define([
                 var dest = {
                     item: {
                         a: 1,
-                        b: 2
+                        b: {bb: 1}
                     }
                 };
                 var source = {
                     item: {
                         a: 0,
+                        b: {dd: 5},
                         c: 3
                     }
                 }
                 var result = {
                     item: {
                         a: 0,
-                        b: 2,
+                        b: {bb: 1, dd:5},
                         c: 3
                     }
                 }
-                doh.assertEqual(result, Utils.mixinDeep(dest, source));
+                doh.assertEqual(result, utils.mixinDeep(dest, source));
             },
 
             function countPropertiesTest(doh){
@@ -60,7 +61,7 @@ define([
                     prop3: {three: 3}
                 };
 
-                doh.assertEqual(3, Utils.countProperties(object));
+                doh.assertEqual(3, utils.countProperties(object));
             }
         ]);
     }

@@ -31,6 +31,10 @@ function(
 
             jsonpTimeout: 10000,
 
+            displayLevel: -1,
+
+            logLevel: -1,
+
             handle: function(exception){
 
                 if ( ! exception instanceof BaseException){
@@ -38,11 +42,16 @@ function(
                     this.handle(new InvalidTypeException(exception));
                 }
 
-                if (exception.display) {
+                if ((exception.display && this.displayLevel == -1) ||
+                    this.displayLevel >= exception.severity
+                ) {
                     this.exceptionView.activate(exception);
                 }
 
-                if (exception.log) {
+
+                if ((exception.log && this.logLevel == -1) ||
+                    this.logLevel >= exception.severity
+                ) {
                     script.get(this.serverUrl, {
                         query: {query: '{"name": "test"}'},
                         jsonp: 'callback',

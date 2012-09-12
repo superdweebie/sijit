@@ -9,10 +9,7 @@ define([
     'Sds/View/BaseView',
     'Sds/AuthModule/ViewModel/Login',
     'Sds/View/FormFactory',
-    'dojo/text!./Template/LoginView.html',
-    'Sds/Common/Dialog',
-    'Sds/Common/JsLink',
-    'dijit/form/ValidationTextBox'
+    'Sds/TemplateManager/switch!Sds/AuthModule/Template/[theme]/LoginView'
 ],
 function(
     declare,
