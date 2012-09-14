@@ -10,10 +10,8 @@ define ([
         'dojo/dom-attr',
         'dijit/form/Form',
         'dijit/registry',
-        'dojox/layout/TableContainer',
         'Sds/Common/Validator/ValidatorManager',
-        'Sds/Common/Utils',
-        'dojox/layout/TableContainer',
+        'Sds/Common/Utils'
     ],
     function (
         declare,
@@ -27,7 +25,6 @@ define ([
         domAttr,
         Form,
         registry,
-        TableContainer,
         ValidatorManager,
         Utils
     ){
@@ -75,13 +72,6 @@ define ([
                             break;
                         default:
                             containerNode = form.domNode;
-                    }
-
-                    // Wrap the inputs in a table dijit
-                    if (metadata.tableWrap) {
-                        var table = new TableContainer({cols: 1});
-                        containerNode.appendChild(table.domNode);
-                        containerNode = table.domNode;
                     }
 
                     // Add css classes
@@ -141,10 +131,6 @@ console.dir(form._validator.get('messages'));
                                     return result;
                                 });
                             }
-                        }
-
-                        if (metadata.tableWrap){
-                            table.startup();
                         }
 
                         appendDeferred.resolve(form);

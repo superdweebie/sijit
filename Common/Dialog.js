@@ -4,11 +4,12 @@ define([
     'dojo/Deferred',
     'dojo/on',
     'dojo/keys',
-    'dijit/_WidgetsInTemplateMixin',
-    'dijit/Dialog',
-    'dojo/text!./Template/Dialog.html',
-    'dijit/form/Button',
-    'dijit/form/TextBox'
+    'dojo/dom-prop',
+    'dijit/_Widget',
+	'dijit/_TemplatedMixin',
+    'dijit/Form/_FormMixin',
+    'bootstrap/Modal',
+    'dojo/text!./Template/Dialog.html'
 ],
 function (
     declare,
@@ -16,8 +17,11 @@ function (
     Deferred,
     on,
     keys,
-    WidgetsInTemplateMixin,
-    Dialog,
+    domProp,
+    Widget,
+    TemplatedMixin,
+    FormMixin,
+    Modal,
     template
 ){
     var buttons = {
@@ -27,19 +31,31 @@ function (
 
     var dialog = declare(
         'Sds/Common/Dialog',
-        [Dialog, WidgetsInTemplateMixin],
+        [Widget, TemplatedMixin, FormMixin],
         {
             templateString: template,
 
+            modal: undefined,
+
             button: undefined,
 
+            // Map widget attributes to DOMNode attributes.
+            _setTitleAttr: [
+                { node: "titleNode", type: "innerHTML" }
+            ],
+
             _onPressEnterHandle: undefined,
+
+            startup: function(){
+                this.inherited(arguments);
+                this.modal = new Modal(this.domNode);
+            },
 
             _updateOkDisabled: function(){
                 // Enables and disables the ok button and ENTER key when the state is changed
                 if(this.state == '')
                 {
-                    this.okButtonNode.set('disabled', false);
+                    domProp.set(this.okButtonNode, 'disabled', false);
 
                     // set up ENTER keyhandling
                     this._onPressEnterHandle = on(this, 'keydown', lang.hitch(this, function(event){
@@ -50,7 +66,7 @@ function (
                         }
                     }));
                 } else {
-                    this.okButtonNode.set('disabled', true);
+                    domProp.set(this.okButtonNode, 'disabled', true);
                     if (this._onPressEnterHandle) {
                         this._onPressEnterHandle.remove();
                     }
@@ -72,7 +88,7 @@ function (
 
             onCancel: function(){
                 this.set('button', buttons.CANCEL);
-                this.inherited(arguments);
+                this.hide();
             },
 
             show: function()
@@ -82,14 +98,14 @@ function (
                 this.watch('state', lang.hitch(this, '_updateOkDisabled'));
                 this.connectChildren();
 
-                this.inherited(arguments);
+                this.modal.show();
 
                 this._updateOkDisabled();
                 return this._returnValueDeferred;
             },
             hide: function()
             {
-                this.inherited(arguments);
+                this.modal.hide();
 
                 if(this._returnValueDeferred)
                 {
@@ -104,4 +120,3 @@ function (
 
     return dialog;
 });
-

@@ -4,9 +4,8 @@
 	<head>
 		<title>Functional Testing Sds/Common/Dialog</title>
 		<style type="text/css">
-			@import "../../../../dojo/resources/dojo.css";
-            @import "../../../../dijit/themes/claro/claro.css";
-            @import "../../../../Sds/themes/claro/claro.css";
+            @import "../../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../../themes/bootstrap/css/bootstrap-responsive.css";
 		</style>
 		<script
             type="text/javascript"
@@ -25,6 +24,7 @@
                 'dojo/_base/json',
                 'dojo/parser',
                 'dijit/registry',
+                'Sds/Common/Dialog',
                 'dojo/domReady!'
             ],
             function(
@@ -61,19 +61,20 @@
 	<body class="claro">
         <h1>Functional Testing Sds/Common/Dialog</h1>
         <br />
-        <input id="showDialog" type="button" value="show dialog" />
+        <button class="btn btn-primary btn-large" id="showDialog">Show Dialog</button>
 
         <h3>Return value</h3>
         <p id="ReturnValue"></p>
         <br />
         <h3>State</h3>
         <p id="State"></p>
-        <div id="testDialog" data-dojo-type="Sds/Common/Dialog" title = "Test Dialog">
+        <div id="testDialog" data-dojo-type="Sds/Common/Dialog" title="Test Dialog">
             <div>This is a dialog test message.</div>
-            <input id="validState" type="button" value="valid state" />
-            <input id="invalidState" type="button" value="invalid state" />
-            <br />
-            <input id="hello" data-dojo-type="dijit/form/TextBox" value="hello" name="helloInput"/>
+            <p>
+                <button id="validState" class="btn">set valid state</button>
+                <button id="invalidState" class="btn">set invalid state</button>
+            </p>
+            <p><input id="hello" data-dojo-type="dijit/form/TextBox" value="hello" name="helloInput"/></p>
         </div>
 	</body>
 </html>
