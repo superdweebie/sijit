@@ -1,9 +1,0 @@
-.splashPane
-{
-    position: absolute;
-    height: 100%; 
-    width: 100%;
-    background-image: url('images/splash.jpg');
-    background-size: cover;
-    z-index: 10000;
-}

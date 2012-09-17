@@ -126,7 +126,6 @@ define ([
                             if (form._validator){
                                 aspect.after(input, 'isValid', function(result){
                                     form._validator.isValid(form.get('value'));
-console.dir(form._validator.get('messages'));
                                     form._formValidatorMessage.set('value', form._validator.get('messages').join(' '));
                                     return result;
                                 });
@@ -163,7 +162,7 @@ console.dir(form._validator.get('messages'));
                             inputDeferred.resolve(Input)
                         });
                     } else {
-                        require(['dijit/form/ValidationTextBox'], function(Input){
+                        require(['Sds/Common/Form/ValidationTextBox'], function(Input){
                             inputDeferred.resolve(Input)
                         });
                     }

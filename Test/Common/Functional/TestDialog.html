@@ -4,8 +4,8 @@
 	<head>
 		<title>Functional Testing Sds/Common/Dialog</title>
 		<style type="text/css">
-            @import "../../../../themes/bootstrap/css/bootstrap.css";
-            @import "../../../../themes/bootstrap/css/bootstrap-responsive.css";
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
 		</style>
 		<script
             type="text/javascript"
@@ -25,6 +25,7 @@
                 'dojo/parser',
                 'dijit/registry',
                 'Sds/Common/Dialog',
+                'Sds/Common/Form/TextBox',
                 'dojo/domReady!'
             ],
             function(
@@ -74,7 +75,7 @@
                 <button id="validState" class="btn">set valid state</button>
                 <button id="invalidState" class="btn">set invalid state</button>
             </p>
-            <p><input id="hello" data-dojo-type="dijit/form/TextBox" value="hello" name="helloInput"/></p>
+            <p><input id="hello" data-dojo-type="Sds/Common/Form/TextBox" value="hello" name="helloInput"/></p>
         </div>
 	</body>
 </html>
