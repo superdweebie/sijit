@@ -171,7 +171,7 @@ define ([
                     var deferredValidator = new Deferred;
                     var validators = []
                     if (field.dataType){
-                        validators.push({module: 'Sds/Common/Validator/DatatypeValidator', options: null});
+                        validators.push({module: 'Sds/Common/Validator/DatatypeValidator', options: {requiredType: field.dataType}});
                     }
                     if (field.validatorGroup){
                         validators = validators.concat(field.validatorGroup);
@@ -189,36 +189,17 @@ define ([
                     resourcesDeferredList.then(lang.hitch(this, function(result){
 
                         if (field.validatorGroup) {
-                            field._validator = result[1][1];
+                            field.validator = result[1][1];
                         }
 
                         if (field.dataType || field.validatorGroup) {
-                            // Wrap Sds/Common/Validator/ValidatorGroup for consumption by ValidationTextBox
-                            field.validator = function(value){
-
-                                var result = true;
-                                var messages = [];
-
-                                if ( ! this.required && value == ''){
-                                    return result;
-                                }
-
-                                //Check datatype validator
-                                if (this._validator && ! this._validator.isValid(value)){
-                                    result = false;
-                                    messages = this._validator.get('messages');
-                                }
-
-                                if ( ! result) {
-                                    this.invalidMessage = messages.join(' ');
-                                }
-                                return result;
-                            }
+                            field.validator = result[1][1];
                         }
 
                         delete field.dijit;
                         delete field.dataType;
-
+                        delete field.validatorGroup;
+                        
                         field.id = this._generateDijitId(field.id);
                         if (field.property){
                             field.name = field.property;

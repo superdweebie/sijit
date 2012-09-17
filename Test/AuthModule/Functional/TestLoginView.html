@@ -4,8 +4,8 @@
 	<head>
 		<title>Functional Testing Sds/AuthModule/LoginView</title>
 		<style type="text/css">
-            @import "../../../../themes/bootstrap/css/bootstrap.css";
-            @import "../../../../themes/bootstrap/css/bootstrap-responsive.css";
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
 		</style>
 		<script
             type="text/javascript"
@@ -15,7 +15,6 @@
                 popup: true,
                 async: true,
                 mergeConfigs: [
-                    'Sds/TemplateManager/Config',
                     'Sds/AuthModule/Config',
                     'Sds/Test/AuthModule/Asset/Config'
                 ]
@@ -29,7 +28,6 @@
                 'dojo/when',
                 'dojo/_base/json',
                 'Sds/ServiceManager/Shared/GetObject!loginView',
-                'Sds/TemplateManager/switch!Sds/Test/AuthModule/Functional/Asset/[theme]',
                 'dojo/domReady!'
             ],
             function(
@@ -38,11 +36,8 @@
                 dom,
                 when,
                 json,
-                loginView,
-                template
+                loginView
             ){
-                html.set(dom.byId('content'), template);
-
                 on(dom.byId('formActivateButton'), 'click', function(){
                     when(loginView.activate(), function(result){
                         dom.byId('ViewValue').innerHTML = json.toJson(result);
@@ -53,6 +48,12 @@
 		</script>
 	</head>
 	<body class="claro">
-        <div id="content"></div>
+        <h1>Functional Testing Sds/AuthModule/LoginView</h1>
+        <br />
+        <button class="btn btn-primary btn-large" id="formActivateButton">Activate</button>
+        <h3>MockUserControllerMessage:</h3>
+        <p id="MockUserControllerMessage"></p>
+        <h3>ViewValue</h3>
+        <p id="ViewValue"></p>
 	</body>
 </html>
