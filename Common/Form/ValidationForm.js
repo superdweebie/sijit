@@ -3,26 +3,26 @@ define([
     'dojo/_base/lang',
     'dojo/dom-class',
     'Sds/Common/Validator/BaseValidator',
-    'Sds/Common/Form/TextBox',
-    'dojo/text!./Template/ValidationTextBox.html'
+    'dijit/_Widget',
+	'dijit/_TemplatedMixin',
+    'dijit/Form/_FormMixin',
+    'dojo/text!./Template/ValidationForm.html'
 ],
 function (
     declare,
     lang,
     domClass,
     BaseValidator,
-    TextBox,
+    Widget,
+    TemplatedMixin,
+    FormMixin,
     template
 ){
     return declare(
-        'Sds/Common/Form/ValidationTextBox',
-        [TextBox],
+        'Sds/Common/Form/TextBox',
+        [Widget, TemplatedMixin, FormMixin],
         {
             templateString: template,
-
-            // required: Boolean
-            //		User is required to enter data into this field.
-            required: false,
 
             // message: String
             //		Currently error/prompt message.
@@ -34,6 +34,7 @@ function (
 
             _validatorSet: false,
 
+            // validator: a class level validator. Use for validtaions that query multiple fields.
             validator: undefined,
 
             _setValueAttr: function(){
@@ -41,14 +42,6 @@ function (
                 //		Hook so set('value', ...) works.
                 this.inherited(arguments);
                 this._validate();
-            },
-
-            _refreshState: function(){
-                // Overrides TextBox._refreshState()
-                if(this._created){
-                    this.set('value');
-                }
-                this.inherited(arguments);
             },
 
             _setValidatorAttr: function(value){

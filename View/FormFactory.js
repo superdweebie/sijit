@@ -7,8 +7,7 @@ define ([
         'dojo/DeferredList',
         'dojo/when',
         'dojo/aspect',
-        'dojo/dom-attr',
-        'dijit/form/Form',
+        'Sds/Common/Form/ValidationForm',
         'dijit/registry',
         'Sds/Common/Validator/ValidatorManager',
         'Sds/Common/Utils'
@@ -22,7 +21,6 @@ define ([
         DeferredList,
         when,
         aspect,
-        domAttr,
         Form,
         registry,
         ValidatorManager,
@@ -83,29 +81,14 @@ define ([
                     var formValidatorDeferred = new Deferred;
                     if (metadata.validatorGroup){
                         this.validatorManager.createGroup(metadata.validatorGroup).then(lang.hitch(this, function(validator){
-                            form._validator = validator;
-
-                            this.createInput({
-                                id: "formValidatorMessage",
-                                dijit: "Sds/View/FormValidatorMessage",
-                                validatorGroup: [
-                                    {
-                                        "module": "Sds/View/Validator/FormValidator"
-                                    }
-                                ],
-                                tooltipDomNode: containerNode,
-                                owningForm: form
-                            }).then(function(formValidatorMessage){
-                                form._formValidatorMessage = formValidatorMessage;
-                                containerNode.appendChild(formValidatorMessage.domNode);
-                                formValidatorDeferred.resolve(formValidatorMessage);
-                            });
+                            form.set('validator', validator);
+                            formValidatorDeferred.resolve();
                         }));
                     } else {
                         formValidatorDeferred.resolve();
                     }
 
-                    var deferredInputs = [formValidatorDeferred];
+                    var deferredInputs = [];
                     for (index in metadata.fields){
                         //Create all the input elements
                         deferredInputs.push(this.createInput(metadata.fields[index]));
@@ -115,21 +98,16 @@ define ([
                         //Attach the input elements to the form
                         for (index in inputs){
 
-                            //Skip the form validator
-                            if (index == 0){
-                                continue;
-                            }
-
                             var input = inputs[index][1];
                             containerNode.appendChild(input.domNode);
 
-                            if (form._validator){
-                                aspect.after(input, 'isValid', function(result){
-                                    form._validator.isValid(form.get('value'));
-                                    form._formValidatorMessage.set('value', form._validator.get('messages').join(' '));
-                                    return result;
-                                });
-                            }
+//                            if (form._validator){
+//                                aspect.after(input, 'isValid', function(result){
+//                                    form._validator.isValid(form.get('value'));
+//                                    form._formValidatorMessage.set('value', form._validator.get('messages').join(' '));
+//                                    return result;
+//                                });
+//                            }
                         }
 
                         appendDeferred.resolve(form);
@@ -199,20 +177,16 @@ define ([
                         delete field.dijit;
                         delete field.dataType;
                         delete field.validatorGroup;
-                        
+
                         field.id = this._generateDijitId(field.id);
                         if (field.property){
                             field.name = field.property;
                         }
-                        if ( ! field.title && field.property){
-                            field.title = Utils.ucFirst(field.property) + ':';
+                        if ( ! field.label && field.property){
+                            field.label = Utils.ucFirst(field.property) + ':';
                         }
 
                         var input = new result[0][1](field);
-
-                        if (field.title){
-                            domAttr.set(input.domNode, 'title', field.title);
-                        }
 
                         createInputDeferred.resolve(input);
 

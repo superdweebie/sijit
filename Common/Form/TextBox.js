@@ -35,6 +35,7 @@ function (
                         'first'
                     );
                 }
+                this.inherited(arguments);
             }
         }
     );

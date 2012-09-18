@@ -16,7 +16,7 @@ define ([
         );
 
         model.metadata = {
-            cssClasses : ['testForm'],
+            cssClasses : ['form-horizontal'],
             validatorGroup : [
                 {
                     module: 'Sds/Test/View/Asset/ClassValidator',
@@ -41,7 +41,7 @@ define ([
                 {
                     id       : 'testPassword',
                     property : 'password',
-                    title    : 'Password:',
+                    label    : 'Password:',
                     dataType : 'string',
                     type     : 'password',
                     required : true,

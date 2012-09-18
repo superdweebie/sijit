@@ -48,12 +48,15 @@
                     form1.watch('state', function(property, oldValue, newValue){
                         dom.byId('state1').innerHTML = newValue;
                     });
+                    form1.watch('value', function(property, oldValue, newValue){
+                        dom.byId('value1').innerHTML = json.toJson(newValue);
+                    });
                     dom.byId('formContainer1').appendChild(form1.domNode);
                     form1.startup();
                     form1.set('value', validModel1);
                     dom.byId('state1').innerHTML = form1.get('state');
                 });
-
+/**
                 var inValidModel2 = new TestViewModel;
                 inValidModel2.username = 'NotToby';
                 inValidModel2.password = 'password1';
@@ -82,6 +85,7 @@
                     form3.set('value', inValidModel3);
                     dom.byId('state3').innerHTML = form3.get('state');
                 });
+**/
             })
 		</script>
 	</head>
@@ -89,13 +93,13 @@
         <h1>Functional Testing Sds/View/FormFactory</h1>
         <br />
         <div id="formContainer1">
-            <h3>Valid Form (state: <span id="state1"></span>)</h3>
+            <h3>Valid Form (state: <span id="state1"></span>, value: <span id="value1"></span>)</h3>
         </div>
         <div id="formContainer2">
             <h3>Invalid Form Validator (state: <span id="state2"></span>, value: <span id="value2"></span>)</h3>
         </div>
         <div id="formContainer3">
-            <h3>Invalid Field Validator (state: <span id="state3"></span>)</h3>
+            <h3>Invalid Field Validator (state: <span id="state3"></span>, value: <span id="value3"></span>)</h3>
         </div>
 	</body>
 </html>
