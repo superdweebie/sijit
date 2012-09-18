@@ -36,10 +36,14 @@ function (
 
             validator: undefined,
 
-            _setValueAttr: function(){
+            _setValueAttr: function(/*anything*/ newValue){              
                 // summary:
                 //		Hook so set('value', ...) works.
-                this.inherited(arguments);
+                //this.inherited(arguments);
+                var args = [newValue, true];
+                args.callee = arguments.callee;
+                //this.inherited([newValue, true]);
+                this.inherited(args);
                 this._validate();
             },
 
