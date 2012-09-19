@@ -7,5 +7,5 @@ define([
     'Sds/Test/Common/Validator/TestIdentifierArrayValidator',
     'Sds/Test/Common/Validator/TestIdentifierValidator',
     'Sds/Test/Common/Validator/TestValidatorGroup',
-    'Sds/Test/Common/Validator/TestValidatorManager'
+    'Sds/Test/Common/Validator/TestValidatorFactory'
 ], 1);

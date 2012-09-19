@@ -19,7 +19,7 @@ define ([
             cssClasses : ['form-horizontal'],
             validatorGroup : [
                 {
-                    module: 'Sds/Test/View/Asset/ClassValidator',
+                    'class': 'Sds/Test/View/Asset/ClassValidator',
                     options: null
                 }
             ],
@@ -32,7 +32,7 @@ define ([
                     required : true,
                     validatorGroup: [
                         {
-                            module : 'Sds/Common/Validator/IdentifierValidator',
+                            'class' : 'Sds/Common/Validator/IdentifierValidator',
                             options: null
                         }
                     ]
@@ -47,7 +47,7 @@ define ([
                     required : true,
                     validatorGroup: [
                         {
-                            module : 'Sds/Common/Validator/PasswordValidator',
+                            'class' : 'Sds/Common/Validator/PasswordValidator',
                             options: null
                         }
                     ]

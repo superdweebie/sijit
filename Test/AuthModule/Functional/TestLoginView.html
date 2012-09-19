@@ -22,22 +22,24 @@
         </script>
 		<script type="text/javascript">
 			require([
-                'dojo/html',
                 'dojo/on',
                 'dojo/dom',
                 'dojo/when',
                 'dojo/_base/json',
-                'Sds/ServiceManager/Shared/GetObject!loginView',
+                'dojo/dom-prop',
+                'Sds/ServiceManager/Shared/getObject!loginView',
                 'dojo/domReady!'
             ],
             function(
-                html,
                 on,
                 dom,
                 when,
                 json,
+                domProp,
                 loginView
             ){
+                domProp.set(dom.byId('formActivateButton'), 'disabled', false);
+
                 on(dom.byId('formActivateButton'), 'click', function(){
                     when(loginView.activate(), function(result){
                         dom.byId('ViewValue').innerHTML = json.toJson(result);
@@ -47,10 +49,10 @@
             })
 		</script>
 	</head>
-	<body class="claro">
+	<body>
         <h1>Functional Testing Sds/AuthModule/LoginView</h1>
         <br />
-        <button class="btn btn-primary btn-large" id="formActivateButton">Activate</button>
+        <button class="btn btn-primary btn-large" disabled="true" id="formActivateButton">Activate</button>
         <h3>MockUserControllerMessage:</h3>
         <p id="MockUserControllerMessage"></p>
         <h3>ViewValue</h3>

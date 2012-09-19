@@ -8,6 +8,7 @@ define([
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
     'dijit/Form/_FormMixin',
+    'dijit/_OnDijitClickMixin',
     'bootstrap/Modal',
     'dojo/text!./Template/Dialog.html'
 ],
@@ -21,6 +22,7 @@ function (
     Widget,
     TemplatedMixin,
     FormMixin,
+    OnDijitClickMixin,
     Modal,
     template
 ){
@@ -31,7 +33,7 @@ function (
 
     var dialog = declare(
         'Sds/Common/Dialog',
-        [Widget, TemplatedMixin, FormMixin],
+        [Widget, TemplatedMixin, FormMixin, OnDijitClickMixin],
         {
             templateString: template,
 
@@ -39,16 +41,19 @@ function (
 
             button: undefined,
 
+            visible: false,
+
             // Map widget attributes to DOMNode attributes.
             _setTitleAttr: [
                 { node: "titleNode", type: "innerHTML" }
             ],
 
-            _onPressEnterHandle: undefined,
-
-            startup: function(){
+            postCreate: function(){
                 this.inherited(arguments);
                 this.modal = new Modal(this.domNode);
+                this.watch('state', function(p, o, n){
+                    console.debug(n);
+                });
             },
 
             _updateOkDisabled: function(){
@@ -56,20 +61,8 @@ function (
                 if(this.state == '')
                 {
                     domProp.set(this.okButtonNode, 'disabled', false);
-
-                    // set up ENTER keyhandling
-                    this._onPressEnterHandle = on(this, 'keydown', lang.hitch(this, function(event){
-                        if(event.keyCode == keys.ENTER){
-                            event.preventDefault();
-                            this._onPressEnterHandle.remove();
-                            this._onOk();
-                        }
-                    }));
                 } else {
                     domProp.set(this.okButtonNode, 'disabled', true);
-                    if (this._onPressEnterHandle) {
-                        this._onPressEnterHandle.remove();
-                    }
                 }
             },
 
@@ -93,6 +86,11 @@ function (
 
             show: function()
             {
+                if (this.visible){
+                    return null;
+                }
+                this.visible = true;
+
                 this._returnValueDeferred = new Deferred();
 
                 this.watch('state', lang.hitch(this, '_updateOkDisabled'));
@@ -106,12 +104,16 @@ function (
             hide: function()
             {
                 this.modal.hide();
+                this.visible = false;
+
+                var value = this.get('value');
 
                 if(this._returnValueDeferred)
                 {
-                    this._returnValueDeferred.resolve(this.get('value'))
+                    this._returnValueDeferred.resolve(value)
                 }
-                return this._returnValue;
+
+                return value;
             }
         }
     );

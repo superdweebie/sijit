@@ -1,29 +1,26 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/when',
     'dojo/Deferred',
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'Sds/View/BaseView',
     'Sds/AuthModule/ViewModel/Login',
-    'Sds/View/FormFactory',
+    'Sds/View/formFactory',
     'dojo/text!./Template/LoginView.html',
-    'Sds/Common/Dialog',
-    'Sds/Common/JsLink'
+    'Sds/Common/Dialog'
 ],
 function(
     declare,
     lang,
-    when,
     Deferred,
     Widget,
     TemplatedMixin,
     WidgetsInTemplateMixin,
     BaseView,
     LoginViewModel,
-    FormFactory,
+    formFactory,
     template
 ){
     return declare(
@@ -45,6 +42,11 @@ function(
 
             inputsAppended: false,
 
+            postCreate: function(){
+                this.inherited(arguments);
+                document.body.appendChild(this.domNode);
+            },
+
             activate: function(value){
 
                 this.inherited(arguments);
@@ -54,26 +56,32 @@ function(
                     this.set('value', value);
                 }
 
-                when(this._appendInputs(), lang.hitch(this, function(){
-                    this.loginDialogNode.set('value', value);
-                    when(this.loginDialogNode.show(), lang.hitch(this, function(){
+                this._appendInputs().then(lang.hitch(this, function(){
+                    this.dialogNode.set('value', value);
+                    this.startup();
+                    this.dialogNode.show().then(lang.hitch(this, function(){
                         this._resolve();
                     }));
                 }));
 
                 return this._activateDeferred;
             },
+
+            deactivate: function(){
+                this.dialogNode.hide();
+                this.inherited(arguments);
+            },
+
             reset: function(){
-                this.loginDialogNode.reset();
+                this.dialogNode.reset();
             },
             _appendInputs: function(){
                 var appendInputsDeferred = new Deferred;
 
                 if ( ! this.inputsAppened){
-                    var formFactory = new FormFactory;
                     var metadata = LoginViewModel.metadata;
                     metadata.containerNode = this.containerNode;
-                    when(formFactory.append(this.loginDialogNode, metadata), lang.hitch(this, function(){
+                    formFactory.appendToForm(this.dialogNode, metadata).then(lang.hitch(this, function(){
                         this.inputsAppened = true;
                         appendInputsDeferred.resolve();
                     }));
@@ -83,20 +91,18 @@ function(
                 return appendInputsDeferred;
             },
             _getStateAttr: function(){
-                return this.loginDialogNode.get('state');
+                return this.dialogNode.get('state');
             },
             _getValueAttr: function(){
-                this.value = lang.mixin(this.value, this.loginDialogNode.get('value').value);
+                this.value = lang.mixin(this.value, this.dialogNode.get('value').value);
                 return this.value;
             },
-            _onRecoverPassword: function(){
-                this.set('state', 'recoverPassword');
-                this.loginDialogNode.hide();
+            onRecoverPassword: function(){
+                this.dialogNode.hide();
                 this.userController.recoverPassword();
             },
-            _onRegister: function(){
-                this.set('state', 'register');
-                this.loginDialogNode.hide();
+            onRegister: function(){
+                this.dialogNode.hide();
                 this.userController.register();
             }
         }

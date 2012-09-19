@@ -16,18 +16,18 @@ define ([
         );
 
         model.metadata = {
-            tableWrap: true,
+            cssClasses : ['form-horizontal'],
             fields: {
                 username:
                 {
                     id       : 'usernameInput',
                     property : 'username',
-                    title    : 'Username:',
+                    label    : 'Username:',
                     dataType : 'string',
                     required : true,
-                    validators: [
+                    validatorGroup: [
                         {
-                            module: 'Sds/Common/Validator/IdentifierValidator'
+                            'class': 'Sds/Common/Validator/IdentifierValidator'
                         }
                     ]
                 },
@@ -35,13 +35,13 @@ define ([
                 {
                     id       : 'passwordInput',
                     property : 'password',
-                    title    : 'Password:',
+                    label    : 'Password:',
                     dataType : 'string',
                     type     : 'password',
                     required : true,
-                    validators: [
+                    validatorGroup: [
                         {
-                            module: 'Sds/Common/Validator/LengthValidator',
+                            'class': 'Sds/Common/Validator/LengthValidator',
                             options: {min: 6, max: 40}
                         }
                     ]

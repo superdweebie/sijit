@@ -24,10 +24,10 @@ define ([
         );
 
         model.metadata = {
-            tableWrap: true,
-            validators: [
+            cssClasses : ['form-horizontal'],
+            validatorGroup: [
                 {
-                    module:'Sds/UserModule/Validator/RegisterValidator'
+                    'class':'Sds/UserModule/Validator/RegisterValidator'
                 }
             ],
             fields: {
@@ -35,26 +35,26 @@ define ([
                 password1: {
                     id: "passwordField1",
                     property: "password1",
-                    title: "Password:",
+                    label: "Password:",
                     dataType: "string",
                     required: true,
                     type: "password",
-                    validators: [
+                    validatorGroup: [
                         {
-                            "module": "Sds\/Validator\/PasswordValidator"
+                            "class": "Sds\/Validator\/PasswordValidator"
                         }
                     ]
                 },
                 password2: {
                     id: "passwordField2",
                     property: "password2",
-                    title: "Password again:",
+                    label: "Password again:",
                     dataType: "string",
                     required: true,
                     type: "password",
-                    validators: [
+                    validatorGroup: [
                         {
-                            "module": "Sds\/Validator\/PasswordValidator"
+                            "class": "Sds\/Validator\/PasswordValidator"
                         }
                     ]
                 },

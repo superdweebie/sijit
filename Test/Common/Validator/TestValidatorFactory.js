@@ -1,21 +1,20 @@
 define([
         'doh/main',
         'dojo/Deferred',
-        'Sds/Common/Validator/ValidatorManager'
+        'Sds/Common/Validator/validatorFactory'
     ],
     function(
         doh,
         Deferred,
-        ValidatorManager
+        validatorFactory
     ){
-        doh.register("Sds.Test.Common.Validator.TestValidatorManager", [
+        doh.register("Sds/Test/Common/Validator/TestValidatorFactory", [
 
             function CreateTest(doh){
 
                 var testDeferred = new Deferred;
-                var validatorManager = new ValidatorManager;
 
-                validatorManager.create('Sds/Common/Validator/DatatypeValidator', {requiredType: 'string'}).then(function(validator){
+                validatorFactory.create('Sds/Common/Validator/DatatypeValidator', {requiredType: 'string'}).then(function(validator){
 
                     var testArray = [
                         [true, 'username'],
@@ -40,15 +39,14 @@ define([
             function CreateGroupTest(doh){
 
                 var testDeferred = new Deferred;
-                var validatorManager = new ValidatorManager;
 
-                validatorManager.createGroup([
+                validatorFactory.createGroup([
                     {
-                        module: 'Sds/Common/Validator/DatatypeValidator',
+                        'class': 'Sds/Common/Validator/DatatypeValidator',
                         options: {requiredType: 'string'}
                     },
                     {
-                        module: 'Sds/Common/Validator/IdentifierValidator'
+                        'class': 'Sds/Common/Validator/IdentifierValidator'
                     }
                 ]).then(function(validator){
 

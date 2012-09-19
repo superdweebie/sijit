@@ -16,10 +16,10 @@ define ([
         );
 
         model.metadata = {
-            tableWrap: true,
-            validators: [
+            cssClasses : ['form-horizontal'],
+            validatorGroup: [
                 {
-                    module:'Sds/UserModule/Validator/RecoverPasswordValidator'
+                    'class': 'Sds/UserModule/Validator/RecoverPasswordValidator'
                 }
             ],
             fields: {
@@ -27,11 +27,11 @@ define ([
                 {
                     id       : 'usernameInput',
                     property : 'username',
-                    title    : 'Username:',
+                    label    : 'Username:',
                     dataType : 'string',
-                    validators: [
+                    validatorGroup: [
                         {
-                            module: 'Sds/Common/Validator/IdentifierValidator'
+                            'class': 'Sds/Common/Validator/IdentifierValidator'
                         }
                     ]
                 },
@@ -39,11 +39,11 @@ define ([
                 {
                     id       : 'emailInput',
                     property : 'email',
-                    title    : 'Email:',
+                    label    : 'Email:',
                     dataType : 'string',
-                    validators: [
+                    validatorGroup: [
                         {
-                            module: 'Sds/Common/Validator/EmailAddressValidator'
+                            'class': 'Sds/Common/Validator/EmailAddressValidator'
                         }
                     ]
                 }

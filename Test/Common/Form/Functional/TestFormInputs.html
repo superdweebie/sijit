@@ -30,34 +30,40 @@
             })
 		</script>
 	</head>
-	<body class="claro">
+	<body>
         <h1>Functional Testing Sds/Common/Form Inputs</h1>
         <br />
         <form class="form-horizontal">
+
             <h3>Sds/Common/TextBox</h3>
-            <input data-dojo-type="Sds/Common/Form/TextBox" type="text" value="Toby" label="Name" id="textBox1"/>
+            <input data-dojo-type="Sds/Common/Form/TextBox"
+                type="text"
+                value="Toby"
+                data-dojo-props="label: 'Name'"
+                id="textBox1"
+            />
 
             <h3>Sds/Common/ValidationTextBox</h3>
             <p>Valid</p>
             <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                   type="text"
-                   value="Toby"
-                   data-dojo-props="
-                       label:'Name',
-                       validator: {class: 'Sds/Common/Validator/PersonalNameValidator'}
-                   "
-                   id="validationTextBox1"
+                type="text"
+                value="Toby"
+                data-dojo-props="
+                    label:'Name',
+                    validator: {class: 'Sds/Common/Validator/PersonalNameValidator'}
+                "
+                id="validationTextBox1"
              />
 
             <p>Invalid</p>
             <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                   type="text"
-                   value="Not Toby"
-                   data-dojo-props="
-                       label:'Name',
-                       validator: {class: 'Sds/Common/Validator/PersonalNameValidator'}
-                   "
-                   id="validationTextBox2"
+                type="text"
+                value="Not Toby"
+                data-dojo-props="
+                    label:'Name',
+                    validator: {class: 'Sds/Common/Validator/PersonalNameValidator'}
+                "
+                id="validationTextBox2"
              />
         </form>
 	</body>

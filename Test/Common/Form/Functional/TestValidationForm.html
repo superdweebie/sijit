@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/Common/ValidationForm</title>
+		<style type="text/css">
+            @import "../../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../../themes/bootstrap/css/bootstrap-responsive.css";
+		</style>
+		<script
+            type="text/javascript"
+            src="../../../../../dojo/dojo.js"
+            data-dojo-config="
+                isDebug: true,
+                popup: true,
+                async: true
+            ">
+        </script>
+		<script type="text/javascript">
+			require([
+                'dojo/parser',
+                'Sds/Common/Form/ValidationForm',
+                'Sds/Common/Form/TextBox',
+                'dojo/domReady!'
+            ],
+            function(
+                parser
+            ){
+                parser.parse();
+            })
+		</script>
+	</head>
+	<body>
+        <h1>Functional Testing Sds/Common/ValidationForm</h1>
+        <br />
+
+        <h3>Valid Form</h3>
+        <form
+            class="form-horizontal"
+            data-dojo-type="Sds/Common/Form/ValidationForm"
+            data-dojo-props="validator: {class: 'Sds/Test/Common/Form/Asset/ClassValidator'}"
+        >
+
+            <input
+                data-dojo-type="Sds/Common/Form/TextBox"
+                type="text"
+                value="Toby"
+                data-dojo-props="
+                    label: 'username',
+                    name: 'username'"
+            />
+        </form>
+        <br />
+
+        <h3>Invalid Form</h3>
+        <form
+            class="form-horizontal"
+            data-dojo-type="Sds/Common/Form/ValidationForm"
+            data-dojo-props="validator: {class: 'Sds/Test/Common/Form/Asset/ClassValidator'}"
+        >
+
+            <input
+                data-dojo-type="Sds/Common/Form/TextBox"
+                type="text"
+                value="Not Toby"
+                data-dojo-props="
+                    label: 'username',
+                    name: 'username'"
+            />
+        </form>
+	</body>
+</html>

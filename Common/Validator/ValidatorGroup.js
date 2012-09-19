@@ -28,6 +28,9 @@ function(
                     if ( ! validator.isValid(value)){
                         result = false;
                         this.messages = this.messages.concat(validator.get('messages'));
+                        if (validator.haltOnFail){break}
+                    } else {
+                        if (validator.haltOnPass){break}
                     }
                 }
 

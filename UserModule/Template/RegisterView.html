@@ -1,8 +1,11 @@
-<div class="registerDialog">
-    <div data-dojo-type="Sds/Common/Dialog" title = "User registration" data-dojo-attach-point="registerDialogNode">
-        <div class="dialogMessage">
-            <div>Please enter your details.</div>
-            <br />
+<div>
+    <div data-dojo-type="Sds/Common/Dialog" title = "User registration" data-dojo-attach-point="dialogNode">
+        <div>Please enter your details.</div>
+        <br />
+        <div class="control-group" data-dojo-attach-point="formValidatorMessage">
+            <span class="help-inline" data-dojo-attach-point="inlineMessage"></span>
+            <span class="help-block" data-dojo-attach-point="blockMessage"></span>
         </div>
+        <div data-dojo-attach-point="containerNode"></div>
     </div>
 </div>

@@ -3,7 +3,7 @@ define([
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_OnDijitClickMixin',
-    'dojo/text!./Template/JsLink.html'
+    'dojo/text!./Template/Button.html'
 ],
 function(
     declare,
@@ -14,7 +14,7 @@ function(
 ){
     return declare
     (
-        'Sds.Common.JsLink',
+        'Sds/Common/Button',
         [Widget, TemplatedMixin, OnDijitClickMixin],
         {
             templateString: template,

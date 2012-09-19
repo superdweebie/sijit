@@ -2,11 +2,10 @@
 	"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<title>Unit Testing Sds.AuthModule.AuthController</title>
+		<title>Unit Testing Sds/AuthModule/AuthController</title>
 		<style type="text/css">
-			@import "../../../dojo/resources/dojo.css";
-            @import "../../../dijit/themes/claro/claro.css";
-            @import "../../../Sds/themes/claro/claro.css";
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
 		</style>
 		<script
             type="text/javascript"
@@ -28,9 +27,9 @@
                 'dojo/when',
                 'Sds/AuthModule/Exception/LoginFailedException',
                 'Sds/AuthModule/Exception/AlreadyLoggedInException',
-                'Sds/ServiceManager/Shared/GetObject!authController',
-                'Sds/ServiceManager/Shared/GetObject!mockLoginView',
-                'Sds/ServiceManager/Shared/GetObject!exceptionController',
+                'Sds/ServiceManager/Shared/getObject!authController',
+                'Sds/ServiceManager/Shared/getObject!mockLoginView',
+                'Sds/ServiceManager/Shared/getObject!exceptionController',
                 'dojo/domReady!'
             ],
             function(
@@ -111,7 +110,7 @@
             })
 		</script>
 	</head>
-	<body class="claro">
-        <h1>Unit Testing Sds.AuthModule.AuthController</h1>
+	<body>
+        <h1>Unit Testing Sds/AuthModule/AuthController</h1>
 	</body>
 </html>
