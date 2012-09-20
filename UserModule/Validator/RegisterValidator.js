@@ -18,7 +18,7 @@ function(
                 this.messages = [];
 
                 var result = true;
-                if (value.password1 != value.password2) {
+                if (value.password[0] != value.password[1]) {
                     this.messages.push('Both passwords are not the same.');
                     result = false;
                 }

@@ -1,11 +1,13 @@
 define ([
         'dojo/_base/declare',
-        'Sds/UserModule/Model/User',
-        'Sds/UserModule/Model/Profile',
+        'dojo/_base/lang',
+        'Sds/UserModule/DataModel/User',
+        'Sds/UserModule/DataModel/Profile',
         'Sds/View/BaseViewModel'
     ],
     function (
         declare,
+        lang,
         User,
         Profile,
         BaseViewModel
@@ -32,37 +34,16 @@ define ([
             ],
             fields: {
                 username: User.metadata.fields.username,
-                password1: {
-                    id: "passwordField1",
-                    property: "password1",
-                    label: "Password:",
-                    dataType: "string",
-                    required: true,
-                    type: "password",
-                    validatorGroup: [
-                        {
-                            "class": "Sds\/Validator\/PasswordValidator"
-                        }
-                    ]
-                },
-                password2: {
-                    id: "passwordField2",
-                    property: "password2",
-                    label: "Password again:",
-                    dataType: "string",
-                    required: true,
-                    type: "password",
-                    validatorGroup: [
-                        {
-                            "class": "Sds\/Validator\/PasswordValidator"
-                        }
-                    ]
-                },
+                password1: lang.clone(User.metadata.fields.password),
+                password2: lang.clone(User.metadata.fields.password),
                 firstname: User.metadata.fields.firstname,
                 lastname: User.metadata.fields.lastname,
                 email: Profile.metadata.fields.email
             }
         };
+
+        model.metadata.fields.password1.id = 'passwordField1';
+        model.metadata.fields.password2.id = 'passwordField2';
 
         return model;
     }

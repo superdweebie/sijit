@@ -9,14 +9,14 @@ define ([
         Stateful
     ){
         // module:
-        //		Sds/UserModule/Model/User
+        //		Sds/UserModule/DataModel/User
 
         var model = declare (
-            'Sds/UserModule/Model/User',
+            'Sds/UserModule/DataModel/User',
             [Stateful],
             {
                 // summary:
-                //		A mirror of doctrine document Sds\UserModule\Model\User
+                //		A mirror of doctrine document Sds\UserModule\DataModel\User
                 //
                 // description:
                 //      Use this to create documents in a browser which can the be passed to a doctrine server for
@@ -24,7 +24,7 @@ define ([
 
                 // _className: string
                 //      The doctrine document class name. Don't change this one!
-                _className: 'Sds\\UserModule\\Model\\User',
+                _className: 'Sds\\UserModule\\DataModel\\User',
 
                 // id: custom_id
                 id: undefined,
@@ -49,8 +49,8 @@ define ([
                     //     Function to handle serialization
 
                     var json = {};
-                    if (this.get('_1')) {
-                        json['_1'] = this.get('_1');
+                    if (this.get('_className')) {
+                        json['_className'] = this.get('_className');
                     }
                     if (this.get('id')) {
                         json['id'] = this.get('id');
@@ -81,19 +81,19 @@ define ([
                 "id": {
                     "id": "idField",
                     "property": "id",
-                    "title": "Id:",
+                    "label": "Id:",
                     "dataType": "custom_id",
                     "inputType": "hidden"
                 },
                 "firstname": {
                     "id": "firstnameField",
                     "property": "firstname",
-                    "title": "Firstname:",
+                    "label": "Firstname:",
                     "dataType": "string",
                     "required": true,
-                    "validators": [
+                    "validatorGroup": [
                         {
-                            "module": "Sds\/Validator\/PersonalNameValidator",
+                            "class": "Sds\/Common\/Validator\/PersonalNameValidator",
                             "options": null
                         }
                     ]
@@ -101,12 +101,12 @@ define ([
                 "lastname": {
                     "id": "lastnameField",
                     "property": "lastname",
-                    "title": "Lastname:",
+                    "label": "Lastname:",
                     "dataType": "string",
                     "required": true,
-                    "validators": [
+                    "validatorGroup": [
                         {
-                            "module": "Sds\/Validator\/PersonalNameValidator",
+                            "class": "Sds\/Common\/Validator\/PersonalNameValidator",
                             "options": null
                         }
                     ]
@@ -114,38 +114,35 @@ define ([
                 "password": {
                     "id": "passwordField",
                     "property": "password",
-                    "title": "Password:",
+                    "label": "Password:",
                     "dataType": "string",
-                    "inputType": "password",
                     "required": true,
-                    "validators": [
+                    "validatorGroup": [
                         {
-                            "module": "Sds\/Validator\/PasswordValidator",
+                            "class": "Sds\/Common\/Validator\/PasswordValidator",
                             "options": null
                         }
-                    ]
+                    ],
+                    "type": "password"
                 },
                 "roles": {
                     "id": "rolesField",
                     "property": "roles",
-                    "title": "Roles:",
+                    "label": "Roles:",
                     "dataType": "hash",
-                    "validators": [
-                        {
-                            "module": "Sds\/Validator\/IdentifierArrayValidator",
-                            "options": null
-                        }
+                    "validatorGroup": [
+
                     ]
                 },
                 "username": {
                     "id": "usernameField",
                     "property": "username",
-                    "title": "Username:",
+                    "label": "Username:",
                     "dataType": "string",
                     "required": true,
-                    "validators": [
+                    "validatorGroup": [
                         {
-                            "module": "Sds\/Validator\/IdentifierValidator",
+                            "class": "Sds\/Common\/Validator\/IdentifierValidator",
                             "options": null
                         }
                     ]

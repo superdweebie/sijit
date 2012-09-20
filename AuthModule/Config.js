@@ -13,7 +13,7 @@ define(
                     }
                 },
                 loginView: {
-                    moduleName: 'Sds/AuthModule/LoginView',
+                    moduleName: 'Sds/AuthModule/View/Login',
                     proxyMethods: [
                         'activate',
                         'reset',

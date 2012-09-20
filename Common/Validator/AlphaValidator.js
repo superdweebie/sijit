@@ -6,10 +6,17 @@ function(
     declare,
     BaseValidator
 ){
+    // module:
+    //		Sds/Common/Validator/AlphaValidator
+
     return declare(
         'Sds/Common/Validator/AlphaValidator',
         [BaseValidator],
         {
+            // summary:
+            //		Validator that will check that the supplied string contains
+            //		only alpha characters.
+
             regEx: /^[a-zA-Z]+$/,
 
             isValid: function(value){

@@ -56,6 +56,9 @@ This example validator could be used like this:
         }
     }
 
+The BaseValidator also defines two extra properties for each validator: `haltOnPass` and `haltOnFail`.
+These properties are used by `ValidatorGroup` instances, and are discussed below.
+
 #ValidatorGroup
 
 A ValidatorGroup is a series of validators evaluated in order. If any return `false`, then
@@ -101,3 +104,15 @@ The PersonalNameValidator is then used the same as a normal validator:
     }
 
 ValidatorGroups may be nested.
+
+If a validator inside a ValidatorGroup passes, and that validator also has it's `haltOnPass` property
+evaluate to true, then the ValidatorGroup will immediately return without checking any subsiquent
+validators in the group. (`haltOnPass` is usedby the `NotRequiredValidator`).
+
+If a validator inside a ValidatorGroup fails, and that validator also has it's `haltOnFail` property
+evaluate to true, then the ValidatorGroup will immediately return without checking any subsiquent
+validators in the group. (`haltOnFail` is usedby the `RequiredValidator`).
+
+#validatorFactory
+
+This module may be used to create instances of a Validator or ValidatorGroup.

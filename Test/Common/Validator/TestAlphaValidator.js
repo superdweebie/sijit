@@ -26,7 +26,7 @@ define([
                         doh.assertFalse(validator.isValid(testArray[index][1]));
                     }
                 }
-            },
+            }
         ]);
     }
 );

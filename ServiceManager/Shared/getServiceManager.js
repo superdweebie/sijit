@@ -15,6 +15,7 @@ define([
         return {
             load: function(id, require, callback){
                 if ( ! sharedServiceManager){
+console.debug('create shared');
                     sharedServiceManager = new ServiceManager();
                 }
                 callback(sharedServiceManager);

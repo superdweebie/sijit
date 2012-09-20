@@ -1,5 +1,6 @@
 define([
     'dojo/_base/declare',
+    'dojo/_base/lang',
     'dojo/Deferred',
     'dojo/Stateful',
     'Sds/ExceptionModule/throwEx',
@@ -7,6 +8,7 @@ define([
 ],
 function(
     declare,
+    lang,
     Deferred,
     Stateful,
     throwEx,
@@ -91,6 +93,12 @@ function(
                 this.value = undefined;
             },
 
+            _getResolveMixin: function(){
+                // summary:
+                //      This method can be overridden.
+                //      It must return an object that will be mixed in to resolve return value
+            },
+
             _resolve: function(){
                 // summary:
                 //     Resolved the _activateDeferred promise
@@ -107,10 +115,13 @@ function(
                     this._activateDeferred.reject();
                     return;
                 }
-                this._activateDeferred.resolve({
-                    state: this.get('state'),
-                    value: value
-                });
+                this._activateDeferred.resolve(lang.mixin(
+                    {
+                        state: this.get('state'),
+                        value: value
+                    },
+                    this._getResolveMixin()
+                ));
             }
         }
     );

@@ -11,10 +11,11 @@ class DialogTest extends AbstractWebDriverTest {
         $this->open('Sds/Test/Common/Functional/TestDialog.html');
     }
 
-    public function testRecoverPassword(){
+    public function testDialog(){
         sleep(1);
 
         $this->session->element('id', 'showDialog')->click();
+        sleep(1);
 
         $this->session->element('id', 'invalidState')->click();
         $this->assertEquals('bad', $this->session->element('id', 'State')->text());
@@ -23,16 +24,19 @@ class DialogTest extends AbstractWebDriverTest {
         $this->assertEquals('', $this->session->element('id', 'State')->text());
 
         // Click the cancel button
-        $this->session->element('id', 'testDialog')->element('class name', 'dijitDialogCloseIcon')->click();
+        $this->session->element('class name', 'modal-footer')->element('class name', 'btn')->click();
+
         $this->assertEquals(
             '{"state":"","button":"cancel","value":{"helloInput":"hello"}}',
             $this->session->element('id', 'ReturnValue')->text()
         );
 
         $this->session->element('id', 'showDialog')->click();
-
+        sleep(1);
+        
         // Click the ok button
-        $this->session->element('class name', 'dialogButtons')->element('xpath', './/*[@data-dojo-attach-event]')->click();
+        $this->session->element('class name', 'modal')->element('class name', 'btn-primary')->click();
+        sleep(1);
         $this->assertEquals(
             '{"state":"","button":"ok","value":{"helloInput":"hello"}}',
             $this->session->element('id', 'ReturnValue')->text()

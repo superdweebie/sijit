@@ -4,6 +4,7 @@
     "require": {
         "php": ">=5.4",
         "superdweebie/dojo": "dev-master",
-        "instaclick/php-webdriver": "dev-master"        
+        "dojo/bootstrap": "dev-master",
+        "instaclick/php-webdriver": "dev-master"
     }
 }

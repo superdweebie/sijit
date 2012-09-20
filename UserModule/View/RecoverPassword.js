@@ -9,7 +9,7 @@ define([
     'Sds/View/BaseView',
     'Sds/UserModule/ViewModel/RecoverPassword',
     'Sds/View/formFactory',
-    'dojo/text!./Template/RecoverPasswordView.html',
+    'dojo/text!../Template/RecoverPassword.html',
     'Sds/Common/Dialog'
 ],
 function(
@@ -26,7 +26,7 @@ function(
     template
 ){
     return declare(
-        'Sds/UserModule/RecoverPasswordView',
+        'Sds/UserModule/View/RecoverPassword',
         [
             Widget,
             TemplatedMixin,
@@ -102,7 +102,11 @@ function(
             },
 
             _getStateAttr: function(){
-                return this.dialogNode.get('state');
+                if (this.dialogNode.get('button') == 'ok'){
+                    return this.dialogNode.get('state');
+                } else {
+                    return this.dialogNode.get('button');
+                }
             },
 
             _getValueAttr: function(){

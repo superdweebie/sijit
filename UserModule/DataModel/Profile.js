@@ -9,14 +9,14 @@ define ([
         Stateful
     ){
         // module:
-        //		Sds/UserModule/Model/Profile
+        //		Sds/UserModule/DataModel/Profile
 
         var model = declare (
-            'Sds/UserModule/Model/Profile',
+            'Sds/UserModule/DataModel/Profile',
             [Stateful],
             {
                 // summary:
-                //		A mirror of doctrine document Sds\UserModule\Model\Profile
+                //		A mirror of doctrine document Sds\UserModule\DataModel\Profile
                 //
                 // description:
                 //      Use this to create documents in a browser which can the be passed to a doctrine server for
@@ -24,7 +24,7 @@ define ([
 
                 // _className: string
                 //      The doctrine document class name. Don't change this one!
-                _className: 'Sds\\UserModule\\Model\\Profile',
+                _className: 'Sds\\UserModule\\DataModel\\Profile',
 
                 // email: string
                 email: undefined,
@@ -34,8 +34,8 @@ define ([
                     //     Function to handle serialization
 
                     var json = {};
-                    if (this.get('_1')) {
-                        json['_1'] = this.get('_1');
+                    if (this.get('_className')) {
+                        json['_className'] = this.get('_className');
                     }
                     if (this.get('email')) {
                         json['email'] = this.get('email');
@@ -51,12 +51,12 @@ define ([
                 "email": {
                     "id": "emailField",
                     "property": "email",
-                    "title": "Email:",
+                    "label": "Email:",
                     "dataType": "string",
                     "required": true,
-                    "validators": [
+                    "validatorGroup": [
                         {
-                            "module": "Sds\/Validator\/EmailAddressValidator",
+                            "class": "Sds\/Common\/Validator\/EmailAddressValidator",
                             "options": null
                         }
                     ]

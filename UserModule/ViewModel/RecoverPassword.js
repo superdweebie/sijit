@@ -1,10 +1,16 @@
 define ([
         'dojo/_base/declare',
-        'Sds/View/BaseViewModel'
+        'dojo/_base/lang',
+        'Sds/View/BaseViewModel',
+        'Sds/UserModule/DataModel/User',
+        'Sds/UserModule/DataModel/Profile'
     ],
     function (
         declare,
-        BaseViewModel
+        lang,
+        BaseViewModel,
+        User,
+        Profile
     ){
         var model = declare (
             'Sds/UserModel/ViewModel/RecoverPassword',
@@ -23,32 +29,13 @@ define ([
                 }
             ],
             fields: {
-                username:
-                {
-                    id       : 'usernameInput',
-                    property : 'username',
-                    label    : 'Username:',
-                    dataType : 'string',
-                    validatorGroup: [
-                        {
-                            'class': 'Sds/Common/Validator/IdentifierValidator'
-                        }
-                    ]
-                },
-                email:
-                {
-                    id       : 'emailInput',
-                    property : 'email',
-                    label    : 'Email:',
-                    dataType : 'string',
-                    validatorGroup: [
-                        {
-                            'class': 'Sds/Common/Validator/EmailAddressValidator'
-                        }
-                    ]
-                }
+                username: lang.clone(User.metadata.fields.username),
+                email: lang.clone(Profile.metadata.fields.email)
             }
         };
+
+        model.metadata.fields.username.required = false;
+        model.metadata.fields.email.required = false;
 
         return model;
     }

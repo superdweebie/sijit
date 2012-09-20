@@ -6,10 +6,19 @@ function(
     declare,
     Stateful
 ){
-    return declare(
+    // module:
+    //		Sds/Common/Validator/BaseValidator
+
+    var BaseValidator = declare(
         'Sds/Common/Validator/BaseValidator',
         [Stateful],
         {
+            // summary:
+            //		The base Validator module that all other Validator modules
+            //		should inherit from.
+
+            // messages: array
+            //    An array of strings that indicate why this validator failed.
             messages: [],
 
             //haltOnPass: boolean
@@ -25,6 +34,14 @@ function(
             haltOnFail: false,
 
             isValid: function(value){
+                // summary:
+                //     Should be overridden by ihneriting modules.
+                //     Will check if the supplied value is valid or not.
+                //     If the value is invalid, should populate the messages array.
+                //
+                // returns:
+                //     boolean
+
                 this.messages = [];
 
                 if(value){
@@ -36,4 +53,19 @@ function(
             }
         }
     );
+
+    BaseValidator.isValidator = function(validator){
+        //summary:
+        //     Helper method to determine if a value is an instance of BaseValidator
+        //
+        // returns:
+        //     boolean
+        
+        if (validator.isInstanceOf && validator.isInstanceOf(BaseValidator)){
+            return true;
+        }
+        return false;
+    }
+
+    return BaseValidator;
 });

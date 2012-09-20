@@ -28,7 +28,8 @@ function (
 ){
     var buttons = {
         OK: 'ok',
-        CANCEL: 'cancel'
+        CANCEL: 'cancel',
+        BACKDROP_CANCEL: 'backdropCancel'
     };
 
     var dialog = declare(
@@ -51,9 +52,6 @@ function (
             postCreate: function(){
                 this.inherited(arguments);
                 this.modal = new Modal(this.domNode);
-                this.watch('state', function(p, o, n){
-                    console.debug(n);
-                });
             },
 
             _updateOkDisabled: function(){
@@ -90,6 +88,7 @@ function (
                     return null;
                 }
                 this.visible = true;
+                this.button = undefined;
 
                 this._returnValueDeferred = new Deferred();
 
@@ -97,6 +96,7 @@ function (
                 this.connectChildren();
 
                 this.modal.show();
+                on(this.modal.backdropNode, 'click', lang.hitch(this, 'onBackdropClick'));
 
                 this._updateOkDisabled();
                 return this._returnValueDeferred;
@@ -114,6 +114,14 @@ function (
                 }
 
                 return value;
+            },
+            onBackdropClick: function(){
+                this.set('button', buttons.BACKDROP_CANCEL);
+                this.visible = false;
+                if(this._returnValueDeferred)
+                {
+                    this._returnValueDeferred.resolve(this.get('value'))
+                }
             }
         }
     );

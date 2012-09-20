@@ -19,13 +19,13 @@ define(
                     }
                 },
                 user: {
-                    moduleName: 'Sds/UserModule/Model/User'
+                    moduleName: 'Sds/UserModule/DataModel/User'
                 },
                 recoverPasswordView: {
-                    moduleName: 'Sds/UserModule/RecoverPasswordView'
+                    moduleName: 'Sds/UserModule/View/RecoverPassword'
                 },
                 registerView: {
-                    moduleName: 'Sds/UserModule/RegisterView'
+                    moduleName: 'Sds/UserModule/View/Register'
                 }
             }
         }

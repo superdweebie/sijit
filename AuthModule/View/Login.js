@@ -8,7 +8,7 @@ define([
     'Sds/View/BaseView',
     'Sds/AuthModule/ViewModel/Login',
     'Sds/View/formFactory',
-    'dojo/text!./Template/LoginView.html',
+    'dojo/text!../Template/Login.html',
     'Sds/Common/Dialog'
 ],
 function(
@@ -24,7 +24,7 @@ function(
     template
 ){
     return declare(
-        'Sds/AuthModule/LoginView',
+        'Sds/AuthModule/View/Login',
         [
             Widget,
             TemplatedMixin,
@@ -90,9 +90,15 @@ function(
                 }
                 return appendInputsDeferred;
             },
+
             _getStateAttr: function(){
-                return this.dialogNode.get('state');
+                if (this.dialogNode.get('button') == 'ok'){
+                    return this.dialogNode.get('state');
+                } else {
+                    return this.dialogNode.get('button');
+                }
             },
+
             _getValueAttr: function(){
                 this.value = lang.mixin(this.value, this.dialogNode.get('value').value);
                 return this.value;
