@@ -4,7 +4,7 @@ php:
   - 5.4
 
 before_script:
-  - export TEST_BASE_URL=http//localhost/
+  - export TEST_BASE_URL=http://localhost/
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - sleep 3
