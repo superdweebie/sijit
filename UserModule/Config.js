@@ -1,6 +1,6 @@
 define(
-    [],
-    function(){
+    ['Sds/UserModule/Smd'],
+    function(smd){
         return {
             serviceManager: {
                 userController: {
@@ -10,6 +10,7 @@ define(
                         'register'
                     ],
                     values: {
+                        apiSmd: smd,
                         userRestUrl: '/user/rest/'
                     },
                     refObjects: {
@@ -26,6 +27,11 @@ define(
                 },
                 registerView: {
                     moduleName: 'Sds/UserModule/View/Register'
+                },
+                usernameAvailableValidator: {
+                    values: {
+                        apiSmd: smd
+                    }
                 }
             }
         }

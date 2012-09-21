@@ -6,6 +6,8 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'Sds/Common/Form/_ValidationMixin',
+    'Sds/UserModule/DataModel/User',
+    'Sds/UserModule/DataModel/Profile',
     'Sds/View/BaseView',
     'Sds/UserModule/ViewModel/Register',
     'Sds/View/formFactory',
@@ -20,6 +22,8 @@ function(
     TemplatedMixin,
     WidgetsInTemplateMixin,
     ValidationMixin,
+    User,
+    Profile,
     BaseView,
     RegisterViewModel,
     formFactory,
@@ -36,7 +40,7 @@ function(
         {
             templateString: template,
 
-            valueType: RegisterViewModel,
+            valueType: User,
 
             inputsAppended: false,
 
@@ -61,7 +65,7 @@ function(
                 this.inherited(arguments);
 
                 if ( ! value){
-                    value = new RegisterViewModel;
+                    value = new User;
                     this.set('value', value);
                 }
 
@@ -110,7 +114,16 @@ function(
             },
 
             _getValueAttr: function(){
-                this.value = lang.mixin(this.value, this.dialogNode.get('value').value);
+                var formValue = this.dialogNode.get('value').value;
+
+                this.value.username = formValue.username;
+                this.value.password = formValue.password1;
+                this.value.firstname = formValue.firstname;
+                this.value.lastname = formValue.lastname;
+
+                this.value.profile = new Profile;
+                this.value.profile.email = formValue.email;
+
                 return this.value;
             }
         }

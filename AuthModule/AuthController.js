@@ -2,7 +2,6 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/Deferred',
-    'dojo/when',
     'dojo/_base/json',
     'Sds/Common/Status',
     'dojox/rpc/Service',
@@ -16,7 +15,6 @@ function (
     declare,
     lang,
     Deferred,
-    when,
     json,
     Status,
     RpcService,
@@ -32,15 +30,15 @@ function (
             // summary:
             //		Controlls user login and logout.
 
-            //authApiSmd: object | string
+            //apiSmd: object | string
             //    May be an SMD object, or a url that will return an SMD.
             //    The SMD must define a json rpc interface to login and logout
             //    of a server.
-            authApiSmd: undefined,
+            apiSmd: undefined,
 
-            //authApi: object
-            //    Is the api generated from the authApiSmd
-            authApi: undefined,
+            //api: object
+            //    Is the api generated from the apiSmd
+            api: undefined,
 
             //activeUser: object
             //    The user object returned after a successful login
@@ -68,7 +66,7 @@ function (
 
                 this._loginDeferred = new Deferred();
 
-                when(this.loginView.activate(), lang.hitch(this, function(result){
+                this.loginView.activate().then(lang.hitch(this, function(result){
 
                     // Do nothing if form not valid.
                     if (!result.state == ''){
@@ -81,7 +79,7 @@ function (
                     // Send data to server
                     var formValue = result.value;
 
-                    this.get('authApi').login(formValue['username'], formValue['password']).then(
+                    this.get('api').login(formValue['username'], formValue['password']).then(
                         lang.hitch(this, '_loginComplete'),
                         lang.hitch(this, '_handleException')
                     );
@@ -104,22 +102,22 @@ function (
                 this.set('status', new Status('logging out', Status.icon.SPINNER));
 
                 // Send message to server
-                this.authApi.logout().then(
+                this.api.logout().then(
                     lang.hitch(this, '_logoutComplete'),
                     lang.hitch(this, '_handleException')
                 );
                 return this._logoutDeferred;
             },
-            _authApiGetter: function(){
+            _apiGetter: function(){
                 // summary:
                 //		Get the json rpc api
                 // returns: object
                 //      Returns a json rpc api that can be used to call the server.
 
-                if ( ! this.authApi) {
-                    this.authApi = new RpcService(this.authApiSmd);
+                if ( ! this.api) {
+                    this.api = new RpcService(this.apiSmd);
                 }
-                return this.authApi;
+                return this.api;
             },
             _loginComplete: function(data) {
                 // summary:

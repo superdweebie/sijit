@@ -33,6 +33,18 @@ function(
             //     from executing if this validator fails
             haltOnFail: false,
 
+            //skipOnPass:
+            //     If this validator is part of a ValidatorGroup, setting
+            //     to true will skip evaluating this validator, if all previous
+            //     validators have already evaluated to true
+            skipOnPass: false,
+
+            //skipOnFail:
+            //     If this validator is part of a ValidatorGroup, setting
+            //     to true will skip evaluating this validator, if a previous
+            //     validator has already evaluated to false
+            skipOnFail: false,
+
             isValid: function(value){
                 // summary:
                 //     Should be overridden by ihneriting modules.
@@ -60,7 +72,7 @@ function(
         //
         // returns:
         //     boolean
-        
+
         if (validator.isInstanceOf && validator.isInstanceOf(BaseValidator)){
             return true;
         }

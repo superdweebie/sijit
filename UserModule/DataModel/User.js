@@ -35,6 +35,9 @@ define ([
                 // lastname: string
                 lastname: undefined,
 
+                // profile: one
+                profile: undefined,
+
                 // password: string
                 password: undefined,
 
@@ -60,6 +63,9 @@ define ([
                     }
                     if (this.get('lastname')) {
                         json['lastname'] = this.get('lastname');
+                    }
+                    if (this.get('profile')) {
+                        json['profile'] = this.get('profile');
                     }
                     if (this.get('password')) {
                         json['password'] = this.get('password');
@@ -110,6 +116,12 @@ define ([
                             "options": null
                         }
                     ]
+                },
+                "profile": {
+                    "id": "profileField",
+                    "property": "profile",
+                    "label": "Profile:",
+                    "dataType": "one"
                 },
                 "password": {
                     "id": "passwordField",

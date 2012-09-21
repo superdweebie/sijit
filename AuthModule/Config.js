@@ -1,12 +1,12 @@
 define(
     ['Sds/AuthModule/Smd'],
-    function(authSmd){
+    function(smd){
         return {
             serviceManager: {
                 authController: {
                     moduleName: 'Sds/AuthModule/AuthController',
                     values: {
-                        authApiSmd: authSmd
+                        apiSmd: smd
                     },
                     refObjects: {
                         loginView: 'loginView'
