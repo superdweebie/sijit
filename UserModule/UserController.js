@@ -42,12 +42,12 @@ function(
             //    Is the api generated from the apiSmd
             api: undefined,
 
-            // recoverPasswordView: Sds/UserModule/View/RecoverPasswordView | Sds/ServiceManager/Ref
-            //     A recover password view, or reference to a recover password view.
+            // recoverPasswordView: Sds/UserModule/View/RecoverPasswordView | Sds/ServiceManager/Proxy
+            //     A recover password view, or proxy to a recover password view.
             recoverPasswordView: undefined,
 
-            // registerView: Sds/UserModule/RegisterView | Sds/ServiceManager/Ref
-            //     A register view, or reference to a register view.
+            // registerView: Sds/UserModule/RegisterView | Sds/ServiceManager/Proxy
+            //     A register view, or proxy to a register view.
             registerView: undefined,
 
             getUserStore: function(){

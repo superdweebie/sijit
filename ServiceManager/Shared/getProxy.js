@@ -7,14 +7,14 @@ define([
         sharedServiceManager
     ){
         // module:
-        //		Sds/ServiceManager/Shared/getRef
+        //		Sds/ServiceManager/Shared/getProxy
         //
-        // An AMD plugin that return an reference to the requested object from the
+        // An AMD plugin that return a Proxy to the requested object from the
         // shared ServiceManager
 
         return {
             load: function(id, require, callback){
-                when(sharedServiceManager.getRef(id), function(object){
+                when(sharedServiceManager.getProxy(id), function(object){
                     callback(object);
                 });
             }

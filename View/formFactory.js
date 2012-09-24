@@ -6,7 +6,7 @@ define ([
     'dojo/DeferredList',
     'dijit/registry',
     'Sds/Common/Validator/validatorFactory',
-    'Sds/Common/Utils'
+    'Sds/Common/utils'
 ],
 function (
     lang,
@@ -16,7 +16,7 @@ function (
     DeferredList,
     registry,
     validatorFactory,
-    Utils
+    utils
 ){
 
     var _dijitNames =  [];
@@ -173,7 +173,7 @@ function (
                     field.name = field.property;
                 }
                 if ( ! field.label && field.property){
-                    field.label = Utils.ucFirst(field.property) + ':';
+                    field.label = utils.ucFirst(field.property) + ':';
                 }
 
                 var input = new result[0][1](field);

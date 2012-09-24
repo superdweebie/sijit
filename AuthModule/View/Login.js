@@ -34,8 +34,8 @@ function(
         {
             templateString: template,
 
-            // userController: Sds/UserModule/UserControllerInterface | Sds/ServiceManager/Ref
-            //     A userController or reference to one
+            // userController: Sds/UserModule/UserControllerInterface | Sds/ServiceManager/Proxy
+            //     A userController or proxy to one
             userController: undefined,
 
             valueType: LoginViewModel,

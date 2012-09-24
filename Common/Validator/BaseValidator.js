@@ -1,9 +1,11 @@
 define([
     'dojo/_base/declare',
+    'dojo/Deferred',
     'dojo/Stateful'
 ],
 function(
     declare,
+    Deferred,
     Stateful
 ){
     // module:
@@ -74,6 +76,13 @@ function(
         //     boolean
 
         if (validator.isInstanceOf && validator.isInstanceOf(BaseValidator)){
+            return true;
+        }
+        return false;
+    }
+
+    BaseValidator.isDeferred = function(object){
+        if (object instanceof Deferred){
             return true;
         }
         return false;

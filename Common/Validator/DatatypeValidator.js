@@ -1,11 +1,11 @@
 define([
     'dojo/_base/declare',
-    'Sds/Common/Utils',
+    'Sds/Common/utils',
     'Sds/Common/Validator/BaseValidator'
 ],
 function(
     declare,
-    Utils,
+    utils,
     BaseValidator
 ){
 
@@ -48,7 +48,7 @@ function(
                     case datatypes.BOOLEAN:
                         break;
                     case datatypes.INT:
-                        if ( ! Utils.isInt(value)){
+                        if ( ! utils.isInt(value)){
                             result = false;
                         }
                         break;

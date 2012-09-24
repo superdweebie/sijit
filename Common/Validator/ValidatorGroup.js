@@ -46,7 +46,7 @@ function(
                 if ( !(validator.skipOnPass && currentResult) && !(validator.skipOnFail && ! currentResult)){
 
                     var validatorReturn = validator.isValid(value);
-                    if (this.isDeferred(validatorReturn)){
+                    if (BaseValidator.isDeferred(validatorReturn)){
                         var resultReturn = new Deferred;
                         validatorReturn.then(lang.hitch(this, function(newResult){
                             if (newResult){
@@ -81,13 +81,6 @@ function(
                 }
 
                 return currentResult;
-            },
-
-            isDeferred: function(object){
-                if (object instanceof Deferred){
-                    return true;
-                }
-                return false;
             }
         }
     );

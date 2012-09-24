@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<title>Testing Sds/ServiceManager/Shared/GetRef</title>
+		<title>Testing Sds/ServiceManager/Shared/getProxy</title>
 		<script
             type="text/javascript"
             src="../../../dojo/dojo.js"
@@ -18,18 +18,18 @@
 		<script type="text/javascript">
 			require([
                 'doh/main',
-                'Sds/ServiceManager/Ref',
-                'Sds/ServiceManager/Shared/getRef!zoo',
+                'Sds/ServiceManager/Proxy',
+                'Sds/ServiceManager/Shared/getProxy!zoo',
                 'dojo/domReady!'
             ],
             function(
                 doh,
-                Ref,
+                Proxy,
                 zoo
             ){
                 doh.register([
-                    function testSharedGetRef(){
-                        doh.assertTrue(zoo.isInstanceOf(Ref));
+                    function testSharedGetProxy(){
+                        doh.assertTrue(zoo.isInstanceOf(Proxy));
                     }
                 ]);
                 doh.runOnLoad();
@@ -37,6 +37,6 @@
 		</script>
 	</head>
 	<body>
-        <h1>Testing Sds/ServiceManager/Shared/GetRef</h1>
+        <h1>Testing Sds/ServiceManager/Shared/GetProxy</h1>
 	</body>
 </html>

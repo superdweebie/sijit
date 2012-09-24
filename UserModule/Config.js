@@ -13,7 +13,7 @@ define(
                         apiSmd: smd,
                         userRestUrl: '/user/rest/'
                     },
-                    refObjects: {
+                    proxyObjects: {
                         status: 'status',
                         recoverPasswordView: 'recoverPasswordView',
                         registerView: 'registerView'

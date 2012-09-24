@@ -2,8 +2,8 @@ define([
     'dojo/_base/declare',
     'dojo/dom-prop',
     'dojo/dom-construct',
-    'dijit/Form/_FormValueMixin',
-    'dijit/Form/_TextBoxMixin'
+    'dijit/form/_FormValueMixin',
+    'dijit/form/_TextBoxMixin'
 ],
 function (
     declare,

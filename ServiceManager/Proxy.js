@@ -5,15 +5,15 @@ function (
     declare
 ){
     // module:
-    //		Sds/ServiceManager/Ref
+    //		Sds/ServiceManager/Proxy
 
     return declare
     (
-        'Sds/ServiceManager/Ref',
+        'Sds/ServiceManager/Proxy',
         null,
         {
             // summary:
-            //		A reference to get or use an object.
+            //		A proxy to get or use an object.
 
             _identity: undefined,
 

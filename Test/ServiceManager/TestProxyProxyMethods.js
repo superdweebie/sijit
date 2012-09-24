@@ -4,7 +4,7 @@ define([
         'dojo/DeferredList',
         'dojo/when',
         'Sds/ServiceManager/ServiceManager',
-        'Sds/ServiceManager/Ref'
+        'Sds/ServiceManager/Proxy'
     ],
     function(
         doh,
@@ -12,16 +12,16 @@ define([
         when,
         DeferredList,
         ServiceManager,
-        Ref
+        Proxy
     ){
 
-        doh.register("Sds.Test.ServiceManager.TestRefProxyMethods", [
+        doh.register("Sds/Test/ServiceManager/TestProxyProxyMethods", [
 
-            function refTest(){
+            function proxyTest(){
                 var serviceManager = new ServiceManager({
                     testParent: {
                         moduleName: 'Sds/Test/ServiceManager/Asset/TestParent',
-                        refObjects: {
+                        proxyObjects: {
                             testView: 'testView'
                         }
                     },
@@ -41,7 +41,7 @@ define([
 
                 when(serviceManager.getObject('testParent'), function(parent){
 
-                    doh.assertTrue(parent.testView.isInstanceOf(Ref));
+                    doh.assertTrue(parent.testView.isInstanceOf(Proxy));
 
                     var deferredList = new DeferredList([
                         parent.testView.get('value'),

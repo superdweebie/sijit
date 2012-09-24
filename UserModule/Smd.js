@@ -32,11 +32,23 @@ define(
         			"parameters":[
         				{
         					"type":"object",
-        					"name":"newUser",
+        					"name":"data",
         					"optional":false
         				}
         			],
         			"returns":"object"
+        		},
+        		"usernameAvailable":{
+        			"envelope":"JSON-RPC-1.0",
+        			"transport":"POST",
+        			"parameters":[
+        				{
+        					"type":"object",
+        					"name":"username",
+        					"optional":false
+        				}
+        			],
+        			"returns":"boolean"
         		}
         	},
         	"methods":{
@@ -63,11 +75,23 @@ define(
         			"parameters":[
         				{
         					"type":"object",
-        					"name":"newUser",
+        					"name":"data",
         					"optional":false
         				}
         			],
         			"returns":"object"
+        		},
+        		"usernameAvailable":{
+        			"envelope":"JSON-RPC-1.0",
+        			"transport":"POST",
+        			"parameters":[
+        				{
+        					"type":"object",
+        					"name":"username",
+        					"optional":false
+        				}
+        			],
+        			"returns":"boolean"
         		}
         	},
         	"target":"http:\/\/localhost\/ZendSkeletonApplication\/user"

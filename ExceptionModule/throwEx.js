@@ -1,10 +1,10 @@
 define([
-    'Sds/ServiceManager/Shared/GetRef!exceptionController',
-    'Sds/ConfigManager/ConfigReady!'
+    'Sds/ServiceManager/Shared/getProxy!exceptionController',
+    'Sds/ConfigManager/configReady!'
 ],
-function(exceptionControllerRef){
+function(exceptionControllerProxy){
 	return function(exception){
-        exceptionControllerRef.handle(exception);
+        exceptionControllerProxy.handle(exception);
     }
 });
 

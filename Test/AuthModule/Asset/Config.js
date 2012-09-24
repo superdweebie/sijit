@@ -8,12 +8,12 @@ define(
                     getObjects: {
                         authApi: 'mockAuthApi'
                     },
-                    refObjects: {
+                    proxyObjects: {
                         loginView: 'mockLoginView'
                     }
                 },
                 loginView: {
-                    refObjects: {
+                    proxyObjects: {
                         userController: 'mockUserController'
                     }
                 },

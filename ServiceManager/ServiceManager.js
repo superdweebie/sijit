@@ -6,7 +6,7 @@ define([
         'dojo/_base/lang',
         'dijit/registry',
         'dojo/aspect',
-        'Sds/ServiceManager/Ref',
+        'Sds/ServiceManager/Proxy',
         'Sds/Common/utils'
     ],
     function (
@@ -17,7 +17,7 @@ define([
         lang,
         registry,
         aspect,
-        Ref,
+        Proxy,
         utils
     ) {
         // module:
@@ -49,7 +49,7 @@ define([
                 // |        getObjects: {
                 // |            alterApi: 'alertApi'
                 // |        },
-                // |        refObjects: {
+                // |        proxyObjects: {
                 // |            errorManager: 'Sds/ErrorManager/ErrorManager'
                 // |        }
                 // |    }
@@ -61,7 +61,7 @@ define([
                 // async.
                 //
                 // The proxyMethods array is an array of method names that should be proxied if
-                // a Ref to the is object is created.
+                // a Proxy to the is object is created.
                 //
                 // The values object is an associatvie array of values to inject into the object.
                 //
@@ -71,10 +71,10 @@ define([
                 // The getObjects is an associative array of objects to load with the serviceManager
                 // and inject. Once injected, they can be used as normal.
                 //
-                // The refObjects is an associatvie array of objects to inject a Sds.serviceManager.Ref instance for.
-                // An refObject doesn't inject the object itself, but a reference to get or use the object later.
+                // The proxyObjects is an associatvie array of objects to inject a Sds.serviceManager.Proxy instance for.
+                // An proxyObject doesn't inject the object itself, but a proxy of the object to get or use the object later.
                 //
-                // refObject injections allow the lazy loading of dependencies - they are only
+                // proxyObject injections allow the lazy loading of dependencies - they are only
                 // loaded when they are called.
 
                 // _instances: array
@@ -143,11 +143,11 @@ define([
                     //Create instance
                     return this._createObject(identifier);
                 },
-                _getRef: function(/*string*/ identifier){
+                _getProxy: function(/*string*/ identifier){
                     // summary:
-                    //     Used to get a reference to the object with the supplied identifier.
+                    //     Used to get a proxy to the object with the supplied identifier.
                     //     If a shared object already exists, that will be returned instead of the
-                    //     reference.
+                    //     proxy.
                     // tags:
                     //     protected
 
@@ -157,16 +157,16 @@ define([
                     }
 
                     var config = this.getObjectConfig(identifier);
-                    var ref = new Ref(identifier, this);
+                    var proxy = new Proxy(identifier, this);
                     var method;
                     var index;
                     for (index in config.proxyMethods){
                         method = config.proxyMethods[index];
 
-                        ref[method] = this._getProxyMethod(method);
+                        proxy[method] = this._getProxyMethod(method);
                     }
 
-                    return ref;
+                    return proxy;
                 },
                 _getProxyMethod: function(/*string*/ method){
                     return function(){
@@ -275,9 +275,9 @@ define([
                         });
                     }
 
-                    //Inject ref objects
-                    for (attr in config.refObjects){
-                        object[attr] = this._getRef(config.refObjects[attr]);
+                    //Inject proxy objects
+                    for (attr in config.proxyObjects){
+                        object[attr] = this._getProxy(config.proxyObjects[attr]);
                     }
 
                     //Inject serviceManager, if object is ServiceManagerAware
@@ -343,11 +343,11 @@ define([
 
                     return this._getObject(identifier);
                 },
-                getRef: function(/*string*/ identifier){
+                getProxy: function(/*string*/ identifier){
                     // summary:
-                    //     Return a reference object that will proxy the identifier requested.
+                    //     Return a Proxy object that will proxy the identifier requested.
 
-                    return this._getRef(identifier)
+                    return this._getProxy(identifier)
                 },
                 inject: function(/* object */ object, /* string */ identifier){
                     // summary:

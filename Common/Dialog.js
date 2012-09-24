@@ -7,7 +7,7 @@ define([
     'dojo/dom-prop',
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
-    'dijit/Form/_FormMixin',
+    'dijit/form/_FormMixin',
     'dijit/_OnDijitClickMixin',
     'bootstrap/Modal',
     'dojo/text!./Template/Dialog.html'

@@ -14,7 +14,7 @@ define(
                     values: {
                         serverUrl: 'http://localhost/ZendSkeletonApplication/exception/log'
                     },
-                    refObjects: {
+                    proxyObjects: {
                         exceptionView: 'exceptionView'
                     }
                 },

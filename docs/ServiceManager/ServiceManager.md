@@ -88,8 +88,8 @@ from cache.
 will always overwrite any existing instance in the serviceManager cache. `createObject` will always
 return a Deferred.
 
-`getRef(identifier)` will return a Ref object that can be used to proxy the real isntance. See below for
-more detail about Ref objects. `getRef` will always return syncronously.
+`getProxy(identifier)` will return a Proxy object that can be used to proxy the real isntance. See below for
+more detail about Proxy objects. `getProxy` will always return syncronously.
 
 If there is ever a need to flush the serviceManager cache, it can be done with `clearInstanceCache()`.
 
@@ -108,7 +108,7 @@ Asside from injecting values, a ServiceManager can also inject objects. Eg:
             getObjects: {
                 d: 'object3'
             },
-            refObjects: {
+            proxyObjects: {
                 e: 'object4'
             }
         },
@@ -128,25 +128,25 @@ Calling `getObject('object1])` with the above config will do lots of cool stuff:
     - It will inject values  into properties `a` and `b`
     - It will create an instance of object2 and inject it into property `c`
     - It will check for a cached instnace of object3, and inject it into property `d`
-    - It will create a Ref object which points to object4, and inject it into property `e`
+    - It will create a Proxy object which points to object4, and inject it into property `e`
 
 Object injections can be nested as deeply as you wish. If you have need of circular dependencies,
-then use a Ref object, otherwise the ServiceManager will get stuck in an endless loop.
+then use a Proxy object, otherwise the ServiceManager will get stuck in an endless loop.
 
-#Ref Objects
+#Proxy Objects
 
-Ref objects hold a reference to an identifier, but are not the actual identifier. Ref objects
-allow lazy loading of dependencies. Ref objects have two basic methods `getObject` and `createObject`.
-Either of these can be called to return the object that the Ref references.
+Proxy objects hold a proxy to an identifier, but are not the actual identifier. Proxy objects
+allow lazy loading of dependencies. Proxy objects have two basic methods `getObject` and `createObject`.
+Either of these can be called to return the object that the Proxy references.
 
-Ref objects can also be extended to proxy the funtions of the object they reference. This
+Proxy objects can also be extended to proxy the funtions of the object they reference. This
 can be done through the `proxyMethods` config key. This config key must be an array
 of method names that exist on the module. For example:
 
     {
         object1: {
             moduleName: 'MyNamespace/MyClass1'
-            refObjects: {
+            proxyObjects: {
                 a: 'object2'
             }
         },
@@ -160,12 +160,12 @@ of method names that exist on the module. For example:
     }
 
 When `getObject('object1')` is called, it will return an instance with property
-`a` set with an instance of a Ref object pointing to object2. However, along with
-the normal Ref methods of `getObject()` and `createObject()`, the Ref will have two
+`a` set with an instance of a Proxy object pointing to object2. However, along with
+the normal Proxy methods of `getObject()` and `createObject()`, the Proxy will have two
 additional methods, `method1()` and `method2()`. Calling either of these methods
-on the Ref object will first load object2, then call the method of the same name
-on object2. Any arguments passed to `ref.method1()` will be passed down to
-`object2.method1()`. `ref.method1()` will return a Deferred which will resolve
+on the Proxy object will first load object2, then call the method of the same name
+on object2. Any arguments passed to `proxy.method1()` will be passed down to
+`object2.method1()`. `proxy.method1()` will return a Deferred which will resolve
 to the return value of `object2.method1()`.
 
 #Injecting Dijits
@@ -201,7 +201,7 @@ from the dojo config object. Eg:
         var myObject = serviceManager.getObject('myObject');
     })
 
-Plugins are also provided for `getObject`, `createObject` and `getRef`. Each of these
+Plugins are also provided for `getObject`, `createObject` and `getProxy`. Each of these
 plugins takes an identifier that will be fetched from the shared serviceManager. Eg:
 
     require(['Sds/ServiceManager/Shared/getObject!MyObject'], function(myObject){

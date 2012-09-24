@@ -63,24 +63,51 @@ function (
                     return;
                 }
 
-                // Check the state of any children first. _getState provided by _FormMixin
-                // This is only relevant for form type objects
-                var state = '';
-                if (this._getState){
-                    state = this._getState();
-                    if (state != ''){
-                        this.set('state', state);
-                    }
+                var state;
+                var result = this.validator.isValid(this.get('value'));
+                
+                switch (true){
+                    case BaseValidator.isDeferred(result):
+                        result.then(lang.hitch(this, function(asyncResult){
+                            var state;
+                            if (asyncResult){
+                                state = this._getChildrenState();
+                            } else {
+                                state = 'Error';
+                            }
+                            this._updateMessages(result, this.validator.get('messages'));
+                            this.set('state', state);
+                        }));
+                        state = 'validating';
+                        break;
+                    case result:
+                        this._updateMessages(result, this.validator.get('messages'));
+                        state = this._getChildrenState();
+                        break;
+                    case !result:
+                        this._updateMessages(result, this.validator.get('messages'));
+                        state = 'Error';
+                        break;
                 }
 
-                // Then check my own validator
-                if (this.validator.isValid(this.get('value'))){
+                this.set('state', state);
+            },
+
+            _getChildrenState: function(){
+                if (this._getState){
+                    return this._getState();
+                }
+                return '';
+            },
+
+            _updateMessages: function(result, messages){
+
+                if (result){
                     domClass.remove(this._messageStyleNode, 'error');
                     this.inlineMessage.innerHTML = '';
                     this.blockMessage.innerHTML = '';
                 } else {
                     domClass.add(this._messageStyleNode, 'error');
-                    var messages = this.validator.get('messages');
                     if (messages.length > 1){
                         this.inlineMessage.innerHTML = '';
                        this.blockMessage.innerHTML = messages.join('<br />');
@@ -88,10 +115,7 @@ function (
                         this.blockMessage.innerHTML = '';
                         this.inlineMessage.innerHTML = messages[0];
                     }
-                    state = 'Error';
                 }
-                
-                this.set('state', state);
             }
         }
     );

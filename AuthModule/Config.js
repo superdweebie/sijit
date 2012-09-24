@@ -8,7 +8,7 @@ define(
                     values: {
                         apiSmd: smd
                     },
-                    refObjects: {
+                    proxyObjects: {
                         loginView: 'loginView'
                     }
                 },
@@ -21,7 +21,7 @@ define(
                         'set',
                         'watch'
                     ],
-                    refObjects: {
+                    proxyObjects: {
                         userController: 'userController'
                     }
                 }
