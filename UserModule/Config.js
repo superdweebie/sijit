@@ -29,6 +29,7 @@ define(
                     moduleName: 'Sds/UserModule/View/Register'
                 },
                 usernameAvailableValidator: {
+                    moduleName: 'Sds/UserModule/Validator/UsernameAvailableValidator',
                     values: {
                         apiSmd: smd
                     }

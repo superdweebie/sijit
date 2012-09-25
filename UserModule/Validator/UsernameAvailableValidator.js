@@ -1,11 +1,15 @@
 define([
     'dojo/_base/declare',
+    'dojo/_base/lang',
+    'dojo/Deferred',
     'Sds/Common/Validator/BaseValidator',
     'dojox/rpc/Service',
     'dojox/rpc/JsonRPC'
 ],
 function(
     declare,
+    lang,
+    Deferred,
     BaseValidator,
     RpcService
 ){
@@ -25,27 +29,55 @@ function(
             //    Is the api generated from the apiSmd
             api: undefined,
 
+            _resultDeferred: undefined,
+
+            _validating: undefined,
+
+            _validated: undefined,
+
             isValid: function(value){
 
                 this.messages = [];
 
-                var resultDeferred = new Deferred;
+                if (value === this._validated){
+                    return true;
+                }
+
+                if (value === this._validating){
+                    return this._resultDeferred;
+                }
+
+                this._validating = value;
+
+                this._resultDeferred = new Deferred;
+
+                setTimeout(lang.hitch(this, function(){
+                    this._isValid(value);
+                }), 400);
+
+                return this._resultDeferred;
+            },
+
+            _isValid: function(value){
+
+                if (value != this._validating || value === this._validated){
+                    return;
+                }
 
                 this.get('api').usernameAvailable(value).then(
-                    function(result){
-                        if ( ! result.isAvailable){
+                    lang.hitch(this, function(result){
+                        if ( ! result){
                             this.messages.push('This username is already taken. Please choose another');
                         }
-                        resultDeferred.resolve(result.isAvailable);
-                    },
+                        this._validated = value;
+                        this._resultDeferred.resolve(result);
+                    }),
                     function(exception){
                         // If something goes wrong with the api call, assume the username is ok.
                         // This will be checked again server side anyway.
-                        resultDeferred.resolve(true);
+                        this._resultDeferred.resolve(true);
                     }
                 );
-                    
-                return resultDeferred;
             },
 
             _apiGetter: function(){
