@@ -117,7 +117,7 @@ function(
                 var formValue = this.dialogNode.get('value').value;
 
                 this.value.username = formValue.username;
-                this.value.password = formValue.password1;
+                this.value.password = formValue.password[0];
                 this.value.firstname = formValue.firstname;
                 this.value.lastname = formValue.lastname;
 
