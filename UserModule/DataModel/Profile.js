@@ -26,9 +26,6 @@ define ([
                 //      The doctrine document class name. Don't change this one!
                 _className: 'Sds\\UserModule\\DataModel\\Profile',
 
-                // email: string
-                email: undefined,
-
                 toJSON: function(){
                     // summary:
                     //     Function to handle serialization
@@ -37,9 +34,6 @@ define ([
                     if (this.get('_className')) {
                         json['_className'] = this.get('_className');
                     }
-                    if (this.get('email')) {
-                        json['email'] = this.get('email');
-                    }
 
                     return json;
                 }
@@ -47,21 +41,9 @@ define ([
         );
 
         model.metadata = {
-            "fields": {
-                "email": {
-                    "id": "emailField",
-                    "property": "email",
-                    "label": "Email:",
-                    "dataType": "string",
-                    "required": true,
-                    "validatorGroup": [
-                        {
-                            "class": "Sds\/Common\/Validator\/EmailAddressValidator",
-                            "options": null
-                        }
-                    ]
-                }
-            }
+            "fields": [
+
+            ]
         };
 
         return model;

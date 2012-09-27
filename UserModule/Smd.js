@@ -16,15 +16,41 @@ define(
         				{
         					"type":"string",
         					"name":"username",
-        					"optional":false
+        					"optional":true
         				},
         				{
         					"type":"string",
         					"name":"email",
+        					"optional":true
+        				}
+        			],
+        			"returns":[
+        				"boolean",
+        				"boolean",
+        				"boolean"
+        			]
+        		},
+        		"recoverPasswordComplete":{
+        			"envelope":"JSON-RPC-1.0",
+        			"transport":"POST",
+        			"parameters":[
+        				{
+        					"type":"string",
+        					"name":"username",
+        					"optional":false
+        				},
+        				{
+        					"type":"string",
+        					"name":"newPassword",
+        					"optional":false
+        				},
+        				{
+        					"type":"string",
+        					"name":"passwordRecoveryCode",
         					"optional":false
         				}
         			],
-        			"returns":"object"
+        			"returns":"boolean"
         		},
         		"register":{
         			"envelope":"JSON-RPC-1.0",
@@ -59,15 +85,41 @@ define(
         				{
         					"type":"string",
         					"name":"username",
-        					"optional":false
+        					"optional":true
         				},
         				{
         					"type":"string",
         					"name":"email",
+        					"optional":true
+        				}
+        			],
+        			"returns":[
+        				"boolean",
+        				"boolean",
+        				"boolean"
+        			]
+        		},
+        		"recoverPasswordComplete":{
+        			"envelope":"JSON-RPC-1.0",
+        			"transport":"POST",
+        			"parameters":[
+        				{
+        					"type":"string",
+        					"name":"username",
+        					"optional":false
+        				},
+        				{
+        					"type":"string",
+        					"name":"newPassword",
+        					"optional":false
+        				},
+        				{
+        					"type":"string",
+        					"name":"passwordRecoveryCode",
         					"optional":false
         				}
         			],
-        			"returns":"object"
+        			"returns":"boolean"
         		},
         		"register":{
         			"envelope":"JSON-RPC-1.0",

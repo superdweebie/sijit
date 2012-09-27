@@ -35,6 +35,9 @@ define ([
                 // lastname: string
                 lastname: undefined,
 
+                // email: string
+                email: undefined,
+
                 // profile: one
                 profile: undefined,
 
@@ -63,6 +66,9 @@ define ([
                     }
                     if (this.get('lastname')) {
                         json['lastname'] = this.get('lastname');
+                    }
+                    if (this.get('email')) {
+                        json['email'] = this.get('email');
                     }
                     if (this.get('profile')) {
                         json['profile'] = this.get('profile');
@@ -96,7 +102,6 @@ define ([
                     "property": "firstname",
                     "label": "Firstname:",
                     "dataType": "string",
-                    "required": true,
                     "validatorGroup": [
                         {
                             "class": "Sds\/Common\/Validator\/PersonalNameValidator",
@@ -109,10 +114,21 @@ define ([
                     "property": "lastname",
                     "label": "Lastname:",
                     "dataType": "string",
-                    "required": true,
                     "validatorGroup": [
                         {
                             "class": "Sds\/Common\/Validator\/PersonalNameValidator",
+                            "options": null
+                        }
+                    ]
+                },
+                "email": {
+                    "id": "emailField",
+                    "property": "email",
+                    "label": "Email:",
+                    "dataType": "string",
+                    "validatorGroup": [
+                        {
+                            "class": "Sds\/Common\/Validator\/EmailAddressValidator",
                             "options": null
                         }
                     ]
@@ -128,7 +144,6 @@ define ([
                     "property": "password",
                     "label": "Password:",
                     "dataType": "string",
-                    "required": true,
                     "validatorGroup": [
                         {
                             "class": "Sds\/Common\/Validator\/PasswordValidator",
@@ -151,7 +166,6 @@ define ([
                     "property": "username",
                     "label": "Username:",
                     "dataType": "string",
-                    "required": true,
                     "validatorGroup": [
                         {
                             "class": "Sds\/Common\/Validator\/IdentifierValidator",
