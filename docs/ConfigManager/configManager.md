@@ -3,6 +3,8 @@ configManager
 
 configManager allows dojo config to be composed of multiple config modules.
 
+#configManager and configReady
+
 The config modules you want to merge should be defined in the `mergeConfigs:` key
 of dojo config. For example:
 
@@ -109,3 +111,14 @@ properties, and those properties may have been overwritten.
 
 Some dojo values, such as `async: true` are used by the AMD loader, so cannot be
 overridden by a merged config object.
+
+#Dojo Builds
+
+A dojo build system plugin resolver is provided for `configReady!` so that configs can easily be
+included when build a layer. To use the plugin, first populate the `mergeConfigs`
+array in your dojo build profile. Then include the following in your root
+build profile:
+
+    plugins:{
+        "Sds/ConfigManager/configReady":"Sds/Build/plugin/configReady"
+    }

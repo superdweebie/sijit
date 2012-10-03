@@ -1,11 +1,16 @@
-define(function() {
+define(['dojo/Deferred'], function(Deferred) {
 	return {
 		start:function(
 			mid,
 			referenceModule,
 			bc
 		){
-			return bc.amdResources[bc.getSrcModuleInfo("Sds/ServiceManager/Shared/getObject", referenceModule).mid];
+            var resultDeferred = new Deferred;
+
+			var result = [bc.amdResources[bc.getSrcModuleInfo("Sds/ServiceManager/Shared/getObject", referenceModule).mid]];
+
+            resultDeferred.resolve(result);
+            return resultDeferred;
 		}
 	};
 });

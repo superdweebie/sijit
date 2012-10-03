@@ -5,7 +5,10 @@ define(function() {
 			referenceModule,
 			bc
 		){
-			return bc.amdResources[bc.getSrcModuleInfo("Sds/ServiceManager/Shared/getServiceManager", referenceModule).mid];
+			return [
+                bc.amdResources[bc.getSrcModuleInfo("Sds/ServiceManager/Shared/getServiceManager", referenceModule).mid],
+                bc.amdResources[bc.getSrcModuleInfo("Sds/ServiceManager/ServiceManager", referenceModule).mid]
+            ];
 		}
 	};
 });

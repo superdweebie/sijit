@@ -189,6 +189,14 @@ If a serviceManager is configured as above, the following call will inject the d
         var button = new Button({id: 'button1'});
     })
 
+#ServiceManagerAware
+
+If an object created with a serviceManager has a `isServiceManagerAware` property that
+evaluates to true, then that object will have its `serviceManager` property injected with
+the serviceManager that created it.
+
+For convinience, inheriting from `ServiceManagerAwareMixin` will do this for you.
+
 #AMD Plugins
 
 Several AMD plugins are provided to make working with the ServiceManager simple.
@@ -208,10 +216,32 @@ plugins takes an identifier that will be fetched from the shared serviceManager.
         //Do something with myObject
     })
 
-#ServiceManagerAware
+#Dojo Builds
 
-If an object created with a serviceManager has a `isServiceManagerAware` property that
-evaluates to true, then that object will have its `serviceManager` property injected with
-the serviceManager that created it.
+A dojo build system plugin resolver is provided for each of the AMD plugins. To use
+these plugins add the following to your root build profile:
 
-For convinience, inheriting from `ServiceManagerAwareMixin` will do this for you.
+    plugins:{
+        "Sds/ServiceManager/createObject":"Sds/Build/plugin/createObject",
+        "Sds/ServiceManager/getObject":"Sds/Build/plugin/getObject",
+        "Sds/ServiceManager/getProxy":"Sds/Build/plugin/getProxy",
+        "Sds/ServiceManager/getServiceManager":"Sds/Build/plugin/getServiceManager"
+    }
+
+Each plugin will give the following behaviour when building a layer:
+
+#createObject!
+
+Will include the ServiceManager, and the module requested by createObject!
+
+#getObject!
+
+Will include the ServiceManager, and the module requested by getObject!
+
+#getProxy!
+
+Will include the ServiceManager, but not the module requested by getProxy!.
+
+#getServiceManager!
+
+Will include the ServiceManager

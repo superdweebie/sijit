@@ -5,7 +5,17 @@ define(function() {
 			referenceModule,
 			bc
 		){
-			return bc.amdResources[bc.getSrcModuleInfo("Sds/ConfigManager/configReady", referenceModule).mid];
+			var result = [bc.amdResources[bc.getSrcModuleInfo('Sds/ConfigManager/configReady', referenceModule).mid]];
+
+            // Load required config modules
+            if (bc.mergeConfigs) {
+
+                var index;
+                for (index in bc.mergeConfigs) {
+                    result.push(bc.amdResources[bc.getSrcModuleInfo(bc.mergeConfigs[index], referenceModule).mid]);
+                }
+            }
+            return result;
 		}
 	};
 });

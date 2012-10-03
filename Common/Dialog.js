@@ -3,7 +3,6 @@ define([
     'dojo/_base/lang',
     'dojo/Deferred',
     'dojo/on',
-    'dojo/keys',
     'dojo/dom-prop',
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
@@ -17,7 +16,6 @@ function (
     lang,
     Deferred,
     on,
-    keys,
     domProp,
     Widget,
     TemplatedMixin,
@@ -26,7 +24,18 @@ function (
     Modal,
     template
 ){
+    // module:
+    //		Sds/ServiceManager/ServiceManager
+
     var buttons = {
+        // summary:
+        //		Possible values of the button property in the return object.
+        //
+        // description:
+        //      OK: indicates that the 'ok' button was clicked to dismiss the dialog
+        //      CANCEL: indicates that a 'cancel' button was clicked to dismiss the dialog
+        //      BACKDROP_CANCEL: indicates that the overlay was clicked to dismiss the dialog
+
         OK: 'ok',
         CANCEL: 'cancel',
         BACKDROP_CANCEL: 'backdropCancel'
@@ -36,28 +45,46 @@ function (
         'Sds/Common/Dialog',
         [Widget, TemplatedMixin, FormMixin, OnDijitClickMixin],
         {
+
+            // summary:
+            //		An widget similar to dijit/Dialog, but using twitter/bootstrap styling
+            //
+            // description:
+            //		Creates a modal dialog box. Use the show() and hide() methods to
+            //      iniitate and cancel.
+
+            // templateString: string
+            //      The widget template. To override this, use the paths directive on the AMD loader.
             templateString: template,
 
-            modal: undefined,
+            // _modaul: bootsrap/Modal
+            //     This is what does most of the work.
+            _modal: undefined,
 
+            // button: string
+            //     A value from the buttons array indicating which button was pressed to dismiss the dialog.
             button: undefined,
 
+            // visible: boolean
+            //     Indicates if the modal is visible/active
             visible: false,
 
-            // Map widget attributes to DOMNode attributes.
-            _setTitleAttr: [
-                { node: "titleNode", type: "innerHTML" }
-            ],
+            // title: string
+            //     Text that appears at the top of the modal
+            title: '',
+
+            _setTitleAttr: { node: "titleNode", type: "innerHTML" },
 
             postCreate: function(){
                 this.inherited(arguments);
-                this.modal = new Modal(this.domNode);
+                this._modal = new Modal(this.domNode);
             },
 
             _updateOkDisabled: function(){
-                // Enables and disables the ok button and ENTER key when the state is changed
-                if(this.state == '')
-                {
+                // summary:
+                //     Enables and disables the ok button when the state is changed
+
+                if(this.state == '') {
                     domProp.set(this.okButtonNode, 'disabled', false);
                 } else {
                     domProp.set(this.okButtonNode, 'disabled', true);
@@ -65,6 +92,16 @@ function (
             },
 
             _getValueAttr: function(){
+                // summary:
+                //     The value of the dialog is a composite object:
+                //
+                //     state: Because the dialog also acts as a form, this is the current state of the form. An empty string
+                //         indicates the state is ok. A non-empty string indicates there is some kind of error.
+                //
+                //     button: A value from the buttons array indicating which button was pressed to dismiss the dialog.
+                //
+                //     value: the value of the form.
+
                 return {
                     state: this.get('state'),
                     button: this.get('button'),
@@ -73,19 +110,44 @@ function (
             },
 
             onOk: function(){
+                // summary:
+                //    Event called by the template when the ok button is clicked.
                 this.set('button', buttons.OK);
                 this.hide();
             },
 
             onCancel: function(){
+                // summary:
+                //    Event called by the template when a cancel button is clicked.
                 this.set('button', buttons.CANCEL);
                 this.hide();
             },
 
-            show: function()
+            onBackdropClick: function(){
+                // summary:
+                //    Event called by the template when the backdrop is clicked.
+                this.set('button', buttons.BACKDROP_CANCEL);
+                this.visible = false;
+                if(this._returnValueDeferred)
+                {
+                    this._returnValueDeferred.resolve(this.get('value'))
+                }
+            },
+
+            show: function(/*object*/value)
             {
+                // summary:
+                //    Display the dialog
+                //
+                // value: Optional. A value object that can be used to set the form.
+                //
+                // returns: A deferred that will resolve to the dialog value when the
+                //          dialog is hidden
+
+                this.set('value', value);
+
                 if (this.visible){
-                    return null;
+                    return this._returnValueDeferred;
                 }
                 this.visible = true;
                 this.button = undefined;
@@ -95,15 +157,19 @@ function (
                 this.watch('state', lang.hitch(this, '_updateOkDisabled'));
                 this.connectChildren();
 
-                this.modal.show();
-                on(this.modal.backdropNode, 'click', lang.hitch(this, 'onBackdropClick'));
+                this._modal.show();
+                on(this._modal.backdropNode, 'click', lang.hitch(this, 'onBackdropClick'));
 
                 this._updateOkDisabled();
                 return this._returnValueDeferred;
             },
+
             hide: function()
             {
-                this.modal.hide();
+                // summary:
+                //    Hide the dialog. Calling this will resolve the deferred returned by show()
+
+                this._modal.hide();
                 this.visible = false;
 
                 var value = this.get('value');
@@ -114,14 +180,6 @@ function (
                 }
 
                 return value;
-            },
-            onBackdropClick: function(){
-                this.set('button', buttons.BACKDROP_CANCEL);
-                this.visible = false;
-                if(this._returnValueDeferred)
-                {
-                    this._returnValueDeferred.resolve(this.get('value'))
-                }
             }
         }
     );
