@@ -25,7 +25,7 @@ function (
     template
 ){
     // module:
-    //		Sds/ServiceManager/ServiceManager
+    //		Sds/Common/Dialog
 
     var buttons = {
         // summary:
@@ -45,7 +45,6 @@ function (
         'Sds/Common/Dialog',
         [Widget, TemplatedMixin, FormMixin, OnDijitClickMixin],
         {
-
             // summary:
             //		An widget similar to dijit/Dialog, but using twitter/bootstrap styling
             //

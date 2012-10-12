@@ -9,7 +9,8 @@ define([
     'Sds/ExceptionModule/throwEx',
     'Sds/AuthModule/Exception/AlreadyLoggedInException',
     'Sds/AuthModule/Exception/LoginFailedException',
-    'dojox/rpc/JsonRPC'
+    'dojox/rpc/JsonRPC',
+    'Sds/ServiceManager/Shared/getObject!loginView'
 ],
 function (
     declare,
