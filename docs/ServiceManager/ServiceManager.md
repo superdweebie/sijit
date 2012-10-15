@@ -230,18 +230,22 @@ these plugins add the following to your root build profile:
 
 Each plugin will give the following behaviour when building a layer:
 
-#createObject!
+##createObject!
 
 Will include the ServiceManager, and the module requested by createObject!
 
-#getObject!
+##getObject!
 
 Will include the ServiceManager, and the module requested by getObject!
 
-#getProxy!
+##getProxy!
 
 Will include the ServiceManager, but not the module requested by getProxy!.
 
-#getServiceManager!
+##getServiceManager!
 
 Will include the ServiceManager
+
+To get the most out of the build system plugin resolvers, it is recomended that you
+use the build profile preprocessor. This will merge any required config modules, and
+add the plugins automatically.

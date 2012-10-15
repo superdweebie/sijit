@@ -44,26 +44,44 @@ define ([
             // summary:
             //		Allows the merging of multiple config objects into dojo config.
 
-            merge: function() {
+            merge: function(mergeConfigs, target) {
                 // summary:
                 //		Merges multiple config modules
+                //
+                // mergeConfigs:
+                //      optional. Array.
+                //      A list of mids to load and merge.
+                //      If null, the mergeConfigs key of dojoConfig will be used.
+                //
+                // target:
+                //      optional. Object.
+                //      An object to merged the config objects into.
+                //      If null, dojoConfig itself will be used.
 
-                // Resolves when dojoConfig is updated
-                var dojoConfigUpdated = new Deferred;
+                // Resolves when target has been merged
+                var targetMerged = new Deferred;
 
                 // Resolves when merge is complete
                 var mergeDone = new Deferred;
 
+                if ( ! mergeConfigs){
+                    mergeConfigs = dojoConfig.mergeConfigs;
+                }
+
+                if ( ! target){
+                    target = dojoConfig;
+                }
+
                 // Load required config modules
-                if (dojoConfig.mergeConfigs) {
+                if (mergeConfigs) {
                     var index;
-                    var numToLoad =  dojoConfig.mergeConfigs.length;
+                    var numToLoad =  mergeConfigs.length;
                     var loadConfigsDeferred = new Deferred();
                     var unmergedConfigs = [];
                     for (index = 0; index < numToLoad; index++) unmergedConfigs[index] = undefined;
 
-                    for (index in dojoConfig.mergeConfigs) {
-                        when(loadConfigModule(dojoConfig.mergeConfigs[index], index), function(result){
+                    for (index in mergeConfigs) {
+                        when(loadConfigModule(mergeConfigs[index], index), function(result){
                             unmergedConfigs[result.moduleIndex] = result.configModule;
                             --numToLoad;
                             if (numToLoad == 0) {
@@ -81,11 +99,11 @@ define ([
                 }
 
                 mergeDone.then(function(mergedConfig){
-                    dojoConfig = utils.mixinDeep(dojoConfig, mergedConfig);
-                    dojoConfigUpdated.resolve(dojoConfig);
+                    target = utils.mixinDeep(target, mergedConfig);
+                    targetMerged.resolve(target);
                 });
 
-                return dojoConfigUpdated;
+                return targetMerged;
             }
         }
     }

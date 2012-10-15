@@ -1,4 +1,5 @@
-define(['util/build/fileUtils'], function(fileUtils) {
+define(['Sds/Build/Plugin/extractMidsFromConfig'], function(extractMidsFromConfig) {
+
 	return {
 		start:function(
 			mid,
@@ -8,23 +9,9 @@ define(['util/build/fileUtils'], function(fileUtils) {
 
 			var result = [bc.amdResources[bc.getSrcModuleInfo("Sds/ServiceManager/Shared/getObject", referenceModule).mid]];
 
-console.log('getObject mid: ' + mid);
-
-            // Load required config modules
-            if (bc.mergeConfigs) {
-
-                var index;
-                var moduleInfo;
-                var config;
-                for (index in bc.mergeConfigs) {
-                    moduleInfo = bc.getSrcModuleInfo(bc.mergeConfigs[index], referenceModule);
-                    config = fileUtils.readAndEval(moduleInfo.url);
-
-console.log(config);
-                    result.push(bc.amdResources[moduleInfo.mid]);
-                }
-
-
+            // Gather required mids from serviceManager config
+            if (bc.serviceManager && bc.serviceManager[mid]) {
+                result = result.concat(extractMidsFromConfig(mid, referenceModule, bc));
             }
 
             return result;

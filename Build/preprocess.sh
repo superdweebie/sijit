@@ -96,10 +96,10 @@ fi
 
 if [ "$use_node" = "0" ]; then
     cmd="node $debug_node"
-    cmdflags="`dirname $0`/../../dojo/dojo.js"
+    cmdflags="`dirname $0`/../../dojo/dojo.js load=`dirname $0`/preprocessconfig.js load=`dirname $0`/preprocess.js"
 else
     cmd="java"
-    cmdflags="-Xms256m -Xmx256m -jar `dirname $0`/../../util/shrinksafe/js.jar `dirname $0`/../../dojo/dojo.js baseUrl=`dirname $0`/../../dojo load=buildconfig.js load=main.js"
+    cmdflags="-Xms256m -Xmx256m -jar `dirname $0`/../../util/shrinksafe/js.jar `dirname $0`/../../dojo/dojo.js baseUrl=`dirname $0`/../../dojo load=`dirname $0`/preprocessconfig.js load=`dirname $0`/preprocess.js"
 fi
 
 $cmd $cmdflags $ba

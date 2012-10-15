@@ -122,3 +122,12 @@ build profile:
     plugins:{
         "Sds/ConfigManager/configReady":"Sds/Build/plugin/configReady"
     }
+
+A build profile preprocessor is also provided. It will read a build profile, and
+merge any configs defined in the `mergeConfigs` key into the profile. It will also
+automatically add the build system plugin resolver. To use the build profile
+preprocessor:
+
+    path/to/dojo/Sds/Build/preprocess.sh --profile path/to/build.profile.js
+
+The preprocessor will output a new build profile `path\to\build.profile.preprocessed.js`
