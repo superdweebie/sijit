@@ -1,19 +1,18 @@
 define([
         'doh/main',
-        'Sds/UserModule/Validator/RecoverPasswordValidator',
-        'Sds/UserModule/ViewModel/RecoverPassword'
+        'Sds/UserModule/Validator/RecoverPasswordPart1Validator',
+        'Sds/UserModule/ViewModel/RecoverPasswordPart1'
     ],
     function(
         doh,
-        RecoverPasswordValidator,
-        RecoverPasswordViewModel
+        RecoverPasswordPart1Validator,
+        RecoverPasswordPart1ViewModel
     ){
-        doh.register("Sds.Test.Validator.TestRecoverPasswordValidator", [
+        doh.register("Sds/Test/Validator/TestRecoverPasswordPart1Validator", [
 
             function PositiveTest1(doh){
-
-                var validator = new RecoverPasswordValidator;
-                var model = new RecoverPasswordViewModel;
+                var validator = new RecoverPasswordPart1Validator;
+                var model = new RecoverPasswordPart1ViewModel;
 
                 model.username = 'Lucy';
                 model.email = undefined;
@@ -22,8 +21,8 @@ define([
             },
 
             function PostiviteTest2(doh){
-                var validator = new RecoverPasswordValidator;
-                var model = new RecoverPasswordViewModel;
+                var validator = new RecoverPasswordPart1Validator;
+                var model = new RecoverPasswordPart1ViewModel;
 
                 model.username = undefined;
                 model.email = 'toby@here.com';
@@ -32,8 +31,8 @@ define([
             },
 
             function NegativeTest(doh){
-                var validator = new RecoverPasswordValidator;
-                var model = new RecoverPasswordViewModel;
+                var validator = new RecoverPasswordPart1Validator;
+                var model = new RecoverPasswordPart1ViewModel;
 
                 model.username = undefined;
                 model.email = undefined;

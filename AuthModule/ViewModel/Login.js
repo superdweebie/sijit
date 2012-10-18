@@ -24,8 +24,10 @@ define ([
                     property : 'username',
                     label    : 'Username:',
                     dataType : 'string',
-                    required : true,
                     validatorGroup: [
+                        {
+                            'class': 'Sds/Common/Validator/RequiredValidator'
+                        },
                         {
                             'class': 'Sds/Common/Validator/IdentifierValidator'
                         }
@@ -38,8 +40,10 @@ define ([
                     label    : 'Password:',
                     dataType : 'string',
                     type     : 'password',
-                    required : true,
                     validatorGroup: [
+                        {
+                            'class': 'Sds/Common/Validator/RequiredValidator'
+                        },
                         {
                             'class': 'Sds/Common/Validator/LengthValidator',
                             options: {min: 6, max: 40}

@@ -57,9 +57,8 @@ function(
                 }
 
                 this._appendInputs().then(lang.hitch(this, function(){
-                    this.dialogNode.set('value', value);
                     this.startup();
-                    this.dialogNode.show().then(lang.hitch(this, function(){
+                    this.dialogNode.show(value).then(lang.hitch(this, function(){
                         this._resolve();
                     }));
                 }));
@@ -105,7 +104,7 @@ function(
             },
             onRecoverPassword: function(){
                 this.dialogNode.hide();
-                this.userController.recoverPassword();
+                this.userController.recoverPasswordPart1();
             },
             onRegister: function(){
                 this.dialogNode.hide();

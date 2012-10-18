@@ -2,7 +2,6 @@ define ([
         'dojo/_base/declare',
         'dojo/_base/lang',
         'Sds/UserModule/DataModel/User',
-        'Sds/UserModule/DataModel/Profile',
         'Sds/View/BaseViewModel',
         'Sds/ServiceManager/Shared/getObject!usernameAvailableValidator'
     ],
@@ -10,7 +9,6 @@ define ([
         declare,
         lang,
         User,
-        Profile,
         BaseViewModel,
         usernameAvailableValidator
     ){
@@ -31,16 +29,16 @@ define ([
             cssClasses : ['form-horizontal'],
             validatorGroup: [
                 {
-                    'class':'Sds/UserModule/Validator/RegisterValidator'
+                    'class':'Sds/UserModule/Validator/PasswordMatchValidator'
                 }
             ],
             fields: {
                 username: lang.clone(User.metadata.fields.username),
-                password1: lang.clone(User.metadata.fields.password),
-                password2: lang.clone(User.metadata.fields.password),
+                password1: lang.clone(User.metadata.fields.credential),
+                password2: lang.clone(User.metadata.fields.credential),
                 firstname: User.metadata.fields.firstname,
                 lastname: User.metadata.fields.lastname,
-                email: Profile.metadata.fields.email
+                email: User.metadata.fields.email
             }
         };
 

@@ -126,22 +126,32 @@ function (
             var deferredValidator = new Deferred;
             var validators = []
 
-            if (field.required){
-                validators.push({
-                    'class': 'Sds/Common/Validator/RequiredValidator',
-                    options: null
-                });
-            } else {
-                validators.push({
-                    'class': 'Sds/Common/Validator/NotRequiredValidator',
-                    options: null
-                });
-            }
-
             if (field.dataType){
                 validators.push({
                     'class': 'Sds/Common/Validator/DatatypeValidator',
                     options: {requiredType: field.dataType}
+                });
+            }
+
+            var requireValidatorAdded = false;
+            for (var index in field.validatorGroup){
+                var validator = field.validatorGroup[index];
+                switch (validator['class']){
+                    case 'Sds/Common/Validator/RequiredValidator':
+                        validators.unshift(validator);
+                        requireValidatorAdded = true;
+                        break;
+                    case 'Sds/Common/Validator/NotRequiredValidator':
+                        validators.unshift(validator);
+                        requireValidatorAdded = true;
+                        break;
+                    default:
+                        validators.push(validator);
+                }
+            }
+            if ( ! requireValidatorAdded){
+                validators.unshift({
+                    'class': 'Sds/Common/Validator/NotRequiredValidator'
                 });
             }
 

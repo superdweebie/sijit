@@ -7,6 +7,7 @@ define([
     'dojox/rpc/Service',
     'dojo/Stateful',
     'Sds/ExceptionModule/throwEx',
+    'Sds/ServiceManager/Shared/getProxy!recoverPasswordPart2ViewModel',
     'dojox/rpc/JsonRPC'
 ],
 function(
@@ -17,7 +18,8 @@ function(
     Status,
     RpcService,
     Stateful,
-    throwEx
+    throwEx,
+    recoverPasswordPart2ViewModelProxy
 ){
     return declare
     (
@@ -42,9 +44,13 @@ function(
             //    Is the api generated from the apiSmd
             api: undefined,
 
-            // recoverPasswordView: Sds/UserModule/View/RecoverPasswordView | Sds/ServiceManager/Proxy
-            //     A recover password view, or proxy to a recover password view.
-            recoverPasswordView: undefined,
+            // recoverPasswordPart1View: Sds/UserModule/View/RecoverPasswordPart1View | Sds/ServiceManager/Proxy
+            //     A recover password view part 1, or proxy to a recover password view.
+            recoverPasswordPart1View: undefined,
+
+            // recoverPasswordPart2View: Sds/UserModule/View/RecoverPasswordPart2View | Sds/ServiceManager/Proxy
+            //     A recover password view part 2, or proxy to a recover password view.
+            recoverPasswordPart2View: undefined,
 
             // registerView: Sds/UserModule/RegisterView | Sds/ServiceManager/Proxy
             //     A register view, or proxy to a register view.
@@ -61,19 +67,19 @@ function(
                 this.getStore().add(user);
             },
 
-            recoverPassword: function(){
+            recoverPasswordPart1: function(){
                 // summary:
                 //		Prompt for password recovery details, and process
                 // returns: Deferred
                 //      Returned deferred will resolve when the whole password recovery
                 //      process is complete.
 
-                this._recoverPasswordDeferred = new Deferred();
+                this._recoverPasswordPart1Deferred = new Deferred();
 
-                this.recoverPasswordView.activate().then(lang.hitch(this, function(result){
+                this.recoverPasswordPart1View.activate().then(lang.hitch(this, function(result){
                     // Do nothing if form not valid.
                     if (!result.state == ''){
-                        this._recoverPasswordDeferred.resolve();
+                        this._recoverPasswordPart1Deferred.resolve();
                     }
 
                     // Update status
@@ -82,14 +88,50 @@ function(
                     // Send data to server
                     var formValue = result.value;
 
-                    this.get('api').recoverPassword(formValue['username'], formValue['email']).then(
-                        lang.hitch(this, '_recoverPasswordComplete'),
+                    this.get('api').recoverPasswordPart1(formValue['username'], formValue['email']).then(
+                        lang.hitch(this, '_recoverPasswordPart1Complete'),
                         lang.hitch(this, '_handleException')
                     );
-                    this.recoverPasswordView.reset();
+                    this.recoverPasswordPart1View.reset();
                 }));
 
-                return this._recoverPasswordDeferred;
+                return this._recoverPasswordPart1Deferred;
+            },
+
+            recoverPasswordPart2: function(){
+                // summary:
+                //     Prompt for the server generated recoverPasswordCode and a new
+                //     password to complete the password recovery process
+                // retrurns: Deferred
+
+                this._recoverPasswordPart2Deferred = new Deferred();
+
+                recoverPasswordPart2ViewModelProxy.getObject().then(function(recoverPasswordPart2ViewModel){
+                    recoverPasswordPart2ViewModel.passwordRecoveryCode;
+                    recoverPasswordPart2ViewModel.name;
+                });
+
+
+                this.recoverPasswordPart2View.activate().then(lang.hitch(this, function(result){
+                    // Do nothing if form not valid.
+                    if (!result.state == ''){
+                        this._recoverPasswordPart2Deferred.resolve();
+                    }
+
+                    // Update status
+                    this.set('status', new Status('sending password change request', Status.icon.SPINNER));
+
+                    // Send data to server
+                    var formValue = result.value;
+
+                    this.get('api').recoverPasswordPart2(formValue['username'], formValue['password'][0], formValue['passwordRecoveryCode']).then(
+                        lang.hitch(this, '_recoverPasswordPart2Complete'),
+                        lang.hitch(this, '_handleException')
+                    );
+                    this.recoverPasswordPart2View.reset();
+                }));
+
+                return this._recoverPasswordPart2Deferred;
             },
 
             register: function(){
@@ -131,10 +173,16 @@ function(
                 return this.api;
             },
 
-            _recoverPasswordComplete: function(data)
+            _recoverPasswordPart1Complete: function(data)
             {
                 this.set('status', new Status('password recovery email sent', Status.icon.SUCCESS, 5000));
-                this._recoverPasswordDeferred.resolve(true);
+                this._recoverPasswordPart1Deferred.resolve(true);
+            },
+
+            _recoverPasswordPart2Complete: function(data)
+            {
+                this.set('status', new Status('password changed', Status.icon.SUCCESS, 5000));
+                this._recoverPasswordPart2Deferred.resolve(true);
             },
 
             _registerComplete: function(data)
@@ -151,8 +199,11 @@ function(
 
                 throwEx(exception);
 
-                if (this._recoverPasswordDeferred && (! this._recoverPasswordDeferred.isFulfilled())){
-                    this._recoverPasswordDeferred.reject(exception);
+                if (this._recoverPasswordPart1Deferred && (! this._recoverPasswordPart1Deferred.isFulfilled())){
+                    this._recoverPasswordPart1Deferred.reject(exception);
+                }
+                if (this._recoverPasswordPart2Deferred && (! this._recoverPasswordPart2Deferred.isFulfilled())){
+                    this._recoverPasswordPart2Deferred.reject(exception);
                 }
                 if (this._registerDeferred && (! this._registerDeferred.isFulfilled())){
                     this._registerDeferred.reject(exception);

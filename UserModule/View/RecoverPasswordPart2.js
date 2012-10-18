@@ -6,12 +6,10 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'Sds/Common/Form/_ValidationMixin',
-    'Sds/UserModule/DataModel/User',
-    'Sds/UserModule/DataModel/Profile',
     'Sds/View/BaseView',
-    'Sds/UserModule/ViewModel/Register',
+    'Sds/UserModule/ViewModel/RecoverPasswordPart2',
     'Sds/View/formFactory',
-    'dojo/text!../Template/Register.html',
+    'dojo/text!../Template/RecoverPasswordPart2.html',
     'Sds/Common/Dialog'
 ],
 function(
@@ -22,15 +20,13 @@ function(
     TemplatedMixin,
     WidgetsInTemplateMixin,
     ValidationMixin,
-    User,
-    Profile,
     BaseView,
-    RegisterViewModel,
+    RecoverPasswordPart1ViewModel,
     formFactory,
     template
 ){
     return declare(
-        'Sds/UserModule/RegisterView',
+        'Sds/UserModule/View/RecoverPasswordPart1',
         [
             Widget,
             TemplatedMixin,
@@ -40,7 +36,7 @@ function(
         {
             templateString: template,
 
-            valueType: User,
+            valueType: RecoverPasswordPart1ViewModel,
 
             inputsAppended: false,
 
@@ -65,7 +61,7 @@ function(
                 this.inherited(arguments);
 
                 if ( ! value){
-                    value = new User;
+                    value = new RecoverPasswordPart1ViewModel;
                     this.set('value', value);
                 }
 
@@ -92,7 +88,7 @@ function(
                 var appendInputsDeferred = new Deferred;
 
                 if ( ! this.inputsAppened){
-                    var metadata = RegisterViewModel.metadata;
+                    var metadata = RecoverPasswordPart1ViewModel.metadata;
                     metadata.containerNode = this.containerNode;
                     formFactory.appendToForm(this.dialogNode, metadata).then(lang.hitch(this, function(){
                         this.inputsAppened = true;
@@ -115,11 +111,9 @@ function(
             _getValueAttr: function(){
                 var formValue = this.dialogNode.get('value').value;
 
+                this.value.passwordRecoveryCode = formValue.passwordRecoveryCode;
                 this.value.name = formValue.name;
                 this.value.credential = formValue.credential[0];
-                this.value.firstname = formValue.firstname;
-                this.value.lastname = formValue.lastname;
-                this.value.email = formValue.email;
 
                 return this.value;
             }

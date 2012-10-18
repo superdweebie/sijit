@@ -41,14 +41,17 @@ define ([
                 // profile: one
                 profile: undefined,
 
-                // password: string
-                password: undefined,
+                // passwordRecoveryCode: string
+                passwordRecoveryCode: undefined,
+
+                // credential: string
+                credential: undefined,
+
+                // name: string
+                name: undefined,
 
                 // roles: hash
                 roles: undefined,
-
-                // username: string
-                username: undefined,
 
                 toJSON: function(){
                     // summary:
@@ -73,14 +76,17 @@ define ([
                     if (this.get('profile')) {
                         json['profile'] = this.get('profile');
                     }
-                    if (this.get('password')) {
-                        json['password'] = this.get('password');
+                    if (this.get('passwordRecoveryCode')) {
+                        json['passwordRecoveryCode'] = this.get('passwordRecoveryCode');
+                    }
+                    if (this.get('credential')) {
+                        json['credential'] = this.get('credential');
+                    }
+                    if (this.get('name')) {
+                        json['name'] = this.get('name');
                     }
                     if (this.get('roles')) {
                         json['roles'] = this.get('roles');
-                    }
-                    if (this.get('username')) {
-                        json['username'] = this.get('username');
                     }
 
                     return json;
@@ -104,6 +110,9 @@ define ([
                     "dataType": "string",
                     "validatorGroup": [
                         {
+                            "class": "Sds\/Common\/Validator\/RequiredValidator"
+                        },
+                        {
                             "class": "Sds\/Common\/Validator\/PersonalNameValidator",
                             "options": null
                         }
@@ -115,6 +124,9 @@ define ([
                     "label": "Lastname:",
                     "dataType": "string",
                     "validatorGroup": [
+                        {
+                            "class": "Sds\/Common\/Validator\/RequiredValidator"
+                        },
                         {
                             "class": "Sds\/Common\/Validator\/PersonalNameValidator",
                             "options": null
@@ -128,6 +140,9 @@ define ([
                     "dataType": "string",
                     "validatorGroup": [
                         {
+                            "class": "Sds\/Common\/Validator\/RequiredValidator"
+                        },
+                        {
                             "class": "Sds\/Common\/Validator\/EmailAddressValidator",
                             "options": null
                         }
@@ -139,12 +154,21 @@ define ([
                     "label": "Profile:",
                     "dataType": "one"
                 },
-                "password": {
-                    "id": "passwordField",
-                    "property": "password",
+                "passwordRecoveryCode": {
+                    "id": "passwordRecoveryCodeField",
+                    "property": "passwordRecoveryCode",
+                    "label": "Password Recovery Code:",
+                    "dataType": "string"
+                },
+                "credential": {
+                    "id": "credentialField",
+                    "property": "credential",
                     "label": "Password:",
                     "dataType": "string",
                     "validatorGroup": [
+                        {
+                            "class": "Sds\/Common\/Validator\/RequiredValidator"
+                        },
                         {
                             "class": "Sds\/Common\/Validator\/PasswordValidator",
                             "options": null
@@ -152,23 +176,32 @@ define ([
                     ],
                     "type": "password"
                 },
+                "name": {
+                    "id": "nameField",
+                    "property": "name",
+                    "label": "Username:",
+                    "dataType": "string",
+                    "validatorGroup": [
+                        {
+                            "class": "Sds\/Common\/Validator\/RequiredValidator"
+                        },
+                        {
+                            "class": "Sds\/Common\/Validator\/IdentifierValidator",
+                            "options": null
+                        }
+                    ]
+                },
                 "roles": {
                     "id": "rolesField",
                     "property": "roles",
                     "label": "Roles:",
                     "dataType": "hash",
                     "validatorGroup": [
-
-                    ]
-                },
-                "username": {
-                    "id": "usernameField",
-                    "property": "username",
-                    "label": "Username:",
-                    "dataType": "string",
-                    "validatorGroup": [
                         {
-                            "class": "Sds\/Common\/Validator\/IdentifierValidator",
+                            "class": "Sds\/Common\/Validator\/NotRequiredValidator"
+                        },
+                        {
+                            "class": "Sds\/Validator\/IdentifierArrayValidator",
                             "options": null
                         }
                     ]

@@ -9,7 +9,7 @@ define(
         	"contentType":"application\/json",
         	"SMDVersion":"2.0",
         	"services":{
-        		"recoverPassword":{
+        		"recoverPasswordPart1":{
         			"envelope":"JSON-RPC-1.0",
         			"transport":"POST",
         			"parameters":[
@@ -30,7 +30,7 @@ define(
         				"boolean"
         			]
         		},
-        		"recoverPasswordComplete":{
+        		"recoverPasswordPart2":{
         			"envelope":"JSON-RPC-1.0",
         			"transport":"POST",
         			"parameters":[
@@ -78,7 +78,7 @@ define(
         		}
         	},
         	"methods":{
-        		"recoverPassword":{
+        		"recoverPasswordPart1":{
         			"envelope":"JSON-RPC-1.0",
         			"transport":"POST",
         			"parameters":[
@@ -99,7 +99,7 @@ define(
         				"boolean"
         			]
         		},
-        		"recoverPasswordComplete":{
+        		"recoverPasswordPart2":{
         			"envelope":"JSON-RPC-1.0",
         			"transport":"POST",
         			"parameters":[

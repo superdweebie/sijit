@@ -7,11 +7,10 @@ function(
     BaseValidator
 ){
     return declare(
-        'Sds/UserModule/Validator/RecoverPasswordValidator',
+        'Sds/UserModule/Validator/PasswordMatchValidator',
         [BaseValidator],
         {
             isValid: function(value){
-
                 if (value.value){
                     value = value.value;
                 }
@@ -19,11 +18,10 @@ function(
                 this.messages = [];
 
                 var result = true;
-                if ( ! value.username && ! value.email) {
-                    this.messages.push('Either username or email is required.');
+                if (value.credential[0] != value.credential[1]) {
+                    this.messages.push('Both passwords are not the same.');
                     result = false;
                 }
-
                 return result;
             }
         }

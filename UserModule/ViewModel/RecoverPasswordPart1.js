@@ -2,21 +2,19 @@ define ([
         'dojo/_base/declare',
         'dojo/_base/lang',
         'Sds/View/BaseViewModel',
-        'Sds/UserModule/DataModel/User',
-        'Sds/UserModule/DataModel/Profile'
+        'Sds/UserModule/DataModel/User'
     ],
     function (
         declare,
         lang,
         BaseViewModel,
-        User,
-        Profile
+        User
     ){
         var model = declare (
-            'Sds/UserModel/ViewModel/RecoverPassword',
+            'Sds/UserModel/ViewModel/RecoverPasswordPart1',
             [BaseViewModel],
             {
-                username: undefined,
+                name: undefined,
                 email: undefined
             }
         );
@@ -25,16 +23,16 @@ define ([
             cssClasses : ['form-horizontal'],
             validatorGroup: [
                 {
-                    'class': 'Sds/UserModule/Validator/RecoverPasswordValidator'
+                    'class': 'Sds/UserModule/Validator/RecoverPasswordPart1Validator'
                 }
             ],
             fields: {
-                username: lang.clone(User.metadata.fields.username),
-                email: lang.clone(Profile.metadata.fields.email)
+                name: lang.clone(User.metadata.fields.name),
+                email: lang.clone(User.metadata.fields.email)
             }
         };
 
-        model.metadata.fields.username.required = false;
+        model.metadata.fields.name.required = false;
         model.metadata.fields.email.required = false;
 
         return model;

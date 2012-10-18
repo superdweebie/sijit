@@ -7,9 +7,9 @@ define([
     'dijit/_WidgetsInTemplateMixin',
     'Sds/Common/Form/_ValidationMixin',
     'Sds/View/BaseView',
-    'Sds/UserModule/ViewModel/RecoverPassword',
+    'Sds/UserModule/ViewModel/RecoverPasswordPart1',
     'Sds/View/formFactory',
-    'dojo/text!../Template/RecoverPassword.html',
+    'dojo/text!../Template/RecoverPasswordPart1.html',
     'Sds/Common/Dialog'
 ],
 function(
@@ -21,12 +21,12 @@ function(
     WidgetsInTemplateMixin,
     ValidationMixin,
     BaseView,
-    RecoverPasswordViewModel,
+    RecoverPasswordPart1ViewModel,
     formFactory,
     template
 ){
     return declare(
-        'Sds/UserModule/View/RecoverPassword',
+        'Sds/UserModule/View/RecoverPasswordPart1',
         [
             Widget,
             TemplatedMixin,
@@ -36,7 +36,7 @@ function(
         {
             templateString: template,
 
-            valueType: RecoverPasswordViewModel,
+            valueType: RecoverPasswordPart1ViewModel,
 
             inputsAppended: false,
 
@@ -61,14 +61,13 @@ function(
                 this.inherited(arguments);
 
                 if ( ! value){
-                    value = new RecoverPasswordViewModel;
+                    value = new RecoverPasswordPart1ViewModel;
                     this.set('value', value);
                 }
 
                 this._appendInputs().then(lang.hitch(this, function(){
-                    this.dialogNode.set('value', value);
                     this.startup();
-                    this.dialogNode.show().then(lang.hitch(this, function(){
+                    this.dialogNode.show(value).then(lang.hitch(this, function(){
                         this._resolve();
                     }));
                 }));
@@ -89,7 +88,7 @@ function(
                 var appendInputsDeferred = new Deferred;
 
                 if ( ! this.inputsAppened){
-                    var metadata = RecoverPasswordViewModel.metadata;
+                    var metadata = RecoverPasswordPart1ViewModel.metadata;
                     metadata.containerNode = this.containerNode;
                     formFactory.appendToForm(this.dialogNode, metadata).then(lang.hitch(this, function(){
                         this.inputsAppened = true;
