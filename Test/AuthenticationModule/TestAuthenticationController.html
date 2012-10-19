@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Unit Testing Sds/AuthenticationModule/AuthenticationController</title>
+		<style type="text/css">
+            @import "../../themes/bootstrap/css/bootstrap.css";
+            @import "../../themes/bootstrap/css/bootstrap-responsive.css";
+		</style>
+		<script
+            type="text/javascript"
+            src="../../../dojo/dojo.js"
+            data-dojo-config="
+                isDebug: true,
+                popup: true,
+                async: true,
+                mergeConfigs: [
+                    'Sds/AuthenticationModule/Config',
+                    'Sds/Test/AuthenticationModule/Asset/Config'
+                ]
+            ">
+        </script>
+		<script type="text/javascript">
+			require([
+                'doh/main',
+                'dojo/Deferred',
+                'dojo/when',
+                'Sds/AuthenticationModule/Exception/LoginFailedException',
+                'Sds/AuthenticationModule/Exception/AlreadyLoggedInException',
+                'Sds/ServiceManager/Shared/getObject!authenticationController',
+                'Sds/ServiceManager/Shared/getObject!mockLoginView',
+                'Sds/ServiceManager/Shared/getObject!exceptionController',
+                'dojo/domReady!'
+            ],
+            function(
+                doh,
+                Deferred,
+                when,
+                LoginFailedException,
+                AlreadyLoggedInException,
+                authenticationController,
+                mockLoginView,
+                mockExceptionController
+            ){
+
+                // Define and register the tests
+                doh.register([
+                    function testLoginFail(){
+
+                        var testResult = new Deferred();
+
+                        mockLoginView.value.username = 'toby';
+                        mockLoginView.value.password = 'wrong';
+
+                        when(authenticationController.login(), null, function(){
+                            doh.assertTrue(mockExceptionController.lastException instanceof LoginFailedException);
+                            testResult.resolve();
+                        });
+
+                        return testResult;
+                    },
+
+                    function testLoginSucceed(){
+
+                        var testResult = new Deferred();
+
+                        mockLoginView.value.username = 'toby';
+                        mockLoginView.value.password = 'password';
+
+                        when(authenticationController.login(), function(){
+                            doh.assertTrue(authenticationController.get('loggedIn'));
+                            doh.assertEqual('toby', authenticationController.get('activeUser'));
+                            testResult.resolve();
+                        });
+
+                        return testResult;
+                    },
+
+                    function testAlreadyLoggedIn(){
+
+                        var testResult = new Deferred();
+
+                        mockLoginView.value.username = 'toby';
+                        mockLoginView.value.password = 'password';
+
+                        when(authenticationController.login(), null, function(){
+                            doh.assertTrue(mockExceptionController.lastException instanceof AlreadyLoggedInException);
+                            testResult.resolve();
+                        });
+
+                        return testResult;
+                    },
+
+                    function testLogout(){
+
+                        var testResult = new Deferred();
+
+                        when(authenticationController.logout(), function(){
+                            doh.assertFalse(authenticationController.get('loggedIn'));
+                            doh.assertFalse(authenticationController.get('activeUser'));
+                            testResult.resolve();
+                        });
+
+                        return testResult;
+                    }
+                ]);
+
+                // Kick off the test runner
+                doh.runOnLoad();
+            })
+		</script>
+	</head>
+	<body>
+        <h1>Unit Testing Sds/AuthenticationModule/AuthenticationController</h1>
+	</body>
+</html>

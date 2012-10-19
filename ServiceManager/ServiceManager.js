@@ -173,7 +173,9 @@ define([
                         var proxyArguments = arguments;
                         var resultDeferred = new Deferred;
                         when(this._serviceManager.getObject(this._identity), function(object){
-                            resultDeferred.resolve(object[method].apply(object, proxyArguments));
+                            when(object[method].apply(object, proxyArguments), function(result){
+                                resultDeferred.resolve(result);
+                            })
                         });
                         return resultDeferred;
                     }

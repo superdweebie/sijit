@@ -25,15 +25,20 @@
                 'dojo/on',
                 'Sds/ExceptionModule/throwEx',
                 'Sds/Test/ExceptionModule/Asset/TestException',
+                'dojo/dom-prop',
                 'dojo/domReady!',
-                'Sds/ConfigManager/ConfigReady!'
+                'Sds/ConfigManager/configReady!'
             ],
             function(
                 dom,
                 on,
                 throwEx,
-                TestException
+                TestException,
+                domProp
             ){
+                domProp.set(dom.byId('displayExceptionButton'), 'disabled', false);
+                domProp.set(dom.byId('logExceptionButton'), 'disabled', false);
+
                 on(dom.byId('displayExceptionButton'), 'click', function(){
                     var exception = new TestException('test exception', {display: true, log: false});
                     throwEx(exception);
@@ -49,8 +54,8 @@
 	<body>
         <h1>Functional Testing Sds/ExceptionModule/ExceptionController</h1>
         <br />
-        <input id="displayExceptionButton" type="button" value="display exception" />
+        <button class="btn btn-primary btn-large" disabled="true" id="displayExceptionButton">Display Exception</button>
         <br />
-        <input id="logExceptionButton" type="button" value="log exception" />
+        <button class="btn btn-primary btn-large" disabled="true" id="logExceptionButton">Log Exception</button>
 	</body>
 </html>

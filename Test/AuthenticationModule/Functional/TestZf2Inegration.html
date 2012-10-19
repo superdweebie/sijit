@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/AuthenticationModule Zf2 Integration</title>
+		<style type="text/css">
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
+		</style>
+        <script type="text/javascript" src="../../zf2integrationconfig.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			require([
+                'dojo/on',
+                'dojo/dom',
+                'dojo/_base/json',
+                'dojo/dom-prop',
+                'Sds/ServiceManager/Shared/getObject!authenticationController',
+                'dojo/domReady!'
+            ],
+            function(
+                on,
+                dom,
+                json,
+                domProp,
+                authenticationController
+            ){
+                domProp.set(dom.byId('loginButton'), 'disabled', false);
+                domProp.set(dom.byId('logoutButton'), 'disabled', false);
+
+                authenticationController.watch('status', function(property, oldValue, newValue){
+                    dom.byId('Status').innerHTML = json.toJson(newValue, true);
+                });
+
+                authenticationController.watch('loggedIn', function(property, oldValue, newValue){
+                    dom.byId('LoggedIn').innerHTML = json.toJson(newValue, true);
+                });
+
+                authenticationController.watch('identity', function(property, oldValue, newValue){
+                    dom.byId('Identity').innerHTML = json.toJson(newValue, true);
+                });
+
+                on(dom.byId('loginButton'), 'click', function(){
+                    authenticationController.login();
+                });
+
+                on(dom.byId('logoutButton'), 'click', function(){
+                    authenticationController.logout();
+                });
+            })
+		</script>
+	</head>
+	<body>
+        <h1>Functional Testing Sds/AuthenticationModule Zf2 Integration</h1>
+        <br />
+        <button class="btn btn-primary btn-large" disabled="true" id="loginButton">Login</button>
+        <button class="btn btn-primary btn-large" disabled="true" id="logoutButton">Logout</button>
+        <h3>Status:</h3>
+        <pre><p id="Status"></p></pre>
+        <h3>LoggedIn:</h3>
+        <pre><p id="LoggedIn"></p></pre>
+        <h3>Identity:</h3>
+        <pre><p id="Identity"></p></pre>
+	</body>
+</html>

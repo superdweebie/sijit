@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/AuthenticationModule/View/Login</title>
+		<style type="text/css">
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
+		</style>
+		<script
+            type="text/javascript"
+            src="../../../../dojo/dojo.js"
+            data-dojo-config="
+                isDebug: true,
+                popup: true,
+                async: true,
+                mergeConfigs: [
+                    'Sds/AuthenticationModule/Config',
+                    'Sds/Test/AuthenticationModule/Asset/Config'
+                ]
+            ">
+        </script>
+		<script type="text/javascript">
+			require([
+                'dojo/on',
+                'dojo/dom',
+                'dojo/_base/json',
+                'dojo/dom-prop',
+                'Sds/ServiceManager/Shared/getObject!loginView',
+                'dojo/domReady!'
+            ],
+            function(
+                on,
+                dom,
+                json,
+                domProp,
+                loginView
+            ){
+                domProp.set(dom.byId('formActivateButton'), 'disabled', false);
+
+                on(dom.byId('formActivateButton'), 'click', function(){
+                    loginView.activate().then(function(result){
+                        dom.byId('ViewValue').innerHTML = json.toJson(result, true);
+                    });
+                });
+
+            })
+		</script>
+	</head>
+	<body>
+        <h1>Functional Testing Sds/AuthenticationModule/View/Login</h1>
+        <br />
+        <button class="btn btn-primary btn-large" disabled="true" id="formActivateButton">Activate</button>
+        <h3>MockUserControllerMessage:</h3>
+        <pre><p id="MockIdentityControllerMessage"></p></pre>
+        <h3>ViewValue</h3>
+        <pre><p id="ViewValue"></p></pre>
+	</body>
+</html>

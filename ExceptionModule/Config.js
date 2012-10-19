@@ -19,7 +19,7 @@ define(
                     }
                 },
                 exceptionView: {
-                    moduleName: 'Sds/ExceptionModule/ExceptionView',
+                    moduleName: 'Sds/ExceptionModule/View/Exception',
                     proxyMethods: [
                         'activate',
                         'reset',

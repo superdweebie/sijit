@@ -4,8 +4,7 @@ define([
     'dojo/request/script',
     'Sds/ExceptionModule/Exception/BaseException',
     'Sds/ExceptionModule/Exception/InvalidTypeException',
-    'Sds/ExceptionModule/Exception/ServerLogFailedException',
-    'Sds/ExceptionModule/BaseExceptionController'
+    'Sds/ExceptionModule/Exception/ServerLogFailedException'
 ],
 function(
     declare,
@@ -13,18 +12,17 @@ function(
     script,
     BaseException,
     InvalidTypeException,
-    ServerLogFailedException,
-    BaseExceptionController
+    ServerLogFailedException
 ){
     return declare (
         'Sds/ExceptionModule/ExceptionController',
-        [BaseExceptionController],
+        [],
         {
             // summary:
             //     Module providing exception display and logging
 
-            // exceptionView: Sds.View.BaseView
-            //     Responsible for displaying the error
+            // exceptionView: Sds/View/BaseView
+            //     Responsible for displaying the exception
             exceptionView: undefined,
 
             serverUrl: undefined,
