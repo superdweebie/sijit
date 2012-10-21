@@ -65,6 +65,20 @@
                 "
                 id="validationTextBox2"
              />
+
+            <p>Valid with ValidatorGroup</p>
+            <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
+                type="text"
+                value="Toby"
+                data-dojo-props="
+                    label:'Name',
+                    validator: [
+                        {class: 'Sds/Common/Validator/NotRequiredValidator'},
+                        {class: 'Sds/Common/Validator/PersonalNameValidator'}
+                    ]
+                "
+                id="validationTextBox3"
+             />
         </form>
 	</body>
 </html>

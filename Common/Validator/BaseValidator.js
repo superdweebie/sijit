@@ -70,7 +70,7 @@ function(
 
     BaseValidator.isValidator = function(validator){
         //summary:
-        //     Helper method to determine if a value is an instance of BaseValidator
+        //     Helper method to determine if a validator is an instance of BaseValidator
         //
         // returns:
         //     boolean
@@ -82,6 +82,12 @@ function(
     }
 
     BaseValidator.isDeferred = function(object){
+        //summary:
+        //     Helper method to determine if an object is an instance of Deferred
+        //
+        // returns:
+        //     boolean
+
         if (object instanceof Deferred){
             return true;
         }

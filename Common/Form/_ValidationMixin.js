@@ -26,7 +26,7 @@ function (
 
             _validatorSet: false,
 
-            // validator: a class level validator. Use for validtaions that query multiple fields.
+            // validator: an instance of Sds/Common/Validator/BaseValidator.
             validator: undefined,
 
             _messageStyleNode: undefined,
@@ -44,17 +44,42 @@ function (
             },
 
             _setValidatorAttr: function(value){
-                if ( ! (value.isInstanceOf && value.isInstanceOf(BaseValidator))){
-                    validatorFactory.create(value['class'], value.options).then(lang.hitch(this, function(validator){
+                // summary:
+                //     Will set the validator. The value parameter may be one of three
+                //     types:
+                //
+                //     Instance of BaseValidator - the validator property is set equal to this instance.
+                //
+                //     Array - if an array, it is assumed to be an array of validators, or validator definitions.
+                //     The array will be passed to validatorFactory.createGroup(). The validator property
+                //     will be set to the returned instance of ValidatorGroup
+                //
+                //     Object - an an object, it is assumbed to be a validator definition.
+                //     The definition will be passed to validatorFactory.create(). The validator property
+                //     will be set to the returned instance of BaseValdiator
+                //
+
+                if (BaseValidator.isValidator(value)){
+                    this.validator = value;
+                    this._validatorSet = true;
+                    this._validate();
+                    return;
+                }
+
+                if (lang.isArray(value)){
+                    validatorFactory.createGroup(value).then(lang.hitch(this, function(validator){
                         this.validator = validator;
                         this._validatorSet = true;
                         this._validate();
                     }));
-                } else {
-                    this.validator = value;
+                    return;
+                }
+
+                validatorFactory.create(value['class'], value.options).then(lang.hitch(this, function(validator){
+                    this.validator = validator;
                     this._validatorSet = true;
                     this._validate();
-                }
+                }));
             },
 
             _validate: function(){
@@ -65,7 +90,7 @@ function (
 
                 var state;
                 var result = this.validator.isValid(this.get('value'));
-                
+
                 switch (true){
                     case BaseValidator.isDeferred(result):
                         result.then(lang.hitch(this, function(asyncResult){
