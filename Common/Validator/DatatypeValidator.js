@@ -53,9 +53,10 @@ function(
                         }
                         break;
                     case datatypes.FLOAT:
-                        if (typeof value != 'number'){
+                        if ( ! utils.isFloat(value)){
                             result = false;
                         }
+                        break;
                 }
 
                 if ( ! result){

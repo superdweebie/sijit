@@ -50,6 +50,17 @@ function (config) {
             }
         },
 
+        isFloat: function(value) {
+            // summary:
+            //      Checks if a value is a float
+
+            if (parseFloat(value) && !isNaN(value)){
+                return true;
+            } else {
+                return false;
+            }
+        },
+
         fullUrl: function(string) {
             // summary:
             //		Appends a relative url to the full site url. Requires

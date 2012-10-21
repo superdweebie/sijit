@@ -31,6 +31,17 @@ define([
                 doh.assertFalse(validator.isValid(1.1));
                 doh.assertFalse(validator.isValid('1.1'));
                 doh.assertFalse(validator.isValid('password'));
+            },
+
+            function FloatTest(doh){
+                var validator = new DatatypeValidator(DatatypeValidator.datatypes.FLOAT);
+
+                doh.assertTrue(validator.isValid(1));
+                doh.assertTrue(validator.isValid('1'));
+                doh.assertTrue(validator.isValid(1.1));
+                doh.assertTrue(validator.isValid('1.1'));
+
+                doh.assertFalse(validator.isValid('password'));
             }
 
         ]);
