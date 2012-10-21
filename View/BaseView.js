@@ -43,7 +43,7 @@ function(
             //      that will be returned from the activate method
             //      when it resolves. Normally a ViewModel definition.
             valueType: undefined,
-
+            
             // _activateDeferred: promise
             //      This is the promise that is returned from the activate function.
             //      This promise may emit progress data.
@@ -80,6 +80,13 @@ function(
                 return this._activateDeferred;
             },
 
+            isAcive: function(){
+                // summary:
+                //    Returns a boolean to indicate if the view is active.
+                
+                return ! this._activateDeferred.isResolved();
+            },
+            
             deactivate: function(){
                 // summary:
                 //     Tell the view to close/hide/stop doing whatever it does.
