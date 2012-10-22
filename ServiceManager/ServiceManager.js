@@ -254,28 +254,33 @@ define([
                     }
 
                     //Inject create objects
-                    for (attr in config.createObjects){
-                        var attrCreate = attr;
-                        when(this.createObject(config.createObjects[attrCreate]), function(injectionObject){
+                    var injectCreateObject = lang.hitch(this, function(createIdentifier, attrCreate){
+                        when(this.createObject(createIdentifier), function(injectionObject){
                             object[attrCreate] = injectionObject;
                             --injectionsRemaining;
                             if (injectionsRemaining == 0){
                                 deferredObject.resolve(object);
-                            }
+                            }                            
                         });
-                    }
+                    });
+                    for (attr in config.createObjects){
+                        injectCreateObject(config.createObjects[attr], attr);
+                    } 
+
 
                     //Inject get objects
-                    for (attr in config.getObjects){
-                        var attrGet = attr;
-                        when(this.getObject(config.getObjects[attrGet]), function(injectionObject){
+                    var injectGetObject = lang.hitch(this, function(getIdentifier, attrGet){
+                        when(this.getObject(getIdentifier), function(injectionObject){
                             object[attrGet] = injectionObject;
                             --injectionsRemaining;
                             if (injectionsRemaining == 0){
                                 deferredObject.resolve(object);
-                            }
+                            }                            
                         });
-                    }
+                    });
+                    for (attr in config.getObjects){
+                        injectGetObject(config.getObjects[attr], attr);
+                    }                    
 
                     //Inject proxy objects
                     for (attr in config.proxyObjects){
