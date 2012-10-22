@@ -9,6 +9,14 @@ define(
         	"contentType":"application\/json",
         	"SMDVersion":"2.0",
         	"services":{
+        		"getIdentity":{
+        			"envelope":"JSON-RPC-1.0",
+        			"transport":"POST",
+        			"parameters":[
+        
+        			],
+        			"returns":"object"
+        		},
         		"login":{
         			"envelope":"JSON-RPC-1.0",
         			"transport":"POST",
@@ -36,6 +44,14 @@ define(
         		}
         	},
         	"methods":{
+        		"getIdentity":{
+        			"envelope":"JSON-RPC-1.0",
+        			"transport":"POST",
+        			"parameters":[
+        
+        			],
+        			"returns":"object"
+        		},
         		"login":{
         			"envelope":"JSON-RPC-1.0",
         			"transport":"POST",

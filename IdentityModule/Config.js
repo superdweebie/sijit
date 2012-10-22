@@ -3,7 +3,7 @@ define(
     function(smd){
         return {
             serviceManager: {
-                identityController: {
+                'Sds/IdentityModule/IdentityController': {
                     moduleName: 'Sds/IdentityModule/IdentityController',
                     proxyMethods: [
                         'forgotCredential',
@@ -16,15 +16,15 @@ define(
                         identityRestUrl: '/identity/rest/'
                     },
                     proxyObjects: {
-                        forgotCredentialPart1View: 'forgotCredentialPart1View',
-                        forgotCredentialPart2View: 'forgotCredentialPart2View',
-                        registerView: 'registerView'
+                        forgotCredentialPart1View: 'Sds/IdentityModule/View/ForgotCredentialPart1',
+                        forgotCredentialPart2View: 'Sds/IdentityModule/View/ForgotCredentialPart2',
+                        registerView: 'Sds/IdentityModule/View/Register'
                     }
                 },
-                identity: {
+                'Sds/IdentityModule/DataModule/Identity': {
                     moduleName: 'Sds/IdentityModule/DataModel/Identity'
                 },
-                forgotCredentialPart1View: {
+                'Sds/IdentityModule/View/ForgotCredentialPart1': {
                     moduleName: 'Sds/IdentityModule/View/ForgotCredentialPart1',
                     proxyMethods: [
                         'activate',
@@ -34,7 +34,7 @@ define(
                         'watch'
                     ]
                 },
-                forgotCredentialPart2View: {
+                'Sds/IdentityModule/View/ForgotCredentialPart2': {
                     moduleName: 'Sds/IdentityModule/View/ForgotCredentialPart2',
                     proxyMethods: [
                         'activate',
@@ -44,10 +44,10 @@ define(
                         'watch'
                     ]
                 },
-                forgotCredentialPart2ViewModel: {
+                'Sds/IdentityModule/ViewModel/ForgotCredentialPart2': {
                     moduleName: 'Sds/IdentityModule/ViewModel/ForgotCredentialPart2'
                 },
-                registerView: {
+                'Sds/IdentityModule/View/Register': {
                     moduleName: 'Sds/IdentityModule/View/Register',
                     proxyMethods: [
                         'activate',
@@ -57,7 +57,7 @@ define(
                         'watch'
                     ]
                 },
-                identityNameAvailableValidator: {
+                'Sds/IdentityModule/Validator/IdentityNameAvailableValidator': {
                     moduleName: 'Sds/IdentityModule/Validator/IdentityNameAvailableValidator',
                     values: {
                         apiSmd: smd

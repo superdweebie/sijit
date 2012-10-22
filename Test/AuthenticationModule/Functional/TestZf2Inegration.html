@@ -15,7 +15,7 @@
                 'dojo/dom',
                 'dojo/_base/json',
                 'dojo/dom-prop',
-                'Sds/ServiceManager/Shared/getObject!authenticationController',
+                'Sds/ServiceManager/Shared/getObject!Sds/AuthenticationModule/AuthenticationController',
                 'dojo/domReady!'
             ],
             function(
@@ -47,6 +47,8 @@
                 on(dom.byId('logoutButton'), 'click', function(){
                     authenticationController.logout();
                 });
+
+                authenticationController.get('identity');
             })
 		</script>
 	</head>

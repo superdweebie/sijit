@@ -47,7 +47,7 @@ function(
                 document.body.appendChild(this.domNode);
             },
 
-            activate: function(value){
+            activate: function(value, enableRememberMe){
 
                 var returnValue = this.inherited(arguments);
 
@@ -56,7 +56,7 @@ function(
                     this.set('value', value);
                 }
 
-                this._appendInputs().then(lang.hitch(this, function(){
+                this._appendInputs(enableRememberMe).then(lang.hitch(this, function(){
                     this.startup();
                     this.dialogNode.show(value).then(lang.hitch(this, function(){
                         this.deactivate();
@@ -77,12 +77,15 @@ function(
                 this.dialogNode.reset();
             },
 
-            _appendInputs: function(){
+            _appendInputs: function(enableRememberMe){
                 var appendInputsDeferred = new Deferred;
 
                 if ( ! this.inputsAppened){
-                    var metadata = LoginViewModel.metadata;
+                    var metadata = lang.clone(LoginViewModel.metadata);
                     metadata.containerNode = this.containerNode;
+                    if ( ! enableRememberMe){
+                        delete metadata.fields.rememberMe;
+                    }
                     formFactory.appendToForm(this.dialogNode, metadata).then(lang.hitch(this, function(){
                         this.inputsAppened = true;
                         appendInputsDeferred.resolve();

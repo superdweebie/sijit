@@ -3,16 +3,17 @@ define(
     function(smd){
         return {
             serviceManager: {
-                authenticationController: {
+                'Sds/AuthenticationModule/AuthenticationController': {
                     moduleName: 'Sds/AuthenticationModule/AuthenticationController',
                     values: {
-                        apiSmd: smd
+                        apiSmd: smd,
+                        enableRememberMe: true
                     },
                     proxyObjects: {
-                        loginView: 'loginView'
+                        loginView: 'Sds/AuthenticationModule/LoginView'
                     }
                 },
-                loginView: {
+                'Sds/AuthenticationModule/LoginView': {
                     moduleName: 'Sds/AuthenticationModule/View/Login',
                     proxyMethods: [
                         'activate',
@@ -22,7 +23,15 @@ define(
                         'watch'
                     ],
                     proxyObjects: {
-                        identityController: 'identityController'
+                        identityController: 'Sds/IdentityModule/IdentityController'
+                    }
+                },
+                'Sds/ExceptionModule/ExceptionController': {
+                    values: {
+                        registeredExceptions: {
+                            'Sds/AuthenticationModule/Exception/AlreadyLoggedInException': 'Sds\\AuthenticationModule\\Exception\\AlreadyLoggedInException',
+                            'Sds/AuthenticationModule/Exception/LoginFailedException': 'Sds\\AuthenticationModule\\Exception\\LoginFailedException'
+                        }
                     }
                 }
             }

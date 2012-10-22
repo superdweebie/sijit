@@ -3,7 +3,7 @@ define ([
         'dojo/_base/lang',
         'Sds/IdentityModule/DataModel/Identity',
         'Sds/View/BaseViewModel',
-        'Sds/ServiceManager/Shared/getObject!identityNameAvailableValidator'
+        'Sds/ServiceManager/Shared/getObject!Sds/IdentityModule/Validator/IdentityNameAvailableValidator'
     ],
     function (
         declare,

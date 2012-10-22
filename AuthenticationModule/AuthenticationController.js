@@ -2,26 +2,20 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/Deferred',
-    'dojo/_base/json',
     'Sds/Common/Status',
     'dojox/rpc/Service',
     'dojo/Stateful',
     'Sds/ExceptionModule/throwEx',
-    'Sds/AuthenticationModule/Exception/AlreadyLoggedInException',
-    'Sds/AuthenticationModule/Exception/LoginFailedException',
     'dojox/rpc/JsonRPC'
 ],
 function (
     declare,
     lang,
     Deferred,
-    json,
     Status,
     RpcService,
     Stateful,
-    throwEx,
-    AlreadyLoggedInException,
-    LoginFailedException
+    throwEx
 ){
     return declare(
         'Sds/AuthenticationModule/AuthenticationController',
@@ -46,7 +40,7 @@ function (
 
             //loggedIn: boolean
             //    Indicates if there is a logged in identity
-            loggedIn: false,
+            loggedIn: undefined,
 
             //status: Sds/Common/Status
             //    An object indicating the current status
@@ -55,6 +49,8 @@ function (
             // loginView: Sds.View.BaseView
             //     This form is shown to prompt login
             loginView: undefined,
+
+            enableRememberMe: undefined,
 
             login: function()
             {
@@ -66,7 +62,7 @@ function (
 
                 this._loginDeferred = new Deferred();
 
-                this.loginView.activate().then(lang.hitch(this, function(result){
+                this.loginView.activate(null, this.enableRememberMe).then(lang.hitch(this, function(result){
 
                     // Do nothing if form not valid.
                     if (result.state != ''){
@@ -89,6 +85,7 @@ function (
 
                 return this._loginDeferred;
             },
+
             logout: function()
             {
                 // summary:
@@ -103,12 +100,13 @@ function (
                 this.set('status', new Status('logging out', Status.icon.SPINNER));
 
                 // Send message to server
-                this.api.logout().then(
+                this.get('api').logout().then(
                     lang.hitch(this, '_logoutComplete'),
                     lang.hitch(this, '_handleException')
                 );
                 return this._logoutDeferred;
             },
+
             _apiGetter: function(){
                 // summary:
                 //		Get the json rpc api
@@ -120,6 +118,19 @@ function (
                 }
                 return this.api;
             },
+
+            _identityGetter: function(){
+                if (this.identity == undefined){
+                    this._getIdentityDeferred = new Deferred;
+                    this.get('api').getIdentity().then(
+                        lang.hitch(this, '_getIdentityComplete'),
+                        lang.hitch(this, '_handleException')
+                    );
+                    return this._getIdentityDeferred;
+                }
+                return this.identity;
+            },
+
             _loginComplete: function(data) {
                 // summary:
                 //		Cleanup after login
@@ -132,6 +143,7 @@ function (
                 this.set('loggedIn', true);
                 this._loginDeferred.resolve(true);
             },
+
             _logoutComplete: function(data){
                 // summary:
                 //		Cleanup after logout
@@ -144,37 +156,34 @@ function (
                 this.set('loggedIn', false);
                 this._logoutDeferred.resolve(true);
             },
+
+            _getIdentityComplete: function(data){
+
+                if (data.hasIdentity){
+                    this.set('loggedIn', true);
+                } else {
+                    this.set('loggedIn', false);
+                }
+                this.set('identity', data.identity);
+                this._getIdentityDeferred.resolve(true);
+            },
+
             _handleException: function(exception){
                 // summary:
                 //		Handles xhr exceptions during login and logout.
 
-                if (exception.response){
-                    exception = json.fromJson(exception.response.text).error;
-                }
+                throwEx(exception).then(lang.hitch(this, function(standardizedException){
 
-                var newException;
-                switch (exception.type) {
-                    case 'Sds\\AuthenticationModule\\Exception\\LoginFailedException':
-                        newException = new LoginFailedException(exception.message)
-                        break;
-                    case 'Sds\\AuthenticationModule\\Exception\\AlreadyLoggedInException':
-                        newException = new AlreadyLoggedInException(exception.message);
-                        break;
-                    default:
-                        newException = exception;
-                }
+                    // Update status
+                    this.set('status', new Status(standardizedException.message, Status.icon.ERROR, 5000));
 
-                // Update status
-                this.set('status', new Status(exception.message, Status.icon.ERROR, 5000));
-
-                throwEx(newException);
-
-                if (this._loginDeferred && (! this._loginDeferred.isFulfilled())){
-                    this._loginDeferred.reject(newException);
-                }
-                if (this._logutDeferred && (! this._logoutDeferred.isFulfilled())){
-                    this._logoutDeferred.reject(newException);
-                }
+                    if (this._loginDeferred && (! this._loginDeferred.isFulfilled())){
+                        this._loginDeferred.reject(standardizedException);
+                    }
+                    if (this._logutDeferred && (! this._logoutDeferred.isFulfilled())){
+                        this._logoutDeferred.reject(standardizedException);
+                    }
+                }));
             }
         }
     );

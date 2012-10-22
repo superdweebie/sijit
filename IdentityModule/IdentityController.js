@@ -7,7 +7,7 @@ define([
     'dojox/rpc/Service',
     'dojo/Stateful',
     'Sds/ExceptionModule/throwEx',
-    'Sds/ServiceManager/Shared/getProxy!forgotCredentialPart2ViewModel',
+    'Sds/ServiceManager/Shared/getProxy!Sds/IdentityModule/ViewModel/ForgotCredentialPart2',
     'dojox/rpc/JsonRPC'
 ],
 function(

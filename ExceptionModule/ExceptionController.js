@@ -1,6 +1,8 @@
 define([
     'dojo/_base/declare',
+    'dojo/Deferred',
     'dojo/_base/lang',
+    'dojo/_base/json',
     'dojo/request/script',
     'Sds/ExceptionModule/Exception/BaseException',
     'Sds/ExceptionModule/Exception/InvalidTypeException',
@@ -8,7 +10,9 @@ define([
 ],
 function(
     declare,
+    Deferred,
     lang,
+    json,
     script,
     BaseException,
     InvalidTypeException,
@@ -33,11 +37,15 @@ function(
 
             logLevel: -1,
 
+            registeredExceptions: [],
+
             handle: function(exception){
 
                 if ( ! exception instanceof BaseException){
-                    // Supplied exception needs to be wrapped
-                    this.handle(new InvalidTypeException(exception));
+                    this.standardize(exception).then(lang.hitch(this, function(standardizedException){
+                        this.handle(standardizedException);
+                    }));
+                    return;
                 }
 
                 if ((exception.display && this.displayLevel == -1) ||
@@ -59,6 +67,37 @@ function(
                         this.handle(new ServerLogFailedException(error));
                     }));
                 }
+            },
+
+            standardize: function(exception){
+
+                var returnDeferred = new Deferred;
+
+                if (exception.response){
+                    exception = json.fromJson(exception.response.text).error;
+                }
+
+                if (exception._rpcErrorObject){
+                    exception.type = exception._rpcErrorObject.type;
+                    exception.code = exception._rpcErrorObject.code;
+                }
+
+                var isRegistered = false;
+                for (var exceptionMid in this.registeredExceptions){
+                    var exceptionType = this.registeredExceptions[exceptionMid];
+                    if (exceptionType == exception.type){
+                        require([exceptionMid], function(StandardizedException){
+                            returnDeferred.resolve(new StandardizedException(exception.message));
+                        });
+                        isRegistered = true;
+                        break;
+                    }
+                }
+
+                if ( ! isRegistered){
+                    returnDeferred.resolve(new InvalidTypeException(exception.message));
+                }
+                return returnDeferred;
             },
 
             onLogged: function(exception, result){

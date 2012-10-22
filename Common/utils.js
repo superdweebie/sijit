@@ -1,7 +1,8 @@
 define ([
+    'dojo/_base/lang',
     'dojo/_base/config'
 ],
-function (config) {
+function (lang, config) {
     // module:
     //		Sds/Common/utils
 
@@ -15,6 +16,9 @@ function (config) {
                 try {
                     if ( source[name].constructor==Object ) {
                         dest[name] = mixinDeep(dest[name], source[name]);
+                    } else if (lang.isArray(dest[name]) && lang.isArray(source[name])){
+                        // Concat arrays, rather than overwrite
+                        dest[name] = dest[name].concat(source[name]);
                     } else {
                         dest[name] = source[name];
                     }

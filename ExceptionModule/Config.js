@@ -3,22 +3,24 @@ define(
     function(){
         return {
             serviceManager: {
-                exceptionController: {
+                'Sds/ExceptionModule/ExceptionController': {
                     moduleName: 'Sds/ExceptionModule/ExceptionController',
                     proxyMethods: [
                         'handle',
+                        'standardize',
                         'get',
                         'set',
                         'watch'
                     ],
                     values: {
-                        serverUrl: 'http://localhost/ZendSkeletonApplication/exception/log'
+                        serverUrl: 'http://localhost/ZendSkeletonApplication/exception/log',
+                        registeredExceptions: {}
                     },
                     proxyObjects: {
-                        exceptionView: 'exceptionView'
+                        exceptionView: 'Sds/ExceptionModule/ExceptionView'
                     }
                 },
-                exceptionView: {
+                'Sds/ExceptionModule/ExceptionView': {
                     moduleName: 'Sds/ExceptionModule/View/Exception',
                     proxyMethods: [
                         'activate',

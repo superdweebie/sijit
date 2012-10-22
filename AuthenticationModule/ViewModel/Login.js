@@ -18,7 +18,7 @@ define ([
         model.metadata = {
             cssClasses : ['form-horizontal'],
             fields: {
-                username:
+                identityName:
                 {
                     id       : 'identityNameField',
                     property : 'identityName',
@@ -33,7 +33,7 @@ define ([
                         }
                     ]
                 },
-                password:
+                credential:
                 {
                     id       : 'credentialField',
                     property : 'credential',
@@ -49,6 +49,14 @@ define ([
                             options: {min: 6, max: 40}
                         }
                     ]
+                },
+                rememberMe:
+                {
+                    id       : 'rememberMeField',
+                    property : 'rememberMe',
+                    label    : 'Remember me:',
+                    dataType : 'boolean',
+                    dijit    : 'Sds/Common/Form/Checkbox'
                 }
             }
         };
