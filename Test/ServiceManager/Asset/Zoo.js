@@ -8,7 +8,7 @@ define ([
     ){
 
         return declare (
-            'Sds.Test.ServiceManager.Asset.Zoo',
+            'Sds/Test/ServiceManager/Asset/Zoo',
             [ServiceManagerAwareMixin],
             {
                 name: 'the Sds zoo',

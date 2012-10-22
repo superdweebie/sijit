@@ -6,7 +6,7 @@ function(
 ){
 
     return declare(
-        'Sds.Test.ServiceManager.Asset.TestParent',
+        'Sds/Test/ServiceManager/Asset/TestParent',
         null,
         {
             testForm: undefined

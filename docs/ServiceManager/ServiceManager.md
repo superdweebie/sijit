@@ -133,6 +133,19 @@ Calling `getObject('object1])` with the above config will do lots of cool stuff:
 Object injections can be nested as deeply as you wish. If you have need of circular dependencies,
 then use a Proxy object, otherwise the ServiceManager will get stuck in an endless loop.
 
+When injecting objects, the serviceManager will check the module to see if it has a prototype.
+If it does, then it will create a new instance, and inject that. If it does not, then it
+will inject a clone of the module. The default behaviour of creating a new instance, and instead
+injecting a clone can be overridden with the config flag 'dontInstantiate: true'. eg:
+
+    object1: {
+        moduleName: 'MyNamespace/MyClass1',
+        dontInstantiate: true
+    }
+
+Calling serviceManager.getObject('object1') with the above config will return the
+constructor for 'MyNamespace/MyClass1' rather than an instnace.
+
 #Proxy Objects
 
 Proxy objects hold a proxy to an identifier, but are not the actual identifier. Proxy objects

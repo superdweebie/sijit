@@ -8,7 +8,7 @@ function(
 ){
 
     return declare(
-        'Sds.Test.ServiceManager.Asset.TestView',
+        'Sds/Test/ServiceManager/Asset/TestView',
         [BaseView],
         {
             value: 'working',

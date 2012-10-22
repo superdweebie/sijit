@@ -8,7 +8,7 @@ define ([
     ){
 
         return declare (
-            'Sds.Test.ServiceManager.Asset.Tiger',
+            'Sds/Test/ServiceManager/Asset/Tiger',
             [Stateful],
             {
                 name: 'toby'

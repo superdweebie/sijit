@@ -120,7 +120,12 @@ define([
                     this._instances[index] = {identifier: identifier, object: null, promise: deferredObject};
 
                     require([moduleName], lang.hitch(this, function(Module){
-                        var object = new Module;
+                        var object;
+                        if (Module.prototype && config && !config.dontInstantiate){
+                            object = new Module; //Create an instance
+                        } else {
+                            object = lang.clone(Module); //Just clone the module
+                        }
                         when(this._inject(object, config), lang.hitch(this, function(injectedObject){
                             this._instances[index].object = injectedObject;
                             this._instances[index].promise.resolve(injectedObject);
@@ -260,12 +265,12 @@ define([
                             --injectionsRemaining;
                             if (injectionsRemaining == 0){
                                 deferredObject.resolve(object);
-                            }                            
+                            }
                         });
                     });
                     for (attr in config.createObjects){
                         injectCreateObject(config.createObjects[attr], attr);
-                    } 
+                    }
 
 
                     //Inject get objects
@@ -275,12 +280,12 @@ define([
                             --injectionsRemaining;
                             if (injectionsRemaining == 0){
                                 deferredObject.resolve(object);
-                            }                            
+                            }
                         });
                     });
                     for (attr in config.getObjects){
                         injectGetObject(config.getObjects[attr], attr);
-                    }                    
+                    }
 
                     //Inject proxy objects
                     for (attr in config.proxyObjects){

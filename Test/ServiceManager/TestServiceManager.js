@@ -179,6 +179,48 @@ define([
 
                 return deferredTest;
             },
+            function noConstructorModuleGetTest(){
+                var serviceManager = new ServiceManager({
+                    'test': {
+                        moduleName: 'Sds/Test/ServiceManager/Asset/NoConstructorModule',
+                        values: {
+                            value2: 200
+                        }
+                    }
+                });
+
+                var deferredTest = new Deferred;
+
+                when(serviceManager.getObject('test'), function(test){
+                    doh.assertEqual(10, test.value1);
+                    doh.assertEqual(200, test.value2);
+
+                    deferredTest.resolve(true);
+                });
+
+                return deferredTest;
+            },
+            function dontInstantiateModuleGetTest(){
+                var serviceManager = new ServiceManager({
+                    'lion': {
+                        moduleName: 'Sds/Test/ServiceManager/Asset/Lion',
+                        dontInsantiate: true
+                    }
+                });
+
+                var deferredTest = new Deferred;
+
+                when(serviceManager.getObject('lion'), function(Lion){
+                    doh.assertTrue(Lion.prototype);
+
+                    var instance = new Lion;
+                    doh.assertEqual('lucy', instance.name);
+
+                    deferredTest.resolve(true);
+                });
+
+                return deferredTest;
+            },
             function injectExistingDijitTest(){
 
                 var button = new Button({id: 'testButton'});
