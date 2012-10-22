@@ -18,13 +18,10 @@ function (
     TextBoxMixin
 ){
     return declare(
-        'Sds/Common/Form/_TextBoxMixin',
+        'Sds/Common/Form/_TextAreaMixin',
         [FormValueMixin, TextBoxMixin],
         {
             postCreate: function(){
-                this._setPlaceholderText();
-                
-                this._setAppendages();
                 
                 if (this.label){
                     domConstruct.create(
@@ -49,44 +46,6 @@ function (
                     this.set('value', this.textbox.value);
                 }
                 this.inherited(arguments);
-            },
-            
-            _setAppendages: function() {
-                if (this.prepend || this.append) {
-                    //create wrapper element
-                    var wrapper = domConstruct.create("div");
-                    
-                    // add classes to wrapper
-                    if(this.prepend) {
-                        domClass.add(wrapper,'input-prepend');
-                    }
-                    
-                    if(this.append) {
-                        domClass.add(wrapper,'input-append');
-                    }
-                    
-                    //wrap the input
-                    query(this.textbox).wrap(wrapper);
-                    
-                    //add the appendages
-                    if(this.prepend) {
-                        domConstruct.create(
-                            'span',
-                            {innerHTML: this.prepend, 'class': 'add-on'},
-                            this.textbox,
-                            'before'
-                        );
-                    }
-                    
-                    if(this.append) {
-                        domConstruct.create(
-                            'span',
-                            {innerHTML: this.append, 'class': 'add-on'},
-                            this.textbox,
-                            'after'
-                        );
-                    }
-                }
             },
             
             _setPlaceholderText: function() {

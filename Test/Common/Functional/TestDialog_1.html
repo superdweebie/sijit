@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <title>Functional Testing Sds/Common/Dialog</title>
+        <style type="text/css">
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
+        </style>
+        <script
+            type="text/javascript"
+            src="../../../../dojo/dojo.js"
+            data-dojo-config="
+            isDebug: true,
+            popup: true,
+            async: true
+            ">
+        </script>
+        <script type="text/javascript">
+            require([
+                'dojo/dom',
+                'dojo/on',
+                'dojo/when',
+                'dojo/_base/json',
+                'dojo/parser',
+                'dijit/registry',
+                'Sds/Common/Dialog',
+                'Sds/Common/Form/TextBox',
+                'dojo/domReady!'
+            ],
+            function(
+            dom,
+            on,
+            when,
+            json,
+            parser,
+            registry,
+            Dialog,
+            TextBox
+        ){
+                parser.parse().then(function(){
+                    var dialog = new Dialog({title:'Test'});
+                    var text = new TextBox();
+                    dialog.show();
+                    
+                    when(dialog.show(), function(result){
+                        console.log(json.toJson(result));
+                    });
+                });
+            })
+        </script>
+    </head>
+    <body>
+
+    </body>
+</html>

@@ -129,10 +129,14 @@ function (
 
                 if (result){
                     domClass.remove(this._messageStyleNode, 'error');
+                    domClass.add(this.inlineMessage, 'hide');
+                    domClass.add(this.blockMessage, 'hide');
                     this.inlineMessage.innerHTML = '';
                     this.blockMessage.innerHTML = '';
                 } else {
                     domClass.add(this._messageStyleNode, 'error');
+                    domClass.remove(this.inlineMessage, 'hide');
+                    domClass.remove(this.blockMessage, 'hide');
                     if (messages.length > 1){
                         this.inlineMessage.innerHTML = '';
                        this.blockMessage.innerHTML = messages.join('<br />');
