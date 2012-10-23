@@ -121,7 +121,7 @@ define([
 
                     require([moduleName], lang.hitch(this, function(Module){
                         var object;
-                        if (Module.prototype && config && !config.dontInstantiate){
+                        if (Module.prototype && (!config || (config && !config.dontInstantiate))){
                             object = new Module; //Create an instance
                         } else {
                             object = lang.clone(Module); //Just clone the module

@@ -76,7 +76,11 @@ function (
                     // Send data to server
                     var formValue = result.value;
 
-                    this.get('api').login(formValue['identityName'], formValue['credential']).then(
+                    this.get('api').login(
+                        formValue['identityName'],
+                        formValue['credential'], 
+                        Boolean(formValue['rememberMe'].length)
+                    ).then(
                         lang.hitch(this, '_loginComplete'),
                         lang.hitch(this, '_handleException')
                     );
@@ -164,7 +168,8 @@ function (
                 } else {
                     this.set('loggedIn', false);
                 }
-                this.set('identity', data.identity);
+                this.identity = data.identity; //Set the property first, otherwise _identityGetter is called again on the next line.
+                this.set('identity', this.identity); //Set via the setter so that watching callbacks fire
                 this._getIdentityDeferred.resolve(true);
             },
 
@@ -177,12 +182,29 @@ function (
                     // Update status
                     this.set('status', new Status(standardizedException.message, Status.icon.ERROR, 5000));
 
+                    // If the error has not happened on a get('identity') call,
+                    // refresh the identity from the server. Otherwise, just clear the
+                    // identity.
+                    if ( ! this._getIdentityDeferred || this._getIdentityDeferred.isFulfilled()){
+                        this.identity = undefined;
+                        this.get('identity');
+                    } else {
+                        // Clear the identity
+                        this.identity = false;
+                        this.set('identity', false);
+                        this.set('loggedIn', false);
+                    }
+
                     if (this._loginDeferred && (! this._loginDeferred.isFulfilled())){
                         this._loginDeferred.reject(standardizedException);
                     }
                     if (this._logutDeferred && (! this._logoutDeferred.isFulfilled())){
                         this._logoutDeferred.reject(standardizedException);
                     }
+                    if (this._getIdentityDeferred && (! this._getIdentityDeferred.isFulfilled())){
+                        this._getIdentityDeferred.reject(standardizedException);
+                    }
+
                 }));
             }
         }

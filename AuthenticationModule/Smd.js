@@ -30,9 +30,18 @@ define(
         					"type":"string",
         					"name":"credential",
         					"optional":false
+        				},
+        				{
+        					"type":"boolean",
+        					"name":"rememberMe",
+        					"optional":true,
+        					"default":false
         				}
         			],
-        			"returns":"object"
+        			"returns":[
+        				"object",
+        				"object"
+        			]
         		},
         		"logout":{
         			"envelope":"JSON-RPC-1.0",
@@ -65,9 +74,18 @@ define(
         					"type":"string",
         					"name":"credential",
         					"optional":false
+        				},
+        				{
+        					"type":"boolean",
+        					"name":"rememberMe",
+        					"optional":true,
+        					"default":false
         				}
         			],
-        			"returns":"object"
+        			"returns":[
+        				"object",
+        				"object"
+        			]
         		},
         		"logout":{
         			"envelope":"JSON-RPC-1.0",
