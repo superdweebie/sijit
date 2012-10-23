@@ -170,7 +170,7 @@ function (
                 }
                 this.identity = data.identity; //Set the property first, otherwise _identityGetter is called again on the next line.
                 this.set('identity', this.identity); //Set via the setter so that watching callbacks fire
-                this._getIdentityDeferred.resolve(true);
+                this._getIdentityDeferred.resolve(this.identity);
             },
 
             _handleException: function(exception){
