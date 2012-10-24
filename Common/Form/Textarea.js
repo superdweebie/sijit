@@ -3,20 +3,18 @@ define([
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
     'Sds/Common/Form/_TextBoxMixin',
-    'Sds/Common/Form/_AppendageMixin',
-    'dojo/text!./Template/TextBox.html'
+    'dojo/text!./Template/TextArea.html'
 ],
 function (
     declare,
     Widget,
     TemplatedMixin,
     TextBoxMixin,
-    AppendageMixin,
     template
 ){
     return declare(
-        'Sds/Common/Form/TextBox',
-        [Widget, TemplatedMixin, TextBoxMixin, AppendageMixin],
+        'Sds/Common/Form/Textarea',
+        [Widget, TemplatedMixin, TextBoxMixin],
         {
             templateString: template
         }
