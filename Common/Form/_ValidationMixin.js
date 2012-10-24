@@ -20,6 +20,13 @@ function (
             //		Currently error/prompt message.
             message: '',
 
+            // messagePosition: string
+            //      Possible values are:
+            //      auto: if the message is one line, display inline. If it is multiline, display block
+            //      inline: always display message inline. If the message is more than one line, only the first will be shown.
+            //      block: alwyas display message as block, even when there is only one line.
+            messagePosition: 'auto',
+
             // state: [readonly] String
             //		Shows current state (ie, validation result) of input (""=Normal, Incomplete, or Error)
             state: '',
@@ -129,13 +136,18 @@ function (
 
                 if (result){
                     domClass.remove(this._messageStyleNode, 'error');
+                    domClass.add(this.inlineMessageWrapper, 'hide');
+                    domClass.add(this.blockMessageWrapper, 'hide');
                     this.inlineMessage.innerHTML = '';
                     this.blockMessage.innerHTML = '';
                 } else {
                     domClass.add(this._messageStyleNode, 'error');
-                    if (messages.length > 1){
+                    domClass.remove(this.inlineMessageWrapper, 'hide');
+                    domClass.remove(this.blockMessageWrapper, 'hide');
+
+                    if ((this.messagePosition == 'auto' && messages.length > 1) || this.messagePosition == 'block'){
                         this.inlineMessage.innerHTML = '';
-                       this.blockMessage.innerHTML = messages.join('<br />');
+                        this.blockMessage.innerHTML = messages.join('<br />');
                     } else {
                         this.blockMessage.innerHTML = '';
                         this.inlineMessage.innerHTML = messages[0];

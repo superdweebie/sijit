@@ -1,7 +1,9 @@
 <div class="control-group">
     <div class="controls">
-        <input type="${type}" id="${id}" value="${value}" data-dojo-attach-point="textbox, focusNode"/>
-        <span class="help-inline" data-dojo-attach-point="inlineMessage"></span>
-        <span class="help-block" data-dojo-attach-point="blockMessage"></span>
+        <div data-dojo-attach-point="appendagesWrapper">
+            <input type="${type}" id="${id}" value="${value}" data-dojo-attach-point="textbox, focusNode">
+            <span class="help-inline hide" data-dojo-attach-point="inlineMessageWrapper"><small data-dojo-attach-point="inlineMessage"></small></span>
+            <span class="help-block hide" data-dojo-attach-point="blockMessageWrapper"><small data-dojo-attach-point="blockMessage"></small></span>
+        </div>
     </div>
 </div>
