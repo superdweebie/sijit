@@ -4,8 +4,7 @@ define([
 	'dijit/_TemplatedMixin',
     'Sds/Common/Form/_TextBoxMixin',
     'Sds/Common/Form/_ValidationMixin',
-    'Sds/Common/Form/_AppendageMixin',
-    'dojo/text!./Template/ValidationTextBox.html'
+    'dojo/text!./Template/ValidationTextArea.html'
 ],
 function (
     declare,
@@ -13,12 +12,11 @@ function (
     TemplatedMixin,
     TextBoxMixin,
     ValidationMixin,
-    AppendageMixin,
     template
 ){
     return declare(
-        'Sds/Common/Form/ValidationTextBox',
-        [Widget, TemplatedMixin, TextBoxMixin, AppendageMixin, ValidationMixin],
+        'Sds/Common/Form/ValidationTextarea',
+        [Widget, TemplatedMixin, TextBoxMixin, ValidationMixin],
         {
             templateString: template,
 

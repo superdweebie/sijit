@@ -19,14 +19,27 @@
 		<script type="text/javascript">
 			require([
                 'dojo/parser',
+                'dojo/on',
+                'dijit/registry',
                 'Sds/Common/Form/TextBox',
                 'Sds/Common/Form/ValidationTextBox',
+                'Sds/Common/Form/Textarea',
+                'Sds/Common/Form/ValidationTextarea',
+                'Sds/Common/Form/ExpandingTextarea',
+                'Sds/Common/Form/Checkbox',
+                'Sds/Common/Form/Select',
                 'dojo/domReady!'
             ],
             function(
-                parser
+                parser,
+                on,
+                registry
             ){
-                parser.parse();
+                parser.parse().then(function(){
+                    on(registry.byId('textBox8').domNode, 'appendage-click', function(event){
+                        alert('Clicked ' + event.button);
+                    });
+                });
             })
 		</script>
 	</head>
@@ -36,14 +49,78 @@
         <form class="form-horizontal">
 
             <h3>Sds/Common/TextBox</h3>
+
+            <p>With placeholder</p>
+            <input data-dojo-type="Sds/Common/Form/TextBox"
+                type="text"
+                data-dojo-props="placeholder: 'Enter your name'"
+                id="textBox1"
+            />
+
+            <p>With label</p>
+            <input data-dojo-type="Sds/Common/Form/TextBox"
+                type="text"
+                data-dojo-props="label: 'Name'"
+                id="textBox2"
+            />
+
+            <p>With label and placeholder</p>
+            <input data-dojo-type="Sds/Common/Form/TextBox"
+                type="text"
+                data-dojo-props="label: 'Name', placeholder: 'Enter your name'"
+                id="textBox3"
+            />
+
+            <p>With label and value</p>
             <input data-dojo-type="Sds/Common/Form/TextBox"
                 type="text"
                 value="Toby"
                 data-dojo-props="label: 'Name'"
-                id="textBox1"
+                id="textBox4"
+            />
+
+            <p>With label and value and span2 css class</p>
+            <input data-dojo-type="Sds/Common/Form/TextBox"
+                type="text"
+                value="Toby"
+                data-dojo-props="label: 'Name', inputClasses: ['span2']"
+                id="textBox5"
+            />
+
+            <p>Appendage text shorthand</p>
+            <input data-dojo-type="Sds/Common/Form/TextBox"
+                type="text"
+                value="Toby"
+                data-dojo-props="label: 'Name', prepend: ['pre1', 'pre2'], append: ['app1', 'app2']"
+                id="textBox6"
+            />
+
+            <p>Appendage text longhand</p>
+            <input data-dojo-type="Sds/Common/Form/TextBox"
+                type="text"
+                value="Toby"
+                data-dojo-props="
+                    label: 'Name',
+                    prepend: [{type: 'text', innerHTML: 'pre1'}, {type: 'text', innerHTML: 'pre2'}],
+                    append: [{type: 'text', innerHTML: 'app1'}, {type: 'text', innerHTML: 'app2'}]
+                "
+                id="textBox7"
+            />
+
+            <p>Appendage button (clickable)</p>
+            <input data-dojo-type="Sds/Common/Form/TextBox"
+                type="text"
+                value="Toby"
+                data-dojo-props="
+                    label: 'Name',
+                    prepend: [{type: 'button', innerHTML: 'pre1', clickMixin: {button: 'pre1'}}],
+                    append: [{type: 'button', innerHTML: 'app1', clickMixin: {button: 'app1'}}]
+                "
+                id="textBox8"
             />
 
             <h3>Sds/Common/ValidationTextBox</h3>
+
             <p>Valid</p>
             <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
                 type="text"
@@ -55,7 +132,7 @@
                 id="validationTextBox1"
              />
 
-            <p>Invalid</p>
+            <p>Invalid auto inline</p>
             <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
                 type="text"
                 value="Not Toby"
@@ -64,6 +141,41 @@
                     validator: {class: 'Sds/Common/Validator/PersonalNameValidator'}
                 "
                 id="validationTextBox2"
+             />
+
+            <p>Invalid force inline</p>
+            <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
+                type="text"
+                value=""
+                data-dojo-props="
+                    label:'Name',
+                    messagePosition: 'inline',
+                    validator: {class: 'Sds/Common/Validator/PersonalNameValidator'}
+                "
+                id="validationTextBox3"
+             />
+
+            <p>Invalid auto block</p>
+            <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
+                type="text"
+                value=""
+                data-dojo-props="
+                    label:'Name',
+                    validator: {class: 'Sds/Common/Validator/PersonalNameValidator'}
+                "
+                id="validationTextBox4"
+             />
+
+            <p>Invalid force block</p>
+            <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
+                type="text"
+                value="Not Toby"
+                data-dojo-props="
+                    label:'Name',
+                    messagePosition: 'block',
+                    validator: {class: 'Sds/Common/Validator/PersonalNameValidator'}
+                "
+                id="validationTextBox5"
              />
 
             <p>Valid with ValidatorGroup</p>
@@ -77,10 +189,144 @@
                         {class: 'Sds/Common/Validator/PersonalNameValidator'}
                     ]
                 "
-                id="validationTextBox3"
+                id="validationTextBox6"
              />
 
-            <p>Checkbox</p>
+            <h3>Sds/Common/Form/Textarea</h3>
+            <p>Default</p>
+            <textarea data-dojo-type="Sds/Common/Form/Textarea"
+                type="text"
+                data-dojo-props="
+                    label:'About'
+                "
+                id="textarea1"
+             >
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </textarea>
+
+            <p>15 rows</p>
+            <textarea data-dojo-type="Sds/Common/Form/Textarea"
+                type="text"
+                rows="15"
+                data-dojo-props="
+                    label:'About'
+                "
+                id="textarea2"
+             >
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </textarea>
+
+            <h3>Sds/Common/Form/ValidationTextarea</h3>
+
+            <p>Valid</p>
+            <textarea data-dojo-type="Sds/Common/Form/ValidationTextarea"
+                type="text"
+                rows="10"
+                data-dojo-props="
+                    label:'About',
+                    validator: [
+                        {class: 'Sds/Common/Validator/LengthValidator', options: {min: 10, max: 1000}}
+                    ]
+                "
+                id="validationTextarea1"
+             >Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
+
+            <p>Invalid</p>
+            <textarea data-dojo-type="Sds/Common/Form/ValidationTextarea"
+                type="text"
+                rows="10"
+                data-dojo-props="
+                    label:'About',
+                    validator: [
+                        {class: 'Sds/Common/Validator/LengthValidator', options: {min: 10, max: 1000}}
+                    ]
+                "
+                id="validationTextarea2"
+             >12345</textarea>
+
+            <h3>Sds/Common/Form/ExpandingTextarea</h3>
+            <p>Default (does auto resize)</p>
+            <textarea data-dojo-type="Sds/Common/Form/ExpandingTextarea"
+                type="text"
+                data-dojo-props="
+                    label:'About'
+                "
+                id="expandingTextarea1"
+             >
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </textarea>
+
+            <h3>Sds/Common/Form/ValidationExpandingTextarea</h3>
+
+            <p>Valid</p>
+            <textarea data-dojo-type="Sds/Common/Form/ValidationExpandingTextarea"
+                type="text"
+                data-dojo-props="
+                    label:'About',
+                    validator: [
+                        {class: 'Sds/Common/Validator/LengthValidator', options: {min: 10, max: 1000}}
+                    ]
+                "
+                id="validationExpandingTextarea1"
+             >Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
+
+            <p>Invalid</p>
+            <textarea data-dojo-type="Sds/Common/Form/ValidationExpandingTextarea"
+                type="text"
+                data-dojo-props="
+                    label:'About',
+                    validator: [
+                        {class: 'Sds/Common/Validator/LengthValidator', options: {min: 10, max: 1000}}
+                    ]
+                "
+                id="validationExpandingTextarea2"
+             >12345</textarea>
+
+            <h3>Sds/Common/Form/Select</h3>
+
+            <p>Single line select, no explicit selection</p>
+            <select id="select1" data-dojo-type="Sds/Common/Form/Select" data-dojo-props="label: 'State'">
+                <option value="TN">Tennessee</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="FL">Florida</option>
+                <option value="CA">California</option>
+            </select>
+
+            <p>Single line select, with selection</p>
+            <select id="select2" data-dojo-type="Sds/Common/Form/Select" data-dojo-props="label: 'State'">
+                <option value="TN">Tennessee</option>
+                <option value="VA" selected="selected">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="FL">Florida</option>
+                <option value="CA">California</option>
+            </select>
+
+            <p>Single line select, programatic options</p>
+            <select id="select3" data-dojo-type="Sds/Common/Form/Select" data-dojo-props="
+                options: {
+                    TN: 'Tennessee',
+                    VA: 'Virginia',
+                    WA: 'Washington',
+                    FL: 'Florida',
+                    CA: 'California'
+                },
+                value: 'CA',
+                label: 'State'
+            ">
+            </select>
+
+            <p>Multiple select</p>
+            <select id="select4" data-dojo-type="Sds/Common/Form/Select" multiple="multiple" data-dojo-props="label: 'State'">
+                <option value="TN">Tennessee</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="FL">Florida</option>
+                <option value="CA">California</option>
+            </select>
+
+            <h3>Sds/Common/Form/Checkbox</h3>
+
             <input data-dojo-type="Sds/Common/Form/CheckBox"
                 data-dojo-props="
                     label:'Remember Me',
