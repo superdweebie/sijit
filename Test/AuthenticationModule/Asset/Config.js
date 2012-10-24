@@ -1,7 +1,7 @@
 define([], function(){
     return {
         serviceManager: {
-            authenticationController: {
+            'Sds/AuthenticationModule/AuthenticationController': {
                 getObjects: {
                     api: 'mockAuthenticationApi'
                 },
@@ -9,7 +9,7 @@ define([], function(){
                     loginView: 'mockLoginView'
                 }
             },
-            loginView: {
+            'Sds/AuthenticationModule/View/Login': {
                 proxyObjects: {
                     identityController: 'mockIdentityController'
                 }
@@ -27,7 +27,7 @@ define([], function(){
                     'watch'
                 ]
             },
-            exceptionController: {
+            'Sds/ExceptionModule/ExceptionController': {
                 moduleName: 'Sds/Test/AuthenticationModule/Asset/MockExceptionController',
                 proxyMethods: [
                     'handle'

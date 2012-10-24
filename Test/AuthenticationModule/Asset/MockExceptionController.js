@@ -1,14 +1,12 @@
 define([
-    'dojo/_base/declare',
-    'Sds/ExceptionModule/BaseExceptionController'
+    'dojo/_base/declare'
 ],
 function(
-    declare,
-    BaseExceptionController
+    declare
 ){
     return declare(
         'Sds/Test/AuthenticationModule/Asset/MockExceptionController',
-        [BaseExceptionController],
+        [],
         {
             lastException: undefined,
 

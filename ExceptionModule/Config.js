@@ -4,7 +4,6 @@ define(
         return {
             serviceManager: {
                 'Sds/ExceptionModule/ExceptionController': {
-                    moduleName: 'Sds/ExceptionModule/ExceptionController',
                     proxyMethods: [
                         'handle',
                         'standardize',
@@ -17,11 +16,10 @@ define(
                         registeredExceptions: {}
                     },
                     proxyObjects: {
-                        exceptionView: 'Sds/ExceptionModule/ExceptionView'
+                        exceptionView: 'Sds/ExceptionModule/View/Exception'
                     }
                 },
-                'Sds/ExceptionModule/ExceptionView': {
-                    moduleName: 'Sds/ExceptionModule/View/Exception',
+                'Sds/ExceptionModule/View/Exception': {
                     proxyMethods: [
                         'activate',
                         'reset',

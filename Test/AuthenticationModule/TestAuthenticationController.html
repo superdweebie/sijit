@@ -7,29 +7,20 @@
             @import "../../themes/bootstrap/css/bootstrap.css";
             @import "../../themes/bootstrap/css/bootstrap-responsive.css";
 		</style>
-		<script
-            type="text/javascript"
-            src="../../../dojo/dojo.js"
-            data-dojo-config="
-                isDebug: true,
-                popup: true,
-                async: true,
-                mergeConfigs: [
-                    'Sds/AuthenticationModule/Config',
-                    'Sds/Test/AuthenticationModule/Asset/Config'
-                ]
-            ">
+        <script type="text/javascript" src="../testconfig.js"></script>
+        <script type="text/javascript">
+            dojoConfig.mergeConfigs.push('Sds/Test/AuthenticationModule/Asset/Config');
         </script>
+        <script type="text/javascript" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			require([
                 'doh/main',
                 'dojo/Deferred',
                 'dojo/when',
                 'Sds/AuthenticationModule/Exception/LoginFailedException',
-                'Sds/AuthenticationModule/Exception/AlreadyLoggedInException',
-                'Sds/ServiceManager/Shared/getObject!authenticationController',
+                'Sds/ServiceManager/Shared/getObject!Sds/AuthenticationModule/AuthenticationController',
                 'Sds/ServiceManager/Shared/getObject!mockLoginView',
-                'Sds/ServiceManager/Shared/getObject!exceptionController',
+                'Sds/ServiceManager/Shared/getObject!Sds/ExceptionModule/ExceptionController',
                 'dojo/domReady!'
             ],
             function(
@@ -37,7 +28,6 @@
                 Deferred,
                 when,
                 LoginFailedException,
-                AlreadyLoggedInException,
                 authenticationController,
                 mockLoginView,
                 mockExceptionController
@@ -70,21 +60,6 @@
                         when(authenticationController.login(), function(){
                             doh.assertTrue(authenticationController.get('loggedIn'));
                             doh.assertEqual('toby', authenticationController.get('activeUser'));
-                            testResult.resolve();
-                        });
-
-                        return testResult;
-                    },
-
-                    function testAlreadyLoggedIn(){
-
-                        var testResult = new Deferred();
-
-                        mockLoginView.value.username = 'toby';
-                        mockLoginView.value.password = 'password';
-
-                        when(authenticationController.login(), null, function(){
-                            doh.assertTrue(mockExceptionController.lastException instanceof AlreadyLoggedInException);
                             testResult.resolve();
                         });
 

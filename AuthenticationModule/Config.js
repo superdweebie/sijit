@@ -11,11 +11,10 @@ function(){
                     apiSmd: 'Sds/AuthenticationModule/Smd'
                 },
                 proxyObjects: {
-                    loginView: 'Sds/AuthenticationModule/LoginView'
+                    loginView: 'Sds/AuthenticationModule/View/Login'
                 }
             },
-            'Sds/AuthenticationModule/LoginView': {
-                moduleName: 'Sds/AuthenticationModule/View/Login',
+            'Sds/AuthenticationModule/View/Login': {
                 proxyMethods: [
                     'activate',
                     'reset',
