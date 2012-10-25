@@ -3,7 +3,6 @@ function(){
     return {
         serviceManager: {
             'Sds/AuthenticationModule/AuthenticationController': {
-                moduleName: 'Sds/AuthenticationModule/AuthenticationController',
                 values: {
                     enableRememberMe: true
                 },
@@ -22,14 +21,22 @@ function(){
                     'set',
                     'watch'
                 ],
-                proxyObjects: {
-                    identityController: 'Sds/IdentityModule/IdentityController'
+                values: {
+                    forgotCredentialRoute: '/identity/forgotCredential',
+                    registerRoute: '/identity/register'
                 }
             },
             'Sds/ExceptionModule/ExceptionController': {
                 values: {
                     registeredExceptions: {
                         'Sds/AuthenticationModule/Exception/LoginFailedException': 'Sds\\AuthenticationModule\\Exception\\LoginFailedException'
+                    }
+                }
+            },
+            'Sds/Router/router': {
+                values: {
+                    controllers: {
+                        'authentication': 'Sds/AuthenticationModule/AuthenticationController'
                     }
                 }
             }

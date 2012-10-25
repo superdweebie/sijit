@@ -1,0 +1,42 @@
+<div class="modal hide fade">
+    <div class="modal-header">
+        <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-hidden="true"
+            data-dojo-attach-event="ondijitclick: onCancel"
+        >
+            &times;
+        </button>
+        <h3 data-dojo-attach-point="titleNode"></h3>
+    </div>
+    <div class="modal-body">
+        <div class="control-group" data-dojo-attach-point="formValidatorMessage">
+            <span
+                class="help-inline"
+                data-dojo-attach-point="inlineMessageWrapper"
+            >
+                <small data-dojo-attach-point="inlineMessage"></small>
+            </span>
+            <span
+                class="help-block"
+                data-dojo-attach-point="blockMessageWrapper"
+            >
+                <small data-dojo-attach-point="blockMessage"></small>
+            </span>
+        </div>
+        <div data-dojo-attach-point='containerNode'>
+    </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dojo-attach-event="ondijitclick: onCancel">Close</button>
+        <button
+            class="btn btn-primary"
+            data-dojo-attach-point="okButtonNode"
+            data-dojo-attach-event="ondijitclick: onOk"
+        >
+            Ok
+        </button>
+    </div>
+</div>

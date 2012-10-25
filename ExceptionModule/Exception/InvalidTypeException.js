@@ -1,20 +1,20 @@
 define([
     'dojo/_base/lang',
     'dojo/errors/create',
-    'Sds/ExceptionModule/Severity',
-    'Sds/ExceptionModule/Exception/BaseException'
+    'Sds/ExceptionModule/Exception/BaseException',
+    'Sds/ExceptionModule/severity'
 ],
 function(
     lang,
     create,
-    Severity,
-    BaseException
+    BaseException,
+    severity
 ){
 	return create(
         "InvalidTypeException",
         function(message, options){
 
-            this.severity = Severity.WARNING;
+            this.severity = severity.WARNING;
 
             this.display = false;
 
