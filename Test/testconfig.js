@@ -4,9 +4,11 @@ dojoConfig = {
     popup: true,
     async: true,
     mergeConfigs: [
-        'Sds/ExceptionModule/Config',
-        'Sds/Mongo/Config',
-        'Sds/IdentityModule/Config',
-        'Sds/AuthenticationModule/Config'
+        'Sds/ExceptionModule/config',
+        'Sds/Router/config',
+        'Sds/Mongo/config',
+        'Sds/IdentityModule/config',
+        'Sds/AuthenticationModule/config',
+        'Sds/Test/config'
     ]
 }

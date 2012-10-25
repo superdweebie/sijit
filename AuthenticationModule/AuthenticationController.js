@@ -52,6 +52,14 @@ function (
 
             enableRememberMe: undefined,
 
+            loginAction: function(){
+                return this.login();
+            },
+
+            logoutAction: function(){
+                return this.logout();
+            },
+
             login: function()
             {
                 // summary:
@@ -78,7 +86,7 @@ function (
 
                     this.get('api').login(
                         formValue['identityName'],
-                        formValue['credential'], 
+                        formValue['credential'],
                         Boolean(formValue['rememberMe'].length)
                     ).then(
                         lang.hitch(this, '_loginComplete'),

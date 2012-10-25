@@ -19,7 +19,7 @@ function(
                 this.messages = [];
 
                 var result = true;
-                if ( ! value.name && ! value.email) {
+                if ( ! value.identityName && ! value.email) {
                     this.messages.push('Either username or email is required.');
                     result = false;
                 }

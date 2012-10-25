@@ -1,23 +1,23 @@
 define([
         'doh/main',
         'dojo/Deferred',
-        'Sds/UserModule/Validator/UsernameAvailableValidator'
+        'Sds/IdentityModule/Validator/IdentityNameAvailableValidator'
     ],
     function(
         doh,
         Deferred,
-        UsernameAvailableValidator
+        IdentityNameAvailableValidator
     ){
-        doh.register("Sds/Test/Validator/TestUsernameAvailableValidator", [
+        doh.register("Sds/Test/Validator/TestIdentityNameAvailableValidator", [
 
             function PositiveTest(doh){
 
                 var resultDeferred = new Deferred;
-                var validator = new UsernameAvailableValidator;
+                var validator = new IdentityNameAvailableValidator;
 
                 //Mock rpc api
                 validator.api = {
-                    usernameAvailable: function(value){
+                    identityNameAvailable: function(value){
                         var returnDeferred = new Deferred;
                         returnDeferred.resolve(true);
                         return returnDeferred;
@@ -35,11 +35,11 @@ define([
             function NegativeTest(doh){
 
                 var resultDeferred = new Deferred;
-                var validator = new UsernameAvailableValidator;
+                var validator = new IdentityNameAvailableValidator;
 
                 //Mock rpc api
                 validator.api = {
-                    usernameAvailable: function(value){
+                    identityNameAvailable: function(value){
                         var returnDeferred = new Deferred;
                         returnDeferred.resolve(false);
                         return returnDeferred;

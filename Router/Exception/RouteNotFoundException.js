@@ -9,12 +9,12 @@ function(
     BaseException
 ){
 	return create(
-        "ServerLogFailedException",
+        "RouteNotFoundException",
         function(message, options){
 
-            this.display = true;
+            this.display = false;
 
-            this.log = false; //Make sure this stays false, or you'll start an endless loop
+            this.log = true;
 
             lang.mixin(this, options);
         },

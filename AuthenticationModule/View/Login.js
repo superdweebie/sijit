@@ -8,6 +8,7 @@ define([
     'Sds/View/BaseView',
     'Sds/AuthenticationModule/ViewModel/Login',
     'Sds/View/formFactory',
+    'Sds/Router/startedRouter!',
     'dojo/text!../Template/Login.html',
     'Sds/Common/Dialog'
 ],
@@ -21,6 +22,7 @@ function(
     BaseView,
     LoginViewModel,
     formFactory,
+    router,
     template
 ){
     return declare(
@@ -34,19 +36,14 @@ function(
         {
             templateString: template,
 
-            // identityController: Sds/IdentityModule/IdentityController | Sds/ServiceManager/Proxy
-            //     A identityController or proxy to one
-            identityController: undefined,
-
             valueType: LoginViewModel,
 
             inputsAppended: false,
 
-            postCreate: function(){
-                this.inherited(arguments);
-                document.body.appendChild(this.domNode);
-            },
+            forgotCredentialRoute: undefined,
 
+            registerRoute: undefined,
+            
             activate: function(value, enableRememberMe){
 
                 var returnValue = this.inherited(arguments);
@@ -63,6 +60,7 @@ function(
                     }));
                 }));
 
+                document.body.appendChild(this.domNode);
                 return returnValue;
             },
 
@@ -110,11 +108,11 @@ function(
             },
             onForgotCredential: function(){
                 this.dialogNode.hide();
-                this.identityController.forgotCredential();
+                router.go(this.forgotCredentialRoute);
             },
             onRegister: function(){
                 this.dialogNode.hide();
-                this.identityController.register();
+                router.go(this.registerRoute);
             }
         }
     );

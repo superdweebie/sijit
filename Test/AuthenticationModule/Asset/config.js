@@ -9,11 +9,6 @@ define([], function(){
                     loginView: 'mockLoginView'
                 }
             },
-            'Sds/AuthenticationModule/View/Login': {
-                proxyObjects: {
-                    identityController: 'mockIdentityController'
-                }
-            },
             mockAuthenticationApi: {
                 moduleName: 'Sds/Test/AuthenticationModule/Asset/MockAuthenticationApi'
             },
@@ -31,13 +26,6 @@ define([], function(){
                 moduleName: 'Sds/Test/AuthenticationModule/Asset/MockExceptionController',
                 proxyMethods: [
                     'handle'
-                ]
-            },
-            mockIdentityController: {
-                moduleName: 'Sds/Test/AuthenticationModule/Asset/MockIdentityController',
-                proxyMethods: [
-                    'forgotCredential',
-                    'register'
                 ]
             }
         }

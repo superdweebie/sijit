@@ -63,6 +63,7 @@ function(
     var sdsplugins = {
         plugins: {
             "Sds/ConfigManager/configReady":"Sds/Build/plugin/configReady",
+            "Sds/Router/startedRouter":"Sds/Build/plugin/startedRouter",
             "Sds/ServiceManager/Shared/getServiceManager":"Sds/Build/plugin/getServiceManager",
             "Sds/ServiceManager/Shared/getProxy":"Sds/Build/plugin/getProxy",
             "Sds/ServiceManager/Shared/getObject":"Sds/Build/plugin/getObject",
