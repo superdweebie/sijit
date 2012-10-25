@@ -63,6 +63,13 @@ function(){
                 getObjects: {
                     apiSmd: 'Sds/IdentityModule/Smd'
                 }
+            },
+            'Sds/Router/router': {
+                values: {
+                    controllers: {
+                        'identity': 'Sds/IdentityModule/IdentityController'
+                    }
+                }
             }
         }
     }

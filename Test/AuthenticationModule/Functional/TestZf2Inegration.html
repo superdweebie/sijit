@@ -16,6 +16,7 @@
                 'dojo/_base/json',
                 'dojo/dom-prop',
                 'Sds/ServiceManager/Shared/getObject!Sds/AuthenticationModule/AuthenticationController',
+                'Sds/Router/startedRouter!',
                 'dojo/domReady!'
             ],
             function(
@@ -23,7 +24,8 @@
                 dom,
                 json,
                 domProp,
-                authenticationController
+                authenticationController,
+                router
             ){
                 domProp.set(dom.byId('loginButton'), 'disabled', false);
                 domProp.set(dom.byId('logoutButton'), 'disabled', false);
@@ -41,11 +43,11 @@
                 });
 
                 on(dom.byId('loginButton'), 'click', function(){
-                    authenticationController.login();
+                    router.go('/authentication/login');
                 });
 
                 on(dom.byId('logoutButton'), 'click', function(){
-                    authenticationController.logout();
+                    router.go('/authentication/logout');
                 });
 
                 authenticationController.get('identity');

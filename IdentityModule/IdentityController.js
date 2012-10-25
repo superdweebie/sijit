@@ -67,8 +67,12 @@ function(
                 return this.identityStore;
             },
 
-            forgotCredential: function(){
+            forgotCredentialAction: function(){
                 return this.forgotCredentialPart1();
+            },
+
+            registerAction: function(){
+                return this.register();
             },
 
             forgotCredentialPart1: function(){
