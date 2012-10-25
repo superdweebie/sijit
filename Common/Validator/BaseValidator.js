@@ -10,7 +10,7 @@ function(
 ){
     // module:
     //		Sds/Common/Validator/BaseValidator
-
+   
     var BaseValidator = declare(
         'Sds/Common/Validator/BaseValidator',
         [Stateful],
@@ -20,9 +20,10 @@ function(
             //		should inherit from.
 
             // messages: array
-            //    An array of strings that indicate why this validator failed.
+            //    An array of strings that indicate why this validator failed, or success
+            //    messages if the validation passed.           
             messages: [],
-
+            
             //haltOnPass: boolean
             //     If this validator is part of a ValidatorGroup, setting
             //     to true will stop any Validators after this one
@@ -59,12 +60,13 @@ function(
                 this.messages = [];
 
                 if(value){
+                    this.messages.push('valid');
                     return true;
                 } else {
-                    this.messages.push('Invalid');
+                    this.messages.push('invalid');
                     return false;
                 }
-            }
+            }           
         }
     );
 

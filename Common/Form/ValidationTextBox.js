@@ -26,7 +26,7 @@ function (
             //		Currently error/prompt message.
             message: '',
 
-            postCreate: function(){
+            postCreate: function(){              
                 this._messageStyleNode = this.domNode;
                 this.inherited(arguments);
             }

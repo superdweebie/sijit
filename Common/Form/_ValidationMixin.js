@@ -1,25 +1,26 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/_base/array',
     'dojo/dom-class',
     'Sds/Common/Validator/BaseValidator',
-    'Sds/Common/Validator/validatorFactory'
+    'Sds/Common/Validator/validatorFactory',
+    'dijit/_FocusMixin'
 ],
 function (
     declare,
     lang,
+    array,
     domClass,
     BaseValidator,
-    validatorFactory
+    validatorFactory,
+    FocusMixin
 ){
+    
     return declare(
         'Sds/Common/Form/_ValidationMixin',
-        null,
+        [FocusMixin],
         {
-            // message: String
-            //		Currently error/prompt message.
-            message: '',
-
             // messagePosition: string
             //      Possible values are:
             //      auto: if the message is one line, display inline. If it is multiline, display block
@@ -27,10 +28,38 @@ function (
             //      block: alwyas display message as block, even when there is only one line.
             messagePosition: 'auto',
 
+            // surpressMessages: boolean
+            //      Should message be returned to a get('message') call?
+            surpressMessages: true,
+            
+            // onBlurSurpressMessages: boolean
+            //      Value for surpressMessages afte the first onBlur event
+            onBlurSurpressMessages: false,
+            
             // state: [readonly] String
             //		Shows current state (ie, validation result) of input (""=Normal, Incomplete, or Error)
             state: '',
 
+            // styleClasses: Object
+            //      An object the defines the css classes that could be applied to _messageStyleNode
+            //      when a validation failure occurs
+            styleClasses: {
+                none : [],
+                success : ['success'],
+                info : ['info'],
+                warning : ['warning'],
+                error : ['error']
+            },
+            
+            // style: string
+            //      A property name from the styleClasses object. This is the style which will be applied
+            //      on validation failure
+            style: 'info',
+            
+            // onBlurStyle: string
+            //      The style to change to after blur event
+            onBlurStyle: 'error',
+            
             _validatorSet: false,
 
             // validator: an instance of Sds/Common/Validator/BaseValidator.
@@ -40,6 +69,9 @@ function (
 
             startup: function(){
                 this.inherited(arguments);
+                this.validator.watch('messages', lang.hitch(this, function(prop, oldValue, newValue){
+                    this._updateMessages(newValue)
+                }));
                 this._validate();
             },
 
@@ -49,7 +81,7 @@ function (
                 this.inherited(arguments);
                 this._validate();
             },
-
+           
             _setValidatorAttr: function(value){
                 // summary:
                 //     Will set the validator. The value parameter may be one of three
@@ -89,6 +121,26 @@ function (
                 }));
             },
 
+            _getMessages: function(){
+                if (this.surpressMessages){
+                    return null;
+                }
+                return this.validator.get('messages');
+            },
+            
+            _setSurpressMessagesAttr: function(value){
+                this.surpressMessages = value;
+                if (this._started){
+                    this._updateMessages(this.validator.get('messages'));
+                }
+            },
+            
+            _onBlur: function(){
+                this.set('style', this.onBlurStyle);
+                this.set('surpressMessages', this.onBlurSurpressMessages);
+                this.inherited(arguments);                
+            },
+            
             _validate: function(){
 
                 if (! this._validatorSet || ! this._started){
@@ -107,17 +159,17 @@ function (
                             } else {
                                 state = 'Error';
                             }
-                            this._updateMessages(result, this.validator.get('messages'));
+                            this._updateStyle(result);
                             this.set('state', state);
                         }));
                         state = 'validating';
                         break;
                     case result:
-                        this._updateMessages(result, this.validator.get('messages'));
+                        this._updateStyle(result);
                         state = this._getChildrenState();
                         break;
                     case !result:
-                        this._updateMessages(result, this.validator.get('messages'));
+                        this._updateStyle(result);
                         state = 'Error';
                         break;
                 }
@@ -132,27 +184,51 @@ function (
                 return '';
             },
 
-            _updateMessages: function(result, messages){
-
-                if (result){
-                    domClass.remove(this._messageStyleNode, 'error');
+            _updateMessages: function(messages){
+                if (messages.length == 0 || this.surpressMessages){
                     domClass.add(this.inlineMessageWrapper, 'hide');
                     domClass.add(this.blockMessageWrapper, 'hide');
                     this.inlineMessage.innerHTML = '';
-                    this.blockMessage.innerHTML = '';
-                } else {
-                    domClass.add(this._messageStyleNode, 'error');
-                    domClass.remove(this.inlineMessageWrapper, 'hide');
-                    domClass.remove(this.blockMessageWrapper, 'hide');
-
-                    if ((this.messagePosition == 'auto' && messages.length > 1) || this.messagePosition == 'block'){
-                        this.inlineMessage.innerHTML = '';
-                        this.blockMessage.innerHTML = messages.join('<br />');
-                    } else {
-                        this.blockMessage.innerHTML = '';
-                        this.inlineMessage.innerHTML = messages[0];
-                    }
+                    this.blockMessage.innerHTML = '';                    
+                    return;
                 }
+                if ((this.messagePosition == 'auto' && messages.length > 1) || this.messagePosition == 'block'){
+                    this.inlineMessage.innerHTML = '';
+                    this.blockMessage.innerHTML = messages.join('<br />');
+                    domClass.remove(this.blockMessageWrapper, 'hide');                    
+                } else {
+                    this.blockMessage.innerHTML = '';
+                    this.inlineMessage.innerHTML = messages[0];
+                    domClass.remove(this.inlineMessageWrapper, 'hide');                    
+                }                
+            },
+                        
+            _updateStyle: function(result){
+                                             
+                var add = [];
+                var remove = [];
+                
+                for(var item in this.styleClasses){
+                    remove = remove.concat(this.styleClasses[item]);                    
+                }
+                
+                if (!result){
+                    add = this.styleClasses[this.style];
+                    remove = array.filter(remove, function(item){
+                        if(array.indexOf(add, item) == -1){
+                            return true
+                        } else {
+                            return false
+                        }                        
+                    });
+                }
+                                    
+                array.forEach(add, function(item){
+                    domClass.add(this._messageStyleNode, item);                    
+                }, this);
+                array.forEach(remove, function(item){
+                    domClass.remove(this._messageStyleNode, item);                    
+                }, this);
             }
         }
     );
