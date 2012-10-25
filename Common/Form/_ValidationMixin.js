@@ -28,13 +28,13 @@ function (
             //      block: alwyas display message as block, even when there is only one line.
             messagePosition: 'auto',
 
-            // surpressMessages: boolean
+            // suppressMessages: boolean
             //      Should message be returned to a get('message') call?
-            surpressMessages: true,
+            suppressMessages: true,
             
-            // onBlurSurpressMessages: boolean
-            //      Value for surpressMessages afte the first onBlur event
-            onBlurSurpressMessages: false,
+            // onBlurSuppressMessages: boolean
+            //      Value for suppressMessages afte the first onBlur event
+            onBlurSuppressMessages: false,
             
             // state: [readonly] String
             //		Shows current state (ie, validation result) of input (""=Normal, Incomplete, or Error)
@@ -122,14 +122,14 @@ function (
             },
 
             _getMessages: function(){
-                if (this.surpressMessages){
+                if (this.suppressMessages){
                     return null;
                 }
                 return this.validator.get('messages');
             },
             
-            _setSurpressMessagesAttr: function(value){
-                this.surpressMessages = value;
+            _setSuppressMessagesAttr: function(value){
+                this.suppressMessages = value;
                 if (this._started){
                     this._updateMessages(this.validator.get('messages'));
                 }
@@ -137,7 +137,7 @@ function (
             
             _onBlur: function(){
                 this.set('style', this.onBlurStyle);
-                this.set('surpressMessages', this.onBlurSurpressMessages);
+                this.set('suppressMessages', this.onBlurSuppressMessages);
                 this.inherited(arguments);                
             },
             
@@ -185,7 +185,7 @@ function (
             },
 
             _updateMessages: function(messages){
-                if (messages.length == 0 || this.surpressMessages){
+                if (messages.length == 0 || this.suppressMessages){
                     domClass.add(this.inlineMessageWrapper, 'hide');
                     domClass.add(this.blockMessageWrapper, 'hide');
                     this.inlineMessage.innerHTML = '';
