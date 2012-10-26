@@ -20,30 +20,25 @@ function(
         [BaseValidator],
         {
 
+            timeout: 2000,
+
             _isValid: function(value){
 
                 var resultDeferred = new Deferred;
-                this.set('messages', ['validating...']);
 
                 // Delay the validation result for two seconds to simulate server response time
-                var timer = new timing.Timer(2000);
+                var timer = new timing.Timer(this.timeout);
                 timer.onTick = lang.hitch(this, function(){
                     timer.stop();
-                    if (this._valueString != value.toString()){
-                        resultDeferred.reject('Deferred validator returning for old value');
+                    if (value == 'awesome'){
+                        resultDeferred.resolve({result: true, messages: []});
                     } else {
-                        if (value == 'awesome'){
-                            this.set('messages', []);
-                            resultDeferred.resolve(true);
-                        } else {
-                            this.set('messages', ['value must be "awesome"']);
-                            resultDeferred.resolve(false);
-                        }
+                        resultDeferred.resolve({result: false, messages: ['value must be awesome']});
                     }
                 });
                 timer.start();
 
-                return resultDeferred;
+                return {result: resultDeferred, messages: ['...is validating']};
             }
         }
     );

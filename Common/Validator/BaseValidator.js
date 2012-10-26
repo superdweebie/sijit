@@ -1,12 +1,14 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/when',
     'dojo/Deferred',
     'dojo/Stateful'
 ],
 function(
     declare,
     lang,
+    when,
     Deferred,
     Stateful
 ){
@@ -68,13 +70,18 @@ function(
 
             useCache: true,
 
-            _validatedValuesCache: {},
+            _validatedValuesCache: undefined,
 
-            _maxCacheSize: 100,
+            maxCacheSize: 50,
+
+            constructor: function(){
+                this._validatedValuesCache = {};
+            },
 
             isValid: function(value){
 
-                this._valueString = value.toString();
+                var valueString = value.toString();
+                this._valueString = valueString;
 
                 if (this.useCache){
                     var cacheItem = this._validatedValuesCache[this._valueString];
@@ -83,10 +90,19 @@ function(
                         return cacheItem.result;
                     }
                 }
-                var result = this._isValid(value);
+                var resultObject = this._isValid(value);
+                var result = resultObject.result;
+                var messages = resultObject.messages;
 
                 if (this.useCache){
-                    this._addToCache(this._valueString, result);
+                    this._addToCache(valueString, result, messages);
+                }
+
+                this.set('messages', messages);
+                if (isDeferred(result)){
+                    var resultDeferred = new Deferred;
+                    this._handleDeferredResult(valueString, result, resultDeferred);
+                    return resultDeferred;
                 }
                 return result;
             },
@@ -111,29 +127,39 @@ function(
                     result = false;
                 }
 
-                this.set('messages', messages);
-                return result;
+                return {result: result, messages: messages};
             },
 
-            _addToCache: function(valueString, result){
-                if (isDeferred(result)){
-                    result.then(
-                        lang.hitch(this, function(resultDeferred){
-                            this._validatedValuesCache[valueString] = {
-                                result: resultDeferred,
-                                messages: this.messages
-                            }
-                        }),
-                        function(){
-                            //Do nothing if error
+            _handleDeferredResult: function(valueString, resultObjectDeferred, resultDeferred){
+                resultObjectDeferred.then(lang.hitch(this, function(resultObject){
+                    if (this._valueString == valueString){
+                        this.set('messages', resultObject.messages);
+                        if (isDeferred(resultObject.result)){ //handle nested Deferreds
+                            this._handleDeferredResult(valueString, resultObject.result, resultDeferred);
+                        } else {
+                            resultDeferred.resolve(resultObject.result);
                         }
-                    );
-                } else {
-                    this._validatedValueCache[valueString] = {
-                        result: result,
-                        messages: this.messages
+                    } else {
+                        resultDeferred.cancel('Deferred validation late');
                     }
-                }
+                }));
+            },
+
+            _addToCache: function(valueString, result, messages){
+
+                when(result, lang.hitch(this, function(resultObject){
+                    if (isDeferred(result)){
+                        result = resultObject.result;
+                        messages = resultObject.messages;
+                    }
+                    if (this._validatedValuesCache.length > this.maxCacheSize){
+                        this._validatedValuesCache.shift();
+                    }
+                    this._validatedValuesCache[valueString] = {
+                        result: result,
+                        messages: messages
+                    }
+                }));
             }
         }
     );

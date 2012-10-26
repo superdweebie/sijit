@@ -24,12 +24,11 @@ function(
                 }
             },
 
-            isValid: function(value){
-                var result = this._loop(value, 0, true, [], []);
-                return result;
+            _isValid: function(value){
+                return this._concatMessages(this._loop(value, 0, {result: true, messagesLists: []}));
             },
 
-            _loop: function(value, index, currentResult, messages, preResolveMessages){
+            _loop: function(value, index, currentResultObject){
                 //Summary:
                 //    loops over all the validators in turn.
                 //    This code is slightly insane, but it works.
@@ -40,60 +39,63 @@ function(
                 //
 
                 if (this.validators.length <= index){
-                    this.set('messages', messages);
-                    return currentResult;
+                    return currentResultObject;
                 }
 
                 var validator = this.validators[index];
 
-                if ( !(validator.skipOnPass && currentResult) && !(validator.skipOnFail && ! currentResult)){
+                if ( !(validator.skipOnPass && currentResultObject.result) && !(validator.skipOnFail && ! currentResultObject.result)){
 
                     var validatorReturn = validator.isValid(value);
                     if (BaseValidator.isDeferred(validatorReturn)){
-                        var resultDeferred = new Deferred;
-                        currentResult = resultDeferred;
 
-                        preResolveMessages = preResolveMessages.concat(validator.get('messages'));
-                        messages = messages.concat(validator.get('messages'));
+                        var resultDeferred = new Deferred;
+                        currentResultObject.result = resultDeferred;
+                        currentResultObject.messagesLists[index] = validator.get('messages');
 
                         validatorReturn.then(lang.hitch(this, function(newResult){
                             if (newResult){
                                 if (validator.haltOnPass){halt = true}
                             } else {
-                                currentResult = false;
-                                messages = messages.concat(validator.get('messages'));
-                                messages = utils.arraySubtract(messages, preResolveMessages);
+                                currentResultObject.result = false;
+                                currentResultObject.messagesLists[index] = validator.get('messages');
                                 if (validator.haltOnFail){halt = true}
                             }
                             if (halt){
-                                resultDeferred.resolve(currentResult);
+                                resultDeferred.resolve(this._concatMessages(currentResultObject));
                             } else {
-                                resultDeferred.resolve(this._loop(value, index + 1, currentResult, messages, preResolveMessages));
+                                resultDeferred.resolve(this._concatMessages(this._loop(value, index + 1, currentResultObject)));
                             }
                         }));
 
-                        this.set('messages', messages);
-                        return currentResult;
+                        return currentResultObject;
                     } else {
                         var halt = false;
                         if (validatorReturn){
                             if (validator.haltOnPass){halt = true}
                         } else {
-                            currentResult = false;
-                            messages = messages.concat(validator.get('messages'));
+                            currentResultObject.result = false;
                             if (validator.haltOnFail){halt = true}
                         }
+                        currentResultObject.messagesLists[index] = validator.get('messages');
+
                         if (halt){
-                            this.set('messages', messages);
-                            return currentResult;
+                            return currentResultObject;
                         } else {
-                            return this._loop(value, index + 1, currentResult, messages, preResolveMessages);
+                            return this._loop(value, index + 1, currentResultObject);
                         }
                     }
                 }
 
-                this.set('messages', messages);
-                return currentResult;
+                return currentResultObject;
+            },
+
+            _concatMessages: function(resultObject){
+                var returnResultObject = {result: resultObject.result, messages: []};
+                for (var index in resultObject.messagesLists){
+                    returnResultObject.messages = returnResultObject.messages.concat(resultObject.messagesLists[index]);
+                }
+                return returnResultObject;
             }
         }
     );

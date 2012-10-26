@@ -94,6 +94,13 @@ function(
                 return this.createGroup(arguments[0]);
             }
 
+            var validatorDeferred = new Deferred;
+
+            if (BaseValidator.isValidator(arguments[0])){
+                //It's already a validator, just pass it back!
+                validatorDeferred.resolve(arguments[0]);
+            }
+
             if (typeof arguments[0] === 'string'){
                 module = arguments[0];
                 options = arguments[1];
@@ -101,8 +108,6 @@ function(
                 module = arguments[0]['class'];
                 options = arguments[0].options;
             }
-
-            var validatorDeferred = new Deferred;
 
             require([module], function(Validator){
                 var validator = new Validator;

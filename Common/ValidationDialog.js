@@ -31,6 +31,14 @@ function (
                     this._validate();
                 });
                 this.inherited(arguments);
+            },
+
+            _getIinvalidWidgetsAttr: function(){
+                var result = this.inherited(arguments);
+                if (this._getChildrenState() == '' && this.get('state') != ''){
+                    result.push(this);
+                }
+                return result;
             }
         }
     );

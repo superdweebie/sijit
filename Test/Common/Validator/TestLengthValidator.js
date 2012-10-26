@@ -6,7 +6,7 @@ define([
         doh,
         LengthValidator
     ){
-        doh.register("Sds.Test.Common.Validator.TestLengthValidator", [
+        doh.register("Sds/Test/Common/Validator/TestLengthValidator", [
 
             function ValidatorTest(doh){
                 var validator = new LengthValidator(1, 5);

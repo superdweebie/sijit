@@ -11,16 +11,16 @@ function(
         [BaseValidator],
         {
 
-            isValid: function(value){
+            _isValid: function(value){
 
                 var result = true;
                 this.haltOnPass = false;
-                
+
                 if (value === undefined || value === null || value == ''){
                     this.haltOnPass = true;
                 }
 
-                return result;
+                return {result: result, messages: []};
             }
         }
     );

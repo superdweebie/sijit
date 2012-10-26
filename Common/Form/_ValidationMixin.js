@@ -75,9 +75,11 @@ function (
 
             _delayTimer: undefined,
 
+            delayTimeout: 500,
+            
             startup: function(){
                 this.inherited(arguments);
-                this._delayTimer = new timing.Timer(200);
+                this._delayTimer = new timing.Timer(this.delayTimeout);
                 this._delayTimer.onTick = lang.hitch(this, function(){
                     this._delayTimer.stop();
                     this._validate();
@@ -118,13 +120,9 @@ function (
                     this._startValidateTimer();
                 }));
 
-                if (BaseValidator.isValidator(value)){
-                    validatorDeferred.resolve(value);
-                } else {
-                    validatorFactory.create(value).then(lang.hitch(this, function(validator){
-                        validatorDeferred.resolve(validator);
-                    }));
-                }
+                validatorFactory.create(value).then(function(validator){
+                    validatorDeferred.resolve(validator);
+                });
             },
 
             _getMessages: function(){

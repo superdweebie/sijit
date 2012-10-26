@@ -31,7 +31,7 @@ function(
                 this.requiredType = requiredType;
             },
 
-            isValid: function(value){
+            _isValid: function(value){
                 // Will return true if the value is the required type.
                 // Will also return true if the value can be successfully cast into the required type
 
@@ -62,8 +62,7 @@ function(
                     messages.push('Value must be a ' + this.requiredType + '.');
                 }
 
-                this.set('messages', messages);
-                return result;
+                return {result: result, messages: messages};
             }
         }
     );

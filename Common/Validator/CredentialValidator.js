@@ -16,7 +16,7 @@ function(
 
             containNumRegEx: /[0-9]/,
 
-            isValid: function(value){
+            _isValid: function(value){
 
                 var messages = [];
                 var result = true;
@@ -36,8 +36,7 @@ function(
                     messages.push('Must contain at least one numeric character.');
                 }
 
-                this.set('messages', messages);
-                return result;
+                return {result: result, messages: messages};
             }
         }
     );

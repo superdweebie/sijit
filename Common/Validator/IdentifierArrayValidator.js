@@ -12,7 +12,7 @@ function(
         'Sds/Common/Validator/IdentifierArrayValidator',
         [BaseValidator],
         {
-            isValid: function(value){
+            _isValid: function(value){
 
                 var messages = [];
                 var validator = new IdentifierValidator;
@@ -30,8 +30,7 @@ function(
                     }
                 }
 
-                this.set('messages', messages);
-                return result;
+                return {result: result, messages: messages};
             }
         }
     );

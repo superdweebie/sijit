@@ -4,7 +4,7 @@ define([
     'dojo/Deferred',
     'dojo/on',
     'dojo/dom-prop',
-    'dijit/form/_FormMixin',
+    'Sds/Common/Form/_FormMixin',
     'dijit/_OnDijitClickMixin',
     'bootstrap/Modal'
 ],

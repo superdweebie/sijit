@@ -19,7 +19,7 @@ function(
 
             regEx: /^[a-zA-Z]+$/,
 
-            isValid: function(value){
+            _isValid: function(value){
                 var messages = [];
 
                 var result = true;
@@ -29,8 +29,7 @@ function(
                     messages.push('Must contain only the characters a-z, or A-Z.');
                 }
 
-                this.set('messages', messages);
-                return result;
+                return {result: result, messages: messages};
             }
         }
     );

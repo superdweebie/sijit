@@ -13,7 +13,7 @@ function(
 
             haltOnFail: true,
 
-            isValid: function(value){
+            _isValid: function(value){
 
                 var messages = [];
                 var result = true;
@@ -23,8 +23,7 @@ function(
                     messages.push('This value is required.');
                 }
 
-                this.set('messages', messages);
-                return result;
+                return {result: result, messages: messages};
             }
         }
     );
