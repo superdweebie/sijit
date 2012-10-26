@@ -35,8 +35,7 @@ function(
                 // Will return true if the value is the required type.
                 // Will also return true if the value can be successfully cast into the required type
 
-                this.messages = [];
-
+                var messages = [];
                 var result = true;
 
                 switch (this.requiredType) {
@@ -60,8 +59,10 @@ function(
                 }
 
                 if ( ! result){
-                    this.messages.push('Value must be a ' + this.requiredType + '.');
+                    messages.push('Value must be a ' + this.requiredType + '.');
                 }
+
+                this.set('messages', messages);
                 return result;
             }
         }

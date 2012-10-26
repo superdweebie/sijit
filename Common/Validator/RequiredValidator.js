@@ -14,15 +14,16 @@ function(
             haltOnFail: true,
 
             isValid: function(value){
-                this.messages = [];
 
+                var messages = [];
                 var result = true;
 
                 if (value === undefined || value === null || value == ''){
                     result = false;
-                    this.messages.push('This value is required.');
+                    messages.push('This value is required.');
                 }
 
+                this.set('messages', messages);
                 return result;
             }
         }

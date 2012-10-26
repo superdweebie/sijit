@@ -1,8 +1,9 @@
 define ([
     'dojo/_base/lang',
-    'dojo/_base/config'
+    'dojo/_base/config',
+    'dojo/_base/array'
 ],
-function (lang, config) {
+function (lang, config, array) {
     // module:
     //		Sds/Common/utils
 
@@ -89,6 +90,19 @@ function (lang, config) {
                 }
             }
             return count;
+        },
+
+        arraySubtract: function(removeFrom, removeValues){
+            // summary:
+            //     Remove the values in removeValues from the array removeFrom
+
+            return array.filter(removeFrom, function(item){
+                if(array.indexOf(removeValues, item) == -1){
+                    return true
+                } else {
+                    return false
+                }
+            });            
         }
     }
 });

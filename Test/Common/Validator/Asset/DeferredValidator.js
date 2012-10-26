@@ -1,11 +1,15 @@
 define([
     'dojo/_base/declare',
+    'dojo/_base/lang',
     'dojo/Deferred',
+    'dojox/timing',
     'Sds/Common/Validator/BaseValidator',
 ],
 function(
     declare,
+    lang,
     Deferred,
+    timing,
     BaseValidator
 ){
     // module:
@@ -16,19 +20,30 @@ function(
         [BaseValidator],
         {
 
-            isValid: function(value){
-                this.messages = [];
+            _isValid: function(value){
 
-                var result = new Deferred;
+                var resultDeferred = new Deferred;
+                this.set('messages', ['validating...']);
 
-                if ( ! value){
-                    this.messages.push('Invalid');
-                    result.resolve(false);     
-                } else {
-                    result.resolve(true);
-                }
+                // Delay the validation result for two seconds to simulate server response time
+                var timer = new timing.Timer(2000);
+                timer.onTick = lang.hitch(this, function(){
+                    timer.stop();
+                    if (this._valueString != value.toString()){
+                        resultDeferred.reject('Deferred validator returning for old value');
+                    } else {
+                        if (value == 'awesome'){
+                            this.set('messages', []);
+                            resultDeferred.resolve(true);
+                        } else {
+                            this.set('messages', ['value must be "awesome"']);
+                            resultDeferred.resolve(false);
+                        }
+                    }
+                });
+                timer.start();
 
-                return result;
+                return resultDeferred;
             }
         }
     );

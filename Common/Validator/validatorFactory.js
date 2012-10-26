@@ -67,7 +67,7 @@ function(
             //    Creates an instance of a validator
             //
             //description:
-            //    create may be called in one of two different ways.
+            //    create may be called in several different ways.
             //
             //    Create may be called with a string giving the moduleName, and
             //    an options object which will be mixed into the validator instance:
@@ -79,11 +79,20 @@ function(
             //
             // |  create({'class': moduleName, options: optionsObject})
             //
+            //    Finally, create may be called with an array. If so, this array will
+            //    be passed to createGroup to create a ValidatorGroup:
+            //
+            //    create([validator1, validator2])
+            //
             //    Create will return a promise, which will resolve to the validator
             //    instance.
 
             var module;
             var options;
+
+            if (lang.isArray(arguments[0])){
+                return this.createGroup(arguments[0]);
+            }
 
             if (typeof arguments[0] === 'string'){
                 module = arguments[0];

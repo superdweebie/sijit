@@ -2,21 +2,27 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
+    'dojo/Deferred',
     'dojo/dom-class',
+    'dojox/timing',
     'Sds/Common/Validator/BaseValidator',
     'Sds/Common/Validator/validatorFactory',
+    'Sds/Common/utils',
     'dijit/_FocusMixin'
 ],
 function (
     declare,
     lang,
     array,
+    Deferred,
     domClass,
+    timing,
     BaseValidator,
     validatorFactory,
+    utils,
     FocusMixin
 ){
-    
+
     return declare(
         'Sds/Common/Form/_ValidationMixin',
         [FocusMixin],
@@ -31,11 +37,11 @@ function (
             // suppressMessages: boolean
             //      Should message be returned to a get('message') call?
             suppressMessages: true,
-            
+
             // onBlurSuppressMessages: boolean
             //      Value for suppressMessages afte the first onBlur event
             onBlurSuppressMessages: false,
-            
+
             // state: [readonly] String
             //		Shows current state (ie, validation result) of input (""=Normal, Incomplete, or Error)
             state: '',
@@ -50,16 +56,16 @@ function (
                 warning : ['warning'],
                 error : ['error']
             },
-            
+
             // style: string
             //      A property name from the styleClasses object. This is the style which will be applied
             //      on validation failure
             style: 'info',
-            
+
             // onBlurStyle: string
             //      The style to change to after blur event
             onBlurStyle: 'error',
-            
+
             _validatorSet: false,
 
             // validator: an instance of Sds/Common/Validator/BaseValidator.
@@ -67,21 +73,25 @@ function (
 
             _messageStyleNode: undefined,
 
+            _delayTimer: undefined,
+
             startup: function(){
                 this.inherited(arguments);
-                this.validator.watch('messages', lang.hitch(this, function(prop, oldValue, newValue){
-                    this._updateMessages(newValue)
-                }));
-                this._validate();
+                this._delayTimer = new timing.Timer(200);
+                this._delayTimer.onTick = lang.hitch(this, function(){
+                    this._delayTimer.stop();
+                    this._validate();
+                });
+                this._startValidateTimer();
             },
 
             _setValueAttr: function(){
                 // summary:
                 //		Hook so set('value', ...) works.
                 this.inherited(arguments);
-                this._validate();
+                this._startValidateTimer();
             },
-           
+
             _setValidatorAttr: function(value){
                 // summary:
                 //     Will set the validator. The value parameter may be one of three
@@ -98,27 +108,23 @@ function (
                 //     will be set to the returned instance of BaseValdiator
                 //
 
-                if (BaseValidator.isValidator(value)){
-                    this.validator = value;
-                    this._validatorSet = true;
-                    this._validate();
-                    return;
-                }
-
-                if (lang.isArray(value)){
-                    validatorFactory.createGroup(value).then(lang.hitch(this, function(validator){
-                        this.validator = validator;
-                        this._validatorSet = true;
-                        this._validate();
-                    }));
-                    return;
-                }
-
-                validatorFactory.create(value['class'], value.options).then(lang.hitch(this, function(validator){
+                var validatorDeferred = new Deferred;
+                validatorDeferred.then(lang.hitch(this, function(validator){
                     this.validator = validator;
                     this._validatorSet = true;
-                    this._validate();
+                    this.validator.watch('messages', lang.hitch(this, function(prop, oldValue, newValue){
+                        this._updateMessages(newValue)
+                    }));
+                    this._startValidateTimer();
                 }));
+
+                if (BaseValidator.isValidator(value)){
+                    validatorDeferred.resolve(value);
+                } else {
+                    validatorFactory.create(value).then(lang.hitch(this, function(validator){
+                        validatorDeferred.resolve(validator);
+                    }));
+                }
             },
 
             _getMessages: function(){
@@ -127,30 +133,60 @@ function (
                 }
                 return this.validator.get('messages');
             },
-            
+
             _setSuppressMessagesAttr: function(value){
                 this.suppressMessages = value;
-                if (this._started){
+                if (this._started && this.validator){
                     this._updateMessages(this.validator.get('messages'));
                 }
             },
-            
-            _onBlur: function(){
+
+            _setStyleAttr: function(value){
+                this.style = value;
+                if (this._started){
+                    if (this.state == ''){
+                        this._updateStyle(true);
+                    } else {
+                        this._updateStyle(false);
+                    }
+                }
+            },
+
+            onBlur: function(){
                 this.set('style', this.onBlurStyle);
                 this.set('suppressMessages', this.onBlurSuppressMessages);
-                this.inherited(arguments);                
+                this.inherited(arguments);
             },
-            
-            _validate: function(){
+
+            _startValidateTimer: function(){
 
                 if (! this._validatorSet || ! this._started){
                     return;
                 }
 
+                //Put in delay timer. Don't validate every single value change
+                if ( ! this._delayTimer.isRunning){
+                    this._delayTimer.start();
+                } else {
+                    this._delayTimer.stop(); //reset timer
+                    this._delayTimer.start();
+                }
+            },
+
+            _validate: function(){
+
                 var state;
                 var result = this.validator.isValid(this.get('value'));
 
                 switch (true){
+                    case (result === true):
+                        this._updateStyle(result);
+                        state = this._getChildrenState();
+                        break;
+                    case (result === false):
+                        this._updateStyle(result);
+                        state = 'Error';
+                        break;
                     case BaseValidator.isDeferred(result):
                         result.then(lang.hitch(this, function(asyncResult){
                             var state;
@@ -159,18 +195,10 @@ function (
                             } else {
                                 state = 'Error';
                             }
-                            this._updateStyle(result);
+                            this._updateStyle(asyncResult);
                             this.set('state', state);
                         }));
                         state = 'validating';
-                        break;
-                    case result:
-                        this._updateStyle(result);
-                        state = this._getChildrenState();
-                        break;
-                    case !result:
-                        this._updateStyle(result);
-                        state = 'Error';
                         break;
                 }
 
@@ -189,45 +217,39 @@ function (
                     domClass.add(this.inlineMessageWrapper, 'hide');
                     domClass.add(this.blockMessageWrapper, 'hide');
                     this.inlineMessage.innerHTML = '';
-                    this.blockMessage.innerHTML = '';                    
+                    this.blockMessage.innerHTML = '';
                     return;
                 }
                 if ((this.messagePosition == 'auto' && messages.length > 1) || this.messagePosition == 'block'){
                     this.inlineMessage.innerHTML = '';
                     this.blockMessage.innerHTML = messages.join('<br />');
-                    domClass.remove(this.blockMessageWrapper, 'hide');                    
+                    domClass.remove(this.blockMessageWrapper, 'hide');
                 } else {
                     this.blockMessage.innerHTML = '';
                     this.inlineMessage.innerHTML = messages[0];
-                    domClass.remove(this.inlineMessageWrapper, 'hide');                    
-                }                
+                    domClass.remove(this.inlineMessageWrapper, 'hide');
+                }
             },
-                        
+
             _updateStyle: function(result){
-                                             
+
                 var add = [];
                 var remove = [];
-                
+
                 for(var item in this.styleClasses){
-                    remove = remove.concat(this.styleClasses[item]);                    
+                    remove = remove.concat(this.styleClasses[item]);
                 }
-                
+
                 if (!result){
                     add = this.styleClasses[this.style];
-                    remove = array.filter(remove, function(item){
-                        if(array.indexOf(add, item) == -1){
-                            return true
-                        } else {
-                            return false
-                        }                        
-                    });
+                    remove = utils.arraySubtract(remove, add);
                 }
-                                    
+
                 array.forEach(add, function(item){
-                    domClass.add(this._messageStyleNode, item);                    
+                    domClass.add(this._messageStyleNode, item);
                 }, this);
                 array.forEach(remove, function(item){
-                    domClass.remove(this._messageStyleNode, item);                    
+                    domClass.remove(this._messageStyleNode, item);
                 }, this);
             }
         }

@@ -20,15 +20,16 @@ function(
             regEx: /^[a-zA-Z]+$/,
 
             isValid: function(value){
-                this.messages = [];
+                var messages = [];
 
                 var result = true;
 
                 if ( ! this.regEx.test(value)){
                     result = false;
-                    this.messages.push('Must contain only the characters a-z, or A-Z.');
+                    messages.push('Must contain only the characters a-z, or A-Z.');
                 }
 
+                this.set('messages', messages);
                 return result;
             }
         }

@@ -7,7 +7,7 @@ function(
     BaseValidator
 ){
     return declare(
-        'Sds/Common/Validator/PasswordValidator',
+        'Sds/Common/Validator/CredentialValidator',
         [BaseValidator],
         {
             lengthRegEx: /^.{6,40}$/,
@@ -17,24 +17,26 @@ function(
             containNumRegEx: /[0-9]/,
 
             isValid: function(value){
-                this.messages = [];
 
+                var messages = [];
                 var result = true;
+
                 if ( ! this.lengthRegEx.test(value)){
                     result = false;
-                    this.messages.push('Must be between 6 and 40 characters long.');
+                    messages.push('Must be between 6 and 40 characters long.');
                 }
 
                 if ( ! this.containAlphaRegEx.test(value)){
                     result = false;
-                    this.messages.push('Must contain at least one alpha character.');
+                    messages.push('Must contain at least one alpha character.');
                 }
 
                 if ( ! this.containNumRegEx.test(value)){
                     result = false;
-                    this.messages.push('Must contain at least one numeric character.');
+                    messages.push('Must contain at least one numeric character.');
                 }
 
+                this.set('messages', messages);
                 return result;
             }
         }

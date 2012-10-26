@@ -13,15 +13,16 @@ function(
             regEx: /^[a-zA-Z0-9_-]+$/,
 
             isValid: function(value){
-                this.messages = [];
 
+                var messages = [];
                 var result = true;
 
                 if ( ! this.regEx.test(value)){
                     result = false;
-                    this.messages.push('Must contain only the characters a-z, A-Z, 0-9, _, or -.');
+                    messages.push('Must contain only the characters a-z, A-Z, 0-9, _, or -.');
                 }
 
+                this.set('messages', messages);
                 return result;
             }
         }

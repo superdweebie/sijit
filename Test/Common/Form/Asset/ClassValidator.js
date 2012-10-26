@@ -13,13 +13,15 @@ function(
             messages: [],
 
             isValid: function(value){
-                this.messages = [];
+                var messages = [];
 
                 var result = true;
                 if (value.username != 'Toby'){
                     result = false;
-                    this.messages.push('Username must be Toby');
+                    messages.push('Username must be Toby');
                 }
+                
+                this.set('messages', messages);
                 return result;
             }
         }

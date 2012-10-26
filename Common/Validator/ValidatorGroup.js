@@ -2,13 +2,15 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/Deferred',
-    'Sds/Common/Validator/BaseValidator'
+    'Sds/Common/Validator/BaseValidator',
+    'Sds/Common/utils'
 ],
 function(
     declare,
     lang,
     Deferred,
-    BaseValidator
+    BaseValidator,
+    utils
 ){
     return declare(
         'Sds/Common/Validator/ValidatorGroup',
@@ -23,11 +25,11 @@ function(
             },
 
             isValid: function(value){
-                this.messages = [];
-                return this.loop(value, 0, true);
+                var result = this._loop(value, 0, true, [], []);
+                return result;
             },
 
-            loop: function(value, index, currentResult){
+            _loop: function(value, index, currentResult, messages, preResolveMessages){
                 //Summary:
                 //    loops over all the validators in turn.
                 //    This code is slightly insane, but it works.
@@ -38,6 +40,7 @@ function(
                 //
 
                 if (this.validators.length <= index){
+                    this.set('messages', messages);
                     return currentResult;
                 }
 
@@ -47,39 +50,49 @@ function(
 
                     var validatorReturn = validator.isValid(value);
                     if (BaseValidator.isDeferred(validatorReturn)){
-                        var resultReturn = new Deferred;
+                        var resultDeferred = new Deferred;
+                        currentResult = resultDeferred;
+
+                        preResolveMessages = preResolveMessages.concat(validator.get('messages'));
+                        messages = messages.concat(validator.get('messages'));
+
                         validatorReturn.then(lang.hitch(this, function(newResult){
                             if (newResult){
                                 if (validator.haltOnPass){halt = true}
                             } else {
                                 currentResult = false;
-                                this.messages = this.messages.concat(validator.get('messages'));
+                                messages = messages.concat(validator.get('messages'));
+                                messages = utils.arraySubtract(messages, preResolveMessages);
                                 if (validator.haltOnFail){halt = true}
                             }
                             if (halt){
-                                resultReturn.resolve(currentResult);
+                                resultDeferred.resolve(currentResult);
                             } else {
-                                resultReturn.resolve(this.loop(value, index + 1, currentResult));
+                                resultDeferred.resolve(this._loop(value, index + 1, currentResult, messages, preResolveMessages));
                             }
                         }));
-                        return resultReturn;
+
+                        this.set('messages', messages);
+                        return currentResult;
                     } else {
                         var halt = false;
                         if (validatorReturn){
                             if (validator.haltOnPass){halt = true}
                         } else {
                             currentResult = false;
-                            this.messages = this.messages.concat(validator.get('messages'));
+                            messages = messages.concat(validator.get('messages'));
                             if (validator.haltOnFail){halt = true}
                         }
                         if (halt){
+                            this.set('messages', messages);
                             return currentResult;
                         } else {
-                            return this.loop(value, index + 1, currentResult);
+                            return this._loop(value, index + 1, currentResult, messages, preResolveMessages);
                         }
                     }
                 }
 
+                this.set('messages', messages);
                 return currentResult;
             }
         }

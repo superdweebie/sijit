@@ -186,6 +186,44 @@
                 id="validationTextBox6"
              />
 
+            <p>Invalid with Deferred Validator</p>
+            <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
+                type="text"
+                value="not awesome"
+                data-dojo-props="
+                    label:'Sijit is:',
+                    validator: {class: 'Sds/Test/Common/Validator/Asset/DeferredValidator'},
+                    suppressMessages: false
+                "
+                id="validationTextBox7"
+             />
+
+            <p>Invalid with Deferred Validator inside ValidatorGroup</p>
+            <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
+                type="text"
+                value="not awesome"
+                data-dojo-props="
+                    label:'Sijit is:',
+                    validator: [
+                        {class: 'Sds/Common/Validator/AlphaValidator'},
+                        {class: 'Sds/Test/Common/Validator/Asset/DeferredValidator'},
+                        {class: 'Sds/Common/Validator/LengthValidator', options: {min: 1, max: 7}},
+                    ],
+                    suppressMessages: false
+                "
+                id="validationTextBox8"
+             />
+
+            <p>No Validator Set</p>
+            <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
+                type="text"
+                value=":-)"
+                data-dojo-props="
+                    label:'Name'
+                "
+                id="validationTextBox9"
+             />
+
             <h3>Sds/Common/Form/Textarea</h3>
             <p>Default</p>
             <textarea data-dojo-type="Sds/Common/Form/Textarea"

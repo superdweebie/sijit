@@ -1,15 +1,15 @@
 define([
         'doh/main',
-        'Sds/Common/Validator/PasswordValidator'
+        'Sds/Common/Validator/CredentialValidator'
     ],
     function(
         doh,
-        PasswordValidator
+        CredentialValidator
     ){
-        doh.register("Sds.Test.Common.Validator.TestPasswordValidator", [
+        doh.register("Sds/Test/Common/Validator/TestCredentialValidator", [
 
             function ValidatorTest(doh){
-                var validator = new PasswordValidator;
+                var validator = new CredentialValidator;
 
                 var testArray = [
                     [true, 'password1'],

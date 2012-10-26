@@ -170,7 +170,7 @@ define ([
                             "class": "Sds\/Common\/Validator\/RequiredValidator"
                         },
                         {
-                            "class": "Sds\/Common\/Validator\/PasswordValidator",
+                            "class": "Sds\/Common\/Validator\/CredentialValidator",
                             "options": null
                         }
                     ],

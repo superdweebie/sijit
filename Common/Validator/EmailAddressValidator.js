@@ -14,15 +14,15 @@ function(
         {
             isValid: function(value){
 
-                this.messages = [];
-
+                var messages = [];
                 var result = true;
 
                 if ( ! xweb.isEmailAddress(value)){
                     result = false;
-                    this.messages.push('Must be a valid email address.');
+                    messages.push('Must be a valid email address.');
                 }
 
+                this.set('messages', messages);
                 return result;
             }
         }

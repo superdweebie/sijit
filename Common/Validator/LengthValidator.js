@@ -20,16 +20,17 @@ function(
             },
 
             isValid: function(value){
-                this.messages = [];
 
+                var messages = [];
                 var result = true;
                 var regEx = new RegExp('^.{' + this.min + ',' + this.max + '}$');
 
                 if ( ! regEx.test(value)){
                     result = false;
-                    this.messages.push('Must be between ' + this.min + ' and ' + this.max + ' characters long.');
+                    messages.push('Must be between ' + this.min + ' and ' + this.max + ' characters long.');
                 }
 
+                this.set('messages', messages);
                 return result;
             }
         }

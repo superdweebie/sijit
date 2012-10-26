@@ -20,6 +20,8 @@ function (
         {
             templateString: template,
 
+            suppressMessages: false,
+            
             postCreate: function(){
                 this._messageStyleNode = this.formValidatorMessage;
                 this.watch('value', function(){

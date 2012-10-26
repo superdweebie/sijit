@@ -13,8 +13,8 @@ function(
         [BaseValidator],
         {
             isValid: function(value){
-                this.messages = [];
 
+                var messages = [];
                 var validator = new IdentifierValidator;
                 var result = true;
                 var name;
@@ -23,15 +23,14 @@ function(
                     name = value[index];
                     if ( ! validator.isValid(name)){
                         result = false;
-                        var message;
-                        var messages = validator.get('messages')
-                        for (var messageIndex in messages){
-                            message = messages[messageIndex];
-                            this.messages.push(name + ' not valid. ' + message);
+                        var identifierMessages = validator.get('messages')
+                        for (var messageIndex in identifierMessages){
+                            this.messages.push(name + ' not valid. ' + identifierMessages[messageIndex]);
                         }
                     }
                 }
 
+                this.set('messages', messages);
                 return result;
             }
         }

@@ -37,7 +37,7 @@
 
                     on(dom.byId('showDialog'), 'click', function(){
                         when(registry.byId('testDialog').show(), function(result){
-                            dom.byId('ReturnValue').innerHTML = json.toJson(result);
+                            dom.byId('ReturnValue').innerHTML = json.toJson(result, true);
                         });
                     });
                 });
@@ -53,7 +53,7 @@
         <p><pre id="ReturnValue"></pre></p>
         <br />
         <h3>State</h3>
-        <p><ore id="State"></pre></p>
+        <p><pre id="State"></pre></p>
         <div
             id="testDialog"
             data-dojo-type="Sds/Common/ValidationDialog"
