@@ -16,13 +16,15 @@ function (
             //
             _getInvalidWidgetsAttr: function(){
                 // Returns an array of child widgets which have a state != ''
-                return array.filter(this._descendants, function(widget){
-                    if (widget.get('state') == ''){
-                        return true;
-                    } else {
+                var filteredArr = array.filter(this._descendants, function(widget){
+                    if (widget.get('state') == '' || widget.get('state') == undefined){
                         return false;
+                    } else {
+                        return true;
                     }
                 });
+                
+                return filteredArr;
             }
         }
     );
