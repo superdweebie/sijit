@@ -59,7 +59,7 @@ function (lang, config, array) {
             // summary:
             //      Checks if a value is a float
 
-            if (parseFloat(value) && !isNaN(value)){
+            if ((parseFloat(value) || value == 0) && !isNaN(value)){
                 return true;
             } else {
                 return false;
