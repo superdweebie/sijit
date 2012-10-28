@@ -59,7 +59,7 @@ function (lang, config, array) {
             // summary:
             //      Checks if a value is a float
 
-            if ((parseFloat(value) || value == 0) && !isNaN(value)){
+            if ((parseFloat(value) || parseInt(value) === 0) && !isNaN(value)){
                 return true;
             } else {
                 return false;
@@ -74,7 +74,7 @@ function (lang, config, array) {
             return config.siteUrl + '/' + string;
         },
 
-        mixinDeep: function(dest, source) {
+        mixinDeep: function(/*object*/ dest, /*object*/ source) {
             return mixinDeep(dest, source);
         },
 
@@ -92,7 +92,7 @@ function (lang, config, array) {
             return count;
         },
 
-        arraySubtract: function(removeFrom, removeValues){
+        arraySubtract: function(/*array*/ removeFrom, /*array*/ removeValues){
             // summary:
             //     Remove the values in removeValues from the array removeFrom
 
@@ -102,7 +102,7 @@ function (lang, config, array) {
                 } else {
                     return false
                 }
-            });            
+            });
         }
     }
 });
