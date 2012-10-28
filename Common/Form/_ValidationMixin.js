@@ -76,7 +76,7 @@ function (
             _delayTimer: undefined,
 
             delayTimeout: 500,
-            
+
             startup: function(){
                 this.inherited(arguments);
                 this._delayTimer = new timing.Timer(this.delayTimeout);
@@ -173,7 +173,7 @@ function (
 
             _validate: function(){
 
-                var state;
+var state;
                 var result = this.validator.isValid(this.get('value'));
 
                 switch (true){

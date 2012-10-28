@@ -7,7 +7,7 @@ function(
     BaseValidator
 ){
     return declare(
-        'Sds/Test/Common/Form/Asset/ClassValidator',
+        'Sds/Test/Common/Form/Asset/FormValidator',
         [BaseValidator],
         {
             messages: [],
@@ -20,7 +20,7 @@ function(
                     result = false;
                     messages.push('Username must be Toby');
                 }
-                
+
                 this.set('messages', messages);
                 return result;
             }

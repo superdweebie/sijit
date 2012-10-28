@@ -12,14 +12,30 @@
 		<script type="text/javascript">
 			require([
                 'dojo/parser',
+                'dojo/on',
+                'dojo/dom',
+                'dijit/registry',
                 'Sds/Common/Form/ValidationForm',
                 'Sds/Common/Form/TextBox',
+                'Sds/Common/Form/ValidationTextBox',
                 'dojo/domReady!'
             ],
             function(
-                parser
+                parser,
+                on,
+                dom,
+                registry
             ){
-                parser.parse();
+                parser.parse().then(function(){
+                    on(dom.byId('listInvalidButton'), 'click', function(){
+                        var widgets = registry.byId('widgetListForm').get('invalidWidgets');
+                        var ids = [];
+                        for (var index in widgets){
+                            ids.push(widgets[index].get('id'));
+                        }
+                        dom.byId('invalidWidgetsList').innerHTML = ids.toString();
+                    });
+                });
             })
 		</script>
 	</head>
@@ -27,11 +43,11 @@
         <h1>Functional Testing Sds/Common/ValidationForm</h1>
         <br />
 
-        <h3>Valid Form</h3>
+        <h3>Valid Form with form validator</h3>
         <form
             class="form-horizontal"
             data-dojo-type="Sds/Common/Form/ValidationForm"
-            data-dojo-props="validator: {class: 'Sds/Test/Common/Form/Asset/ClassValidator'}"
+            data-dojo-props="validator: {class: 'Sds/Test/Common/Form/Asset/FormValidator'}"
         >
 
             <input
@@ -45,11 +61,11 @@
         </form>
         <br />
 
-        <h3>Invalid Form</h3>
+        <h3>Invalid Form with form validator</h3>
         <form
             class="form-horizontal"
             data-dojo-type="Sds/Common/Form/ValidationForm"
-            data-dojo-props="validator: {class: 'Sds/Test/Common/Form/Asset/ClassValidator'}"
+            data-dojo-props="validator: {class: 'Sds/Test/Common/Form/Asset/FormValidator'}"
         >
 
             <input
@@ -61,5 +77,36 @@
                     name: 'username'"
             />
         </form>
+
+        <h3>Invalid Form with invalid textbox showing invalid widgets list</h3>
+        <form
+            id="widgetListForm"
+            class="form-horizontal"
+            data-dojo-type="Sds/Common/Form/ValidationForm"
+        >
+
+            <input
+                id="username1"
+                data-dojo-type="Sds/Common/Form/ValidationTextBox"
+                type="text"
+                value="Not Toby"
+                data-dojo-props="
+                    label: 'username1',
+                    name: 'username1',
+                    validator: {class: 'Sds/Common/Validator/LengthValidator', options: {max: 4, min: 2}}"
+            />
+            <input
+                id="username2"
+                data-dojo-type="Sds/Common/Form/ValidationTextBox"
+                type="text"
+                value="Toby"
+                data-dojo-props="
+                    label: 'username2',
+                    name: 'username2',
+                    validator: {class: 'Sds/Common/Validator/LengthValidator', options: {max: 4, min: 2}}"
+            />
+        </form>
+        <button class="btn btn-primary btn-large" id="listInvalidButton">List invalid widgets</button>
+        <p><pre id="invalidWidgetsList"></pre></p>
 	</body>
 </html>

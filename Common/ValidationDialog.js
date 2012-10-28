@@ -28,7 +28,7 @@ function (
             postCreate: function(){
                 this._messageStyleNode = this.formValidatorMessage;
                 this.watch('value', function(){
-                    this._validate();
+                    this._startValidateTimer();
                 });
                 this.inherited(arguments);
             },

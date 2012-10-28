@@ -15,16 +15,14 @@ function (
             // Extends the standard dijit/form/_FormMixin to add an invalidWidgets function.
             //
             _getInvalidWidgetsAttr: function(){
-                // Returns an array of child widgets which have a state != ''
-                var filteredArr = array.filter(this._descendants, function(widget){
-                    if (widget.get('state') == '' || widget.get('state') == undefined){
-                        return false;
-                    } else {
+                // Returns an array of child widgets which have a state != '' (ie have invalid state)
+                return array.filter(this._descendants, function(widget){
+                    if (widget.get('state') != ''){
                         return true;
+                    } else {
+                        return false;
                     }
                 });
-                
-                return filteredArr;
             }
         }
     );
