@@ -21,6 +21,11 @@ function (
             // label: string
             label: undefined,
 
+            // inputClasses: array
+            //     An array of strings.
+            //     These strings will be added to the select tag's style classes
+            inputClasses: undefined,
+
             buildRendering: function(){
                 this.inherited(arguments);
 
@@ -72,13 +77,8 @@ function (
                     );
                 }
             },
-            
-            _setInputClassesAttr: function(value){
-                this.inputClasses = value;
-                for (var index in this.inputClasses){
-                    domClass.add(this.select, this.inputClasses[index]);
-                }
-            }
+
+            _setClassAttr: { node: "focusNode", type: "class" }
         }
     )
 });

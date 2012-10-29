@@ -63,12 +63,7 @@ function (
                 }
             },
 
-            _setInputClassesAttr: function(value){
-                this.inputClasses = value;
-                for (var index in this.inputClasses){
-                    domClass.add(this.textbox, this.inputClasses[index]);
-                }
-            }
+            _setClassAttr: { node: "focusNode", type: "class" }
         }
     );
 });
