@@ -1,9 +1,11 @@
 define([
     'dojo/_base/declare',
+    'dojo/i18n!Sds/nls/validatorMessages',
     'Sds/Common/Validator/BaseValidator'
 ],
 function(
     declare,
+    validatorMessages,
     BaseValidator
 ){
     // module:
@@ -26,7 +28,7 @@ function(
 
                 if ( ! this.regEx.test(value)){
                     result = false;
-                    messages.push('Must contain only the characters a-z, or A-Z.');
+                    messages.push(validatorMessages.alphaValidatorMessage);
                 }
 
                 return {result: result, messages: messages};

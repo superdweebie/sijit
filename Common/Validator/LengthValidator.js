@@ -1,9 +1,11 @@
 define([
     'dojo/_base/declare',
+    'dojo/i18n!Sds/nls/validatorMessages',
     'Sds/Common/Validator/BaseValidator'
 ],
 function(
     declare,
+    validatorMessages,
     BaseValidator
 ){
     return declare(
@@ -27,7 +29,10 @@ function(
 
                 if ( ! regEx.test(value)){
                     result = false;
-                    messages.push('Must be between ' + this.min + ' and ' + this.max + ' characters long.');
+                    messages.push(BaseValidator.formatMessage(
+                        validatorMessages.lengthValidatorMessage,
+                        {min: this.min, max: this.max}
+                    ));
                 }
 
                 return {result: result, messages: messages};

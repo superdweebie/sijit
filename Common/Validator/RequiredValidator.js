@@ -1,9 +1,11 @@
 define([
     'dojo/_base/declare',
+    'dojo/i18n!Sds/nls/validatorMessages',
     'Sds/Common/Validator/BaseValidator'
 ],
 function(
     declare,
+    validatorMessages,
     BaseValidator
 ){
     return declare(
@@ -20,7 +22,7 @@ function(
 
                 if (value === undefined || value === null || value == ''){
                     result = false;
-                    messages.push('This value is required.');
+                    messages.push(validatorMessages.requiredValidatorMessage);
                 }
 
                 return {result: result, messages: messages};

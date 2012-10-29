@@ -1,10 +1,12 @@
 define([
     'dojo/_base/declare',
+    'dojo/i18n!Sds/nls/validatorMessages',
     'Sds/Common/Validator/BaseValidator',
     'dojox/validate/web'
 ],
 function(
     declare,
+    validatorMessages,
     BaseValidator,
     xweb
 ){
@@ -19,7 +21,7 @@ function(
 
                 if ( ! xweb.isEmailAddress(value)){
                     result = false;
-                    messages.push('Must be a valid email address.');
+                    messages.push(validatorMessages.emailValidatorFailMessage);
                 }
 
                 return {result: result, messages: messages};

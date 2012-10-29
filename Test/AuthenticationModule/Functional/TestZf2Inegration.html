@@ -11,25 +11,17 @@
         <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			require([
-                'dojo/on',
                 'dojo/dom',
                 'dojo/_base/json',
-                'dojo/dom-prop',
                 'Sds/ServiceManager/Shared/getObject!Sds/AuthenticationModule/AuthenticationController',
                 'Sds/Router/startedRouter!',
                 'dojo/domReady!'
             ],
             function(
-                on,
                 dom,
                 json,
-                domProp,
-                authenticationController,
-                router
+                authenticationController
             ){
-                domProp.set(dom.byId('loginButton'), 'disabled', false);
-                domProp.set(dom.byId('logoutButton'), 'disabled', false);
-
                 authenticationController.watch('status', function(property, oldValue, newValue){
                     dom.byId('Status').innerHTML = json.toJson(newValue, true);
                 });
@@ -42,14 +34,6 @@
                     dom.byId('Identity').innerHTML = json.toJson(newValue, true);
                 });
 
-                on(dom.byId('loginButton'), 'click', function(){
-                    router.go('/authentication/login');
-                });
-
-                on(dom.byId('logoutButton'), 'click', function(){
-                    router.go('/authentication/logout');
-                });
-
                 authenticationController.get('identity');
             })
 		</script>
@@ -57,8 +41,8 @@
 	<body>
         <h1>Functional Testing Sds/AuthenticationModule Zf2 Integration</h1>
         <br />
-        <button class="btn btn-primary btn-large" disabled="true" id="loginButton">Login</button>
-        <button class="btn btn-primary btn-large" disabled="true" id="logoutButton">Logout</button>
+        <a href="#/authentication/login">login</a>
+        <a href="#/authentication/logout">logout</a>
         <h3>Status:</h3>
         <pre><p id="Status"></p></pre>
         <h3>LoggedIn:</h3>

@@ -1,9 +1,11 @@
 define([
     'dojo/_base/declare',
+    'dojo/i18n!Sds/nls/validatorMessages',
     'Sds/Common/Validator/BaseValidator'
 ],
 function(
     declare,
+    validatorMessages,
     BaseValidator
 ){
     return declare(
@@ -23,17 +25,17 @@ function(
 
                 if ( ! this.lengthRegEx.test(value)){
                     result = false;
-                    messages.push('Must be between 6 and 40 characters long.');
+                    messages.push(validatorMessages.credentialValidatorLengthMessage);
                 }
 
                 if ( ! this.containAlphaRegEx.test(value)){
                     result = false;
-                    messages.push('Must contain at least one alpha character.');
+                    messages.push(validatorMessages.credentialValidatorAlphaMessage);
                 }
 
                 if ( ! this.containNumRegEx.test(value)){
                     result = false;
-                    messages.push('Must contain at least one numeric character.');
+                    messages.push(validatorMessages.credentialValidatorNumMessage);
                 }
 
                 return {result: result, messages: messages};

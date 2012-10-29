@@ -1,6 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/string',
     'dojo/when',
     'dojo/Deferred',
     'dojo/Stateful'
@@ -8,6 +9,7 @@ define([
 function(
     declare,
     lang,
+    string,
     when,
     Deferred,
     Stateful
@@ -114,20 +116,7 @@ function(
                 //     If the value is invalid, should populate the messages array.
                 //
                 // returns:
-                //     boolean
-
-                var messages = [];
-                var result;
-
-                if(value){
-                    messages.push('valid');
-                    result = true;
-                } else {
-                    messages.push('invalid');
-                    result = false;
-                }
-
-                return {result: result, messages: messages};
+                //     {result: result, messages: messages}
             },
 
             _handleDeferredResult: function(valueString, resultObjectDeferred, resultDeferred){
@@ -178,6 +167,10 @@ function(
     }
 
     BaseValidator.isDeferred = isDeferred;
+
+    BaseValidator.formatMessage = function(/*string*/template, /*array*/params){
+        return string.substitute(template, params);
+    }
 
     return BaseValidator;
 });

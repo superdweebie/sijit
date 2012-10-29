@@ -1,10 +1,12 @@
 define([
     'dojo/_base/declare',
+    'dojo/i18n!Sds/nls/validatorMessages',
     'Sds/Common/utils',
     'Sds/Common/Validator/BaseValidator'
 ],
 function(
     declare,
+    validatorMessages,
     utils,
     BaseValidator
 ){
@@ -59,7 +61,10 @@ function(
                 }
 
                 if ( ! result){
-                    messages.push('Value must be a ' + this.requiredType + '.');
+                    messages.push(BaseValidator.formatMessage(
+                        validatorMessages.dataTypeValidatorMessage,
+                        {requiredType: this.requiredType}
+                    ))
                 }
 
                 return {result: result, messages: messages};

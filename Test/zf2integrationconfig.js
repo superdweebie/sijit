@@ -1,6 +1,7 @@
 // Dojo Configuration
 dojoConfig = {
     isDebug: true,
+    locale: 'en-us',
     popup: true,
     async: true,
     mergeConfigs: [

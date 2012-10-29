@@ -16,9 +16,6 @@ function(){
                             }
                         }
                     }
-                },
-                getObjects: {
-                    controllerManager: 'Sds/ServiceManager/Shared/getServiceManager!'
                 }
             }
         }

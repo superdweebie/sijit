@@ -52,14 +52,6 @@ function (
 
             enableRememberMe: undefined,
 
-            loginAction: function(){
-                return this.login();
-            },
-
-            logoutAction: function(){
-                return this.logout();
-            },
-
             login: function()
             {
                 // summary:

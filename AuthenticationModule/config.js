@@ -36,7 +36,13 @@ function(){
             'Sds/Router/router': {
                 values: {
                     controllers: {
-                        'authentication': 'Sds/AuthenticationModule/AuthenticationController'
+                        'authentication': {
+                            name: 'Sds/AuthenticationModule/AuthenticationController',
+                            methods: {
+                                login: 'login',
+                                logout: 'logout'
+                            }
+                        }
                     }
                 }
             }
