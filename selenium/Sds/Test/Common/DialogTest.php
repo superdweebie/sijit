@@ -26,10 +26,10 @@ class DialogTest extends AbstractWebDriverTest {
         // Click the cancel button
         $this->session->element('class name', 'modal-footer')->element('class name', 'btn')->click();
         sleep(1);
-        
+
         $this->assertEquals(
             '{"state":"","button":"cancel","value":{"helloInput":"hello"}}',
-            $this->session->element('id', 'ReturnValue')->text()
+            str_replace(["\n", "\t", " "], "", $this->session->element('id', 'ReturnValue')->text())
         );
 
         $this->session->element('id', 'showDialog')->click();
@@ -40,7 +40,7 @@ class DialogTest extends AbstractWebDriverTest {
         sleep(1);
         $this->assertEquals(
             '{"state":"","button":"ok","value":{"helloInput":"hello"}}',
-            $this->session->element('id', 'ReturnValue')->text()
+            str_replace(["\n", "\t", " "], "", $this->session->element('id', 'ReturnValue')->text())
         );
     }
 }

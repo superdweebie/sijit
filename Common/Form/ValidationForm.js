@@ -36,10 +36,6 @@ function (
                     result.push(this);
                 }
                 return result;
-            },
-
-            _getValueToValidate: function(){
-                return this.get('value').value;
             }
         }
     );
