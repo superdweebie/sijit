@@ -6,7 +6,7 @@ define([
         doh,
         AlphaValidator
     ){
-        doh.register("Sds.Test.Common.Validator.TestAlphaValidator", [
+        doh.register("Sds/Test/Common/Validator/TestAlphaValidator", [
 
             function ValidatorTest(doh){
                 var validator = new AlphaValidator;
