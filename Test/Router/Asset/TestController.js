@@ -10,11 +10,15 @@ function(
         'Sds/Test/Router/Asset/TestController',
         [],
         {
-            test1Action: function(){
-                dom.byId('test1ActionResult').innerHTML = 'test1Action called';
+            test1: function(){
+                dom.byId('test1Result').innerHTML = 'test1 called';
             },
-            test2Action: function(a, b){
-                dom.byId('test2ActionResult').innerHTML = 'test2Action called. arg a: ' + a + ', arg b: ' + b;
+            test2: function(a, b){
+                dom.byId('test2Result').innerHTML = 'test2 called. arg a: ' + a + ', arg b: ' + b;
+            },
+            clear: function(){
+                dom.byId('test1Result').innerHTML = '';
+                dom.byId('test2Result').innerHTML = '';
             }
         }
     );

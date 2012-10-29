@@ -1,6 +1,6 @@
 <?php
 
-namespace Sds\Test\View;
+namespace Sds\Test\Common\Form;
 
 use Sds\Test\AbstractWebDriverTest;
 
@@ -8,7 +8,7 @@ class FormFactoryTest extends AbstractWebDriverTest {
 
     public function setUp(){
         parent::setUp();
-        $this->open('Sds/Test/View/Functional/TestFormFactory.html');
+        $this->open('Sds/Test/Common/Form/Functional/TestFormFactory.html');
     }
 
     public function testFormFactory(){

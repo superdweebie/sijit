@@ -17,11 +17,16 @@ function (
         // controllers: object
         //    This should be an object defineing the routes to controllers. eg:
         //       {
-        //             'authentication': 'Sds/AuthenticationModule/AuthenticationController'
+        //             'authentication': {
+        //                 name: 'Sds/AuthenticationModule/AuthenticationController',
+        //                 methods: {
+        //                     name: 'login'
+        //                 }
+        //             }
         //       }
         //    Going to the followning hash: '/authenticaiton/login' will then
         //    get the instance of 'Sds/AuthenticationModule/AuthenticationController'
-        //    from the controllerManager, and call the loginAction
+        //    from the controllerManager, and call the login
         //    function.
         //
         controllers: {},
@@ -33,28 +38,38 @@ function (
 
         resolve: function(event){
             var pieces = event.params.route.split('/');
-            var controllerAlias = this.controllers[pieces[0]];
-            if (controllerAlias){
+            var config = this.controllers[pieces[0]];
+            if (config){
                 var method;
                 if (pieces[1]){
-                    method = pieces[1] + 'Action';
+                    if (config.methods[pieces[1]]){
+                        method = config.methods[pieces[1]];
+                    } else {
+                        throwEx(new RouteNotFoundException('Function ' + pieces[1] + ' could not configured for controller ' + config.name + '.'));
+                        return
+                    }
+                } else if (config.defaultMethod) {
+                    method = config.defaultMethod;
                 } else {
-                    method = 'indexAction';
+                    throwEx(new RouteNotFoundException('Controller ' + config.name + ' has no default method defined'));
+                    return
                 }
 
                 var args = [];
                 for (var i = 2; i < pieces.length; i++){
                     args.push(pieces[i]);
                 }
-                when(this.controllerManager.getObject(controllerAlias), function(controller){
+                when(this.controllerManager.getObject(config.name), function(controller){
                     if (controller[method]){
                         controller[method].apply(controller, args);
                     } else {
-                        throwEx(new RouteNotFoundException('Function ' + method + ' could not be in the controller instance created from the ' + controllerAlias + ' controller alias.'));
+                        throwEx(new RouteNotFoundException('Function ' + method + ' could not be in the controller instance created from the ' + config.name + ' controller.'));
+                        return;
                     }
                 });
             } else {
-                throwEx(new RouteNotFoundException('Controller alias ' + controllerAlias + ' could not be found in the controllerManager config.'));
+                throwEx(new RouteNotFoundException('Controller name ' + pieces[0] + ' could not be found in the controllerManager\n\ config.'));
+                return;
             }
         },
 

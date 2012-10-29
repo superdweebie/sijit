@@ -14,50 +14,26 @@
         <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			require([
-                'dojo/on',
-                'Sds/Router/startedRouter!',
-                'dojo/dom',
-                'dojo/dom-prop',
-                'dojo/domReady!'
+                'Sds/Router/startedRouter!'
             ],
-            function(
-                on,
-                router,
-                dom,
-                domProp
-            ){
-                domProp.set(dom.byId('test1Action'), 'disabled', false);
-                domProp.set(dom.byId('test2Action'), 'disabled', false);
-                domProp.set(dom.byId('badController'), 'disabled', false);
-                domProp.set(dom.byId('badFunction'), 'disabled', false);
-
-                on(dom.byId('test1Action'), 'click', function(){
-                    router.go('/test/test1');
-                });
-                on(dom.byId('test2Action'), 'click', function(){
-                    router.go('/test/test2/1/10');
-                });
-                on(dom.byId('badController'), 'click', function(){
-                    router.go('/badController/function');
-                });
-                on(dom.byId('badFunction'), 'click', function(){
-                    router.go('/test/badFunction');
-                });
-            })
+            function(){})
 		</script>
 	</head>
 	<body>
         <h1>Functional Testing Sds/Router/router</h1>
         <br />
-        <button class="btn btn-primary btn-large" disabled="true" id="test1Action">/test/test1</button>
-        <button class="btn btn-primary btn-large" disabled="true" id="test2Action">/test/test2/1/10</button>
-        <button class="btn btn-primary btn-large" disabled="true" id="badController">/badController/function</button>
-        <button class="btn btn-primary btn-large" disabled="true" id="badFunction">/test/badFunction</button>
+        <a href="#/test/clear">clear</a>
+        <a href="#/test">/test</a>
+        <a href="#/test/test1">/test/test1</a>
+        <a href="#/test/test2/1/10">/test/test2/1/10</a>
+        <a href="#/test/altTest2/4/15">/test/altTest2/4/15</a>
+        <a href="#/badController/function">/badController/function</a>
+        <a href="#/test/badFunction">/test/badFunction</a>
 
         <h3>Test1Action result:</h3>
-        <pre><p id="test1ActionResult"></p></pre>
+        <pre><p id="test1Result"></p></pre>
 
         <h3>Test2Action result:</h3>
-        <pre><p id="test2ActionResult"></p></pre>
+        <pre><p id="test2Result"></p></pre>
 	</body>
 </html>
