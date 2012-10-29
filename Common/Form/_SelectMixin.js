@@ -3,7 +3,6 @@ define([
     'dojo/_base/lang',
     'dojo/_base/array',
     'dojo/dom-construct',
-    'dojo/dom-class',
     'dijit/form/_FormValueMixin'
 ],
 function (
@@ -11,7 +10,6 @@ function (
     lang,
     array,
     domConstruct,
-    domClass,
     FormValueMixin
 ){
     return declare(
