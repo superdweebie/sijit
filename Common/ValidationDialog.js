@@ -25,6 +25,8 @@ function (
             //      The widget template. To override this, use the paths directive on the AMD loader.
             templateString: template,
 
+            suppressMessages: false,
+
             postCreate: function(){
                 this._messageStyleNode = this.formValidatorMessage;
                 this.watch('value', function(){
@@ -39,6 +41,10 @@ function (
                     result.push(this);
                 }
                 return result;
+            },
+
+            _getValueToValidate: function(){
+                return this.get('value').value;
             }
         }
     );

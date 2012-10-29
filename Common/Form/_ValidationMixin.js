@@ -173,8 +173,8 @@ function (
 
             _validate: function(){
 
-var state;
-                var result = this.validator.isValid(this.get('value'));
+                var state;
+                var result = this.validator.isValid(this._getValueToValidate());
 
                 switch (true){
                     case (result === true):
@@ -201,6 +201,10 @@ var state;
                 }
 
                 this.set('state', state);
+            },
+
+            _getValueToValidate: function(){
+                return this.get('value');
             },
 
             _getChildrenState: function(){
