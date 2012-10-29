@@ -5,7 +5,7 @@
             class="close"
             data-dismiss="modal"
             aria-hidden="true"
-            data-dojo-attach-event="ondijitclick: onCancel"
+            data-dojo-attach-event="ondijitclick: onCancelClick"
         >
             &times;
         </button>
@@ -30,11 +30,11 @@
     </div>
     </div>
     <div class="modal-footer">
-        <button class="btn" data-dojo-attach-event="ondijitclick: onCancel">Close</button>
+        <button class="btn" data-dojo-attach-event="ondijitclick: onCancelClick">Close</button>
         <button
             class="btn btn-primary"
             data-dojo-attach-point="okButtonNode"
-            data-dojo-attach-event="ondijitclick: onOk"
+            data-dojo-attach-event="ondijitclick: onOkClick"
         >
             Ok
         </button>

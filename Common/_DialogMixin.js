@@ -4,6 +4,7 @@ define([
     'dojo/Deferred',
     'dojo/on',
     'dojo/dom-prop',
+    'Sds/Common/utils',
     'Sds/Common/Form/_FormMixin',
     'dijit/_OnDijitClickMixin',
     'bootstrap/Modal'
@@ -14,6 +15,7 @@ function (
     Deferred,
     on,
     domProp,
+    utils,
     FormMixin,
     OnDijitClickMixin,
     Modal
@@ -26,12 +28,7 @@ function (
         //		Possible values of the button property in the return object.
         //
         // description:
-        //      OK: indicates that the 'ok' button was clicked to dismiss the dialog
-        //      CANCEL: indicates that a 'cancel' button was clicked to dismiss the dialog
         //      BACKDROP_CANCEL: indicates that the overlay was clicked to dismiss the dialog
-
-        OK: 'ok',
-        CANCEL: 'cancel',
         BACKDROP_CANCEL: 'backdropCancel'
     };
 
@@ -50,6 +47,10 @@ function (
             //     This is what does most of the work.
             _modal: undefined,
 
+            // buttons: array
+            //     An array of button names to register onButtonClick event handlers for
+            buttons: buttons,
+
             // button: string
             //     A value from the buttons array indicating which button was pressed to dismiss the dialog.
             button: undefined,
@@ -63,6 +64,25 @@ function (
             title: '',
 
             _setTitleAttr: { node: "titleNode", type: "innerHTML" },
+
+            constructor: function(){
+
+                // Add onClick handlers for any buttons that don't have them
+                var functionName;
+                for (var index in this.buttons){
+                    functionName = 'on' + utils.ucFirst(this.buttons[index]) + 'Click';
+                    if (! this[functionName]){
+                        this._addClickHandler(functionName, this.buttons[index]);
+                    }
+                }
+            },
+
+            _addClickHandler: function(functionName, buttonValue){
+                this[functionName] = function(){
+                    this.set('button', buttonValue);
+                    this.hide();
+                }
+            },
 
             postCreate: function(){
                 this.inherited(arguments);
@@ -96,20 +116,6 @@ function (
                     button: this.get('button'),
                     value: this.inherited(arguments)
                 }
-            },
-
-            onOk: function(){
-                // summary:
-                //    Event called by the template when the ok button is clicked.
-                this.set('button', buttons.OK);
-                this.hide();
-            },
-
-            onCancel: function(){
-                // summary:
-                //    Event called by the template when a cancel button is clicked.
-                this.set('button', buttons.CANCEL);
-                this.hide();
             },
 
             onBackdropClick: function(){
