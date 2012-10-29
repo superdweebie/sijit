@@ -154,6 +154,10 @@ function (
                 this.set('style', this.onBlurStyle);
                 this.set('suppressMessages', this.onBlurSuppressMessages);
                 this.inherited(arguments);
+
+                // Stop the delay timer and force an immediate validation
+                this._delayTimer.stop();
+                this._validate();
             },
 
             _startValidateTimer: function(){
