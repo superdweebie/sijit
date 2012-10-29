@@ -76,7 +76,7 @@ function (
                 }
             },
 
-            _setClassAttr: { node: "focusNode", type: "class" }
+            _setFocusClassAttr: { node: "focusNode", type: "class" }
         }
     )
 });
