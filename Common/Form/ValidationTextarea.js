@@ -4,7 +4,7 @@ define([
 	'dijit/_TemplatedMixin',
     'Sds/Common/Form/_TextBoxMixin',
     'Sds/Common/Form/_ValidationMixin',
-    'dojo/text!./Template/ValidationTextArea.html'
+    'dojo/text!./Template/ValidationTextarea.html'
 ],
 function (
     declare,
