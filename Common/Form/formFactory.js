@@ -133,18 +133,9 @@ function (
 
             inputDeferred.then(function(Input){
 
-                if (field.dataType){
-                    var dataTypeValidator = {
-                        'class': 'Sds/Common/Validator/DatatypeValidator',
-                        options: {requiredType: field.dataType}
-                    };
-                    if (!field.validator) {
-                        field.validator = dataTypeValidator;
-                    } else if (lang.isArray(field.validator)) {
-                        field.validator.push(dataTypeValidator);
-                    } else {
-                        field.validator = [dataTypeValidator, field.validator];
-                    }
+                field.validator = {
+                    'class': 'Sds/Common/Validator/FieldValidator',
+                    options: {metadata: lang.clone(field)}
                 }
 
                 delete field.dijit;
@@ -157,7 +148,7 @@ function (
                 if ( ! field.label && field.property){
                     field.label = utils.ucFirst(field.property) + ':';
                 }
-                
+
                 createInputDeferred.resolve(new Input(field));
             });
 
