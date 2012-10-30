@@ -14,6 +14,7 @@
                 'dojo/parser',
                 'dojo/on',
                 'dijit/registry',
+                'dojo/store/Memory',
                 'Sds/Common/Form/TextBox',
                 'Sds/Common/Form/ValidationTextBox',
                 'Sds/Common/Form/Textarea',
@@ -27,12 +28,43 @@
             function(
                 parser,
                 on,
-                registry
+                registry,
+                MemoryStore
             ){
                 parser.parse().then(function(){
                     on(registry.byId('textBox8').domNode, 'appendage-click', function(event){
                         alert('Clicked ' + event.button);
                     });
+
+                    var data = [
+                        {ref: 'TN', name: 'Tennessee'},
+                        {ref: 'VA', name: 'Virginia'},
+                        {ref: 'WA', name: 'Washington'},
+                        {ref: 'FL', name: 'Florida'},
+                        {ref: 'CA', name: 'California'}
+                    ];
+
+                    var stateStore = new MemoryStore({
+                        idProperty: 'ref',
+                        data: data
+                    });
+
+                    var select;
+
+                    select = registry.byId('select6');
+                    select.set('storeLabelAttr', 'name');
+                    select.set('store', stateStore);
+
+                    select = registry.byId('select7');
+                    select.set('storeLabelAttr', 'name');
+                    select.set('query', {name: /^.*i.*$/});
+                    select.set('store', stateStore);
+
+                    select = registry.byId('select8');
+                    select.set('storeLabelAttr', 'name');
+                    select.set('query', {name: /^.*i.*$/});
+                    select.set('store', stateStore);
+                    select.set('query', {name: /^.*g.*$/});
                 });
             })
 		</script>
@@ -379,8 +411,41 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
                 <option value="CA">California</option>
             </select>
 
+            <p>Single line select, unsorted</p>
+            <select id="select5" data-dojo-type="Sds/Common/Form/Select" data-dojo-props="label: 'State', sortByLabel: false">
+                <option value="TN">Tennessee</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="FL">Florida</option>
+                <option value="CA">California</option>
+            </select>
+
+            <p>Single line select, using data store</p>
+            <select
+                id="select6"
+                data-dojo-type="Sds/Common/Form/Select"
+                data-dojo-props="label: 'State'"
+            >
+            </select>
+
+            <p>Single line select, using data store with query (any name with an 'i')</p>
+            <select
+                id="select7"
+                data-dojo-type="Sds/Common/Form/Select"
+                data-dojo-props="label: 'State'"
+            >
+            </select>
+
+            <p>Single line select, using data store with query change (any name with a 'g')</p>
+            <select
+                id="select8"
+                data-dojo-type="Sds/Common/Form/Select"
+                data-dojo-props="label: 'State'"
+            >
+            </select>
+
             <p>Multiple select</p>
-            <select id="select5" data-dojo-type="Sds/Common/Form/Select" multiple="multiple" data-dojo-props="label: 'State'">
+            <select id="select9" data-dojo-type="Sds/Common/Form/Select" multiple="multiple" data-dojo-props="label: 'State'">
                 <option value="TN">Tennessee</option>
                 <option value="VA">Virginia</option>
                 <option value="WA">Washington</option>
