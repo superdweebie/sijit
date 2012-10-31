@@ -200,18 +200,18 @@ define([
 
                 return deferredTest;
             },
-            function dontInstantiateModuleGetTest(){
+            function useDeclareGetTest(){
                 var serviceManager = new ServiceManager({
                     'lion': {
                         moduleName: 'Sds/Test/ServiceManager/Asset/Lion',
-                        dontInsantiate: true
+                        useDeclare: true
                     }
                 });
 
                 var deferredTest = new Deferred;
 
                 when(serviceManager.getObject('lion'), function(Lion){
-                    doh.assertTrue(Lion.prototype);
+                    doh.assertFalse(Lion.name);
 
                     var instance = new Lion;
                     doh.assertEqual('lucy', instance.name);
@@ -220,55 +220,6 @@ define([
                 });
 
                 return deferredTest;
-            },
-            function injectExistingDijitTest(){
-
-                var button = new Button({id: 'testButton'});
-
-                var serviceManager = new ServiceManager({
-                    'testButton': {
-                        values: {
-                            label: 'test Button'
-                        }
-                    }
-                });
-
-                var deferredTest = new Deferred;
-
-                when(serviceManager.getObject('testButton'), function(button){
-                    doh.assertEqual('test Button', button.get('label'));
-                    deferredTest.resolve(true);
-                });
-
-                return deferredTest;
-            },
-            function injectDijitOnCreateTest(){
-
-                var serviceManager = new ServiceManager({
-                    'injectedButton': {
-                        values: {
-                            label: 'injected Button'
-                        }
-                    }
-                });
-
-                var button = new Button({id: 'injectedButton'});
-
-                doh.assertEqual('injected Button', button.get('label'));
-            },
-            function dijitIdAliasTest(){
-                var serviceManager = new ServiceManager({
-                    'aliasButton': {
-                        dijitId: 'anotherButton',
-                        values: {
-                            label: 'alias Button'
-                        }
-                    }
-                });
-
-                var button = new Button({id: 'anotherButton'});
-
-                doh.assertEqual('alias Button', button.get('label'));
             },
             function serviceManagerAwareTest(){
 

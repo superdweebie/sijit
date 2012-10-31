@@ -4,8 +4,6 @@ define([
         'dojo/Deferred',
         'dojo/when',
         'dojo/_base/lang',
-        'dijit/registry',
-        'dojo/aspect',
         'Sds/ServiceManager/Proxy',
         'Sds/Common/utils'
     ],
@@ -15,8 +13,6 @@ define([
         Deferred,
         when,
         lang,
-        registry,
-        aspect,
         Proxy,
         utils
     ) {
@@ -77,21 +73,18 @@ define([
                 // proxyObject injections allow the lazy loading of dependencies - they are only
                 // loaded when they are called.
 
-                // _instances: array
-                //      An array of all object created through the ServiceManager. If an object is requested
+                // _cache: array
+                //      An array of all objects created through the ServiceManager. If an object is requested
                 //      more than once, it is retrieved from this array
-                _instances: [],
+                _cache: [],
 
                 // _config: Object
                 //      The configuration object. Defines what to inject into objects
                 _config: {},
 
                 constructor: function(/* object */ config){
-                    // summary:
-                    //     Attatches to the registry, so that declarively created dijits can be injected
-                    aspect.after(registry, 'add', lang.hitch(this, function(widget){this.injectDijit(widget)}), true);
 
-                    this._instances = [];
+                    this._cache = [];
 
                     // Default to dojo config object if no config object is supplied
                     if ( ! config) {
@@ -100,6 +93,7 @@ define([
 
                     this._config = config;
                 },
+
                 _createObject: function(/*string*/ identifier) {
                     // summary:
                     //     Used to create an object with the supplied identifier
@@ -114,40 +108,55 @@ define([
                         moduleName = config.moduleName;
                     }
 
-                    //Create instance
+                    //Create object
                     var deferredObject = new Deferred();
-                    var index = this._instances.length;
-                    this._instances[index] = {identifier: identifier, object: null, promise: deferredObject};
+                    var index = this._cache.length;
+                    this._cache[index] = {identifier: identifier, object: null, promise: deferredObject};
 
                     require([moduleName], lang.hitch(this, function(Module){
                         var object;
-                        if (Module.prototype && (!config || (config && !config.dontInstantiate))){
-                            object = new Module; //Create an instance
+                        if (Module.prototype){ //check if we can create an instnace
+                            if (!config || (config && !config.useDeclare)){
+                                object = new Module; //Create an instance
+                                when(this._inject(object, config), lang.hitch(this, function(injectedObject){
+                                    this._cache[index].object = injectedObject;
+                                    this._cache[index].promise.resolve(injectedObject);
+                                }));
+                            } else {
+                                //don't create an instance - use declare to create a new injected prototype
+                                when(this._inject({}, config), lang.hitch(this, function(injectedObject){
+                                    object = declare(identifier, [Module], injectedObject);
+                                    this._cache[index].object = object;
+                                    this._cache[index].promise.resolve(object);
+                                }));
+                            }
                         } else {
                             object = lang.clone(Module); //Just clone the module
+                            when(this._inject(object, config), lang.hitch(this, function(injectedObject){
+                                this._cache[index].object = injectedObject;
+                                this._cache[index].promise.resolve(injectedObject);
+                            }));
                         }
-                        when(this._inject(object, config), lang.hitch(this, function(injectedObject){
-                            this._instances[index].object = injectedObject;
-                            this._instances[index].promise.resolve(injectedObject);
-                        }))
                     }));
 
                     return deferredObject;
                 },
+
                 _getObject: function(/*string*/ identifier){
                     // summary:
                     //     Used to get an object with the supplied identifier
                     // tags:
                     //     protected
 
-                    var object = this._getInstantatedObject(identifier);
+                    var object = this._getCachedObject(identifier);
                     if (object){
                         return object;
                     }
 
-                    //Create instance
+                    //Create object
                     return this._createObject(identifier);
                 },
+
                 _getProxy: function(/*string*/ identifier){
                     // summary:
                     //     Used to get a proxy to the object with the supplied identifier.
@@ -156,7 +165,7 @@ define([
                     // tags:
                     //     protected
 
-                    var object = this._getInstantatedObject(identifier);
+                    var object = this._getCachedObject(identifier);
                     if (object){
                         return object;
                     }
@@ -173,6 +182,7 @@ define([
 
                     return proxy;
                 },
+
                 _getProxyMethod: function(/*string*/ method){
                     return function(){
                         var proxyArguments = arguments;
@@ -185,7 +195,8 @@ define([
                         return resultDeferred;
                     }
                 },
-                _getInstantatedObject: function(/*string*/ identifier){
+
+                _getCachedObject: function(/*string*/ identifier){
                     // summary:
                     //     Will return an instance of object with the supplied identifier
                     //     if it already exists. If not, will return null.
@@ -195,34 +206,15 @@ define([
                     var index;
 
                     //Check for already created instance
-                    for(index in this._instances){
-                        if (this._instances[index].identifier == identifier){
-                            return this._instances[index].object;
+                    for(index in this._cache){
+                        if (this._cache[index].identifier == identifier){
+                            return this._cache[index].object;
                         }
-                    }
-
-                    //Check to see if a dijit is wanted
-                    var object = this._getRawDijitObject(identifier);
-                    if (object) {
-                        return this._inject(object, this.getObjectConfig(identifier));
                     }
 
                     return null;
                 },
-                _getRawDijitObject: function(/*string*/ identifier){
-                    // summary:
-                    //     Returns an uninjected dijit
-                    // tags:
-                    //     protected
 
-                    var config = this.getObjectConfig(identifier);
-
-                    var dijitId = identifier
-                    if (config && config.dijitId) {
-                        dijitId = config.dijitId;
-                    }
-                    return registry.byId(dijitId);
-                },
                 _inject: function(/* object */ object, /* object */ config){
                     // summary:
                     //     Used to inject an object with the objects defined in the
@@ -303,33 +295,39 @@ define([
                     }
                     return deferredObject;
                 },
+
                 clearInstanceCache: function(){
                     // summary:
                     //     Empties the cached instance array
 
-                    this._instances = [];
+                    this._cache = [];
                 },
+
                 mergeConfig: function(/* object */merge){
                     // summary:
                     //     Merge a config object with the existing config object.
 
                     this._config = utils.mixinDeep(this._config, merge);
                 },
+
                 getConfig: function(){
                     // summary:
                     //     Return the complete config object
 
                     return this._config;
                 },
+
                 setConfig: function(/* object */ config){
                     this._config = config;
                 },
+
                 setObjectConfig: function(/* string */ identifier, /* object */ config) {
                     // summary:
                     //     Set the config object for a particular identifier
 
                     this._config[identifier] = config;
                 },
+
                 getObjectConfig: function(/* string */identifier){
                     // summary:
                     //     Return the config object for a particular identifier
@@ -341,26 +339,30 @@ define([
                     }
                     return null;
                 },
+
                 createObject: function(/*string*/ identifier){
                     // summary:
-                    //     Create a new instance of identifier.
+                    //     Create a new object from identifier.
                     //     Will replace cached copy of identifier, if it exists
 
                     return this._createObject(identifier);
                 },
+
                 getObject: function(/*string*/ identifier){
                     // summary:
                     //     Return a deferred that will resolve to the identifier requested.
-                    //     Will return cached instance if one exists.
+                    //     Will return cached object if one exists.
 
                     return this._getObject(identifier);
                 },
+
                 getProxy: function(/*string*/ identifier){
                     // summary:
                     //     Return a Proxy object that will proxy the identifier requested.
 
                     return this._getProxy(identifier)
                 },
+                
                 inject: function(/* object */ object, /* string */ identifier){
                     // summary:
                     //     Use inject to inject an object created outside the serviceManager
@@ -371,19 +373,6 @@ define([
                         object = this._inject(object, config);
                     }
                     return object;
-                },
-                injectDijit: function(widget){
-                    // summary:
-                    //     Use injectDijit to inject a dijit instance with the serviceManager config
-
-                    var dijitId = widget.get('id');
-
-                    for(var alias in this._config){
-                        var config = this._config[alias];
-                        if (alias == dijitId || config.dijitId == dijitId){
-                            this._inject(widget, config);
-                        }
-                    }
                 }
             }
         );
