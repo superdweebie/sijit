@@ -110,19 +110,23 @@ function (
             addOption: function(value, label){
                 var existingOptions = this.get('options');
                 if ( ! existingOptions[value]){
+                    var props = {value: value, innerHTML: label};
+                    if(this.value == value) {
+                        props.selected = 'selected';
+                    }
                     if (this.sortByLabel){
                         var created = false;
                         array.forEach(this.select.options, lang.hitch(this, function(option){
                             if ( ! created && option.text > label){
-                                domConstruct.create('option',{value: value, innerHTML: label}, option, 'before');
+                                domConstruct.create('option',props, option, 'before');
                                 created = true;
                             }
                         }));
                         if ( ! created){
-                            domConstruct.create('option',{value: value, innerHTML: label}, this.select, 'last');
+                            domConstruct.create('option',props, this.select, 'last');
                         }
                     } else {
-                        domConstruct.create('option',{value: value, innerHTML: label}, this.select, 'last');
+                        domConstruct.create('option',props, this.select, 'last');
                     }
                 }
             },
