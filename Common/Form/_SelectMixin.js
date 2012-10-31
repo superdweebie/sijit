@@ -15,7 +15,7 @@ function (
     FormValueMixin
 ){
     return declare(
-        'Sds/Common/Form/Select',
+        'Sds/Common/Form/_SelectMixin',
         [FormValueMixin],
         {
             // label: string
@@ -42,14 +42,15 @@ function (
             // sortByLabel: Boolean
             sortByLabel: true,
 
-            _isBuilt: false,
-
             buildRendering: function(){
                 this.inherited(arguments);
 
+                var source = this.srcNodeRef;
+
                 // Add options tags if not using store
-                if ( ! this.store){
-                    var source = this.srcNodeRef;
+                if (this.store){
+                    this._updateOptionsFromStore();
+                } else {
                     if(source && source.options){
                         array.forEach(source.options, lang.hitch(this, function(option){
                             this.addOption(option.value, option.text);
@@ -57,7 +58,6 @@ function (
                     }
                 }
                 this.set('value', source.value);
-                this._isBuilt = true;
             },
 
             _setStoreLabelAttrAttr: function(storeLabelAttr){
@@ -76,7 +76,7 @@ function (
             },
 
             _updateOptionsFromStore: function(){
-                if (this._isBuilt && this.store && this.storeLabelAttr){
+                if (this.store && this.storeLabelAttr){
                     when(this.store.query(this.query, this.queryOptions), lang.hitch(this, function(data){
                         var existingOptions = this.get('options');
                         var idProperty = this.store.idProperty;
