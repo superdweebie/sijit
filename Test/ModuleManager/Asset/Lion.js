@@ -6,7 +6,7 @@ define ([
     ){
 
         return declare (
-            'Sds/Test/ServiceManager/Asset/Lion',
+            'Sds/Test/ModuleManager/Asset/Lion',
             null,
             {
                 name: 'lucy'

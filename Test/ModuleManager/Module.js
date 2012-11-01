@@ -1,8 +1,6 @@
 define([
-    'Sds/Test/ServiceManager/TestProxyProxyMethods',
-    'Sds/Test/ServiceManager/TestServiceManager',
-    'Sds/Test/ServiceManager/TestSharedGetServiceManager',
-    'Sds/Test/ServiceManager/TestSharedGetObject',
-    'Sds/Test/ServiceManager/TestSharedCreateObject',
-    'Sds/Test/ServiceManager/TestSharedGetProxy'
+    'Sds/Test/ModuleManager/TestModuleManager'//,
+    //'Sds/Test/ModuleManager/TestSharedGetModuleManager',
+    //'Sds/Test/ModuleManager/TestSharedGet',
+    //'Sds/Test/ModuleManager/TestSharedProxy'
 ], 1);

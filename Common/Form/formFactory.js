@@ -4,7 +4,8 @@ define ([
     'dojo/Deferred',
     'dojo/DeferredList',
     'dijit/registry',
-    'Sds/Common/utils'
+    'Sds/Common/utils',
+    'Sds/ModuleManager/ModuleManager'
 ],
 function (
     lang,
@@ -12,7 +13,8 @@ function (
     Deferred,
     DeferredList,
     registry,
-    utils
+    utils,
+    ModuleManager
 ){
 
     var _dijitNames =  [];

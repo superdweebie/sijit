@@ -16,7 +16,7 @@ function(
         {
             constructor: function(){
                 this.validators = [
-                    new LengthValidator(3, 40),
+                    new LengthValidator({min: 3, max: 40}),
                     new IdentifierCharsValidator()
                 ]
             }

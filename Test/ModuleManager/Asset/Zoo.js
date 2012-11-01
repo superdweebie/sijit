@@ -1,20 +1,25 @@
 define ([
-        'dojo/_base/declare',
-        'Sds/ServiceManager/ServiceManagerAwareMixin'
+        'dojo/_base/declare'
     ],
     function (
-        declare,
-        ServiceManagerAwareMixin
+        declare
     ){
 
         return declare (
-            'Sds/Test/ServiceManager/Asset/Zoo',
-            [ServiceManagerAwareMixin],
+            'Sds/Test/ModuleManager/Asset/Zoo',
+            [],
             {
-                name: 'the Sds zoo',
-                lion: undefined,
+                name: 'the sijit zoo',
+
+                lion1: undefined,
+
                 lion2: undefined,
-                tiger: undefined
+
+                tiger: undefined,
+
+                listAnimals: function(){
+                    return [this.lion1.name, this.lion2.name, this.tiger.name];
+                }
             }
         );
     }

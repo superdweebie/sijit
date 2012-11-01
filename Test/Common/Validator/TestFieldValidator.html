@@ -2,90 +2,57 @@
 	"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<title>Testing Sds/Common/Validator/ValidatorGroup</title>
-		<script
-            type="text/javascript"
-            src="../../../../dojo/dojo.js"
-            data-dojo-config="
-                isDebug: true,
-                popup: true,
-                async: true
-            ">
-        </script>
+		<title>Testing Sds/Common/Validator/FieldValidator</title>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
             require([
                     'doh/main',
+                    'dojo/when',
                     'dojo/Deferred',
-                    'Sds/Common/Validator/DatatypeValidator',
-                    'Sds/Common/Validator/IdentifierValidator',
-                    'Sds/Common/Validator/ValidatorGroup',
-                    'Sds/Test/Common/Validator/Asset/DeferredValidator',
+                    'Sds/Common/Validator/FieldValidator',
+                    'Sds/Test/Common/Validator/Asset/TestModel',
                     'dojo/domReady!'
                 ],
                 function(
                     doh,
+                    when,
                     Deferred,
-                    DatatypeValidator,
-                    IdentifierValidator,
-                    ValidatorGroup,
-                    DeferredValidator
+                    FieldValidator,
+                    TestModel
                 ){
-                    doh.register("Sds/Test/Common/Validator/TestValidatorGroup", [
+                    doh.register("Sds/Test/Common/Validator/TestFieldValidator", [
 
                         function ValidatorTest(doh){
 
-                            var validator = new ValidatorGroup([
-                                new DatatypeValidator(DatatypeValidator.datatypes.STRING),
-                                new IdentifierValidator()
-                            ]);
+                            var resultDeferred = new Deferred;
+
+                            var validator = new FieldValidator({metadata: TestModel.metadata.fields.firstname});
 
                             var testArray = [
-                                [true, 'username'],
-                                [false, 'u'],
-                                [false, 1233456]
+                                [true, 'Tim'],
+                                [false, 'T'],
+                                [false, 'Timothy']//,
+                                //[false, null]
                             ];
+                            var count = 0;
+
+                            var doIsValid = function(correctResult, value){
+                                when(validator.isValid(value), function(result){
+                                    console.debug(correctResult);
+                                    console.debug(validator.get('messages'));
+                                    doh.assertEqual(correctResult, result);
+                                    ++count;
+                                    if (count > testArray.length){resultDeferred.resolve(true)}
+                                })
+                            }
 
                             var index;
                             for (index in testArray){
-                                if (testArray[index][0]){
-                                    doh.assertTrue(validator.isValid(testArray[index][1]));
-                                } else {
-                                    doh.assertFalse(validator.isValid(testArray[index][1]));
-                                }
-                            }
-                        },
-
-                        function deferredValidatorTest(doh){
-
-                            var deferredTest = new Deferred;
-
-                            var validator = new ValidatorGroup([
-                                new DeferredValidator(),
-                                new DatatypeValidator(DatatypeValidator.datatypes.STRING),
-                            ]);
-
-                            var testArray = [
-                                [true, 'username'],
-                                [true, 'u'],
-                                [false, 1233456]
-                            ];
-
-                            var index;
-                            for (index in testArray){
-                                if (testArray[index][0]){
-                                    validator.isValid(testArray[index][1]).then(function(result){
-                                        doh.assertTrue(result);
-                                        deferredTest.resolve(true);
-                                    })
-                                } else {
-                                    validator.isValid(testArray[index][1]).then(function(result){
-                                        doh.assertFalse(result);
-                                        deferredTest.resolve(true);
-                                    })
-                                }
+                                doIsValid(testArray[index][0], testArray[index][1]);
                             }
 
-                            return deferredTest;
+                            return resultDeferred;
                         }
                     ]);
 
@@ -96,6 +63,6 @@
 		</script>
 	</head>
 	<body>
-        <h1>Testing Sds/Common/Validator/ValidatorGroup</h1>
+        <h1>Testing Sds/Common/Validator/FieldValidator</h1>
 	</body>
 </html>

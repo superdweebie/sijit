@@ -1,38 +1,29 @@
 define([
     'dojo/_base/declare',
-    'dojo/i18n!Sds/nls/validatorMessages',
     'Sds/Common/Validator/BaseValidator'
 ],
 function(
     declare,
-    validatorMessages,
     BaseValidator
 ){
     return declare(
-        'Sds/Common/Validator/LengthValidator',
+        'Sds/Test/Common/Validator/Asset/TestModelValidator',
         [BaseValidator],
         {
-            min: 0,
+            name: undefined,
 
-            max: 255,
-
-            constructor: function(min, max){
-                this.min = min,
-                this.max = max
+            constructor: function(name){
+                this.name = name
             },
 
             _isValid: function(value){
 
                 var messages = [];
                 var result = true;
-                var regEx = new RegExp('^.{' + this.min + ',' + this.max + '}$');
 
-                if ( ! regEx.test(value)){
+                if (value.firstname != this.name){
                     result = false;
-                    messages.push(BaseValidator.formatMessage(
-                        validatorMessages.lengthValidatorMessage,
-                        {min: this.min, max: this.max}
-                    ));
+                    messages.push('Firstname must be miriam');
                 }
 
                 return {result: result, messages: messages};

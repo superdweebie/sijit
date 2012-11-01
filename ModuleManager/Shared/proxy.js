@@ -1,20 +1,20 @@
 define([
         'dojo/when',
-        'Sds/ServiceManager/Shared/getServiceManager!'
+        'Sds/ModuleManager/Shared/getModuleManager!'
     ],
     function(
         when,
-        sharedServiceManager
+        sharedModuleManager
     ){
         // module:
-        //		Sds/ServiceManager/Shared/getProxy
+        //		Sds/ModuleManager/Shared/getProxy
         //
         // An AMD plugin that return a Proxy to the requested object from the
-        // shared ServiceManager
+        // shared ModuleManager
 
         return {
             load: function(id, require, callback){
-                when(sharedServiceManager.getProxy(id), function(object){
+                when(sharedModuleManager.proxy(id), function(object){
                     callback(object);
                 });
             }

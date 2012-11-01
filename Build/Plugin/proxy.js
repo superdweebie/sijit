@@ -5,7 +5,7 @@ define(function() {
 			referenceModule,
 			bc
 		){
-			return bc.amdResources[bc.getSrcModuleInfo("Sds/ServiceManager/Shared/getProxy", referenceModule).mid];
+			return bc.amdResources[bc.getSrcModuleInfo("Sds/ModuleManager/Shared/proxy", referenceModule).mid];
 		}
 	};
 });

@@ -20,7 +20,7 @@ function(
         [BaseValidator],
         {
 
-            timeout: 2000,
+            timeout: 1000,
 
             _isValid: function(value){
 

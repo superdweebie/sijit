@@ -1,23 +1,23 @@
 define([
-        'Sds/ServiceManager/ServiceManager',
+        'Sds/ModuleManager/ModuleManager',
         'Sds/ConfigManager/configReady!'
     ],
     function(
-        ServiceManager
+        ModuleManager
     ){
         // module:
-        //		Sds/ServiceManager/Shared/getServiceManager
+        //		Sds/ModuleManager/Shared/getModuleManager
         //
-        // An AMD plugin that returns an instance of the ServiceManager configured
+        // An AMD plugin that returns an instance of the ModuleManager configured
         // by dojo config
 
-        var sharedServiceManager = undefined;
+        var sharedModuleManager = undefined;
         return {
             load: function(id, require, callback){
-                if ( ! sharedServiceManager){
-                    sharedServiceManager = new ServiceManager();
+                if ( ! sharedModuleManager){
+                    sharedModuleManager = new ModuleManager();
                 }
-                callback(sharedServiceManager);
+                callback(sharedModuleManager);
             }
         };
     }

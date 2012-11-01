@@ -1,20 +1,20 @@
 define([
         'dojo/when',
-        'Sds/ServiceManager/Shared/getServiceManager!'
+        'Sds/ModuleManager/Shared/getModuleManager!'
     ],
     function(
         when,
-        sharedServiceManager
+        sharedModuleManager
     ){
         // module:
-        //		Sds/ServiceManager/Shared/getObject
+        //		Sds/ModuleManager/Shared/get
         //
         // An AMD plugin that return an instance of the requested object from the
-        // shared ServiceManager
+        // shared ModuleManager
 
         return {
             load: function(id, require, callback){
-                when(sharedServiceManager.getObject(id), function(object){
+                when(sharedModuleManager.get(id), function(object){
                     callback(object);
                 });
             }

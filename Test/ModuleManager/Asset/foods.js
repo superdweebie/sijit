@@ -1,7 +1,8 @@
 define([],
 function(){
     return {
-        value1: 10,
-        value2: 20
+        lion: 'beef',
+        tiger: 'chicken',
+        meerkat: 'worms'
     }
 });

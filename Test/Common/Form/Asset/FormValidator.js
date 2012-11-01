@@ -10,9 +10,8 @@ function(
         'Sds/Test/Common/Form/Asset/FormValidator',
         [BaseValidator],
         {
-            messages: [],
 
-            isValid: function(value){
+            _isValid: function(value){
                 var messages = [];
 
                 var result = true;
@@ -21,8 +20,7 @@ function(
                     messages.push('Username must be Toby');
                 }
 
-                this.set('messages', messages);
-                return result;
+                return {result: result, messages: messages};
             }
         }
     );

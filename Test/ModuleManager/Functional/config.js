@@ -1,10 +1,10 @@
 define([],
 function(){
     return {
-        serviceManager: {
+        moduleManager: {
             'statesStore': {
-                moduleName: 'dojo/store/Memory',
-                values: {
+                mid: 'dojo/store/Memory',
+                params: {
                     idProperty: 'ref',
                     data: [
                         {ref: 'TN', name: 'Tennessee'},
@@ -16,14 +16,16 @@ function(){
                 }
             },
             'StatesSelect': {
-                moduleName: 'Sds/Common/Form/Select',
-                useDeclare: true,
-                values: {
+                mid: 'Sds/Common/Form/Select',
+                directives: {
+                    declare: true
+                },
+                params: {
                     label: 'state',
                     storeLabelAttr: 'name',
                     query: {name: /^.*i.*$/}
                 },
-                getObjects: {
+                gets: {
                     store: 'statesStore'
                 }
             }

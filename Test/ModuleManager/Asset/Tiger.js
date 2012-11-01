@@ -1,17 +1,21 @@
 define ([
-        'dojo/_base/declare',
-        'dojo/Stateful'
+        'dojo/_base/declare'
     ],
     function (
-        declare,
-        Stateful
+        declare
     ){
 
         return declare (
-            'Sds/Test/ServiceManager/Asset/Tiger',
-            [Stateful],
+            'Sds/Test/ModuleManager/Asset/Tiger',
+            [],
             {
-                name: 'toby'
+                name: 'toby',
+
+                sound: 'roar',
+
+                makeSound: function(){
+                    return this.sound;
+                }
             }
         );
     }

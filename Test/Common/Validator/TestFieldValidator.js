@@ -1,34 +1,5 @@
-define([
-        'doh/main',
-        'Sds/Common/Validator/AlphaValidator'
-    ],
-    function(
-        doh,
-        AlphaValidator
-    ){
-        doh.register("Sds/Test/Common/Validator/TestAlphaValidator", [
-
-            function ValidatorTest(doh){
-                var validator = new AlphaValidator;
-
-                var testArray = [
-                    [true, 'abc'],
-                    [true, 'ABC'],
-                    [false, 'a1'],
-                    [false, 'a&']
-                ];
-
-                var index;
-                for (index in testArray){
-                    if (testArray[index][0]){
-                        doh.assertTrue(validator.isValid(testArray[index][1]));
-                    } else {
-                        doh.assertFalse(validator.isValid(testArray[index][1]));
-                    }
-                }
-            }
-        ]);
-    }
-);
-
-
+define(["doh", "require"], function(doh, require){
+	if(doh.isBrowser){
+		doh.register("Sds/Test/Common/Validator/TestFieldValidator", require.toUrl("./TestFieldValidator.html"));
+	}
+});

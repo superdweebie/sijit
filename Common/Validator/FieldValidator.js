@@ -29,10 +29,6 @@ function(
 
             _validatorSet: false,
 
-            consturctor: function(metadata){
-                this.set('metadata', metadata);
-            },
-
             _metadataSetter: function(metadata){
 
                 if (metadata.dataType){
@@ -56,32 +52,28 @@ function(
 
             _validatorSetter: function(validator){
                 this.validator = validator;
-                this._validatorSet = true;
+                this.set('_validatorSet', true);
             },
 
             _isValid: function(value){
-                var messages;
-
-                var result = true;
 
                 if (this._validatorSet){
-                    if ( ! this.validator.isValid(value)){
-                        result = false;
-                        messages = this.validator.get('messages');
-                    }
-                    return {result: result, messages: messages};
+                    return {
+                        result: this.validator.isValid(value),
+                        messages: this.validator.get('messages')
+                    };
                 } else {
                     var returnDeferred = new Deferred;
-                    this.watch('_validatorSet', lang.hitch(this, function(property, oldValue, newValue){
+                    var handle = this.watch('_validatorSet', lang.hitch(this, function(property, oldValue, newValue){
                         if (newValue){
-                            if ( ! this.validator.isValid(value)){
-                                result = false;
-                                messages = this.validator.get('messages');
-                            }
-                            returnDeferred.resolve({result: result, messages: messages});
+                            handle.unwatch('_validatorSet');
+                            returnDeferred.resolve({
+                                result: this.validator.isValid(value),
+                                messages: this.validator.get('messages')
+                            });
                         }
                     }));
-                    return returnDeferred;
+                    return {result: returnDeferred, messages: []};
                 }
             }
         }

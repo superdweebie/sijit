@@ -2,91 +2,58 @@
 	"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<title>Testing Sds/Common/Validator/ValidatorGroup</title>
-		<script
-            type="text/javascript"
-            src="../../../../dojo/dojo.js"
-            data-dojo-config="
-                isDebug: true,
-                popup: true,
-                async: true
-            ">
-        </script>
+		<title>Testing Sds/Common/Validator/DatatypeValidator</title>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
             require([
                     'doh/main',
-                    'dojo/Deferred',
                     'Sds/Common/Validator/DatatypeValidator',
-                    'Sds/Common/Validator/IdentifierValidator',
-                    'Sds/Common/Validator/ValidatorGroup',
-                    'Sds/Test/Common/Validator/Asset/DeferredValidator',
                     'dojo/domReady!'
                 ],
                 function(
                     doh,
-                    Deferred,
-                    DatatypeValidator,
-                    IdentifierValidator,
-                    ValidatorGroup,
-                    DeferredValidator
+                    DatatypeValidator
                 ){
-                    doh.register("Sds/Test/Common/Validator/TestValidatorGroup", [
 
-                        function ValidatorTest(doh){
+                    doh.register("Sds/Test/Common/Validator/TestDatatypeValidator", [
 
-                            var validator = new ValidatorGroup([
-                                new DatatypeValidator(DatatypeValidator.datatypes.STRING),
-                                new IdentifierValidator()
-                            ]);
+                        function StringTest(doh){
+                            var validator = new DatatypeValidator({requiredType: DatatypeValidator.STRING});
 
-                            var testArray = [
-                                [true, 'username'],
-                                [false, 'u'],
-                                [false, 1233456]
-                            ];
-
-                            var index;
-                            for (index in testArray){
-                                if (testArray[index][0]){
-                                    doh.assertTrue(validator.isValid(testArray[index][1]));
-                                } else {
-                                    doh.assertFalse(validator.isValid(testArray[index][1]));
-                                }
-                            }
+                            doh.assertTrue(validator.isValid('password1').result);
+                            doh.assertFalse(validator.isValid(1).result);
                         },
 
-                        function deferredValidatorTest(doh){
+                        function BooleanTest(doh){
+                            var validator = new DatatypeValidator({requiredType: DatatypeValidator.BOOLEAN});
 
-                            var deferredTest = new Deferred;
+                            doh.assertTrue(validator.isValid(true).result);
+                            doh.assertTrue(validator.isValid(false).result);
+                        },
 
-                            var validator = new ValidatorGroup([
-                                new DeferredValidator(),
-                                new DatatypeValidator(DatatypeValidator.datatypes.STRING),
-                            ]);
+                        function IntTest(doh){
+                            var validator = new DatatypeValidator({requiredType: DatatypeValidator.INT});
 
-                            var testArray = [
-                                [true, 'username'],
-                                [true, 'u'],
-                                [false, 1233456]
-                            ];
+                            doh.assertTrue(validator.isValid(1).result);
+                            doh.assertTrue(validator.isValid('1').result);
 
-                            var index;
-                            for (index in testArray){
-                                if (testArray[index][0]){
-                                    validator.isValid(testArray[index][1]).then(function(result){
-                                        doh.assertTrue(result);
-                                        deferredTest.resolve(true);
-                                    })
-                                } else {
-                                    validator.isValid(testArray[index][1]).then(function(result){
-                                        doh.assertFalse(result);
-                                        deferredTest.resolve(true);
-                                    })
-                                }
-                            }
+                            doh.assertFalse(validator.isValid(1.1).result);
+                            doh.assertFalse(validator.isValid('1.1').result);
+                            doh.assertFalse(validator.isValid('password').result);
+                        },
 
-                            return deferredTest;
+                        function FloatTest(doh){
+                            var validator = new DatatypeValidator({requiredType: DatatypeValidator.FLOAT});
+
+                            doh.assertTrue(validator.isValid(1).result);
+                            doh.assertTrue(validator.isValid('1').result);
+                            doh.assertTrue(validator.isValid(1.1).result);
+                            doh.assertTrue(validator.isValid('1.1').result);
+
+                            doh.assertFalse(validator.isValid('password').result);
                         }
+
                     ]);
 
                     doh.runOnLoad();
@@ -96,6 +63,6 @@
 		</script>
 	</head>
 	<body>
-        <h1>Testing Sds/Common/Validator/ValidatorGroup</h1>
+        <h1>Testing Sds/Common/Validator/DatatypeValidator</h1>
 	</body>
 </html>

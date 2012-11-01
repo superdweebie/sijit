@@ -1,35 +1,53 @@
 define ([], function (){
 
     return {
-        'class' : ['form-horizontal'],
-        validator : {
-            'class': 'Sds/Test/Common/Form/Asset/FormValidator',
-            options: null
-        },
-        fields: {
-            username:
-            {
-                id       : 'testUsername',
-                property : 'username',
-                dataType : 'string',
-                required : true,
-                validator: {
-                    'class' : 'Sds/Common/Validator/IdentifierValidator',
-                    options: null
-                }
+        testForm: {
+            mid: 'Sds/Common/Form/ValidationForm',
+            params: {
+                'class': ['form-horizontal']
             },
-            password:
-            {
+            gets: {
+                validator: 'Sds/Test/Common/Form/Asset/FormValidator',
+                fields: [
+                    'usernameField',
+                    'passwordField'
+                ]
+            }
+        },
+        usernameField: {
+            mid: 'Sds/Common/Form/ValidationTextBox',
+            params: {
+                id       : 'testUsername',
+                property : 'username'
+            },
+            gets: {
+                validator: [
+                    'Sds/Common/Validator/RequiredValidator',
+                    {
+                        mid: 'Sds/Common/Validator/DatatypeValidator',
+                        params: {requiredType: 'string'}
+                    },
+                    'Sds/Common/Validator/IdentifierValidator'
+                ]
+            }
+        },
+        passwordField: {
+            mid: 'Sds/Common/Form/ValidationTextBox',
+            params: {
                 id       : 'testPassword',
                 property : 'password',
                 label    : 'Password:',
-                dataType : 'string',
-                type     : 'password',
-                required : true,
-                validator: {
-                    'class' : 'Sds/Common/Validator/CredentialValidator',
-                    options: null
-                }
+                type     : 'password'
+            },
+            gets: {
+                validator: [
+                    'Sds/Common/Validator/RequiredValidator',
+                    {
+                        mid: 'Sds/Common/Validator/DatatypeValidator',
+                        params: {requiredType: 'string'}
+                    },
+                    'Sds/Common/Validator/CredentialValidator'
+                ]
             }
         }
     };

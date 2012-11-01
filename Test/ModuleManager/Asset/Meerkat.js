@@ -1,20 +1,17 @@
 define ([
         'dojo/_base/declare',
-        'Sds/ServiceManager/ServiceManagerAwareMixin'
+        'Sds/ModuleManager/ModuleManagerAwareMixin'
     ],
     function (
         declare,
-        ServiceManagerAwareMixin
+        ModuleManagerAwareMixin
     ){
 
         return declare (
-            'Sds/Test/ServiceManager/Asset/Zoo',
-            [ServiceManagerAwareMixin],
+            'Sds/Test/ModuleManager/Asset/Meerkat',
+            [ModuleManagerAwareMixin],
             {
-                name: 'the Sds zoo',
-                lion: undefined,
-                lion2: undefined,
-                tiger: undefined
+                name: 'miriam'
             }
         );
     }

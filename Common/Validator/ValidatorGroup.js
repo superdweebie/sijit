@@ -2,27 +2,21 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/Deferred',
-    'Sds/Common/Validator/BaseValidator',
-    'Sds/Common/utils'
+    'Sds/Common/utils',
+    'Sds/Common/Validator/BaseValidator'
 ],
 function(
     declare,
     lang,
     Deferred,
-    BaseValidator,
-    utils
+    utils,
+    BaseValidator
 ){
     return declare(
         'Sds/Common/Validator/ValidatorGroup',
         [BaseValidator],
         {
             validators: [],
-
-            constructor: function(validators){
-                if (validators){
-                    this.validators = validators;
-                }
-            },
 
             _isValid: function(value){
                 return this._concatMessages(this._loop(value, 0, {result: true, messagesLists: []}));
@@ -47,18 +41,18 @@ function(
                 if ( !(validator.skipOnPass && currentResultObject.result) && !(validator.skipOnFail && ! currentResultObject.result)){
 
                     var validatorReturn = validator.isValid(value);
-                    if (BaseValidator.isDeferred(validatorReturn)){
+                    if (utils.isDeferred(validatorReturn.result)){
 
                         var resultDeferred = new Deferred;
                         currentResultObject.result = resultDeferred;
-                        currentResultObject.messagesLists[index] = validator.get('messages');
+                        currentResultObject.messagesLists[index] = validatorReturn.messages;
 
-                        validatorReturn.then(lang.hitch(this, function(newResult){
-                            if (newResult){
+                        validatorReturn.result.then(lang.hitch(this, function(newResultObject){
+                            if (newResultObject.result){
                                 if (validator.haltOnPass){halt = true}
                             } else {
                                 currentResultObject.result = false;
-                                currentResultObject.messagesLists[index] = validator.get('messages');
+                                currentResultObject.messagesLists[index] = newResultObject.messages;
                                 if (validator.haltOnFail){halt = true}
                             }
                             if (halt){
@@ -71,13 +65,13 @@ function(
                         return currentResultObject;
                     } else {
                         var halt = false;
-                        if (validatorReturn){
+                        if (validatorReturn.result){
                             if (validator.haltOnPass){halt = true}
                         } else {
                             currentResultObject.result = false;
                             if (validator.haltOnFail){halt = true}
                         }
-                        currentResultObject.messagesLists[index] = validator.get('messages');
+                        currentResultObject.messagesLists[index] = validatorReturn.messages;
 
                         if (halt){
                             return currentResultObject;

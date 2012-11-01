@@ -4,8 +4,9 @@ define([
     'dojo/_base/array',
     'dojo/Deferred',
     'dojo/DeferredList',
+    'Sds/Common/utils',
     'Sds/Common/Validator/BaseValidator',
-    'Sds/Common/Validator/validatorFactory'
+    'Sds/Common/Validator/FieldValidator'
 ],
 function(
     declare,
@@ -13,8 +14,9 @@ function(
     array,
     Deferred,
     DeferredList,
+    utils,
     BaseValidator,
-    validatorFactory
+    FieldValidator
 ){
     // module:
     //		Sds/Common/Validator/ModelValidator
@@ -31,93 +33,110 @@ function(
 
             _classValidator: undefined,
 
-            _fieldValidators: undefined,
+            _fieldValidators: {},
 
-            _allValidatorsSet: false,
-
-            consturctor: function(metadata){
-                this.set('metadata', metadata);
-            },
+            _validatorsSet: false,
 
             _metadataSetter: function(metadata){
 
-                var allValidators = array.map(metadata.fields, lang.hitch(this, function(field, fieldName){
-                    var fieldValidatorSet = new Deferred;
-                    validatorFactory.create({
-                        'class': 'Sds/Common/Validator/FieldValidator',
-                        options: {metadata: field}
-                    }).then(lang.hitch(this, function(fieldValidator){
-                        this._fieldValidators[fieldName] = fieldValidator;
-                        fieldValidatorSet.resolve();
-                    }));
-                    return fieldValidatorSet;
-                }));
+                for (var fieldName in metadata.fields){
+                    this._fieldValidators[fieldName] = new FieldValidator({metadata: metadata.fields[fieldName]});
+                }
 
-                var classValidatorSet = new Deferred;
-                allValidators.push(classValidatorSet);
-
-                validatorFactory.create({
-                    'class': 'Sds/Common/Validator/FieldValidator',
-                    options: {metadata: metadata}
-                }).then(lang.hitch(this, function(classValidator){
-                    this.set('_classValidator', classValidator);
-                    classValidatorSet.resolve();
-                }));
-
-                var allValidatorsSet = new DeferredList(allValidators);
-                allValidatorsSet.then(lang.hitch(this, function(){
-                    this.set('_allValidatorsSet', true);
-                }));
+                this._classValidator = new FieldValidator({metadata: metadata});
+                this.set('_validatorsSet', true);
             },
 
             _isValid: function(value){
 
-                if (this._allValidatorsSet){
-                    return this._checkAllValidators(value);
+                if (this._validatorsSet){
+                    return this._checkValidators(value);
                 }
-                    var resultDeferred = new Deferred;
-                    this.watch('_allValidatorsSet', lang.hitch(this, function(property, oldValue, newValue){
-                        if (newValue){
-                            resultDeferred.resolve(this._checkAllValidators(value));
-                        }
-                    }));
 
-                return resultDeferred;
+                var resultDeferred = new Deferred;
+                var handle = this.watch('_validatorsSet', lang.hitch(this, function(property, oldValue, newValue){
+                    if (newValue){
+                        handle.unwatch('_validatorsSet');
+                        resultDeferred.resolve(this._checkValidators(value));
+                    }
+                }));
+
+                return {result: resultDeferred, messages: []};
             },
 
-            _checkAllVaidators: function(value){
+            _checkValidators: function(value){
 
-                var resultObjects = array.map(this._fieldValidators, function(validator, fieldName){
-                    return {result: validator.isValid(value.fieldName), messages: validator.get('messages')};
-                });
-                resultObjects.push({result: this._classValidator.isValid(value), messages: this._classValidator.get('messages')});
 
-                var deferredResultObjects = array.filter(resultObjects, function(resultObject){
-                    if (BaseValidator.isDeferred(resultObject.result)){
-                        return true;
-                    } else {
-                        return false;
-                    }
-                });
+                var resultObjects = {};
+                var validator;
+                var fieldName;
 
+                for (fieldName in this._fieldValidators){
+                    validator = this._fieldValidators[fieldName];
+                    resultObjects[fieldName] = {
+                        result: validator.isValid(value[fieldName]),
+                        messages: validator.get('messages'),
+                        validator: validator
+                    };
+                }
+                resultObjects['modelValidator'] = {
+                    result: this._classValidator.isValid(value),
+                    messages: this._classValidator.get('messages'),
+                    validator: this._classValidator
+                };
+
+                var resultDeferred;
                 var messages;
-                array.forEach(resultObject, function(resultObject){
-                    messages.concat(resultObject.messages);
-                });
+                var result;
 
-                if (deferredResultObjects.length == 0){
-                    var result = array.every(resultObjects, function(resultObject){
-                        return resultObject.result;
+                var resultThen = function(fieldName){
+                    resultObjects[fieldName].result.then(function(resolvedResult){
+                        resultObjects[fieldName].result = resolvedResult;
+                        resultObjects[fieldName].messages = resultObjects[fieldName].validator.get('messages');
+
+                        var stillWaiting = false;
+                        result = true;
+                        messages = [];
+                        for (fieldName in resultObjects){
+                            if (utils.isDeferred(resultObjects[fieldName].result)){
+                                stillWaiting = true;
+                            }
+                            if (resultObjects[fieldName].result === false){
+                                result = false;
+                            }
+                            messages = messages.concat(array.map(resultObjects[fieldName].messages, function(message){
+                                return fieldName + ': ' + message;
+                            }));
+                        }
+                        if ( ! stillWaiting){
+                            resultDeferred.resolve({result: result, messages: messages});
+                        }
                     });
-                    return {result: result, messages: messages};
-                } else {
-                    var deferredResult = new DeferredList(
-                        array.map(deferredResultObjects, function(resultObject){
-                            return resultObject.result;
-                        })
-                    );
+                };
 
-                    return {result: deferredResult, messages: messages};
+                var hasDeferred = false;
+                result = true;
+                messages = [];
+                for (fieldName in resultObjects){
+                    if (utils.isDeferred(resultObjects[fieldName].result)){
+                        if (! resultDeferred){
+                            resultDeferred = new Deferred;
+                        }
+                        hasDeferred = true;
+                        resultThen(fieldName);
+                    }
+                    if (resultObjects[fieldName].result === false){
+                        result = false;
+                    }
+                    messages = messages.concat(array.map(resultObjects[fieldName].messages, function(message){
+                        return fieldName + ': ' + message;
+                    }));
+                }
+
+                if (hasDeferred){
+                    return {result: resultDeferred, messages: messages};
+                } else {
+                    return {result: result, messages: messages};
                 }
             }
         }

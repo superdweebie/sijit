@@ -23,6 +23,12 @@ function (
                         return false;
                     }
                 });
+            },
+
+            _setFieldsAttr: function(value){
+                for (var index in value){
+                    this.containerNode.appendChild(value[index].domNode);
+                }
             }
         }
     );

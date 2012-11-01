@@ -2,24 +2,24 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
+    'dojo/when',
     'dojo/Deferred',
     'dojo/dom-class',
     'dojox/timing',
-    'Sds/Common/Validator/BaseValidator',
-    'Sds/Common/Validator/validatorFactory',
     'Sds/Common/utils',
+    'Sds/Common/Validator/validatorFactory',
     'dijit/_FocusMixin'
 ],
 function (
     declare,
     lang,
     array,
+    when,
     Deferred,
     domClass,
     timing,
-    BaseValidator,
-    validatorFactory,
     utils,
+    validatorFactory,
     FocusMixin
 ){
 
@@ -120,7 +120,7 @@ function (
                     this._startValidateTimer();
                 }));
 
-                validatorFactory.create(value).then(function(validator){
+                when(validatorFactory.create(value), function(validator){
                     validatorDeferred.resolve(validator);
                 });
             },
@@ -189,7 +189,7 @@ function (
                         this._updateStyle(result);
                         state = 'Error';
                         break;
-                    case BaseValidator.isDeferred(result):
+                    case utils.isDeferred(result):
                         result.then(lang.hitch(this, function(asyncResult){
                             var state;
                             if (asyncResult){

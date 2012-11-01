@@ -2,26 +2,28 @@ define([
         'dojo/_base/declare',
         'dojo/_base/config',
         'dojo/Deferred',
+        'dojo/DeferredList',
         'dojo/when',
         'dojo/_base/lang',
-        'Sds/ServiceManager/Proxy',
+        'Sds/ModuleManager/Proxy',
         'Sds/Common/utils'
     ],
     function (
         declare,
         dojoConfig,
         Deferred,
+        DeferredList,
         when,
         lang,
         Proxy,
         utils
     ) {
         // module:
-        //		Sds/ServiceManager/ServiceManager
+        //		Sds/ModuleManager/ModuleManager
 
         return declare
         (
-            'Sds/ServiceManager/ServiceManager',
+            'Sds/ModuleManager/ModuleManager',
             null,
             {
                 // summary:
@@ -31,50 +33,11 @@ define([
                 //		The config property may be populated with a config object that
                 //		defines what to inject.
                 //
-                // example:
-                // |    myThingForm: {
-                // |        moduleName: 'my/Thing/Form',
-                // |        proxyMethods: [
-                // |            'get', 'set', 'watch'
-                // |        ],
-                // |        values: {
-                // |            title: 'my formt title'
-                // |        },
-                // |        createObjects: {
-                // |        },
-                // |        getObjects: {
-                // |            alterApi: 'alertApi'
-                // |        },
-                // |        proxyObjects: {
-                // |            errorManager: 'Sds/ErrorManager/ErrorManager'
-                // |        }
-                // |    }
-                //
-                // The above config describes how to create an instance of the 'my/Thing/Form'.
-                // When `serviceManager.getObject('myThingForm')` this object will be returned.
-                //
-                // The moduleName attribute defines which module to load. If not already loaded, it will be loaded
-                // async.
-                //
-                // The proxyMethods array is an array of method names that should be proxied if
-                // a Proxy to the is object is created.
-                //
-                // The values object is an associatvie array of values to inject into the object.
-                //
-                // The createObjects is an associative array of objects to create with the serviceManager
-                // and inject. Once injected, they can be used as normal.
-                //
-                // The getObjects is an associative array of objects to load with the serviceManager
-                // and inject. Once injected, they can be used as normal.
-                //
-                // The proxyObjects is an associatvie array of objects to inject a Sds.serviceManager.Proxy instance for.
-                // An proxyObject doesn't inject the object itself, but a proxy of the object to get or use the object later.
-                //
-                // proxyObject injections allow the lazy loading of dependencies - they are only
-                // loaded when they are called.
+                //      See Sds/Test/ModuleManager/Asset/config for many configuration
+                //      examples and explaination of options.
 
                 // _cache: array
-                //      An array of all objects created through the ServiceManager. If an object is requested
+                //      An array of all objects created through the ModuleManager. If an object is requested
                 //      more than once, it is retrieved from this array
                 _cache: [],
 
@@ -82,59 +45,109 @@ define([
                 //      The configuration object. Defines what to inject into objects
                 _config: {},
 
-                constructor: function(/* object */ config){
+                constructor: function(/*object*/ config){
 
                     this._cache = [];
 
                     // Default to dojo config object if no config object is supplied
                     if ( ! config) {
-                        config = dojoConfig.serviceManager;
+                        config = dojoConfig.moduleManager;
                     }
 
                     this._config = config;
                 },
 
-                _createObject: function(/*string*/ identifier) {
+                _create: function(/*mixed*/ identifier) {
                     // summary:
                     //     Used to create an object with the supplied identifier
                     // tags:
                     //     protected
 
-                    var config = this.getObjectConfig(identifier);
+                    var config;
+                    var mid;
+                    var defaultDirectives = {
+                        declare: false,
+                        define: false,
+                        cache: true
+                    };
 
-                    //Check for moduleName alias
-                    var moduleName = identifier;
-                    if (config && config.moduleName){
-                        moduleName = config.moduleName;
+                    switch (true){
+                        case typeof(identifier) == 'string':
+                            config = this.getIdentifierConfig(identifier);
+                            if ( ! config){
+                                config = {};
+                            }
+
+                            //Marshal directives
+                            if ( ! config.directives){
+                                config.directives = defaultDirectives;
+                            } else {
+                                config.directives = lang.mixin(defaultDirectives, config.directives);
+                            }
+
+                            //Check for explicit mid
+                            mid = identifier;
+                            if (config.mid){
+                                mid = config.mid;
+                            }
+
+                            break;
+                        case typeof(identifier) == 'object':
+                            config = lang.clone(identifier);
+
+                            //Marshal directives
+                            config.directives = defaultDirectives;
+                            config.directives.cache = false; //Never cache nested configs
+
+                            identifier = null;
+                            mid = config.mid;
+                            if (!mid){
+                                return null;
+                            }
+                            break;
+                        default:
+                            return null;
                     }
 
                     //Create object
                     var deferredObject = new Deferred();
                     var index = this._cache.length;
-                    this._cache[index] = {identifier: identifier, object: null, promise: deferredObject};
 
-                    require([moduleName], lang.hitch(this, function(Module){
+                    if (config.directives.cache){
+                        this._cache[index] = {identifier: identifier, object: deferredObject};
+                    }
+
+                    require([mid], lang.hitch(this, function(Module){
                         var object;
+
+                        var resolveObject = lang.hitch(this, function(object){
+                            if (config.directives.cache){
+                                this._cache[index].object = object;
+                            }
+                            if (config.directives.define){
+                                define(identifier, [], function(){return object});
+                            }
+                            deferredObject.resolve(object);
+                        });
+
                         if (Module.prototype){ //check if we can create an instnace
-                            if (!config || (config && !config.useDeclare)){
-                                object = new Module; //Create an instance
-                                when(this._inject(object, config), lang.hitch(this, function(injectedObject){
-                                    this._cache[index].object = injectedObject;
-                                    this._cache[index].promise.resolve(injectedObject);
-                                }));
-                            } else {
-                                //don't create an instance - use declare to create a new injected prototype
+                            if (config.directives.declare){
                                 when(this._inject({}, config), lang.hitch(this, function(injectedObject){
                                     object = declare(identifier, [Module], injectedObject);
-                                    this._cache[index].object = object;
-                                    this._cache[index].promise.resolve(object);
+                                    resolveObject(object);
+                                }));
+                            } else {
+                                object = new Module;
+                                when(this._inject(object, config), lang.hitch(this, function(injectedObject){
+                                    resolveObject(injectedObject);
                                 }));
                             }
                         } else {
                             object = lang.clone(Module); //Just clone the module
                             when(this._inject(object, config), lang.hitch(this, function(injectedObject){
-                                this._cache[index].object = injectedObject;
-                                this._cache[index].promise.resolve(injectedObject);
+                                when(this._inject(object, config), lang.hitch(this, function(injectedObject){
+                                    resolveObject(injectedObject);
+                                }));
                             }));
                         }
                     }));
@@ -142,52 +155,93 @@ define([
                     return deferredObject;
                 },
 
-                _getObject: function(/*string*/ identifier){
+                _get: function(/*mixed*/ identifier){
                     // summary:
                     //     Used to get an object with the supplied identifier
                     // tags:
                     //     protected
 
-                    var object = this._getCachedObject(identifier);
-                    if (object){
-                        return object;
+                    var result;
+
+                    switch (true){
+                        case typeof(identifier) == 'string':
+                            //If identifier is a string, just get the corresponding object
+
+                            //check the cache first
+                            result = this._getCached(identifier);
+                            if ( ! result){
+                                //No cache, so create object
+                                result = this._create(identifier);
+                            }
+                            break;
+                        case lang.isArray(identifier):
+                            //If identifier is array, then get each identifier in the array, and
+                            //return the array
+                            var resultArray = lang.clone(identifier);
+
+                            var getArrayItem = lang.hitch(this, function(index){
+                                var objectDeferred = new Deferred;
+                                when(this._get(identifier[index]), function(object){
+                                    resultArray[index] = object;
+                                    objectDeferred.resolve();
+                                });
+                                return objectDeferred;
+                            });
+
+                            var objectDeferreds = [];
+                            for (var index in identifier){
+                                objectDeferreds.push(getArrayItem(index));
+                            }
+
+                            result = new Deferred;
+                            var objectDeferredsList = new DeferredList(objectDeferreds);
+                            objectDeferredsList.then(function(){
+                                result.resolve(resultArray);
+                            });
+
+                            break;
+                        case Boolean(identifier.mid):
+                            //If identifier is object with mid, then it is a nested config
+                            result = this._create(identifier);
+                            break;
+                        default:
+                            //Don't know what to do with it, so just pass it back
+                            result = identifier;
                     }
 
-                    //Create object
-                    return this._createObject(identifier);
+                    return result;
                 },
 
-                _getProxy: function(/*string*/ identifier){
+                _proxy: function(/*string*/ identifier){
                     // summary:
                     //     Used to get a proxy to the object with the supplied identifier.
-                    //     If a shared object already exists, that will be returned instead of the
+                    //     If a cache already exists, that will be returned instead of the
                     //     proxy.
                     // tags:
                     //     protected
 
-                    var object = this._getCachedObject(identifier);
+                    var object = this._getCached(identifier);
                     if (object){
                         return object;
                     }
 
-                    var config = this.getObjectConfig(identifier);
+                    var config = this.getIdentifierConfig(identifier);
                     var proxy = new Proxy(identifier, this);
                     var method;
                     var index;
                     for (index in config.proxyMethods){
                         method = config.proxyMethods[index];
-
-                        proxy[method] = this._getProxyMethod(method);
+                        proxy[method] = this._proxyMethod(method);
                     }
 
                     return proxy;
                 },
 
-                _getProxyMethod: function(/*string*/ method){
+                _proxyMethod: function(/*string*/ method){
                     return function(){
                         var proxyArguments = arguments;
                         var resultDeferred = new Deferred;
-                        when(this._serviceManager.getObject(this._identity), function(object){
+                        when(this._moduleManager.get(this._identity), function(object){
                             when(object[method].apply(object, proxyArguments), function(result){
                                 resultDeferred.resolve(result);
                             })
@@ -196,7 +250,7 @@ define([
                     }
                 },
 
-                _getCachedObject: function(/*string*/ identifier){
+                _getCached: function(/*string*/ identifier){
                     // summary:
                     //     Will return an instance of object with the supplied identifier
                     //     if it already exists. If not, will return null.
@@ -223,82 +277,57 @@ define([
                     // tags:
                     //     protected
 
-                    //return early if there are not injections to do
+                    //return early if there are no injections to do
                     if ( ! config){
                         return object;
                     }
 
                     var attr;
-                    var deferredObject = new Deferred();
-                    var injectionsRemaining = 0;
-                    var earlyResolve = false;
 
-                    //Determine how many async object loads need to finish before object is ready
-                    if (config.createObjects) {
-                        injectionsRemaining += utils.countProperties(config.createObjects);
-                    }
-                    if (config.getObjects) {
-                        injectionsRemaining += utils.countProperties(config.getObjects);
-                    }
+                    //Inject prarams
+                    lang.mixin(object, config.params);
 
-                    if (injectionsRemaining == 0) {
-                        earlyResolve = true;
-                    }
-
-                    //Inject variables
-                    for (attr in config.values){
-                        object[attr] = config.values[attr];
-                    }
-
-                    //Inject create objects
-                    var injectCreateObject = lang.hitch(this, function(createIdentifier, attrCreate){
-                        when(this.createObject(createIdentifier), function(injectionObject){
-                            object[attrCreate] = injectionObject;
-                            --injectionsRemaining;
-                            if (injectionsRemaining == 0){
-                                deferredObject.resolve(object);
-                            }
-                        });
-                    });
-                    for (attr in config.createObjects){
-                        injectCreateObject(config.createObjects[attr], attr);
-                    }
-
-
-                    //Inject get objects
-                    var injectGetObject = lang.hitch(this, function(getIdentifier, attrGet){
-                        when(this.getObject(getIdentifier), function(injectionObject){
+                    //Inject gets
+                    var injectGet = lang.hitch(this, function(getIdentifier, attrGet){
+                        var getDeferred = new Deferred;
+                        when(this._get(getIdentifier), function(injectionObject){
                             object[attrGet] = injectionObject;
-                            --injectionsRemaining;
-                            if (injectionsRemaining == 0){
-                                deferredObject.resolve(object);
-                            }
+                            getDeferred.resolve();
                         });
+                        return getDeferred;
                     });
-                    for (attr in config.getObjects){
-                        injectGetObject(config.getObjects[attr], attr);
+                    var getsDeferreds = [];
+                    for (attr in config.gets){
+                        getsDeferreds.push(injectGet(config.gets[attr], attr));
                     }
 
-                    //Inject proxy objects
-                    for (attr in config.proxyObjects){
-                        object[attr] = this._getProxy(config.proxyObjects[attr]);
+                    //Inject proxies
+                    for (attr in config.proxies){
+                        object[attr] = this._proxy(config.proxies[attr]);
                     }
 
-                    //Inject serviceManager, if object is ServiceManagerAware
-                    if (object.isServiceManagerAware) {
-                        object.serviceManager = this;
+                    //Inject moduleManager, if object is ModuleManagerAware
+                    if (object.isModuleManagerAware) {
+                        object.moduleManager = this;
                     }
 
-                    //Resove deferred if there were no async injections
-                    if (earlyResolve) {
-                        deferredObject.resolve(object);
+                    if (getsDeferreds.length > 0){
+                        var deferredObject = new Deferred();
+                        var getsDeferredsList = new DeferredList(getsDeferreds);
+                        getsDeferredsList.then(function(){
+                            deferredObject.resolve(object);
+                        })
+                        return deferredObject;
+                    } else {
+                        return object;
                     }
+
                     return deferredObject;
                 },
 
-                clearInstanceCache: function(){
+                clearCache: function(){
                     // summary:
-                    //     Empties the cached instance array
+                    //     Empties the cache
 
                     this._cache = [];
                 },
@@ -321,14 +350,14 @@ define([
                     this._config = config;
                 },
 
-                setObjectConfig: function(/* string */ identifier, /* object */ config) {
+                setIdentifierConfig: function(/* string */ identifier, /* object */ config) {
                     // summary:
                     //     Set the config object for a particular identifier
 
                     this._config[identifier] = config;
                 },
 
-                getObjectConfig: function(/* string */identifier){
+                getIdentifierConfig: function(/* string */identifier){
                     // summary:
                     //     Return the config object for a particular identifier
 
@@ -340,35 +369,28 @@ define([
                     return null;
                 },
 
-                createObject: function(/*string*/ identifier){
-                    // summary:
-                    //     Create a new object from identifier.
-                    //     Will replace cached copy of identifier, if it exists
 
-                    return this._createObject(identifier);
-                },
-
-                getObject: function(/*string*/ identifier){
+                get: function(/*string*/ identifier){
                     // summary:
                     //     Return a deferred that will resolve to the identifier requested.
                     //     Will return cached object if one exists.
 
-                    return this._getObject(identifier);
+                    return this._get(identifier);
                 },
 
-                getProxy: function(/*string*/ identifier){
+                proxy: function(/*string*/ identifier){
                     // summary:
                     //     Return a Proxy object that will proxy the identifier requested.
 
-                    return this._getProxy(identifier)
+                    return this._proxy(identifier)
                 },
-                
+
                 inject: function(/* object */ object, /* string */ identifier){
                     // summary:
-                    //     Use inject to inject an object created outside the serviceManager
-                    //     with the serviceManager config
+                    //     Use inject to inject an object created outside the moduleManager
+                    //     with the moduleManager config
 
-                    var config = this.getObjectConfig(identifier);
+                    var config = this.getIdentifierConfig(identifier);
                     if (config){
                         object = this._inject(object, config);
                     }

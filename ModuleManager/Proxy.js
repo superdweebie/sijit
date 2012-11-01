@@ -5,11 +5,11 @@ function (
     declare
 ){
     // module:
-    //		Sds/ServiceManager/Proxy
+    //		Sds/ModuleManager/Proxy
 
     return declare
     (
-        'Sds/ServiceManager/Proxy',
+        'Sds/ModuleManager/Proxy',
         null,
         {
             // summary:
@@ -17,19 +17,15 @@ function (
 
             _identity: undefined,
 
-            _serviceManager: undefined,
+            _moduleManager: undefined,
 
-            constructor: function(identity, serviceManager){
+            constructor: function(identity, moduleManager){
                 this._identity = identity;
-                this._serviceManager = serviceManager;
+                this._moduleManager = moduleManager;
             },
 
-            createObject: function(){
-                return this._serviceManager.createObject(this._identity);
-            },
-
-            getObject: function(){
-                return this._serviceManager.getObject(this._identity);
+            moduleManagerGet: function(){
+                return this._moduleManager.get(this._identity);
             }
         }
     )

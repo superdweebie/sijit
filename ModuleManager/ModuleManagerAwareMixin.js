@@ -5,27 +5,27 @@ define ([
         declare
     ){
         // module:
-        //		Sds/ServiceManager/ServiceManagerAwareMixin
+        //		Sds/ModuleManager/ModuleManagerAwareMixin
 
         return declare (
-            'Sds/ServiceManager/ServiceManagerAwareMixin',
+            'Sds/ModuleManager/ModuleManagerAwareMixin',
             null,
             {
                 // summary:
                 //		Can be mixed into objects that need to be explicitly aware
-                //		of the ServiceManager
+                //		of the ModuleManager
                 //
                 // description:
-                //      The ServiceManager will be automatically injected
+                //      The ModuleManager will be automatically injected
 
-                // isServiceManagerAware: boolean
-                //      The serviceManager looks for this property. If it is found,
+                // isModuleManagerAware: boolean
+                //      The moduleManager looks for this property. If it is found,
                 //      then the serivceManager instance is injected.
-                isServiceManagerAware: true,
+                isModuleManagerAware: true,
 
-                // serviceManager: Object
-                //		The serviceManager instance
-                serviceManager: undefined
+                // moduleManager: Object
+                //		The moduleManager instance
+                moduleManager: undefined
             }
         );
     }
