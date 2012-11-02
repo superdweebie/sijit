@@ -21,7 +21,7 @@ function(
 
                 if ( ! this.regEx.test(value)){
                     result = false;
-                    messages.push(validatorMessages.IdentifierCharsValidatorMessage);
+                    messages.push(validatorMessages.identifierCharsValidatorMessage);
                 }
 
                 return {result: result, messages: messages};

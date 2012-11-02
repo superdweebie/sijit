@@ -5,7 +5,6 @@ define([
     'Sds/Test/Common/Validator/TestCurrencyValidator',
     'Sds/Test/Common/Validator/TestDatatypeValidator',
     'Sds/Test/Common/Validator/TestEmailAddressValidator',
-    'Sds/Test/Common/Validator/TestFieldValidator',
     'Sds/Test/Common/Validator/TestLengthValidator',
     'Sds/Test/Common/Validator/TestModelValidator',
     'Sds/Test/Common/Validator/TestIdentifierArrayValidator',

@@ -1,7 +1,7 @@
 define([],
 function(){
     return {
-        serviceManager: {
+        moduleManager: {
             'Sds/ExceptionModule/ExceptionController': {
                 values: {
                     logLevel: 0,

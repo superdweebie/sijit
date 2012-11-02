@@ -64,7 +64,7 @@ function(
                 var valueString = json.toJson(value);
 
                 if (this.useCache){
-                    var cacheItem = this._validatedValuesCache[this.valueString];
+                    var cacheItem = this._validatedValuesCache[valueString];
                     if(cacheItem){
                         return cacheItem;
                     }
@@ -92,19 +92,19 @@ function(
             _addToCache: function(valueString, resultObject){
 
                 var cacheResult = lang.hitch(this, function(resultObject){
-                    if (this._validatedValuesCache.length > this.maxCacheSize){
-                        this._validatedValuesCache.shift();
+                    if (utils.isDeferred(resultObject.result)){
+                        resultObject.result.then(function(resultObject){
+                            cacheResult(resultObject);
+                        });
+                    } else {
+                        if (this._validatedValuesCache.length > this.maxCacheSize){
+                            this._validatedValuesCache.shift();
+                        }
+                        this._validatedValuesCache[valueString] = resultObject;
                     }
-                    this._validatedValuesCache[valueString] = resultObject;
                 });
 
-                if (utils.isDeferred(resultObject.result)){
-                    resultObject.result.then(function(resolvedResultObject){
-                        cacheResult(resolvedResultObject);
-                    });
-                } else {
-                    cacheResult(resultObject);
-                }
+                cacheResult(resultObject);
             }
         }
     );

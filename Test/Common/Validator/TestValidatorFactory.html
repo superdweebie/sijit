@@ -23,7 +23,7 @@
 
                             var testDeferred = new doh.Deferred;
 
-                            when(validatorFactory.create({mid: 'Sds/Common/Validator/DatatypeValidator', params: {requiredType: 'string'}}), function(validator){
+                            when(validatorFactory.create({base: 'Sds/Common/Validator/DatatypeValidator', params: {requiredType: 'string'}}), function(validator){
 
                                 var testArray = [
                                     [true, 'username'],
@@ -79,7 +79,7 @@
 
                             when(validatorFactory.create([
                                 {
-                                    mid: 'Sds/Common/Validator/DatatypeValidator',
+                                    base: 'Sds/Common/Validator/DatatypeValidator',
                                     params: {requiredType: 'string'}
                                 },
                                 'Sds/Common/Validator/IdentifierValidator'
@@ -113,7 +113,7 @@
                             when(validatorFactory.create('Sds/Common/Validator/IdentifierValidator'), function(identifierValidator){
                                 when(validatorFactory.create([
                                     {
-                                        mid: 'Sds/Common/Validator/DatatypeValidator',
+                                        base: 'Sds/Common/Validator/DatatypeValidator',
                                         params: {requiredType: 'string'}
                                     },
                                     identifierValidator

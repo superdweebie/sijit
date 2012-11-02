@@ -8,55 +8,43 @@
 		<script type="text/javascript">
             require([
                     'doh/main',
-                    'dojo/when',
-                    'dojo/Deferred',
                     'Sds/Common/Validator/ModelValidator',
-                    'Sds/Test/Common/Validator/Asset/TestModel',
+                    'Sds/Common/Validator/LengthValidator',
+                    'Sds/Common/Validator/CredentialValidator',
+                    'Sds/Test/Common/Form/Asset/MultiFieldValidator',
                     'dojo/domReady!'
                 ],
                 function(
                     doh,
-                    when,
-                    Deferred,
                     ModelValidator,
-                    TestModel
+                    LengthValidator,
+                    CredentialValidator,
+                    MultiFieldValidator
                 ){
                     doh.register("Sds/Test/Common/Validator/TestModelValidator", [
 
                         function ValidatorTest(doh){
 
-                            var resultDeferred = new Deferred;
-
-                            var validator = new ModelValidator({metadata: TestModel.metadata});
+                            var validator = new ModelValidator({validators: [
+                                new MultiFieldValidator,
+                                new LengthValidator({field: 'username', min: 2, max: 5}),
+                                new CredentialValidator({field: 'password'})
+                            ]});
 
                             var testArray = [
-                                //[true, new TestModel({firstname: 'Liz', lastname: 'Emma', email: 'mim@here.com'})],
-                                [false, new TestModel({firstname: 'Miriam', lastname: 'Emma', email: 'mim@here.com'})],
-                                [false, new TestModel({firstname: null, lastname: 'Emma', email: 'mim@here.com'})]//,
-                                //[false, new TestModel({firstname: 'Tim', lastname: 'E', email: 'here.com'})]
+                                [true, {username: 'Toby', password: 'password1'}],
+                                [false, {username: 'Toby', password: 'not password'}],
+                                [false, {username: 'Not Toby', password: 'not password'}]
                             ];
-                            var count = 0;
 
                             var index;
                             for (index in testArray){
                                 if (testArray[index][0]){
-                                    when(validator.isValid(testArray[index][1]), function(result){
-                                        console.dir(validator.get('messages'));
-                                        doh.assertTrue(result);
-                                        ++count;
-                                        if (count > testArray.length){resultDeferred.resolve(true)}
-                                    })
+                                    doh.assertTrue(validator.isValid(testArray[index][1]).result);
                                 } else {
-                                    when(validator.isValid(testArray[index][1]), function(result){
-                                        console.dir(validator.get('messages'));
-                                        doh.assertFalse(result);
-                                        ++count;
-                                        if (count > testArray.length){resultDeferred.resolve(true)}
-                                    })
+                                    doh.assertFalse(validator.isValid(testArray[index][1]).result);
                                 }
                             }
-
-                            return resultDeferred;
                         }
                     ]);
 

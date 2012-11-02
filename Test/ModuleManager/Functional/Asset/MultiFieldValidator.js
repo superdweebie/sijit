@@ -7,23 +7,17 @@ function(
     BaseValidator
 ){
     return declare(
-        'Sds/Test/Common/Validator/Asset/TestModelValidator',
+        'Sds/Test/ModuleManager/Functional/Asset/MultiFieldValidator',
         [BaseValidator],
         {
-            name: undefined,
-
-            constructor: function(name){
-                this.name = name
-            },
 
             _isValid: function(value){
-
                 var messages = [];
-                var result = true;
 
-                if (value.firstname != this.name){
+                var result = true;
+                if (value.username != 'Toby'){
                     result = false;
-                    messages.push('Firstname must be miriam');
+                    messages.push('Username must be Toby');
                 }
 
                 return {result: result, messages: messages};

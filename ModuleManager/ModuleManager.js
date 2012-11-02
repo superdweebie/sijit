@@ -64,7 +64,7 @@ define([
                     //     protected
 
                     var config;
-                    var mid;
+                    var base;
                     var defaultDirectives = {
                         declare: false,
                         define: false,
@@ -85,10 +85,10 @@ define([
                                 config.directives = lang.mixin(defaultDirectives, config.directives);
                             }
 
-                            //Check for explicit mid
-                            mid = identifier;
-                            if (config.mid){
-                                mid = config.mid;
+                            //Check for explicit base
+                            base = identifier;
+                            if (config.base){
+                                base = config.base;
                             }
 
                             break;
@@ -100,13 +100,41 @@ define([
                             config.directives.cache = false; //Never cache nested configs
 
                             identifier = null;
-                            mid = config.mid;
-                            if (!mid){
+                            base = config.base;
+                            if (!base){
                                 return null;
                             }
                             break;
                         default:
                             return null;
+                    }
+
+                    //Get the base object to inject
+                    var baseObjectDeferred = new Deferred;
+                    switch (true){
+                        case typeof(base) == 'object':
+                            //If base is an object, then inject that object
+                            baseObjectDeferred.resolve(base);
+                            break;
+                        case base == identifier:
+                            //If base is the same as the identifier, then load the
+                            //underling AMD module
+                            require([base], function(baseObject){
+                                baseObjectDeferred.resolve(baseObject);
+                            });
+                            break;
+                        case Boolean(this.getIdentifierConfig(base)):
+                            //If base is defined in the moduleManager config, then
+                            //get that object
+                            when(this._get(base), function(baseObject){
+                                baseObjectDeferred.resolve(baseObject);
+                            });
+                            break;
+                        default:
+                            //Default is to load the AMD module
+                            require([base], function(baseObject){
+                                baseObjectDeferred.resolve(baseObject);
+                            });
                     }
 
                     //Create object
@@ -117,7 +145,8 @@ define([
                         this._cache[index] = {identifier: identifier, object: deferredObject};
                     }
 
-                    require([mid], lang.hitch(this, function(Module){
+                    baseObjectDeferred.then(lang.hitch(this, function(baseObject){
+
                         var object;
 
                         var resolveObject = lang.hitch(this, function(object){
@@ -130,20 +159,20 @@ define([
                             deferredObject.resolve(object);
                         });
 
-                        if (Module.prototype){ //check if we can create an instnace
+                        if (baseObject.prototype){ //check if we can create an instnace
                             if (config.directives.declare){
                                 when(this._inject({}, config), lang.hitch(this, function(injectedObject){
-                                    object = declare(identifier, [Module], injectedObject);
+                                    object = declare(identifier, [baseObject], injectedObject);
                                     resolveObject(object);
                                 }));
                             } else {
-                                object = new Module;
+                                object = new baseObject;
                                 when(this._inject(object, config), lang.hitch(this, function(injectedObject){
                                     resolveObject(injectedObject);
                                 }));
                             }
                         } else {
-                            object = lang.clone(Module); //Just clone the module
+                            object = lang.clone(baseObject); //Just clone the module
                             when(this._inject(object, config), lang.hitch(this, function(injectedObject){
                                 when(this._inject(object, config), lang.hitch(this, function(injectedObject){
                                     resolveObject(injectedObject);
@@ -200,8 +229,8 @@ define([
                             });
 
                             break;
-                        case Boolean(identifier.mid):
-                            //If identifier is object with mid, then it is a nested config
+                        case Boolean(identifier.base):
+                            //If identifier is object with base, then it is a nested config
                             result = this._create(identifier);
                             break;
                         default:

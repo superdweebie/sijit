@@ -1,15 +1,15 @@
 define([],
 function(){
     return {
-        serviceManager: {
+        moduleManager: {
             'Sds/AuthenticationModule/AuthenticationController': {
-                values: {
+                params: {
                     enableRememberMe: true
                 },
-                getObjects: {
+                gets: {
                     apiSmd: 'Sds/AuthenticationModule/Smd'
                 },
-                proxyObjects: {
+                proxies: {
                     loginView: 'Sds/AuthenticationModule/View/Login'
                 }
             },
@@ -21,20 +21,72 @@ function(){
                     'set',
                     'watch'
                 ],
-                values: {
+                params: {
                     forgotCredentialRoute: '/identity/forgotCredential',
                     registerRoute: '/identity/register'
                 }
             },
+            'Sds/AuthenticationModule/ViewModel/Login': {
+                base: {},
+                params: {
+                    identityName: undefined,
+                    credential: undefined
+                }
+            },
+            'Sds/AuthenticationModule/ViewModel/Login/IdentityName/Input': {
+                base: 'Sds/Common/Form/ValidationTextBox',
+                directives: {
+                    declare: true,
+                    define: true
+                },
+                params: {
+                    name     : 'identityName',
+                    label    : 'Username:'
+                },
+                gets: {
+                    validator: 'Sds/AuthenticationModule/ViewModel/Login/IdentityName/validator'
+                }
+            },
+            'Sds/AuthenticationModule/ViewModel/Login/Credential/Input': {
+                base: 'Sds/Common/Form/ValidationTextBox',
+                directives: {
+                    declare: true,
+                    define: true
+                },
+                params: {
+                    name     : 'credential',
+                    label    : 'Password:',
+                    type     : 'password'
+                },
+                gets: {
+                    validator: 'Sds/AuthenticationModule/ViewModel/Login/Credential/validator'
+                }
+            },
+            'Sds/AuthenticationModule/ViewModel/Login/RememberMe/Input': {
+                base: 'Sds/Common/Form/Checkbox',
+                directives: {
+                    declare: true,
+                    define: true
+                },
+                params: {
+                    name     : 'rememberMe',
+                    label    : 'Remember me:'
+                },
+                gets: {
+                    validator: 'Sds/AuthenticationModule/ViewModel/Login/RememberMe/validator'
+                }
+            },
+
+
             'Sds/ExceptionModule/ExceptionController': {
-                values: {
+                params: {
                     registeredExceptions: {
                         'Sds/AuthenticationModule/Exception/LoginFailedException': 'Sds\\AuthenticationModule\\Exception\\LoginFailedException'
                     }
                 }
             },
             'Sds/Router/router': {
-                values: {
+                params: {
                     controllers: {
                         'authentication': {
                             name: 'Sds/AuthenticationModule/AuthenticationController',

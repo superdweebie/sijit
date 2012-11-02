@@ -27,6 +27,10 @@ function (
         'Sds/Common/Form/_ValidationMixin',
         [FocusMixin],
         {
+            // state: [readonly] String
+            //		Shows current state (ie, validation result) of input (""=Normal, Incomplete, or Error)
+            state: '',
+
             // messagePosition: string
             //      Possible values are:
             //      auto: if the message is one line, display inline. If it is multiline, display block
@@ -38,13 +42,10 @@ function (
             //      Should message be returned to a get('message') call?
             suppressMessages: true,
 
-            // onBlurSuppressMessages: boolean
-            //      Value for suppressMessages afte the first onBlur event
-            onBlurSuppressMessages: false,
-
-            // state: [readonly] String
-            //		Shows current state (ie, validation result) of input (""=Normal, Incomplete, or Error)
-            state: '',
+            // onActivitySuppressMessages: boolean
+            //      Value for suppressMessages after the first onBlur event
+            //      or if the state changes from valid to invalid while having focus
+            onActivitySuppressMessages: false,
 
             // styleClasses: Object
             //      An object the defines the css classes that could be applied to _messageStyleNode
@@ -64,21 +65,32 @@ function (
 
             // onBlurStyle: string
             //      The style to change to after blur event
-            onBlurStyle: 'error',
+            //      or if the state changes from valid to invalid while having focus
+            onActivityStyle: 'error',
 
             _validatorSet: false,
 
             // validator: an instance of Sds/Common/Validator/BaseValidator.
             validator: undefined,
 
+            messages: [],
+
             _messageStyleNode: undefined,
 
             _delayTimer: undefined,
 
-            delayTimeout: 500,
+            delayTimeout: 350,
 
             startup: function(){
                 this.inherited(arguments);
+
+                this.watch('state', lang.hitch(this, function(p, o, newValue){
+                    if (newValue != '' && this.get('focused')){
+                        this.set('style', this.onActivityStyle);
+                        this.set('suppressMessages', this.onActivitySuppressMessages);
+                    }
+                }));
+
                 this._delayTimer = new timing.Timer(this.delayTimeout);
                 this._delayTimer.onTick = lang.hitch(this, function(){
                     this._delayTimer.stop();
@@ -90,13 +102,14 @@ function (
             _setValueAttr: function(){
                 // summary:
                 //		Hook so set('value', ...) works.
+                this._valueSetTimestamp = new Date().getTime();
                 this.inherited(arguments);
                 this._startValidateTimer();
             },
 
             _setValidatorAttr: function(value){
                 // summary:
-                //     Will set the validator. The value parameter may be one of three
+                //     Will set the validator. The value must be an instance of BaseValidator parameter may be one of three
                 //     types:
                 //
                 //     Instance of BaseValidator - the validator property is set equal to this instance.
@@ -114,9 +127,6 @@ function (
                 validatorDeferred.then(lang.hitch(this, function(validator){
                     this.validator = validator;
                     this._validatorSet = true;
-                    this.validator.watch('messages', lang.hitch(this, function(prop, oldValue, newValue){
-                        this._updateMessages(newValue)
-                    }));
                     this._startValidateTimer();
                 }));
 
@@ -125,17 +135,22 @@ function (
                 });
             },
 
-            _getMessages: function(){
+            _getMessagesAttr: function(){
                 if (this.suppressMessages){
                     return null;
                 }
-                return this.validator.get('messages');
+                return this.messages;
+            },
+
+            _setMessagesAttr: function(value){
+                this.messages = value;
+                this._updateMessages();
             },
 
             _setSuppressMessagesAttr: function(value){
                 this.suppressMessages = value;
                 if (this._started && this.validator){
-                    this._updateMessages(this.validator.get('messages'));
+                    this._updateMessages();
                 }
             },
 
@@ -151,13 +166,10 @@ function (
             },
 
             onBlur: function(){
-                this.set('style', this.onBlurStyle);
-                this.set('suppressMessages', this.onBlurSuppressMessages);
+                this.set('style', this.onActivityStyle);
+                this.set('suppressMessages', this.onActivitySuppressMessages);
                 this.inherited(arguments);
-
-                // Stop the delay timer and force an immediate validation
-                this._delayTimer.stop();
-                this._validate();
+                this._validateNow();
             },
 
             _startValidateTimer: function(){
@@ -175,36 +187,53 @@ function (
                 }
             },
 
-            _validate: function(){
+            _validateNow: function(){
 
-                var state;
-                var result = this.validator.isValid(this._getValueToValidate());
-
-                switch (true){
-                    case (result === true):
-                        this._updateStyle(result);
-                        state = this._getChildrenState();
-                        break;
-                    case (result === false):
-                        this._updateStyle(result);
-                        state = 'Error';
-                        break;
-                    case utils.isDeferred(result):
-                        result.then(lang.hitch(this, function(asyncResult){
-                            var state;
-                            if (asyncResult){
-                                state = this._getChildrenState();
-                            } else {
-                                state = 'Error';
-                            }
-                            this._updateStyle(asyncResult);
-                            this.set('state', state);
-                        }));
-                        state = 'validating';
-                        break;
+                if (! this._validatorSet || ! this._started){
+                    return;
                 }
 
-                this.set('state', state);
+                // Stop the delay timer and force an immediate validation
+                this._delayTimer.stop();
+                this._validate();
+            },
+
+            _validate: function(){
+
+                var processResult = lang.hitch(this, function(resultObject, timestamp){
+
+                    if (this._setValueTimestamp > timestamp){
+                        // _validate has been called with a fresh value, so don't update the ui
+                        return null;
+                    }
+
+                    var result = resultObject.result;
+                    var state;
+
+                    switch (true){
+                        case (result === true):
+                            this._updateStyle(result);
+                            state = this._getChildrenState();
+                            break;
+                        case (result === false):
+                            this._updateStyle(result);
+                            state = 'Error';
+                            break;
+                        case utils.isDeferred(result):
+                            result.then(function(resultObject){
+                                processResult(resultObject, validatingValue);
+                            });
+                            state = 'validating';
+                            break;
+                    }
+
+                    this.set('messages', resultObject.messages);
+                    this.set('state', state);
+                    return null;
+                });
+
+                var value = this._getValueToValidate();
+                processResult(this.validator.isValid(value), new Date().getTime());
             },
 
             _getValueToValidate: function(){
@@ -218,7 +247,13 @@ function (
                 return '';
             },
 
-            _updateMessages: function(messages){
+            _updateMessages: function(){
+                var messages = this.get('messages');
+
+                if ( ! lang.isArray(messages)){
+                    return;
+                }
+
                 if (messages.length == 0 || this.suppressMessages){
                     domClass.add(this.inlineMessageWrapper, 'hide');
                     domClass.add(this.blockMessageWrapper, 'hide');

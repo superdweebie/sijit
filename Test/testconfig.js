@@ -4,8 +4,13 @@ dojoConfig = {
     locale: 'en-us',
     popup: true,
     async: true,
+    aliases: [
+        ['get', 'Sds/ModuleManager/Shared/get'],
+        ['proxy', 'Sds/ModuleManager/Shared/proxy'],
+    ],
     mergeConfigs: [
-        'Sds/ExceptionModule/config',
+        'Sds/Common/Validator/config',
+        'Sds/ExceptionModule/config', 
         'Sds/Router/config',
         'Sds/Mongo/config',
         'Sds/IdentityModule/config',

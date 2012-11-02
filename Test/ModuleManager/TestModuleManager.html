@@ -27,7 +27,7 @@
 
                         var startingConfig = {
                             testButton: {
-                                mid: 'my/module',
+                                base: 'my/module',
                                 params: {
                                     label: 'Test Button'
                                 }
@@ -36,7 +36,7 @@
 
                         var customConfig = {
                             testButton: {
-                                mid: 'my/module',
+                                base: 'my/module',
                                 params: {
                                     showLabel: false
                                 }
@@ -45,7 +45,7 @@
 
                         var mergedConfig = {
                             testButton: {
-                                mid: 'my/module',
+                                base: 'my/module',
                                 params: {
                                     label: 'Test Button',
                                     showLabel: false
@@ -54,7 +54,7 @@
                         }
 
                         var changedConfig = {
-                            mid: 'my/module',
+                            base: 'my/module',
                             params: {
                                 label: 'changed'
                             }
@@ -101,13 +101,13 @@
                         return deferredTest;
                     },
 
-                    function noMidTest(){
+                    function noBaseTest(){
                         var moduleManager = new ModuleManager(config.moduleManager);
 
                         var deferredTest = new doh.Deferred;
 
-                        when(moduleManager.get('Sds/Test/ModuleManager/Asset/Zoo'), function(zoo){
-                            doh.assertEqual('the sijit zoo', zoo.name);
+                        when(moduleManager.get('Sds/Test/ModuleManager/Asset/Penguin'), function(penguin){
+                            doh.assertEqual('kate', penguin.name);
                             deferredTest.callback(true);
                         });
 
@@ -115,13 +115,39 @@
                     },
 
 
-                    function midSetTest(){
+                    function baseSetTest(){
                         var moduleManager = new ModuleManager(config.moduleManager);
 
                         var deferredTest = new doh.Deferred;
 
-                        when(moduleManager.get('zooWithMid'), function(zoo){
+                        when(moduleManager.get('zooWithBase'), function(zoo){
                             doh.assertEqual('the sijit zoo', zoo.name);
+                            deferredTest.callback(true);
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function identifierBaseTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('zooIdentifierBase'), function(zoo){
+                            doh.assertEqual('the sijit zoo', zoo.name);
+                            deferredTest.callback(true);
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function objectBaseTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('objectBase'), function(object){
+                            doh.assertEqual('alan', object.name);
                             deferredTest.callback(true);
                         });
 

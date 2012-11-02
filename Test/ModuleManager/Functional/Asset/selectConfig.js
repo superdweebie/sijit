@@ -3,7 +3,7 @@ function(){
     return {
         moduleManager: {
             'statesStore': {
-                mid: 'dojo/store/Memory',
+                base: 'dojo/store/Memory',
                 params: {
                     idProperty: 'ref',
                     data: [
@@ -16,9 +16,10 @@ function(){
                 }
             },
             'StatesSelect': {
-                mid: 'Sds/Common/Form/Select',
+                base: 'Sds/Common/Form/Select',
                 directives: {
-                    declare: true
+                    declare: true,
+                    define: true
                 },
                 params: {
                     label: 'state',

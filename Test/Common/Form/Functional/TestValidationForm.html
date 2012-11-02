@@ -47,7 +47,7 @@
         <form
             class="form-horizontal"
             data-dojo-type="Sds/Common/Form/ValidationForm"
-            data-dojo-props="validator: {class: 'Sds/Test/Common/Form/Asset/FormValidator'}"
+            data-dojo-props="validator: {base: 'Sds/Test/Common/Form/Asset/MultiFieldValidator'}"
         >
 
             <input
@@ -65,7 +65,7 @@
         <form
             class="form-horizontal"
             data-dojo-type="Sds/Common/Form/ValidationForm"
-            data-dojo-props="validator: {class: 'Sds/Test/Common/Form/Asset/FormValidator'}"
+            data-dojo-props="validator: {base: 'Sds/Test/Common/Form/Asset/MultiFieldValidator'}"
         >
 
             <input
@@ -93,7 +93,7 @@
                 data-dojo-props="
                     label: 'username1',
                     name: 'username1',
-                    validator: {class: 'Sds/Common/Validator/LengthValidator', options: {max: 4, min: 2}}"
+                    validator: {base: 'Sds/Common/Validator/LengthValidator', params: {max: 4, min: 2}}"
             />
             <input
                 id="username2"
@@ -103,7 +103,7 @@
                 data-dojo-props="
                     label: 'username2',
                     name: 'username2',
-                    validator: {class: 'Sds/Common/Validator/LengthValidator', options: {max: 4, min: 2}}"
+                    validator: {base: 'Sds/Common/Validator/LengthValidator', params: {max: 4, min: 2}}"
             />
         </form>
         <button class="btn btn-primary btn-large" id="listInvalidButton">List invalid widgets</button>

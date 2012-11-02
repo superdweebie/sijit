@@ -7,7 +7,7 @@ function(
     BaseValidator
 ){
     return declare(
-        'Sds/Test/Common/Form/Asset/FormValidator',
+        'Sds/Test/Common/Form/Asset/MultiFieldValidator',
         [BaseValidator],
         {
 

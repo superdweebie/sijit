@@ -1,20 +1,18 @@
 define([
     'dojo/_base/lang',
-    'Sds/ModuleManager/ModuleManager'
+    'Sds/ModuleManager/Shared/getModuleManager!'
 ],
 function(
     lang,
-    ModuleManager
+    moduleManager
 ){
     return {
 
         create: function(config){
 
-            var moduleManager = new ModuleManager;
-
             if (lang.isArray(config)){
                 return moduleManager.get({
-                    mid: 'Sds/Common/Validator/ValidatorGroup',
+                    base: 'Sds/Common/Validator/ValidatorGroup',
                     gets: {
                         validators: config
                     }

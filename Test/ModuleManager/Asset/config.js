@@ -12,23 +12,41 @@ define(
                 //    cache: true
                 //}
 
-                //Get instance with no mid set.
-                //When no mid is set, the mid is assumed to be the config property name
-                //This will return an instnace of Sds/Test/ModuleManager/Asset/Zoo
-                'Sds/Test/ModuleManager/Asset/Zoo': {
+                //Get instance with no base set.
+                //When no base is set, the base is assumed to be the config property name
+                //This will return an instnace of Sds/Test/ModuleManager/Asset/Penguin
+                'Sds/Test/ModuleManager/Asset/Penguin': {
+                    params: {
+                        name: 'kate'
+                    }
                 },
 
-                //Create with mid set:
+                //Create with base set:
                 //This will return an instnace of Sds/Test/ModuleManager/Asset/Zoo
-                'zooWithMid': {
-                    mid: 'Sds/Test/ModuleManager/Asset/Zoo'
+                'zooWithBase': {
+                    base: 'Sds/Test/ModuleManager/Asset/Zoo'
+                },
+
+                //Base set to another identifier
+                //If the base is set to another configured identifier, it will return
+                //the object described by that identifier
+                'zooIdentifierBase': {
+                    base: 'zooWithBase'
+                },
+
+                //If the base is set to an object, that object will be injected
+                'objectBase': {
+                    base: {name: 'tim'},
+                    params: {
+                        name: 'alan'
+                    }
                 },
 
                 //Create instance and mixin some params:
                 //This will return an instnace of Sds/Test/ModuleManager/Asset/Zoo,
                 //and mixin values from the params object into the instance
                 'zooParams': {
-                    mid: 'Sds/Test/ModuleManager/Asset/Zoo',
+                    base: 'Sds/Test/ModuleManager/Asset/Zoo',
                     params: {
                         name: 'Zoo with param'
                     }
@@ -36,7 +54,7 @@ define(
 
                 //Return module with params mixedin
                 'foodsParams': {
-                    mid: 'Sds/Test/ModuleManager/Asset/foods',
+                    base: 'Sds/Test/ModuleManager/Asset/foods',
                     params: {
                         penguin: 'fish',
                         meerkat: 'grubs'
@@ -48,7 +66,7 @@ define(
                 //It tells the module manager to create a new intance of the
                 //module and return that, if the module has a declare
                 'zooDeclareFalse': {
-                    mid: 'Sds/Test/ModuleManager/Asset/Zoo',
+                    base: 'Sds/Test/ModuleManager/Asset/Zoo',
                     directives: {
                         declare: false
                     },
@@ -59,11 +77,11 @@ define(
 
                 //Declare: true
                 //It tells the module manager to use dojo/_base/declare to extend
-                //the mid with the injections and return the result of declare.
+                //the base with the injections and return the result of declare.
                 //This effectively declares a new module. Note that a constructor
                 //will be returned, not an instnace.
                 'ZooDeclareTrue': {
-                    mid: 'Sds/Test/ModuleManager/Asset/Zoo',
+                    base: 'Sds/Test/ModuleManager/Asset/Zoo',
                     directives: {
                         declare: true
                     },
@@ -77,7 +95,7 @@ define(
                 //The next time get is called, the cached result will be returned.
                 //directives.cache: true is the default setting
                 'zooCacheTrue': {
-                    mid: 'Sds/Test/ModuleManager/Asset/Zoo',
+                    base: 'Sds/Test/ModuleManager/Asset/Zoo',
                     directives: {
                         cache: true
                     },
@@ -90,7 +108,7 @@ define(
                 //Tells the module manager not to cache this result.
                 //The next time get is called, the a new instnace will be created.
                 'zooCacheFalse': {
-                    mid: 'Sds/Test/ModuleManager/Asset/Zoo',
+                    base: 'Sds/Test/ModuleManager/Asset/Zoo',
                     directives: {
                         cache: false
                     },
@@ -101,9 +119,9 @@ define(
 
                 //define: false
                 //This is the default setting. Tells the module manager not to create a new
-                //mid from this config.
+                //base from this config.
                 'zooDefineFalse': {
-                    mid: 'Sds/Test/ModuleManager/Asset/Zoo',
+                    base: 'Sds/Test/ModuleManager/Asset/Zoo',
                     directives: {
                         define: false
                     },
@@ -113,15 +131,15 @@ define(
                 },
 
                 //define: true
-                //Tells the moduleManager to use dojo/_base/define to create a new mid.
+                //Tells the moduleManager to use dojo/_base/define to create a new base.
                 //After this object has been got, the following code will work:
                 //
                 //require('zooDefineTrue', function(zooDefineTrue){
-                //    console.debug(ZooDefineMidTrue.name) //prints 'Zoo defineMid true'
+                //    console.debug(ZooDefineBaseTrue.name) //prints 'Zoo defineBase true'
                 //})
                 //
                 'zooDefineTrue': {
-                    mid: 'Sds/Test/ModuleManager/Asset/Zoo',
+                    base: 'Sds/Test/ModuleManager/Asset/Zoo',
                     directives: {
                         define: true
                     },
@@ -131,10 +149,10 @@ define(
                 },
 
                 //define: true
-                //Demonstrates defineMid for a module which does not have a declare
+                //Demonstrates defineBase for a module which does not have a declare
                 //
                 'foodsDefineTrue': {
-                    mid: 'Sds/Test/ModuleManager/Asset/foods',
+                    base: 'Sds/Test/ModuleManager/Asset/foods',
                     directives: {
                         define: true
                     },
@@ -148,7 +166,7 @@ define(
                 //This combination effectively creates a new module that can
                 //be loaded normally with the AMD loader: ie require(['ZooDeclareAndDefine'], function(){})
                 'ZooDeclareAndDefine': {
-                    mid: 'Sds/Test/ModuleManager/Asset/Zoo',
+                    base: 'Sds/Test/ModuleManager/Asset/Zoo',
                     directives: {
                         declare: true,
                         define: true
@@ -159,11 +177,11 @@ define(
                 },
 
                 'lion1': {
-                    mid: 'Sds/Test/ModuleManager/Asset/Lion'
+                    base: 'Sds/Test/ModuleManager/Asset/Lion'
                 },
 
                 'lion2': {
-                    mid: 'Sds/Test/ModuleManager/Asset/Lion',
+                    base: 'Sds/Test/ModuleManager/Asset/Lion',
                     params: {
                         name: 'liz'
                     }
@@ -175,7 +193,7 @@ define(
                 //This particular zoo will get the instances of lion1 and lion2
                 //configured directly above
                 'zooWithGets': {
-                    mid: 'Sds/Test/ModuleManager/Asset/Zoo',
+                    base: 'Sds/Test/ModuleManager/Asset/Zoo',
                     params: {
                         name: 'Zoo with gets'
                     },
@@ -189,7 +207,7 @@ define(
                 //Gets with array
                 //This will inject an array of objects created with moduleManager.get
                 'zooWithGetsArray': {
-                    mid: 'Sds/Test/ModuleManager/Asset/Zoo',
+                    base: 'Sds/Test/ModuleManager/Asset/Zoo',
                     params: {
                         name: 'Zoo with gets array'
                     },
@@ -206,13 +224,13 @@ define(
                 //the config for creating the object, rather than looking for
                 //and identifier in the moduleManager config
                 'zooWithNestedGetsConfig': {
-                    mid: 'Sds/Test/ModuleManager/Asset/Zoo',
+                    base: 'Sds/Test/ModuleManager/Asset/Zoo',
                     params: {
                         name: 'Zoo with nested gets config'
                     },
                     gets: {
                         tiger: {
-                            mid: 'Sds/Test/ModuleManager/Asset/Tiger',
+                            base: 'Sds/Test/ModuleManager/Asset/Tiger',
                             params: {
                                 name: 'tim'
                             }
@@ -220,7 +238,7 @@ define(
                         cage: [
                             'lion2',
                             {
-                                mid: 'Sds/Test/ModuleManager/Asset/Lion',
+                                base: 'Sds/Test/ModuleManager/Asset/Lion',
                                 params: {
                                     name: 'emma'
                                 }
@@ -239,7 +257,7 @@ define(
                 //underling object will be loaded, the method called, and the result
                 //passed back through the proxy.
                 'zooWithProxyMethods': {
-                    mid: 'Sds/Test/ModuleManager/Asset/Zoo',
+                    base: 'Sds/Test/ModuleManager/Asset/Zoo',
                     proxyMethods: [
                         'listAnimals'
                     ],
@@ -254,7 +272,7 @@ define(
                 },
 
                 'tigerWithProxyMethods': {
-                    mid: 'Sds/Test/ModuleManager/Asset/Tiger',
+                    base: 'Sds/Test/ModuleManager/Asset/Tiger',
                     proxyMethods: [
                         'makeSound'
                     ]
@@ -262,7 +280,7 @@ define(
 
                 //Proxies can also be inject in the same way as gets
                 'zooWithProxies': {
-                    mid: 'Sds/Test/ModuleManager/Asset/Zoo',
+                    base: 'Sds/Test/ModuleManager/Asset/Zoo',
                     proxyMethods: [
                         'listAnimals'
                     ],
