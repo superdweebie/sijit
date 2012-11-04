@@ -26,14 +26,7 @@ function(){
                     registerRoute: '/identity/register'
                 }
             },
-            'Sds/AuthenticationModule/ViewModel/Login': {
-                base: {},
-                params: {
-                    identityName: undefined,
-                    credential: undefined
-                }
-            },
-            'Sds/AuthenticationModule/ViewModel/Login/IdentityName/Input': {
+            'Sds/AuthenticationModule/Login/IdentityName/Input': {
                 base: 'Sds/Common/Form/ValidationTextBox',
                 directives: {
                     declare: true,
@@ -44,10 +37,10 @@ function(){
                     label    : 'Username:'
                 },
                 gets: {
-                    validator: 'Sds/AuthenticationModule/ViewModel/Login/IdentityName/validator'
+                    validator: 'Sds/AuthenticationModule/Login/IdentityName/validator'
                 }
             },
-            'Sds/AuthenticationModule/ViewModel/Login/Credential/Input': {
+            'Sds/AuthenticationModule/Login/Credential/Input': {
                 base: 'Sds/Common/Form/ValidationTextBox',
                 directives: {
                     declare: true,
@@ -59,10 +52,10 @@ function(){
                     type     : 'password'
                 },
                 gets: {
-                    validator: 'Sds/AuthenticationModule/ViewModel/Login/Credential/validator'
+                    validator: 'Sds/AuthenticationModule/Login/Credential/validator'
                 }
             },
-            'Sds/AuthenticationModule/ViewModel/Login/RememberMe/Input': {
+            'Sds/AuthenticationModule/Login/RememberMe/Input': {
                 base: 'Sds/Common/Form/Checkbox',
                 directives: {
                     declare: true,
@@ -71,13 +64,29 @@ function(){
                 params: {
                     name     : 'rememberMe',
                     label    : 'Remember me:'
-                },
-                gets: {
-                    validator: 'Sds/AuthenticationModule/ViewModel/Login/RememberMe/validator'
                 }
             },
-
-
+            'Sds/AuthenticationModule/Login/IdentityName/validator': {
+                base: 'validatorGroup',
+                gets: {
+                    validators: [
+                        'requiredValidator',
+                        'identifierValidator'
+                    ]
+                }
+            },
+            'Sds/AuthenticationModule/Login/Credential/validator': {
+                base: 'validatorGroup',
+                gets: {
+                    validators: [
+                        'requiredValidator',
+                        {
+                            base: 'lengthValidator',
+                            params: {min: 6, max: 40}
+                        }
+                    ]
+                }
+            },
             'Sds/ExceptionModule/ExceptionController': {
                 params: {
                     registeredExceptions: {

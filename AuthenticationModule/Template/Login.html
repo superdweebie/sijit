@@ -1,8 +1,10 @@
 <div>
-    <div data-dojo-type="Sds/Common/Dialog" title = "Please login" data-dojo-attach-point="dialogNode">
+    <div data-dojo-type="Sds/Common/Dialog" title = "Please login" data-dojo-attach-point="dialog">
         <div>In order to access the requesed data you must login.</div>
         <br />
-        <div data-dojo-attach-point="containerNode"></div>
+        <input data-dojo-type="Sds/AuthenticationModule/Login/IdentityName/Input"></input>
+        <input data-dojo-type="Sds/AuthenticationModule/Login/Credential/Input"></input>
+        <input data-dojo-type="Sds/AuthenticationModule/Login/RememberMe/Input" data-dojo-attach-point="rememberMe"></input>
         <button id="forgotCredentialButton" class="btn btn-link" data-dojo-attach-event="ondijitclick: onForgotCredential">Forgot Password?</button>
         <button id="registerButton" class="btn btn-link" data-dojo-attach-event="ondijitclick: onRegister">Register</button>
     </div>

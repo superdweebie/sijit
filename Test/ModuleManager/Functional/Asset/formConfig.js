@@ -3,16 +3,15 @@ define ([], function (){
     return {
         moduleManager: {
             'Test': {
-                base: 'dojo/Stateful',
+                base: 'Sds/Mvc/BaseModel',
                 directives: {
                     declare: true
                 },
                 params: {
-                    username: undefined,
-                    password: undefined,
-                    toJSON: function(){
-                        return {username: this.username, password: this.password}
-                    }
+                    fields: [
+                        'username',
+                        'password'
+                    ]
                 }
             },
             'Test/validator': {

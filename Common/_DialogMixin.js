@@ -76,7 +76,7 @@ function (
                     }
                 }
             },
-
+            
             _addClickHandler: function(functionName, buttonValue){
                 this[functionName] = function(){
                     this.set('button', buttonValue);

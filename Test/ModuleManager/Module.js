@@ -1,6 +1,4 @@
 define([
-    'Sds/Test/ModuleManager/TestModuleManager'//,
-    //'Sds/Test/ModuleManager/TestSharedGetModuleManager',
-    //'Sds/Test/ModuleManager/TestSharedGet',
-    //'Sds/Test/ModuleManager/TestSharedProxy'
+    'Sds/Test/ModuleManager/TestModuleManager',
+    'Sds/Test/ModuleManager/Shared/Module'
 ], 1);

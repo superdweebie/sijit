@@ -2,17 +2,13 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/Deferred',
-    'dojo/Stateful',
-    'Sds/ExceptionModule/throwEx',
-    'Sds/ExceptionModule/Exception/InvalidTypeException'
+    'dojo/Stateful'
 ],
 function(
     declare,
     lang,
     Deferred,
-    Stateful,
-    throwEx,
-    InvalidTypeException
+    Stateful
 ){
     // module:
     //		Sds/View/BaseView
@@ -20,11 +16,9 @@ function(
     //		The module defines the base for an View.
     //      A view is responsible for showing and hiding parts of the ui.
     //      A view may also be responsible for displaying or collecting data.
-    //      The form of data to be displayed or collected should normally be
-    //      defined by a ViewModel.
 
     return declare(
-        'Sds.View.BaseView',
+        'Sds/Mvc/BaseView',
         [Stateful],
         {
             // state: string
@@ -34,16 +28,9 @@ function(
             state: '',
 
             // value: object
-            //		Is the view value object. This is normally a viewModel.
+            //		Is the view value object.
             value: undefined,
-
-            // valueType: object
-            //      Is the type of object that can be passed
-            //      to the activate method, and the type of value object
-            //      that will be returned from the activate method
-            //      when it resolves. Normally a ViewModel definition.
-            valueType: undefined,
-            
+           
             // _activateDeferred: promise
             //      This is the promise that is returned from the activate function.
             //      This promise may emit progress data.
@@ -55,27 +42,16 @@ function(
                 // summary:
                 //		Makes the view visible/active
                 // value: object
-                //      Optional. Must be an instance of this.valueType.
+                //      Optional.
                 // returns: Deferred
                 //		A Deferred that resolves
-                //		when the view is hidden.
+                //		when the view is deactivated.
                 //      The Deferred should deliver an object with the structure:
                 //      {state: this.state, value: this.value}
 
                 this._activateDeferred = new Deferred;
-
-                if (value) {
-                    if (! value instanceof this.valueType && (
-                            ! value.isInstanceOf ||
-                            ! value.isInstanceOf(this.valueType)
-                        )
-                    ){
-                        throwEx(new InvalidTypeException());
-                        this._activateDeferred.reject();
-                        return this._activateDeferred;
-                    }
-                    this.set('value', value);
-                }
+                
+                this.set('value', value);
 
                 return this._activateDeferred;
             },
@@ -94,12 +70,6 @@ function(
                 this._resolve();
             },
 
-            reset: function(){
-                // summary:
-                //		Resets/clears the view value
-                this.value = undefined;
-            },
-
             _getResolveMixin: function(){
                 // summary:
                 //      This method can be overridden.
@@ -111,21 +81,10 @@ function(
                 //     Resolved the _activateDeferred promise
                 //     This method should be called by modules which inherit from this base
 
-                var value = this.get('value');
-
-                if (
-                    ! value instanceof this.valueType && (
-                    ! value.isInstanceOf ||
-                    ! value.isInstanceOf(this.valueType)
-                )){
-                    throwEx(new InvalidTypeException('The return value of this View must be an instance of ' + this.valueType));
-                    this._activateDeferred.reject();
-                    return;
-                }
                 this._activateDeferred.resolve(lang.mixin(
                     {
                         state: this.get('state'),
-                        value: value
+                        value: this.get('value')
                     },
                     this._getResolveMixin()
                 ));

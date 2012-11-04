@@ -1,27 +1,24 @@
 define([
     'dojo/_base/declare',
-    'dojo/_base/lang',
-    'dojo/Deferred',
+    'dojo/dom-class',    
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
-    'Sds/View/BaseView',
-    'Sds/AuthenticationModule/ViewModel/Login',
-    'Sds/View/formFactory',
+    'Sds/Mvc/BaseView',
     'Sds/Router/startedRouter!',
     'dojo/text!../Template/Login.html',
-    'Sds/Common/Dialog'
+    'Sds/Common/Dialog',
+    'get!Sds/AuthenticationModule/Login/IdentityName/Input',
+    'get!Sds/AuthenticationModule/Login/Credential/Input',
+    'get!Sds/AuthenticationModule/Login/RememberMe/Input'    
 ],
 function(
     declare,
-    lang,
-    Deferred,
+    domClass,
     Widget,
     TemplatedMixin,
     WidgetsInTemplateMixin,
     BaseView,
-    LoginViewModel,
-    formFactory,
     router,
     template
 ){
@@ -36,82 +33,57 @@ function(
         {
             templateString: template,
 
-            valueType: LoginViewModel,
-
-            inputsAppended: false,
-
             forgotCredentialRoute: undefined,
 
             registerRoute: undefined,
+
+            enableRememberMe: true,
             
-            activate: function(value, enableRememberMe){
+            activate: function(value){
 
                 var returnValue = this.inherited(arguments);
 
                 if ( ! value){
-                    value = new LoginViewModel;
-                    this.set('value', value);
+                    this.set('value', {});
                 }
-
-                this._appendInputs(enableRememberMe).then(lang.hitch(this, function(){
-                    this.startup();
-                    this.dialogNode.show(value).then(lang.hitch(this, function(){
-                        this.deactivate();
-                    }));
-                }));
-
-                document.body.appendChild(this.domNode);
+                this.set('enableRememberMe', this.enableRememberMe);
+                
                 return returnValue;
             },
 
             deactivate: function(){
-                if(this.dialogNode.get('visible')){
-                    this.dialogNode.hide();
+                if(this.dialog.get('visible')){
+                    this.dialog.hide();
                 }
                 this.inherited(arguments);
             },
 
-            reset: function(){
-                this.dialogNode.reset();
-            },
-
-            _appendInputs: function(enableRememberMe){
-                var appendInputsDeferred = new Deferred;
-
-                if ( ! this.inputsAppened){
-                    var metadata = lang.clone(LoginViewModel.metadata);
-                    metadata.containerNode = this.containerNode;
-                    if ( ! enableRememberMe){
-                        delete metadata.fields.rememberMe;
-                    }
-                    formFactory.appendToForm(this.dialogNode, metadata).then(lang.hitch(this, function(){
-                        this.inputsAppened = true;
-                        appendInputsDeferred.resolve();
-                    }));
-                } else {
-                    appendInputsDeferred.resolve();
+            _setEnableRememberMe: function(value){
+                this.enableRememberMe = value;
+                if (this._started){
+                    if (this.enableRememberMe){
+                        domClass.remove(this.rememberMe, 'hide');
+                    } else {
+                        domClass.add(this.rememberMe, 'hide');                    
+                    }                    
                 }
-                return appendInputsDeferred;
             },
-
+            
             _getStateAttr: function(){
-                if (this.dialogNode.get('button') == 'ok'){
-                    return this.dialogNode.get('state');
-                } else {
-                    return this.dialogNode.get('button');
-                }
+                return this.dialog.get('state');
             },
 
             _getValueAttr: function(){
-                this.value = lang.mixin(this.value, this.dialogNode.get('value').value);
-                return this.value;
+                return this.dialog.get('value').value;
             },
+            
             onForgotCredential: function(){
-                this.dialogNode.hide();
+                this.dialog.hide();
                 router.go(this.forgotCredentialRoute);
             },
+            
             onRegister: function(){
-                this.dialogNode.hide();
+                this.dialog.hide();
                 router.go(this.registerRoute);
             }
         }
