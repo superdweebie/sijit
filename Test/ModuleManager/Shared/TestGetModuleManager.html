@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Testing Sds/ModuleManager/Shared/getModuleManager!</title>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript">
+            dojoConfig.mergeConfigs.push('Sds/Test/ModuleManager/Asset/config');
+        </script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			require([
+                'doh/main',
+                'dojo/when',
+                'Sds/ModuleManager/Shared/getModuleManager!',
+                'dojo/domReady!'
+            ],
+            function(
+                doh,
+                when,
+                moduleManager
+            ){
+
+                doh.register([
+                    function testSharedModuleManager(){
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('Sds/Test/ModuleManager/Asset/Zoo'), function(zoo){
+                            doh.assertEqual('the sijit zoo', zoo.name);
+                            deferredTest.callback(true);
+                        });
+                        return deferredTest;
+                    }
+                ]);
+                doh.runOnLoad();
+
+            });
+		</script>
+	</head>
+	<body>
+        <h1>Testing Sds/ModuleManager/Shared/getModuleManager!</h1>
+	</body>
+</html>

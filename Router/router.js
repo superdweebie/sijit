@@ -31,8 +31,8 @@ function (
         //
         controllers: {},
 
-        // controllerManager: Sds/ServiceManager/ServiceManager
-        //    This must be an instance of the serviceManager. This is where
+        // controllerManager: Sds/ModuleManager/ModuleManager
+        //    This must be an instance of the ModuleManager. This is where
         //    the configured controller instances will be pulled from.
         controllerManager: undefined,
 
@@ -59,7 +59,7 @@ function (
                 for (var i = 2; i < pieces.length; i++){
                     args.push(pieces[i]);
                 }
-                when(this.controllerManager.getObject(config.name), function(controller){
+                when(this.controllerManager.get(config.name), function(controller){
                     if (controller[method]){
                         controller[method].apply(controller, args);
                     } else {

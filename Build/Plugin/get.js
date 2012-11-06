@@ -9,8 +9,8 @@ define(['Sds/Build/Plugin/extractMidsFromConfig'], function(extractMidsFromConfi
 
 			var result = [bc.amdResources[bc.getSrcModuleInfo("Sds/ModuleManager/Shared/get", referenceModule).mid]];
 
-            // Gather required mids from serviceManager config
-            if (bc.serviceManager && bc.serviceManager[mid]) {
+            // Gather required mids from moduleManager config
+            if (bc.moduleManager && bc.moduleManager[mid]) {
                 result = result.concat(extractMidsFromConfig(mid, referenceModule, bc));
             }
 

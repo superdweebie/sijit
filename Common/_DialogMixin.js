@@ -55,17 +55,15 @@ function (
             //     A value from the buttons array indicating which button was pressed to dismiss the dialog.
             button: undefined,
 
+            // diableStateButtons: array
+            //     An array of button nodes that should be disabled when the state is invalid
+            disableStateButtons: undefined,
+
             // visible: boolean
             //     Indicates if the modal is visible/active
             visible: false,
 
-            // title: string
-            //     Text that appears at the top of the modal
-            title: '',
-
-            _setTitleAttr: { node: "titleNode", type: "innerHTML" },
-
-            constructor: function(){
+            buildRendering: function(){
 
                 // Add onClick handlers for any buttons that don't have them
                 var functionName;
@@ -75,8 +73,10 @@ function (
                         this._addClickHandler(functionName, this.buttons[index]);
                     }
                 }
+
+                this.inherited(arguments);
             },
-            
+
             _addClickHandler: function(functionName, buttonValue){
                 this[functionName] = function(){
                     this.set('button', buttonValue);
@@ -89,14 +89,16 @@ function (
                 this._modal = new Modal(this.domNode);
             },
 
-            _updateOkDisabled: function(){
+            _updateDisableStateButtons: function(){
                 // summary:
-                //     Enables and disables the ok button when the state is changed
+                //     Enables and disables the buttons when the state is changed
 
-                if(this.state == '') {
-                    domProp.set(this.okButtonNode, 'disabled', false);
-                } else {
-                    domProp.set(this.okButtonNode, 'disabled', true);
+                for (var item in this.disableStateButtons){
+                    if(this.state == '') {
+                        domProp.set(this[this.disableStateButtons[item] + 'Node'], 'disabled', false);
+                    } else {
+                        domProp.set(this[this.disableStateButtons[item] + 'Node'], 'disabled', true);
+                    }
                 }
             },
 
@@ -149,13 +151,13 @@ function (
 
                 this._returnValueDeferred = new Deferred();
 
-                this.watch('state', lang.hitch(this, '_updateOkDisabled'));
+                this.watch('state', lang.hitch(this, '_updateDisableStateButtons'));
                 this.connectChildren();
 
                 this._modal.show();
                 on(this._modal.backdropNode, 'click', lang.hitch(this, 'onBackdropClick'));
 
-                this._updateOkDisabled();
+                this._updateDisableStateButtons();
                 return this._returnValueDeferred;
             },
 

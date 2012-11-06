@@ -1,6 +1,7 @@
 define([
     'dojo/_base/declare',
-    'dojo/dom-class',    
+    'dojo/_base/lang',
+    'dojo/dom-class',
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
@@ -10,19 +11,33 @@ define([
     'Sds/Common/Dialog',
     'get!Sds/AuthenticationModule/Login/IdentityName/Input',
     'get!Sds/AuthenticationModule/Login/Credential/Input',
-    'get!Sds/AuthenticationModule/Login/RememberMe/Input'    
+    'get!Sds/AuthenticationModule/Login/RememberMe/Input'
 ],
 function(
     declare,
+    lang,
     domClass,
     Widget,
     TemplatedMixin,
     WidgetsInTemplateMixin,
     BaseView,
     router,
-    template
+    template,
+    Dialog
 ){
-    return declare(
+
+    var buttons = lang.mixin(Dialog.Buttons, {
+        // summary:
+        //		Possible values of the button property in the return object.
+        //
+        // description:
+        //      OK: indicates that the 'ok' button was clicked to dismiss the dialog
+        //      CANCEL: indicates that a 'cancel' button was clicked to dismiss the dialog
+        REGISTER: 'register',
+        FORGOT_CREDENTIAL: 'forgotCredential'
+    });
+
+    var Login = declare(
         'Sds/AuthenticationModule/View/Login',
         [
             Widget,
@@ -38,56 +53,73 @@ function(
             registerRoute: undefined,
 
             enableRememberMe: true,
-            
+
             activate: function(value){
 
                 var returnValue = this.inherited(arguments);
 
-                if ( ! value){
-                    this.set('value', {});
-                }
+                this.startup();
                 this.set('enableRememberMe', this.enableRememberMe);
-                
+                this.dialogNode.show(value).then(lang.hitch(this, function(){
+                    this.deactivate();
+                }));
+                document.body.appendChild(this.domNode);
+
                 return returnValue;
             },
 
             deactivate: function(){
-                if(this.dialog.get('visible')){
-                    this.dialog.hide();
+                if(this.dialogNode.get('visible')){
+                    this.dialogNode.hide();
                 }
                 this.inherited(arguments);
             },
 
-            _setEnableRememberMe: function(value){
+            _setEnableRememberMeAttr: function(value){
                 this.enableRememberMe = value;
                 if (this._started){
                     if (this.enableRememberMe){
-                        domClass.remove(this.rememberMe, 'hide');
+                        domClass.remove(this.rememberMe.domNode, 'hide');
                     } else {
-                        domClass.add(this.rememberMe, 'hide');                    
-                    }                    
+                        domClass.add(this.rememberMe.domNode, 'hide');
+                    }
                 }
             },
-            
+
             _getStateAttr: function(){
-                return this.dialog.get('state');
+                if (this.dialogNode.get('button') == 'ok'){
+                    return this.dialogNode.get('state');
+                } else {
+                    return this.dialogNode.get('button');
+                }
+            },
+
+            reset: function(){
+                this.dialogNode.set('value', {identityName: '', credential: ''});
+                this.dialogNode.resetActivity();
             },
 
             _getValueAttr: function(){
-                return this.dialog.get('value').value;
+                return this.dialogNode.get('value').value;
             },
-            
-            onForgotCredential: function(){
-                this.dialog.hide();
+
+            onForgotCredentialClick: function(){
+                this.dialogNode.set('button', buttons.REGISTER);
+                this.deactivate();
                 router.go(this.forgotCredentialRoute);
             },
-            
-            onRegister: function(){
-                this.dialog.hide();
+
+            onRegisterClick: function(){
+                this.dialogNode.set('button', buttons.FORGOT_CREDENTIAL);
+                this.deactivate();
                 router.go(this.registerRoute);
             }
         }
     );
+
+    Login.buttons = buttons;
+
+    return Login;
 });
 
 

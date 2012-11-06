@@ -35,7 +35,7 @@ For more information on how to use each of the components listed below, see the 
 A module to allow multiple config objects to be merged into dojo config. Allows
 distributed config definition.
 
-##ServiceManager
+##ModuleManager
 
 A module to handle dependency injection.
 

@@ -42,10 +42,12 @@ function (
             //      Should message be returned to a get('message') call?
             suppressMessages: true,
 
-            // onActivitySuppressMessages: boolean
+            preActivitySuppressMessages: true,
+
+            // postActivitySuppressMessages: boolean
             //      Value for suppressMessages after the first onBlur event
             //      or if the state changes from valid to invalid while having focus
-            onActivitySuppressMessages: false,
+            postActivitySuppressMessages: false,
 
             // styleClasses: Object
             //      An object the defines the css classes that could be applied to _messageStyleNode
@@ -63,15 +65,19 @@ function (
             //      on validation failure
             style: 'info',
 
+            preActivityStyle: 'info',
+
             // onBlurStyle: string
             //      The style to change to after blur event
             //      or if the state changes from valid to invalid while having focus
-            onActivityStyle: 'error',
+            postActivityStyle: 'error',
 
             _validatorSet: false,
 
             // validator: an instance of Sds/Common/Validator/BaseValidator.
             validator: undefined,
+
+            _onFocusValue: undefined,
 
             messages: [],
 
@@ -81,13 +87,15 @@ function (
 
             delayTimeout: 350,
 
+            _setValueTimestamp: 0,
+
             startup: function(){
                 this.inherited(arguments);
 
                 this.watch('state', lang.hitch(this, function(p, o, newValue){
-                    if (newValue != '' && this.get('focused')){
-                        this.set('style', this.onActivityStyle);
-                        this.set('suppressMessages', this.onActivitySuppressMessages);
+                    if (newValue != '' && this._onFocusValue != undefined && this._onFocusValue != '' && this.get('focused')){
+                        this.set('style', this.postActivityStyle);
+                        this.set('suppressMessages', this.postActivitySuppressMessages);
                     }
                 }));
 
@@ -99,10 +107,15 @@ function (
                 this._startValidateTimer();
             },
 
+            resetActivity: function(){
+                this.set('style', this.preActivityStyle);
+                this.set('suppressMessages', this.preActivitySuppressMessages);
+            },
+
             _setValueAttr: function(){
                 // summary:
                 //		Hook so set('value', ...) works.
-                this._valueSetTimestamp = new Date().getTime();
+                this._setValueTimestamp = new Date().getTime();
                 this.inherited(arguments);
                 this._startValidateTimer();
             },
@@ -165,9 +178,13 @@ function (
                 }
             },
 
+            onFocus: function(){
+                this._onFocusValue = this._getValueToValidate();
+            },
+
             onBlur: function(){
-                this.set('style', this.onActivityStyle);
-                this.set('suppressMessages', this.onActivitySuppressMessages);
+                this.set('style', this.postActivityStyle);
+                this.set('suppressMessages', this.postActivitySuppressMessages);
                 this.inherited(arguments);
                 this._validateNow();
             },
@@ -221,7 +238,7 @@ function (
                             break;
                         case utils.isDeferred(result):
                             result.then(function(resultObject){
-                                processResult(resultObject, validatingValue);
+                                processResult(resultObject, timestamp);
                             });
                             state = 'validating';
                             break;

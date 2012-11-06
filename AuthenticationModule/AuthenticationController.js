@@ -62,7 +62,8 @@ function (
 
                 this._loginDeferred = new Deferred();
 
-                this.loginView.activate(null, this.enableRememberMe).then(lang.hitch(this, function(result){
+                this.loginView.set('enableRememberMe', this.enableRememberMe);
+                this.loginView.activate().then(lang.hitch(this, function(result){
 
                     // Do nothing if form not valid.
                     if (result.state != ''){
@@ -75,11 +76,15 @@ function (
 
                     // Send data to server
                     var formValue = result.value;
+                    var rememberMe;
+                    if (formValue.rememberMe){
+                        rememberMe = Boolean(formValue['rememberMe'].length);
+                    }
 
                     this.get('api').login(
                         formValue['identityName'],
                         formValue['credential'],
-                        Boolean(formValue['rememberMe'].length)
+                        rememberMe
                     ).then(
                         lang.hitch(this, '_loginComplete'),
                         lang.hitch(this, '_handleException')
@@ -124,7 +129,7 @@ function (
             },
 
             _identityGetter: function(){
-                if (this.identity == undefined){
+                if (this.identity === undefined){
                     this._getIdentityDeferred = new Deferred;
                     this.get('api').getIdentity().then(
                         lang.hitch(this, '_getIdentityComplete'),

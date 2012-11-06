@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojo/Deferred',
-    'Sds/View/BaseView'
+    'Sds/Mvc/BaseView'
 ],
 function(
     declare,
@@ -13,16 +13,28 @@ function(
         [BaseView],
         {
             state: '',
+
+            enableRememberMe: true,
+
             value: {
                 identityName: undefined,
                 credential: undefined
             },
             activate: function(){
                 var r = new Deferred;
-                r.resolve({
-                    state: this.state,
-                    value: this.value
-                });
+
+                if (this.enableRememberMe){
+                    r.resolve({
+                        state: this.state,
+                        value: this.value,
+                        rememberMe: ['on']
+                    });
+                } else {
+                    r.resolve({
+                        state: this.state,
+                        value: this.value
+                    });
+                }
 
                 return r;
             },

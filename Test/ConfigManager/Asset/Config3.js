@@ -3,11 +3,9 @@ define(
     function(){
         return {
             moduleManager: {
-                test1: {
-                    base: 'Test1',
+                test3: {
                     params: {
-                        value1: 1,
-                        value2: 2
+                        value1: 11
                     }
                 }
             }

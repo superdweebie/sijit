@@ -6,7 +6,7 @@ define([
         doh,
         CredentialMatchValidator
     ){
-        doh.register("Sds/Test/Validator/TestCredentialMatchValidator", [
+        doh.register("Sds/Test/IdentityModule/Validator/TestCredentialMatchValidator", [
 
             function PositiveTest(doh){
                 var validator = new CredentialMatchValidator;
@@ -14,7 +14,7 @@ define([
                 doh.assertTrue(validator.isValid({credential: [
                     'password1',
                     'password1'
-                ]}));
+                ]}).result);
 
             },
 
@@ -24,7 +24,7 @@ define([
                 doh.assertFalse(validator.isValid({credential: [
                     'password1',
                     'not password1'
-                ]}));
+                ]}).result);
             }
 
         ]);

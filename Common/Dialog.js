@@ -36,7 +36,20 @@ function (
             //      The widget template. To override this, use the paths directive on the AMD loader.
             templateString: template,
 
-            buttons: buttons
+            buttons: buttons,
+
+            disableStateButtons: ['ok'],
+
+            _setTitleAttr: { node: "titleNode", type: "innerHTML" },
+
+            resetActivity: function(){
+                for(var index in this._descendants){
+                    var widget = this._descendants[index];
+                    if (widget.resetActivity){
+                        widget.resetActivity();
+                    }
+                }
+            }
         }
     );
 

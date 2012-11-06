@@ -1,16 +1,17 @@
 define([
     'dojo/Deferred',
-    'Sds/ServiceManager/Shared/getProxy!Sds/ExceptionModule/ExceptionController',
+    'dojo/when',
+    'proxy!Sds/ExceptionModule/ExceptionController',
     'Sds/ConfigManager/configReady!'
 ],
-function(Deferred, exceptionControllerProxy){
+function(Deferred, when, exceptionControllerProxy){
 	return function(exception){
         var resultDeferred = new Deferred;
-        exceptionControllerProxy.standardize(exception).then(function(standardizedException){
+        when(exceptionControllerProxy.standardize(exception), function(standardizedException){
             resultDeferred.resolve(standardizedException);
             exceptionControllerProxy.handle(standardizedException);
         })
-        
+
         return resultDeferred;
     }
 });

@@ -11,7 +11,7 @@ function(
     Stateful
 ){
     // module:
-    //		Sds/View/BaseView
+    //		Sds/Mvc/BaseView
     // summary:
     //		The module defines the base for an View.
     //      A view is responsible for showing and hiding parts of the ui.
@@ -30,7 +30,7 @@ function(
             // value: object
             //		Is the view value object.
             value: undefined,
-           
+
             // _activateDeferred: promise
             //      This is the promise that is returned from the activate function.
             //      This promise may emit progress data.
@@ -50,7 +50,7 @@ function(
                 //      {state: this.state, value: this.value}
 
                 this._activateDeferred = new Deferred;
-                
+
                 this.set('value', value);
 
                 return this._activateDeferred;
@@ -59,10 +59,10 @@ function(
             isAcive: function(){
                 // summary:
                 //    Returns a boolean to indicate if the view is active.
-                
+
                 return ! this._activateDeferred.isResolved();
             },
-            
+
             deactivate: function(){
                 // summary:
                 //     Tell the view to close/hide/stop doing whatever it does.

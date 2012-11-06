@@ -4,8 +4,8 @@ function(){
         moduleManager: {
             'Sds/ExceptionModule/ExceptionController': {
                 params: {
-                    logLevel: 0,
-                    displayLevel: 100
+                    logLevel: -1,
+                    displayLevel: -1
                 }
             }
         }

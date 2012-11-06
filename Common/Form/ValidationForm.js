@@ -36,6 +36,16 @@ function (
                     result.push(this);
                 }
                 return result;
+            },
+
+            resetActivity: function(){
+                this.inherited(arguments);
+                for(var index in this._descendants){
+                    var widget = this._descendants[index];
+                    if (widget.resetActivity){
+                        widget.resetActivity();
+                    }
+                }
             }
         }
     );

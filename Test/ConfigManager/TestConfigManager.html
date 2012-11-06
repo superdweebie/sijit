@@ -31,20 +31,25 @@
                    function testConfigMerge(){
                         var expectedConfig = {
                             test1: {
-                                moduleName: 'Test1',
-                                values: {
+                                base: 'Test1',
+                                params: {
                                     value1: 1,
                                     value2: 22
                                 }
                             },
                             test2: {
-                                moduleName: 'Test2',
-                                values: {
+                                base: 'Test2',
+                                params: {
                                     value1: 1
+                                }
+                            },
+                            test3: {
+                                params: {
+                                    value1: 11
                                 }
                             }
                         }
-                        doh.assertEqual(expectedConfig, dojoConfig.serviceManager);
+                        doh.assertEqual(expectedConfig, dojoConfig.moduleManager);
                    }
                 ]);
                 doh.runOnLoad();

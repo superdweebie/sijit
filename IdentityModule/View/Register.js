@@ -1,30 +1,25 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/Deferred',
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
-    'Sds/Common/Form/_ValidationMixin',
-    'Sds/IdentityModule/DataModel/Identity',
-    'Sds/View/BaseView',
-    'Sds/IdentityModule/ViewModel/Register',
-    'Sds/View/formFactory',
+    'Sds/Mvc/BaseView',
     'dojo/text!../Template/Register.html',
-    'Sds/Common/Dialog'
+    'Sds/Common/ValidationDialog',
+    'get!Sds/IdentityModule/DataModel/Identity/IdentityName/Input',
+    'get!Sds/IdentityModule/DataModel/Identity/Credential/Input',
+    'get!Sds/IdentityModule/DataModel/Identity/Firstname/Input',
+    'get!Sds/IdentityModule/DataModel/Identity/Lastname/Input',
+    'get!Sds/IdentityModule/DataModel/Identity/Email/Input'
 ],
 function(
     declare,
     lang,
-    Deferred,
     Widget,
     TemplatedMixin,
     WidgetsInTemplateMixin,
-    ValidationMixin,
-    Identity,
     BaseView,
-    RegisterViewModel,
-    formFactory,
     template
 ){
     return declare(
@@ -38,68 +33,24 @@ function(
         {
             templateString: template,
 
-            valueType: Identity,
-
-            inputsAppended: false,
-
-            postCreate: function(){
-
-                // Extend the dialogNode so it can handle form validators
-                declare.safeMixin(this.dialogNode, new ValidationMixin);
-                this.dialogNode._messageStyleNode = this.formValidatorMessage;
-                this.dialogNode.blockMessage = this.blockMessage;
-                this.dialogNode.inlineMessage = this.inlineMessage;
-                this.dialogNode.watch('value', lang.hitch(this, function(){
-                    this.dialogNode._validate();
-                }));
-
-                this.inherited(arguments);
-
-                document.body.appendChild(this.domNode);
-            },
-
             activate: function(value){
 
-                this.inherited(arguments);
+                var returnValue = this.inherited(arguments);
 
-                if ( ! value){
-                    value = new Identity;
-                    this.set('value', value);
-                }
-
-                this._appendInputs().then(lang.hitch(this, function(){
-                    this.startup();
-                    this.dialogNode.show(value).then(lang.hitch(this, function(){
-                        this._resolve();
-                    }));
+                this.startup();
+                this.dialogNode.show(value).then(lang.hitch(this, function(){
+                    this.deactivate();
                 }));
+                document.body.appendChild(this.domNode);
 
-                return this._activateDeferred;
+                return returnValue;
             },
 
             deactivate: function(){
-                this.dialogNode.hide();
-                this.inherited(arguments);
-            },
-
-            reset: function(){
-                this.dialogNode.reset();
-            },
-
-            _appendInputs: function(){
-                var appendInputsDeferred = new Deferred;
-
-                if ( ! this.inputsAppened){
-                    var metadata = RegisterViewModel.metadata;
-                    metadata.containerNode = this.containerNode;
-                    formFactory.appendToForm(this.dialogNode, metadata).then(lang.hitch(this, function(){
-                        this.inputsAppened = true;
-                        appendInputsDeferred.resolve();
-                    }));
-                } else {
-                    appendInputsDeferred.resolve();
+                if(this.dialogNode.get('visible')){
+                    this.dialogNode.hide();
                 }
-                return appendInputsDeferred;
+                this.inherited(arguments);
             },
 
             _getStateAttr: function(){
@@ -111,15 +62,9 @@ function(
             },
 
             _getValueAttr: function(){
-                var formValue = this.dialogNode.get('value').value;
-
-                this.value.identityName = formValue.identityName;
-                this.value.credential = formValue.credential[0];
-                this.value.firstname = formValue.firstname;
-                this.value.lastname = formValue.lastname;
-                this.value.email = formValue.email;
-
-                return this.value;
+                var value = this.dialogNode.get('value').value;
+                value.credential = value.credential[0];
+                return value;
             }
         }
     );

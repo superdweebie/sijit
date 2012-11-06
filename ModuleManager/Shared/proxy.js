@@ -7,7 +7,7 @@ define([
         sharedModuleManager
     ){
         // module:
-        //		Sds/ModuleManager/Shared/getProxy
+        //		Sds/ModuleManager/Shared/proxy
         //
         // An AMD plugin that return a Proxy to the requested object from the
         // shared ModuleManager

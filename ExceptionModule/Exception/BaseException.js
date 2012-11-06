@@ -1,10 +1,12 @@
 define([
     'dojo/_base/lang',
+    'dojo/Deferred',
     'dojo/errors/create',
     'Sds/ExceptionModule/severity'
 ],
 function(
     lang,
+    Deferred,
     create,
     severity
 ){
@@ -27,6 +29,8 @@ function(
             //code: string
             //    The exception code
             this.code = undefined;
+
+            this.handle = new Deferred;
 
             lang.mixin(this, options);
         }
