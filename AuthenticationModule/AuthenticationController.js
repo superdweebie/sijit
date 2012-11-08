@@ -2,18 +2,17 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/Deferred',
+    'dojo/store/JsonRest',
     'Sds/Common/Status',
-    'dojox/rpc/Service',
     'dojo/Stateful',
-    'Sds/ExceptionModule/throwEx',
-    'dojox/rpc/JsonRPC'
+    'Sds/ExceptionModule/throwEx'
 ],
 function (
     declare,
     lang,
     Deferred,
+    JsonRest,
     Status,
-    RpcService,
     Stateful,
     throwEx
 ){
@@ -24,15 +23,7 @@ function (
             // summary:
             //		Controlls identity login and logout.
 
-            //apiSmd: object | string
-            //    May be an SMD object, or a url that will return an SMD.
-            //    The SMD must define a json rpc interface to login and logout
-            //    of a server.
-            apiSmd: undefined,
-
-            //api: object
-            //    Is the api generated from the apiSmd
-            api: undefined,
+            restUrl: undefined,
 
             //identity: object
             //    The identity object returned after a successful login
@@ -51,6 +42,12 @@ function (
             loginView: undefined,
 
             enableRememberMe: undefined,
+
+            store: undefined,
+
+            constructor: function(){
+                this.store = new JsonRest(this.restUrl);
+            },
 
             login: function()
             {
@@ -76,16 +73,11 @@ function (
 
                     // Send data to server
                     var formValue = result.value;
-                    var rememberMe;
                     if (formValue.rememberMe){
-                        rememberMe = Boolean(formValue['rememberMe'].length);
+                        formValue.rememberMe = Boolean(formValue['rememberMe'].length);
                     }
 
-                    this.get('api').login(
-                        formValue['identityName'],
-                        formValue['credential'],
-                        rememberMe
-                    ).then(
+                    this.store.put(formValue).then(
                         lang.hitch(this, '_loginComplete'),
                         lang.hitch(this, '_handleException')
                     );
@@ -109,29 +101,17 @@ function (
                 this.set('status', new Status('logging out', Status.icon.SPINNER));
 
                 // Send message to server
-                this.get('api').logout().then(
+                this.store.remove(-1).then(
                     lang.hitch(this, '_logoutComplete'),
                     lang.hitch(this, '_handleException')
                 );
                 return this._logoutDeferred;
             },
 
-            _apiGetter: function(){
-                // summary:
-                //		Get the json rpc api
-                // returns: object
-                //      Returns a json rpc api that can be used to call the server.
-
-                if ( ! this.api) {
-                    this.api = new RpcService(this.apiSmd);
-                }
-                return this.api;
-            },
-
             _identityGetter: function(){
                 if (this.identity === undefined){
                     this._getIdentityDeferred = new Deferred;
-                    this.get('api').getIdentity().then(
+                    this.store.get(-1).then(
                         lang.hitch(this, '_getIdentityComplete'),
                         lang.hitch(this, '_handleException')
                     );

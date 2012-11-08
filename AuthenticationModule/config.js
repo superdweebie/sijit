@@ -4,10 +4,8 @@ function(){
         moduleManager: {
             'Sds/AuthenticationModule/AuthenticationController': {
                 params: {
-                    enableRememberMe: true
-                },
-                gets: {
-                    apiSmd: 'Sds/AuthenticationModule/Smd'
+                    enableRememberMe: true,
+                    restUrl: 'http:/mysite.com/authenticatedIdentity'
                 },
                 proxies: {
                     loginView: 'Sds/AuthenticationModule/View/Login'
@@ -37,7 +35,7 @@ function(){
                     label    : 'Username:'
                 },
                 gets: {
-                    validator: 'Sds/AuthenticationModule/Login/IdentityName/validator'
+                    validator: 'Sds/AuthenticationModule/Login/IdentityName/Validator'
                 }
             },
             'Sds/AuthenticationModule/Login/Credential/Input': {
@@ -52,7 +50,7 @@ function(){
                     type     : 'password'
                 },
                 gets: {
-                    validator: 'Sds/AuthenticationModule/Login/Credential/validator'
+                    validator: 'Sds/AuthenticationModule/Login/Credential/Validator'
                 }
             },
             'Sds/AuthenticationModule/Login/RememberMe/Input': {
@@ -66,22 +64,22 @@ function(){
                     label    : 'Remember me:'
                 }
             },
-            'Sds/AuthenticationModule/Login/IdentityName/validator': {
-                base: 'validatorGroup',
+            'Sds/AuthenticationModule/Login/IdentityName/Validator': {
+                base: 'ValidatorGroup',
                 gets: {
                     validators: [
-                        'requiredValidator',
-                        'identifierValidator'
+                        'RequiredValidator',
+                        'IdentifierValidator'
                     ]
                 }
             },
-            'Sds/AuthenticationModule/Login/Credential/validator': {
-                base: 'validatorGroup',
+            'Sds/AuthenticationModule/Login/Credential/Validator': {
+                base: 'ValidatorGroup',
                 gets: {
                     validators: [
-                        'requiredValidator',
+                        'RequiredValidator',
                         {
-                            base: 'lengthValidator',
+                            base: 'LengthValidator',
                             params: {min: 6, max: 40}
                         }
                     ]
