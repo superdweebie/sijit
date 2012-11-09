@@ -90,8 +90,11 @@ function(
         filename = filename.slice(1, filename.length);
         delete profile.selfFilename;
 
-        configManager.merge(profile.mergeConfigs, profile).then(function(processedProfile){
-            fs.writeFileSync(filename, 'var profile = ' + json.toJson(processedProfile, true));
+        var mergedConfig = {};        
+        configManager.merge(profile.defaultConfig.mergeConfigs, mergedConfig).then(function(mergedConfig){            
+            profile.defaultConfig = utils.mixinDeep(profile.defaultConfig, mergedConfig);
+            delete(profile.defaultConfig.mergeConfigs);
+            fs.writeFileSync(filename, 'var profile = ' + json.toJson(profile, true));
             console.log('Preprocessed build profile written to: ' + filename);
         });
     });

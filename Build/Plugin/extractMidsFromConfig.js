@@ -2,7 +2,7 @@ define(['dojo/_base/lang'], function(lang) {
 
     return function extractMidsFromConfig(identifier, referenceModule, bc){
         var mids = [];
-        var moduleManagerConfig = bc.moduleManager;
+        var moduleManagerConfig = bc.defaultConfig.moduleManager;
         var config;
 
         switch(true){
