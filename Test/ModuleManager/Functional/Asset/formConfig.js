@@ -14,48 +14,48 @@ define ([], function (){
                     ]
                 }
             },
-            'Test/validator': {
-                base: 'modelValidator',
+            'Test/Validator': {
+                base: 'ModelValidator',
                 gets: {
                     validators: [
-                        'Test/multiFieldValidator',
-                        'Test/Username/validator',
-                        'Test/Password/validator'
+                        'Test/MultiFieldValidator',
+                        'Test/Username/Validator',
+                        'Test/Password/Validator'
                     ]
                 }
             },
-            'Test/multiFieldValidator': {
+            'Test/MultiFieldValidator': {
                 base: 'Sds/Test/ModuleManager/Functional/Asset/MultiFieldValidator'
             },
-            'Test/Username/validator': {
-                base: 'validatorGroup',
+            'Test/Username/Validator': {
+                base: 'ValidatorGroup',
                 params: {
                     field: 'username'
                 },
                 gets: {
                     validators: [
-                        'requiredValidator',
+                        'RequiredValidator',
                         {
-                            base: 'datatypeValidator',
+                            base: 'DatatypeValidator',
                             params: {requiredType: 'string'}
                         },
-                        'identifierValidator'
+                        'IdentifierValidator'
                     ]
                 }
             },
-            'Test/Password/validator': {
-                base: 'validatorGroup',
+            'Test/Password/Validator': {
+                base: 'ValidatorGroup',
                 params: {
                     field: 'password'
                 },
                 gets: {
                     validators: [
-                        'requiredValidator',
+                        'RequiredValidator',
                         {
-                            base: 'datatypeValidator',
+                            base: 'DatatypeValidator',
                             params: {requiredType: 'string'}
                         },
-                        'credentialValidator'
+                        'CredentialValidator'
                     ]
                 }
             },
@@ -69,7 +69,7 @@ define ([], function (){
                     'class': ['form-horizontal']
                 },
                 gets: {
-                    validator: 'Test/multiFieldValidator',
+                    validator: 'Test/MultiFieldValidator',
                     inputs: [
                         'Test/Username/Input',
                         'Test/Password/Input'
@@ -87,7 +87,7 @@ define ([], function (){
                     label    : 'Username:'
                 },
                 gets: {
-                    validator: 'Test/Username/validator'
+                    validator: 'Test/Username/Validator'
                 }
             },
             'Test/Password/Input': {
@@ -102,7 +102,7 @@ define ([], function (){
                     type     : 'password'
                 },
                 gets: {
-                    validator: 'Test/Password/validator'
+                    validator: 'Test/Password/Validator'
                 }
             }
         }

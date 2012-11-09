@@ -6,16 +6,21 @@
 		<style type="text/css">
             @import "../../../../themes/bootstrap/css/bootstrap.css";
             @import "../../../../themes/bootstrap/css/bootstrap-responsive.css";
+            @import "../../../../../bootstrap/assets/datepicker.css";
 		</style>
         <script type="text/javascript" src="../../../testconfig.js"></script>
         <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			require([
                 'dojo/parser',
+                'dojo/dom',
                 'dojo/on',
                 'dijit/registry',
                 'dojo/store/Memory',
                 'Sds/Common/Form/TextBox',
+                'Sds/Common/Form/NumberTextBox',
+                'Sds/Common/Form/CurrencyTextBox',
+                'Sds/Common/Form/DateTextBox',
                 'Sds/Common/Form/ValidationTextBox',
                 'Sds/Common/Form/Textarea',
                 'Sds/Common/Form/ValidationTextarea',
@@ -27,6 +32,7 @@
             ],
             function(
                 parser,
+                dom,
                 on,
                 registry,
                 MemoryStore
@@ -34,6 +40,26 @@
                 parser.parse().then(function(){
                     on(registry.byId('textBox8').domNode, 'appendage-click', function(event){
                         alert('Clicked ' + event.button);
+                    });
+
+                    dom.byId('numberTextBox1Value').innerHTML = registry.byId('numberTextBox1').get('value');
+                    registry.byId('numberTextBox1').watch('value', function(p, o, newValue){
+                        dom.byId('numberTextBox1Value').innerHTML = newValue;
+                    });
+
+                    dom.byId('currencyTextBox1Value').innerHTML = registry.byId('currencyTextBox1').get('value');
+                    registry.byId('currencyTextBox1').watch('value', function(p, o, newValue){
+                        dom.byId('currencyTextBox1Value').innerHTML = newValue;
+                    });
+
+                    dom.byId('dateTextBox1Value').innerHTML = registry.byId('dateTextBox1').get('value');
+                    registry.byId('dateTextBox1').watch('value', function(p, o, newValue){
+                        dom.byId('dateTextBox1Value').innerHTML = newValue;
+                    });
+                    
+                    dom.byId('dateTextBox2Value').innerHTML = registry.byId('dateTextBox2').get('value');
+                    registry.byId('dateTextBox2').watch('value', function(p, o, newValue){
+                        dom.byId('dateTextBox2Value').innerHTML = newValue;
                     });
 
                     var data = [
@@ -153,7 +179,7 @@
                 value="Toby"
                 data-dojo-props="
                     label:'Name',
-                    validator: 'personalNameValidator'
+                    validator: 'PersonalNameValidator'
                 "
                 id="validationTextBox1"
              />
@@ -164,7 +190,7 @@
                 value="Not Toby"
                 data-dojo-props="
                     label:'Name',
-                    validator: 'personalNameValidator'
+                    validator: 'PersonalNameValidator'
                 "
                 id="validationTextBox2"
              />
@@ -176,7 +202,7 @@
                 data-dojo-props="
                     label:'Name',
                     messagePosition: 'inline',
-                    validator: 'personalNameValidator'
+                    validator: 'PersonalNameValidator'
                 "
                 id="validationTextBox3"
              />
@@ -187,7 +213,7 @@
                 value=""
                 data-dojo-props="
                     label:'Name',
-                    validator: 'personalNameValidator'
+                    validator: 'PersonalNameValidator'
                 "
                 id="validationTextBox4"
              />
@@ -199,7 +225,7 @@
                 data-dojo-props="
                     label:'Name',
                     messagePosition: 'block',
-                    validator: 'personalNameValidator'
+                    validator: 'PersonalNameValidator'
                 "
                 id="validationTextBox5"
              />
@@ -211,14 +237,12 @@
                 data-dojo-props="
                     label:'Name',
                     validator: [
-                        'notRequiredValidator',
-                        'personalNameValidator'
+                        'NotRequiredValidator',
+                        'PersonalNameValidator'
                     ]
                 "
                 id="validationTextBox6"
              />
-
-
 
             <p>Super test Invalid with multiple Deferred Validators</p>
             <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
@@ -228,14 +252,14 @@
                     label:'Sijit is:',
                     messagePosition: 'block',
                     validator: [
-                        'alphaValidator',
+                        'AlphaValidator',
                         'Sds/Test/Common/Validator/Asset/DeferredValidator',
-                        {base: 'lengthValidator', params: {min: 1, max: 7}},
-                        'alphaValidator',
+                        {base: 'LengthValidator', params: {min: 1, max: 7}},
+                        'AlphaValidator',
                         {base: 'Sds/Test/Common/Validator/Asset/DeferredValidator', params: {timeout: 3000}},
-                        {base: 'lengthValidator', params: {min: 4, max: 8}},
+                        {base: 'LengthValidator', params: {min: 4, max: 8}},
                         'Sds/Test/Common/Validator/Asset/DeferredValidator',
-                        {base: 'lengthValidator', params: {min: 5, max: 8}},
+                        {base: 'LengthValidator', params: {min: 5, max: 8}},
                     ],
                     suppressMessages: false
                 "
@@ -251,6 +275,54 @@
                 "
                 id="validationTextBox10"
              />
+
+            <h3>Sds/Common/Form/NumberTextBox</h3>
+
+            <p>Number Box</p>
+            <input data-dojo-type="Sds/Common/Form/NumberTextBox"
+                type="text"
+                value=10000000
+                data-dojo-props="
+                    label:'Number'
+                "
+                id="numberTextBox1"
+            />
+            <p>Number Box Value: <pre id="numberTextBox1Value"></pre></p>
+
+            <h3>Sds/Common/Form/CurrencyTextBox</h3>
+
+            <p>Currency Box</p>
+            <input data-dojo-type="Sds/Common/Form/CurrencyTextBox"
+                type="text"
+                data-dojo-props="
+                    label:'Cost'
+                "
+                id="currencyTextBox1"
+            />
+            <p>Currency Box Value: <pre id="currencyTextBox1Value"></pre></p>
+
+            <h3>Sds/Common/Form/DateTextBox</h3>
+
+            <p>Date Box</p>
+            <input data-dojo-type="Sds/Common/Form/DateTextBox"
+                type="text"
+                data-dojo-props="
+                    label:'Date'
+                "
+                id="dateTextBox1"
+            />
+            <p>Date Value: <pre id="dateTextBox1Value"></pre></p>
+
+            <p>Date Box with validator (must be greater than today)</p>
+            <input data-dojo-type="Sds/Common/Form/DateTextBox"
+                type="text"
+                data-dojo-props="
+                    label:'Date',
+                    validator: 'DateInequalityValidator'
+                "
+                id="dateTextBox2"
+            />
+            <p>Date Box Value: <pre id="dateTextBox2Value"></pre></p>
 
             <h3>Sds/Common/Form/Textarea</h3>
             <p>Default</p>
@@ -285,7 +357,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
                 data-dojo-props="
                     label:'About',
                     validator: [
-                        {base: 'lengthValidator', params: {min: 10, max: 1000}}
+                        {base: 'LengthValidator', params: {min: 10, max: 1000}}
                     ]
                 "
                 id="validationTextarea1"
@@ -298,7 +370,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
                 data-dojo-props="
                     label:'About',
                     validator: [
-                        {base: 'lengthValidator', params: {min: 10, max: 1000}}
+                        {base: 'LengthValidator', params: {min: 10, max: 1000}}
                     ]
                 "
                 id="validationTextarea2"
@@ -324,7 +396,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
                 data-dojo-props="
                     label:'About',
                     validator: [
-                        {base: 'lengthValidator', params: {min: 10, max: 1000}}
+                        {base: 'LengthValidator', params: {min: 10, max: 1000}}
                     ]
                 "
                 id="validationExpandingTextarea1"
@@ -336,7 +408,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
                 data-dojo-props="
                     label:'About',
                     validator: [
-                        {base: 'lengthValidator', params: {min: 10, max: 1000}}
+                        {base: 'LengthValidator', params: {min: 10, max: 1000}}
                     ]
                 "
                 id="validationExpandingTextarea2"
@@ -435,6 +507,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
                     checked: true
                 "
                 id="checkbox1"
+                type="checkbox"
              />
         </form>
 	</body>

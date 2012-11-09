@@ -5,9 +5,8 @@ define([
     'dojo/when',
     'dojo/Deferred',
     'dojo/dom-class',
-    'dojox/timing',
     'Sds/Common/utils',
-    'Sds/Common/Validator/validatorFactory',
+    'get!ValidatorFactory',
     'dijit/_FocusMixin'
 ],
 function (
@@ -17,9 +16,8 @@ function (
     when,
     Deferred,
     domClass,
-    timing,
     utils,
-    validatorFactory,
+    ValidatorFactory,
     FocusMixin
 ){
 
@@ -93,17 +91,17 @@ function (
                 this.inherited(arguments);
 
                 this.watch('state', lang.hitch(this, function(p, o, newValue){
-                    if (newValue != '' && this._onFocusValue != undefined && this._onFocusValue != '' && this.get('focused')){
+                    if (newValue == '' ||
+                        (newValue != '' &&
+                        this._onFocusValue != undefined &&
+                        this._onFocusValue != '' &&
+                        this.get('focused'))
+                    ){
                         this.set('style', this.postActivityStyle);
                         this.set('suppressMessages', this.postActivitySuppressMessages);
                     }
                 }));
 
-                this._delayTimer = new timing.Timer(this.delayTimeout);
-                this._delayTimer.onTick = lang.hitch(this, function(){
-                    this._delayTimer.stop();
-                    this._validate();
-                });
                 this._startValidateTimer();
             },
 
@@ -143,7 +141,7 @@ function (
                     this._startValidateTimer();
                 }));
 
-                when(validatorFactory.create(value), function(validator){
+                when(ValidatorFactory.create(value), function(validator){
                     validatorDeferred.resolve(validator);
                 });
             },
@@ -196,12 +194,10 @@ function (
                 }
 
                 //Put in delay timer. Don't validate every single value change
-                if ( ! this._delayTimer.isRunning){
-                    this._delayTimer.start();
-                } else {
-                    this._delayTimer.stop(); //reset timer
-                    this._delayTimer.start();
-                }
+                clearTimeout(this._delayTimer);
+                this._delayTimer = setTimeout(lang.hitch(this, function(){
+                    this._validate();
+                }), this.delayTimeout);
             },
 
             _validateNow: function(){
@@ -211,7 +207,7 @@ function (
                 }
 
                 // Stop the delay timer and force an immediate validation
-                this._delayTimer.stop();
+                clearTimeout(this._delayTimer);
                 this._validate();
             },
 
