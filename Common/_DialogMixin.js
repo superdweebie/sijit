@@ -43,7 +43,7 @@ function (
             //		Creates a modal dialog box. Use the show() and hide() methods to
             //      iniitate and cancel.
 
-            // _modaul: bootsrap/Modal
+            // _modal: bootsrap/Modal
             //     This is what does most of the work.
             _modal: undefined,
 

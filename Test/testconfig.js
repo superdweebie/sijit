@@ -1,7 +1,7 @@
 // Dojo Configuration
 dojoConfig = {
     isDebug: true,
-    locale: 'en-us',
+    locale: 'en-au',
     popup: true,
     async: true,
     aliases: [
@@ -10,7 +10,7 @@ dojoConfig = {
     ],
     mergeConfigs: [
         'Sds/Common/Validator/config',
-        'Sds/ExceptionModule/config', 
+        'Sds/ExceptionModule/config',
         'Sds/Router/config',
         'Sds/Mongo/config',
         'Sds/IdentityModule/config',

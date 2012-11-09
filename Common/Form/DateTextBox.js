@@ -1,35 +1,71 @@
 define([
     'dojo/_base/declare',
-    'dijit/_Widget',
-	'dijit/_TemplatedMixin',
-    'Sds/Common/Form/_TextBoxMixin',
-    'Sds/Common/Form/_AppendageMixin',
-    'dojo/text!./Template/TextBox.html'
+    'dojo/_base/lang',
+    'dojo/on',
+    'dojo/date/locale',
+    'Sds/Common/Form/ValidationTextBox',
+    'bootstrap/Datepicker'
 ],
 function (
     declare,
-    Widget,
-    TemplatedMixin,
-    TextBoxMixin,
-    AppendageMixin,
-    template
+    lang,
+    on,
+    dateLocale,
+    ValidationTextBox,
+    Datepicker
 ){
     return declare(
         'Sds/Common/Form/DateTextBox',
-        [Widget, TemplatedMixin, TextBoxMixin, AppendageMixin],
+        [ValidationTextBox],
         {
-            templateString: template,
+            placeholder: {format: ''},
 
-            placeholder: '0.00',
+            formatLength: 'short',
 
-            prepend: ['$'],
+            _datepicker: undefined,
 
-            format: function(value /*=====, constraints =====*/){
-                return value == null ? '' : (value.toString ? value.toString() : value);
+            _datepickerHidden: true,
+
+            // there is no typing for this input, so the delay timer can be removed
+            // to make it feel more snappy
+            delayTimeout: 0,
+
+            postCreate: function(){
+                this.inherited(arguments);
+                this._datepicker = new Datepicker(this.textbox, {format: dateLocale._parseInfo().bundle['dateFormat-' + this.formatLength]});
+                this._datepicker.setValue = lang.hitch(this, function(){
+                    this.set('value', dateLocale.format(this._datepicker.date, {selector: 'date', formatLength: this.formatLength}));
+                });
+                on(this.domNode, 'show', lang.hitch(this, function(){
+                    this._datepickerHidden = false;
+                }));
+                on(this.domNode, 'hide', lang.hitch(this, function(){
+                    this._datepickerHidden = true;
+                }));
             },
 
-            parse: function(value /*=====, constraints =====*/){
-                return value;	// String
+            onFocus: function(){
+                this._datepicker.show();
+                this.inherited(arguments);
+            },
+
+            onBlur: function(){
+                //block blur if the date picker is open - it's not really a propert blur event
+                if ( ! this._datepickerHidden){
+                    return;
+                }
+                this.inherited(arguments);
+            },
+
+            _setPlaceholderAttr: function(value){
+                if (value.hasOwnProperty('format')){
+                    value = dateLocale._parseInfo().bundle['dateFormat-' + this.formatLength];
+                }
+                this.inherited(arguments, [value]);
+            },
+
+            parse: function(value, constraints){
+                return dateLocale.parse(value, lang.mixin({selector: 'date', formatLength: this.formatLength}, constraints));
             }
         }
     );

@@ -1,36 +1,44 @@
 define([
     'dojo/_base/declare',
-    'dijit/_Widget',
-	'dijit/_TemplatedMixin',
-    'Sds/Common/Form/_TextBoxMixin',
-    'Sds/Common/Form/_AppendageMixin',
-    'dojo/text!./Template/TextBox.html'
+    'dojo/currency',
+    'Sds/Common/utils',
+    'Sds/Common/Form/ValidationTextBox',
+    'Sds/Common/Form/_NumberTextBoxMixin',
+    'get!CurrencyValidator'
 ],
 function (
     declare,
-    Widget,
-    TemplatedMixin,
-    TextBoxMixin,
-    AppendageMixin,
-    template
+    currency,
+    utils,
+    ValidationTextBox,
+    NumberTextBoxMixin,
+    CurrencyValidator
 ){
     return declare(
         'Sds/Common/Form/CurrencyTextBox',
-        [Widget, TemplatedMixin, TextBoxMixin, AppendageMixin],
+        [ValidationTextBox, NumberTextBoxMixin],
         {
-            templateString: template,
+            currency: 'USD', //US Dollars default currency
 
-            placeholder: '0.00',
+            placeholder: {format: 0},
 
-            prepend: ['$'],
+            validator: CurrencyValidator,
 
-            format: function(value /*=====, constraints =====*/){
-                return value == null ? '' : (value.toString ? value.toString() : value);
+            _formatter: currency.format,
+
+            _parser: currency.parse,
+
+            _setCurrencyAttr: function(value){
+                this.set('prepend', currency._mixInDefaults({currency: value}).symbol);
             },
 
-            parse: function(value /*=====, constraints =====*/){
-                return value;	// String
+            _setPlaceholderAttr: function(value){
+                if (value.hasOwnProperty('format')){
+                    value = this.blurFormat(value.format);
+                }
+                this.inherited(arguments, [value]);
             }
         }
     );
 });
+

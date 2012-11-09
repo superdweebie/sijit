@@ -6,6 +6,7 @@
 		<style type="text/css">
             @import "../../../../themes/bootstrap/css/bootstrap.css";
             @import "../../../../themes/bootstrap/css/bootstrap-responsive.css";
+            @import "../../../../../bootstrap/assets/datepicker.css";
 		</style>
         <script type="text/javascript" src="../../../testconfig.js"></script>
         <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
@@ -19,6 +20,7 @@
                 'Sds/Common/Form/TextBox',
                 'Sds/Common/Form/NumberTextBox',
                 'Sds/Common/Form/CurrencyTextBox',
+                'Sds/Common/Form/DateTextBox',
                 'Sds/Common/Form/ValidationTextBox',
                 'Sds/Common/Form/Textarea',
                 'Sds/Common/Form/ValidationTextarea',
@@ -43,6 +45,21 @@
                     dom.byId('numberTextBox1Value').innerHTML = registry.byId('numberTextBox1').get('value');
                     registry.byId('numberTextBox1').watch('value', function(p, o, newValue){
                         dom.byId('numberTextBox1Value').innerHTML = newValue;
+                    });
+
+                    dom.byId('currencyTextBox1Value').innerHTML = registry.byId('currencyTextBox1').get('value');
+                    registry.byId('currencyTextBox1').watch('value', function(p, o, newValue){
+                        dom.byId('currencyTextBox1Value').innerHTML = newValue;
+                    });
+
+                    dom.byId('dateTextBox1Value').innerHTML = registry.byId('dateTextBox1').get('value');
+                    registry.byId('dateTextBox1').watch('value', function(p, o, newValue){
+                        dom.byId('dateTextBox1Value').innerHTML = newValue;
+                    });
+                    
+                    dom.byId('dateTextBox2Value').innerHTML = registry.byId('dateTextBox2').get('value');
+                    registry.byId('dateTextBox2').watch('value', function(p, o, newValue){
+                        dom.byId('dateTextBox2Value').innerHTML = newValue;
                     });
 
                     var data = [
@@ -280,8 +297,32 @@
                 data-dojo-props="
                     label:'Cost'
                 "
-                id="currencyBox1"
+                id="currencyTextBox1"
             />
+            <p>Currency Box Value: <pre id="currencyTextBox1Value"></pre></p>
+
+            <h3>Sds/Common/Form/DateTextBox</h3>
+
+            <p>Date Box</p>
+            <input data-dojo-type="Sds/Common/Form/DateTextBox"
+                type="text"
+                data-dojo-props="
+                    label:'Date'
+                "
+                id="dateTextBox1"
+            />
+            <p>Date Value: <pre id="dateTextBox1Value"></pre></p>
+
+            <p>Date Box with validator (must be greater than today)</p>
+            <input data-dojo-type="Sds/Common/Form/DateTextBox"
+                type="text"
+                data-dojo-props="
+                    label:'Date',
+                    validator: 'DateInequalityValidator'
+                "
+                id="dateTextBox2"
+            />
+            <p>Date Box Value: <pre id="dateTextBox2Value"></pre></p>
 
             <h3>Sds/Common/Form/Textarea</h3>
             <p>Default</p>

@@ -6,7 +6,7 @@ define([
     'dojo/Deferred',
     'dojo/dom-class',
     'Sds/Common/utils',
-    'Sds/Common/Validator/validatorFactory',
+    'get!ValidatorFactory',
     'dijit/_FocusMixin'
 ],
 function (
@@ -17,7 +17,7 @@ function (
     Deferred,
     domClass,
     utils,
-    validatorFactory,
+    ValidatorFactory,
     FocusMixin
 ){
 
@@ -141,7 +141,7 @@ function (
                     this._startValidateTimer();
                 }));
 
-                when(validatorFactory.create(value), function(validator){
+                when(ValidatorFactory.create(value), function(validator){
                     validatorDeferred.resolve(validator);
                 });
             },
