@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Testing Sds/ModuleManager/Shared/proxy!</title>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript">
+            dojoConfig.mergeConfigs.push('Sds/Test/ModuleManager/Asset/config');
+        </script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			require([
+                'doh/main',
+                'Sds/ModuleManager/Shared/proxy!zooWithProxyMethods',
+                'dojo/domReady!'
+            ],
+            function(
+                doh,
+                zoo
+            ){
+
+                doh.register([
+                    function testSharedModuleManager(){
+                        var deferredTest = new doh.Deferred;
+                        zoo.listAnimals().then(function(animals){
+                            doh.assertEqual(['lucy', 'liz', 'toby'], animals);
+                            deferredTest.callback(true);
+                        });
+                        return deferredTest;
+                    }
+                ]);
+                doh.runOnLoad();
+
+            });
+		</script>
+	</head>
+	<body>
+        <h1>Testing Sds/ModuleManager/Shared/proxy!</h1>
+	</body>
+</html>

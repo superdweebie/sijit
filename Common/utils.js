@@ -1,9 +1,10 @@
 define ([
     'dojo/_base/lang',
     'dojo/_base/config',
-    'dojo/_base/array'
+    'dojo/_base/array',
+    'dojo/Deferred'
 ],
-function (lang, config, array) {
+function (lang, config, array, Deferred) {
     // module:
     //		Sds/Common/utils
 
@@ -103,6 +104,22 @@ function (lang, config, array) {
                     return false
                 }
             });
+        },
+
+        isDeferred: function(/*object*/object){
+            //summary:
+            //     Helper method to determine if an object is an instance of Deferred
+            //
+            // returns:
+            //     boolean
+
+            if (object instanceof Deferred){
+                return true;
+            }
+            if (object.isInstanceOf && object.isInstanceOf(Deferred)){
+                return true;
+            }
+            return false;
         }
     }
 });

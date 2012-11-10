@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Testing Sds/ModuleManager/Shared/get!</title>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript">
+            dojoConfig.mergeConfigs.push('Sds/Test/ModuleManager/Asset/config');
+        </script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			require([
+                'doh/main',
+                'get!Sds/ModuleManager/Shared/get!Sds/Test/ModuleManager/Asset/Zoo',
+                'dojo/domReady!'
+            ],
+            function(
+                doh,
+                zoo
+            ){
+
+                doh.register([
+                    function testSharedModuleManager(){
+                        doh.assertEqual('the sijit zoo', zoo.name);
+                    }
+                ]);
+                doh.runOnLoad();
+
+            });
+		</script>
+	</head>
+	<body>
+        <h1>Testing Sds/ModuleManager/Shared/get!</h1>
+	</body>
+</html>

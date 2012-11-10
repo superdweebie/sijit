@@ -2,10 +2,10 @@ define(
     [],
     function(){
         return {
-            serviceManager: {
+            moduleManager: {
                 test1: {
-                    moduleName: 'Test1',
-                    values: {
+                    base: 'Test1',
+                    params: {
                         value1: 1,
                         value2: 2
                     }

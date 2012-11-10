@@ -2,15 +2,18 @@ define(
     [],
     function(){
         return {
-            serviceManager: {
+            mergeConfigs: [
+                'Sds/Test/ConfigManager/Asset/Config3'
+            ],
+            moduleManager: {
                 test1: {
-                    values: {
+                    params: {
                         value2: 22
                     }
                 },
                 test2: {
-                    moduleName: 'Test2',
-                    values: {
+                    base: 'Test2',
+                    params: {
                         value1: 1
                     }
                 }

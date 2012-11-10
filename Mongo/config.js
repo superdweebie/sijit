@@ -2,9 +2,9 @@ define(
     [],
     function(){
         return {
-            serviceManager: {
+            moduleManager: {
                 'Sds/ExceptionModule/ExceptionController': {
-                    values: {
+                    params: {
                         registeredExceptions: {
                             'Sds/Mongo/Exception/MongoConnectionException': 'MongoConnectionException'
                         }

@@ -9,42 +9,38 @@
 		</style>
         <script type="text/javascript" src="../testconfig.js"></script>
         <script type="text/javascript">
-            dojoConfig.mergeConfigs.push('Sds/Test/AuthenticationModule/Asset/Config');
+            dojoConfig.mergeConfigs.push('Sds/Test/AuthenticationModule/Asset/config');
         </script>
         <script type="text/javascript" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			require([
                 'doh/main',
-                'dojo/Deferred',
                 'dojo/when',
                 'Sds/AuthenticationModule/Exception/LoginFailedException',
-                'Sds/ServiceManager/Shared/getObject!Sds/AuthenticationModule/AuthenticationController',
-                'Sds/ServiceManager/Shared/getObject!mockLoginView',
-                'Sds/ServiceManager/Shared/getObject!Sds/ExceptionModule/ExceptionController',
+                'get!Sds/AuthenticationModule/AuthenticationController',
+                'get!mockLoginView',
                 'dojo/domReady!'
             ],
             function(
                 doh,
-                Deferred,
                 when,
                 LoginFailedException,
                 authenticationController,
-                mockLoginView,
-                mockExceptionController
+                mockLoginView
             ){
 
                 // Define and register the tests
                 doh.register([
                     function testLoginFail(){
 
-                        var testResult = new Deferred();
+                        var testResult = new doh.Deferred;
 
-                        mockLoginView.value.username = 'toby';
-                        mockLoginView.value.password = 'wrong';
+                        mockLoginView.value.identityName = 'toby';
+                        mockLoginView.value.credential = 'wrong';
 
-                        when(authenticationController.login(), null, function(){
-                            doh.assertTrue(mockExceptionController.lastException instanceof LoginFailedException);
-                            testResult.resolve();
+                        when(authenticationController.login(), null, function(exception){
+                            doh.assertTrue(exception instanceof LoginFailedException);
+                            testResult.callback(true);
                         });
 
                         return testResult;
@@ -52,15 +48,15 @@
 
                     function testLoginSucceed(){
 
-                        var testResult = new Deferred();
+                        var testResult = new doh.Deferred;
 
-                        mockLoginView.value.username = 'toby';
-                        mockLoginView.value.password = 'password';
+                        mockLoginView.value.identityName = 'toby';
+                        mockLoginView.value.credential = 'password';
 
                         when(authenticationController.login(), function(){
                             doh.assertTrue(authenticationController.get('loggedIn'));
-                            doh.assertEqual('toby', authenticationController.get('activeUser'));
-                            testResult.resolve();
+                            doh.assertEqual('toby', authenticationController.get('identity'));
+                            testResult.callback(true);
                         });
 
                         return testResult;
@@ -68,12 +64,14 @@
 
                     function testLogout(){
 
-                        var testResult = new Deferred();
+                        var testResult = new doh.Deferred;
 
                         when(authenticationController.logout(), function(){
                             doh.assertFalse(authenticationController.get('loggedIn'));
-                            doh.assertFalse(authenticationController.get('activeUser'));
-                            testResult.resolve();
+                            authenticationController.get('identity').then(function(identity){
+                                doh.assertFalse(identity);
+                            });
+                            testResult.callback(true);
                         });
 
                         return testResult;

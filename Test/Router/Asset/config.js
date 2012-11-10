@@ -1,9 +1,9 @@
 define([],
 function(){
     return {
-        serviceManager: {
+        moduleManager: {
             'Sds/Router/router': {
-                values: {
+                params: {
                     controllers: {
                         test: {
                             name: 'Sds/Test/Router/Asset/TestController',

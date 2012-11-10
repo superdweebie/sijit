@@ -37,23 +37,96 @@ function (
             //      Same as prepend
             append: [],
 
+            _appendageNodes: [],
+
             _setPrependAttr: function(value){
-                this.prepend = value;
-                for (var index in this.prepend){
-                    this._setAppendage(this.prepend[index], true);
+
+                if ( ! lang.isArray(value)){
+                    value = [value];
                 }
+
+                var index;
+                for (index in value){
+                    value[index] = this._createDefinition(value[index], true);
+                }
+                this.prepend = value;
+
+                this._appendageDifference(value);
             },
 
             _setAppendAttr: function(value){
-                this.prepend = value;
-                for (var index in this.append){
-                    this._setAppendage(this.prepend[index], false);
+
+                if ( ! lang.isArray(value)){
+                    value = [value];
+                }
+
+                var index;
+                for (index in value){
+                    value[index] = this._createDefinition(value[index], false);
+                }
+                this.append = value;
+
+                this._appendageDifference(value);
+            },
+
+            _createDefinition: function(value, isPrepend){
+                var definition = value;
+                if (typeof(value) == 'string'){
+                    definition = {
+                        type: 'text',
+                        innerHTML: definition
+                    }
+                }
+                if (isPrepend){
+                    definition.isPrepend = true;
+                } else {
+                    definition.isPrepend = false;
+                }
+                return definition;
+            },
+
+            _appendageDifference: function(definitions){
+                var index;
+                var index2;
+                var add = [];
+                var remove = [];
+
+                for(index in definitions){
+                    add.push(index);
+                }
+
+                for(index in this._appendageNodes){
+                    for(index2 in definitions){
+                        if (this._appendageNodes[index].definition.innerHTML == definitions[index2].innerHTML &&
+                            this._appendageNodes[index].definition.isPrepend == definitions[index2].isPrepend &&
+                            this._appendageNodes[index].definition.type == definitions[index2].type
+                        ){
+                            delete(add[index2]);
+                        } else {
+                            remove.push(index);
+                        }
+                    }
+                }
+
+                var item;
+                for(index in remove){
+                    item = this._appendageNodes.splice(remove[index], 1);
+                    if (item.handler){
+                        item.handler.remove();
+                    }
+                    domConstruct.destroy(item.node);
+                }
+
+                for(index in add){
+                    if (add[index]){
+                        this._addAppendage(definitions[index]);
+                    }
                 }
             },
 
-            _setAppendage: function(definition, isPrepend){
+            _addAppendage: function(definition){
 
-                if (isPrepend){
+                if (definition.isPrepend){
                     domClass.add(this.appendagesWrapper,'input-prepend');
                 } else {
                     domClass.add(this.appendagesWrapper,'input-append');
@@ -61,12 +134,6 @@ function (
 
                 var tag;
                 var properties = {'class': 'add-on'};
-                if (typeof(definition) == 'string'){
-                    definition = {
-                        type: 'text',
-                        innerHTML: definition
-                    }
-                }
 
                 switch (definition.type){
                     case 'text':
@@ -82,7 +149,7 @@ function (
 
 
                 var node;
-                if (isPrepend){
+                if (definition.isPrepend){
                     node = domConstruct.create(
                         tag,
                         properties,
@@ -99,11 +166,14 @@ function (
                 }
 
                 //attach button event listener
+                var handler;
                 if (definition.type == 'button'){
-                    on(node, 'click', lang.hitch(this, function(){
+                    handler = on(node, 'click', lang.hitch(this, function(){
                         this.emit('appendage-click', definition.clickMixin);
                     }))
                 }
+
+                this._appendageNodes.push({definition: definition, node: node, handler: handler});
             }
         }
     );

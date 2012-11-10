@@ -1,10 +1,10 @@
 define([],
 function(){
     return {
-        serviceManager: {
+        moduleManager: {
             'Sds/Router/router': {
-                getObjects: {
-                    controllerManager: 'Sds/ServiceManager/Shared/getServiceManager!'
+                gets: {
+                    controllerManager: 'Sds/ModuleManager/Shared/getModuleManager!'
                 }
             }
         }

@@ -1,31 +1,43 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/Deferred',
+    'dojo/dom-class',
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
-    'Sds/View/BaseView',
-    'Sds/AuthenticationModule/ViewModel/Login',
-    'Sds/View/formFactory',
+    'Sds/Mvc/BaseView',
     'Sds/Router/startedRouter!',
     'dojo/text!../Template/Login.html',
-    'Sds/Common/Dialog'
+    'Sds/Common/Dialog',
+    'get!Sds/AuthenticationModule/Login/IdentityName/Input',
+    'get!Sds/AuthenticationModule/Login/Credential/Input',
+    'get!Sds/AuthenticationModule/Login/RememberMe/Input'
 ],
 function(
     declare,
     lang,
-    Deferred,
+    domClass,
     Widget,
     TemplatedMixin,
     WidgetsInTemplateMixin,
     BaseView,
-    LoginViewModel,
-    formFactory,
     router,
-    template
+    template,
+    Dialog
 ){
-    return declare(
+
+    var buttons = lang.mixin(Dialog.Buttons, {
+        // summary:
+        //		Possible values of the button property in the return object.
+        //
+        // description:
+        //      OK: indicates that the 'ok' button was clicked to dismiss the dialog
+        //      CANCEL: indicates that a 'cancel' button was clicked to dismiss the dialog
+        REGISTER: 'register',
+        FORGOT_CREDENTIAL: 'forgotCredential'
+    });
+
+    var Login = declare(
         'Sds/AuthenticationModule/View/Login',
         [
             Widget,
@@ -36,31 +48,23 @@ function(
         {
             templateString: template,
 
-            valueType: LoginViewModel,
-
-            inputsAppended: false,
-
             forgotCredentialRoute: undefined,
 
             registerRoute: undefined,
-            
-            activate: function(value, enableRememberMe){
+
+            enableRememberMe: true,
+
+            activate: function(value){
 
                 var returnValue = this.inherited(arguments);
 
-                if ( ! value){
-                    value = new LoginViewModel;
-                    this.set('value', value);
-                }
-
-                this._appendInputs(enableRememberMe).then(lang.hitch(this, function(){
-                    this.startup();
-                    this.dialogNode.show(value).then(lang.hitch(this, function(){
-                        this.deactivate();
-                    }));
+                this.startup();
+                this.set('enableRememberMe', this.enableRememberMe);
+                this.dialogNode.show(value).then(lang.hitch(this, function(){
+                    this.deactivate();
                 }));
-
                 document.body.appendChild(this.domNode);
+
                 return returnValue;
             },
 
@@ -71,27 +75,15 @@ function(
                 this.inherited(arguments);
             },
 
-            reset: function(){
-                this.dialogNode.reset();
-            },
-
-            _appendInputs: function(enableRememberMe){
-                var appendInputsDeferred = new Deferred;
-
-                if ( ! this.inputsAppened){
-                    var metadata = lang.clone(LoginViewModel.metadata);
-                    metadata.containerNode = this.containerNode;
-                    if ( ! enableRememberMe){
-                        delete metadata.fields.rememberMe;
+            _setEnableRememberMeAttr: function(value){
+                this.enableRememberMe = value;
+                if (this._started){
+                    if (this.enableRememberMe){
+                        domClass.remove(this.rememberMe.domNode, 'hide');
+                    } else {
+                        domClass.add(this.rememberMe.domNode, 'hide');
                     }
-                    formFactory.appendToForm(this.dialogNode, metadata).then(lang.hitch(this, function(){
-                        this.inputsAppened = true;
-                        appendInputsDeferred.resolve();
-                    }));
-                } else {
-                    appendInputsDeferred.resolve();
                 }
-                return appendInputsDeferred;
             },
 
             _getStateAttr: function(){
@@ -102,20 +94,32 @@ function(
                 }
             },
 
-            _getValueAttr: function(){
-                this.value = lang.mixin(this.value, this.dialogNode.get('value').value);
-                return this.value;
+            reset: function(){
+                this.dialogNode.set('value', {identityName: '', credential: ''});
+                this.dialogNode.resetActivity();
             },
-            onForgotCredential: function(){
-                this.dialogNode.hide();
+
+            _getValueAttr: function(){
+                return this.dialogNode.get('value').value;
+            },
+
+            onForgotCredentialClick: function(){
+                this.dialogNode.set('button', buttons.REGISTER);
+                this.deactivate();
                 router.go(this.forgotCredentialRoute);
             },
-            onRegister: function(){
-                this.dialogNode.hide();
+
+            onRegisterClick: function(){
+                this.dialogNode.set('button', buttons.FORGOT_CREDENTIAL);
+                this.deactivate();
                 router.go(this.registerRoute);
             }
         }
     );
+
+    Login.buttons = buttons;
+
+    return Login;
 });
 
 

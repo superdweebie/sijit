@@ -1,32 +1,30 @@
 define([],
 function(){
     return {
-        serviceManager: {
+        mergeConfigs: [
+            'Sds/IdentityModule/DataModel/Identity'
+        ],
+        moduleManager: {
             'Sds/IdentityModule/IdentityController': {
-                moduleName: 'Sds/IdentityModule/IdentityController',
                 proxyMethods: [
                     'forgotCredential',
                     'forgotCredentialPart1',
                     'forgotCredentialPart2',
                     'register'
                 ],
-                values: {
+                params: {
                     identityRestUrl: '/identity/rest/'
                 },
-                getObjects: {
+                gets: {
                     apiSmd: 'Sds/IdentityModule/Smd'
                 },
-                proxyObjects: {
+                proxies: {
                     forgotCredentialPart1View: 'Sds/IdentityModule/View/ForgotCredentialPart1',
                     forgotCredentialPart2View: 'Sds/IdentityModule/View/ForgotCredentialPart2',
                     registerView: 'Sds/IdentityModule/View/Register'
                 }
             },
-            'Sds/IdentityModule/DataModule/Identity': {
-                moduleName: 'Sds/IdentityModule/DataModel/Identity'
-            },
             'Sds/IdentityModule/View/ForgotCredentialPart1': {
-                moduleName: 'Sds/IdentityModule/View/ForgotCredentialPart1',
                 proxyMethods: [
                     'activate',
                     'reset',
@@ -36,7 +34,6 @@ function(){
                 ]
             },
             'Sds/IdentityModule/View/ForgotCredentialPart2': {
-                moduleName: 'Sds/IdentityModule/View/ForgotCredentialPart2',
                 proxyMethods: [
                     'activate',
                     'reset',
@@ -45,11 +42,7 @@ function(){
                     'watch'
                 ]
             },
-            'Sds/IdentityModule/ViewModel/ForgotCredentialPart2': {
-                moduleName: 'Sds/IdentityModule/ViewModel/ForgotCredentialPart2'
-            },
             'Sds/IdentityModule/View/Register': {
-                moduleName: 'Sds/IdentityModule/View/Register',
                 proxyMethods: [
                     'activate',
                     'reset',
@@ -59,15 +52,29 @@ function(){
                 ]
             },
             'Sds/IdentityModule/Validator/IdentityNameAvailableValidator': {
-                moduleName: 'Sds/IdentityModule/Validator/IdentityNameAvailableValidator',
-                getObjects: {
+                gets: {
                     apiSmd: 'Sds/IdentityModule/Smd'
                 }
             },
             'Sds/Router/router': {
-                values: {
+                params: {
                     controllers: {
-                        'identity': 'Sds/IdentityModule/IdentityController'
+                        identity: {
+                            name: 'Sds/IdentityModule/IdentityController',
+                            methods: {
+                                register: 'register',
+                                forgotCredential: 'forgotCredential',
+                                forgotCredentialPart1: 'forgotCredentialPart1',
+                                forgotCredentailPart2: 'forgotCredentialPart2'
+                            }
+                        }
+                    }
+                }
+            },
+            'Sds/ExceptionModule/ExceptionController': {
+                params: {
+                    registeredExceptions: {
+                        'Sds/IdentityModule/Exception/InvalidArgumentException': 'Sds\\IdentityModule\\Exception\\InvalidArgumentException'
                     }
                 }
             }

@@ -14,7 +14,7 @@ dojoConfig = {
         {
             name: "dojox",
             location: "dojox"
-        },
+        },        
         {
             name: "Sds",
             location: "Sds"

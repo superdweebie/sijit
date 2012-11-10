@@ -29,55 +29,28 @@ function(
             //    Is the api generated from the apiSmd
             api: undefined,
 
-            _resultDeferred: undefined,
-
-            _validating: undefined,
-
-            _validated: undefined,
-
-            isValid: function(value){
-
-                this.messages = [];
-
-                if (value === this._validated){
-                    return true;
-                }
-
-                if (value === this._validating){
-                    return this._resultDeferred;
-                }
-
-                this._validating = value;
-
-                this._resultDeferred = new Deferred;
-
-                setTimeout(lang.hitch(this, function(){
-                    this._isValid(value);
-                }), 400);
-
-                return this._resultDeferred;
-            },
-
             _isValid: function(value){
 
-                if (value != this._validating || value === this._validated){
-                    return;
-                }
+                var resultDeferred = new Deferred;
 
                 this.get('api').identityNameAvailable(value).then(
                     lang.hitch(this, function(result){
+                        var messages = [];
                         if ( ! result){
-                            this.messages.push('This username is already taken. Please choose another');
+                            messages.push('This username is already taken. Please choose another');
+                        } else {
+                            messages.push('Username available');
                         }
-                        this._validated = value;
-                        this._resultDeferred.resolve(result);
+                        resultDeferred.resolve({result: result, messages: messages});
                     }),
                     function(exception){
                         // If something goes wrong with the api call, assume the username is ok.
                         // This will be checked again server side anyway.
-                        this._resultDeferred.resolve(true);
+                        resultDeferred.resolve({result: true, messages: []});
                     }
                 );
+
+                return {result: resultDeferred, messages: ['checking if username is available']};
             },
 
             _apiGetter: function(){

@@ -1,19 +1,16 @@
 define([], function(){
     return {
-        serviceManager: {
+        moduleManager: {
             'Sds/AuthenticationModule/AuthenticationController': {
-                getObjects: {
-                    api: 'mockAuthenticationApi'
+                gets: {
+                    api: 'Sds/Test/AuthenticationModule/Asset/MockAuthenticationApi'
                 },
-                proxyObjects: {
+                proxies: {
                     loginView: 'mockLoginView'
                 }
             },
-            mockAuthenticationApi: {
-                moduleName: 'Sds/Test/AuthenticationModule/Asset/MockAuthenticationApi'
-            },
             mockLoginView: {
-                moduleName: 'Sds/Test/AuthenticationModule/Asset/MockLoginView',
+                base: 'Sds/Test/AuthenticationModule/Asset/MockLoginView',
                 proxyMethods: [
                     'activate',
                     'reset',
@@ -22,11 +19,25 @@ define([], function(){
                     'watch'
                 ]
             },
-            'Sds/ExceptionModule/ExceptionController': {
-                moduleName: 'Sds/Test/AuthenticationModule/Asset/MockExceptionController',
-                proxyMethods: [
-                    'handle'
-                ]
+            'Sds/Test/AuthenticationModule/Asset/MockIdentityController': {
+                base: {},
+                params: {
+                    register: function(){},
+                    forgotCredential: function(){}
+                }
+            },
+            'Sds/Router/router': {
+                params: {
+                    controllers: {
+                        identity: {
+                            name: 'Sds/Test/AuthenticationModule/Asset/MockIdentityController',
+                            methods: {
+                                register: 'register',
+                                forgotCredential: 'forgotCredential'
+                            }
+                        }
+                    }
+                }
             }
         }
     }
