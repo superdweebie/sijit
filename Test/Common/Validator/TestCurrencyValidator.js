@@ -33,9 +33,9 @@ define([
                 var index;
                 for (index in testArray){
                     if (testArray[index][0]){
-                        doh.assertTrue(validator.isValid(testArray[index][1]));
+                        doh.assertTrue(validator.isValid(testArray[index][1]).result);
                     } else {
-                        doh.assertFalse(validator.isValid(testArray[index][1]));
+                        doh.assertFalse(validator.isValid(testArray[index][1]).result);
                     }
                 }
             }

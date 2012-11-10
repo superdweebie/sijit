@@ -20,26 +20,31 @@ function(
 
                 if ( ! this.loggedIn && identityName == 'toby' && credential == 'password'){
                     this.loggedIn = true;
-                    response.resolve({user: 'toby'});
+                    response.resolve({identity: 'toby'});
                 } else {
-                    if (this.loggedIn) {
-                        response.reject(this._alreadyLoggedIn());
-                    } else {
-                        response.reject(this._loginFailed());
-                    }
+                    response.reject(this._loginFailed());
                 }
                 return response;
             },
             logout: function(){
                 var response = new Deferred;
+                this.loggedIn = false;
                 response.resolve({});
                 return response;
             },
+
+            getIdentity: function(){
+                var response = new Deferred;
+                if (this.loggedIn){
+                    response.resolve({identity: 'toby'});
+                } else {
+                    response.resolve({identity: null});
+                }
+                return response;
+            },
+
             _loginFailed: function(){
                 return new RequestError('Unable to load Mock Loign', {text: '{"id":0,"result":null,"error":{"type":"Sds\\\\AuthenticationModule\\\\Exception\\\\LoginFailedException","code":0,"message":"A record with the supplied identity could not be found."}}'});
-            },
-            _alreadyLoggedIn: function(){
-                return new RequestError('Unable to load Mock Loign', {text: '{"id":0,"result":null,"error":{"type":"Sds\\\\AuthenticationModule\\\\Exception\\\\AlreadyLoggedInException","code":0,"message":"Already logged in."}}'});
             }
         }
     );

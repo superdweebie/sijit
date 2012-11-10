@@ -10,19 +10,19 @@ function(
         'Sds/IdentityModule/Validator/CredentialMatchValidator',
         [BaseValidator],
         {
-            isValid: function(value){
+            _isValid: function(value){
                 if (value.value){
                     value = value.value;
                 }
 
-                this.messages = [];
+                var messages = [];
 
                 var result = true;
                 if (value.credential[0] != value.credential[1]) {
-                    this.messages.push('Both passwords are not the same.');
+                    messages.push('Both passwords are not the same.');
                     result = false;
                 }
-                return result;
+                return {result: result, messages: messages};
             }
         }
     );

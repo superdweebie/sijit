@@ -1,13 +1,11 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojox/timing',
     'dojo/Stateful'
 ],
 function(
     declare,
     lang,
-    timing,
     Stateful
 ){
     var status = declare
@@ -33,12 +31,9 @@ function(
                 this.set('timeout', timeout);
 
                 if (timeout){
-                    this._timer = new timing.Timer(timeout);
-                    this._timer.onTick = lang.hitch(this, function(){
-                        this._timer.stop();
+                    this._timer = setTimeout(lang.hitch(this, function(){
                         this.set('expired', true);
-                    });
-                    this._timer.start();
+                    }), this.timeout);
                 }
             }
         }

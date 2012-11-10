@@ -10,21 +10,21 @@ function(
         'Sds/IdentityModule/Validator/ForgotCredentialPart1Validator',
         [BaseValidator],
         {
-            isValid: function(value){
+            _isValid: function(value){
 
                 if (value.value){
                     value = value.value;
                 }
 
-                this.messages = [];
+                var messages = [];
 
                 var result = true;
                 if ( ! value.identityName && ! value.email) {
-                    this.messages.push('Either username or email is required.');
+                    messages.push('Either username or email is required.');
                     result = false;
                 }
 
-                return result;
+                return {result: result, messages: messages};
             }
         }
     );

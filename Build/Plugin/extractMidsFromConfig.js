@@ -1,29 +1,51 @@
-define([], function() {
+define(['dojo/_base/lang'], function(lang) {
 
-    return function extractMidsFromConfig(alias, referenceModule, bc){
+    return function extractMidsFromConfig(identifier, referenceModule, bc){
         var mids = [];
-        var serviceManagerConfig = bc.serviceManager;
-        var aliasConfig = serviceManagerConfig[alias];
+        var moduleManagerConfig = bc.defaultConfig.moduleManager;
+        var config;
+
+        switch(true){
+            case typeof(getIdentifier) == 'string':
+                config = moduleManagerConfig[identifier];
+                break;
+            case typeof(getIdentifier) == 'object':
+                config = lang.clone(identifier);
+                identifier = null;
+                break;
+        }
 
         // Add module
-        if (aliasConfig.moduleName){
-            mids.push(bc.amdResources[bc.getSrcModuleInfo(aliasConfig.moduleName, referenceModule).mid]);
+        switch(true){
+            case config.mid:
+                mids.push(bc.amdResources[bc.getSrcModuleInfo(config.mid, referenceModule).mid]);
+                break;
+            case identifier:
+                mids.push(bc.amdResources[bc.getSrcModuleInfo(identifier, referenceModule).mid]);
+                break;
+            default:
+                return mids;
         }
 
-        // Also add any other required modules
+        // Also add any other mids from gets config
         var index;
-        var injectAlias;
-        for (index in aliasConfig.createObjects){
-            injectAlias = aliasConfig.createObjects[index];
-            if (serviceManagerConfig[injectAlias]){
-                mids = mids.concat(extractMidsFromConfig(injectAlias, referenceModule, bc));
-            }
-        }
+        var getIdentifier;
 
-        for (index in aliasConfig.getObjects){
-            injectAlias = aliasConfig.getObjects[index];
-            if (serviceManagerConfig[injectAlias]){
-                mids = mids.concat(extractMidsFromConfig(injectAlias, referenceModule, bc));
+        for (index in config.gets){
+            getIdentifier = config.gets[index];
+
+            switch (true){
+                case typeof(getIdentifier) == 'string':
+                    mids = mids.concat(extractMidsFromConfig(getIdentifier, referenceModule, bc));
+                    break;
+                case lang.isArray(getIdentifier):
+                    for (var arrayIndex in getIdentifier){
+                        mids = mids.concat(extractMidsFromConfig(getIdentifier[arrayIndex], referenceModule, bc));
+                    }
+                    break;
+                case typeof(getIdentifier) == 'object':
+                    mids = mids.concat(extractMidsFromConfig(getIdentifier, referenceModule, bc));
+                    break;
             }
         }
         return mids;

@@ -6,8 +6,8 @@ define([
     'Sds/Common/Status',
     'dojox/rpc/Service',
     'dojo/Stateful',
+    'get!Sds/IdentityModule/DataModel/Identity',
     'Sds/ExceptionModule/throwEx',
-    'Sds/ServiceManager/Shared/getProxy!Sds/IdentityModule/ViewModel/ForgotCredentialPart2',
     'dojox/rpc/JsonRPC'
 ],
 function(
@@ -18,8 +18,8 @@ function(
     Status,
     RpcService,
     Stateful,
-    throwEx,
-    forgotCredentialPart2ViewModelProxy
+    Identity,
+    throwEx
 ){
     return declare
     (
@@ -44,15 +44,15 @@ function(
             //    Is the api generated from the apiSmd
             api: undefined,
 
-            // forgotCredentialPart1View: Sds/IdentityModule/View/ForgotCredentialPart1View | Sds/ServiceManager/Proxy
+            // forgotCredentialPart1View: Sds/IdentityModule/View/ForgotCredentialPart1View | Sds/ModuleManager/Proxy
             //     A recover password view part 1, or proxy to a recover password view.
             forgotCredentialPart1View: undefined,
 
-            // forgotCredentialPart2View: Sds/IdentityModule/View/ForgotCredentialPart2View | Sds/ServiceManager/Proxy
+            // forgotCredentialPart2View: Sds/IdentityModule/View/ForgotCredentialPart2View | Sds/ModuleManager/Proxy
             //     A recover password view part 2, or proxy to a recover password view.
             forgotCredentialPart2View: undefined,
 
-            // registerView: Sds/IdentityModule/RegisterView | Sds/ServiceManager/Proxy
+            // registerView: Sds/IdentityModule/RegisterView | Sds/ModuleManager/Proxy
             //     A register view, or proxy to a register view.
             registerView: undefined,
 
@@ -86,8 +86,9 @@ function(
 
                 this.forgotCredentialPart1View.activate().then(lang.hitch(this, function(result){
                     // Do nothing if form not valid.
-                    if (!result.state == ''){
+                    if (result.state != ''){
                         this._forgotCredentialPart1Deferred.resolve();
+                        return;
                     }
 
                     // Update status
@@ -100,7 +101,6 @@ function(
                         lang.hitch(this, '_forgotCredentialPart1Complete'),
                         lang.hitch(this, '_handleException')
                     );
-                    this.forgotCredentialPart1View.reset();
                 }));
 
                 return this._forgotCredentialPart1Deferred;
@@ -114,16 +114,11 @@ function(
 
                 this._forgotCredentialPart2Deferred = new Deferred();
 
-                forgotCredentialPart2ViewModelProxy.getObject().then(function(forgotCredentialPart2ViewModel){
-                    forgotCredentialPart2ViewModel.passwordRecoveryCode;
-                    forgotCredentialPart2ViewModel.name;
-                });
-
-
                 this.forgotCredentialPart2View.activate().then(lang.hitch(this, function(result){
                     // Do nothing if form not valid.
-                    if (!result.state == ''){
+                    if (result.state != ''){
                         this._forgotCredentialPart2Deferred.resolve();
+                        return;
                     }
 
                     // Update status
@@ -136,7 +131,6 @@ function(
                         lang.hitch(this, '_forgotCredentialPart2Complete'),
                         lang.hitch(this, '_handleException')
                     );
-                    this.forgotCredentialPart2View.reset();
                 }));
 
                 return this._forgotCredentialPart2Deferred;
@@ -152,18 +146,18 @@ function(
 
                 this.registerView.activate().then(lang.hitch(this, function(result){
                     // Do nothing if form not valid.
-                    if (!result.state == ''){
+                    if (result.state != ''){
                         this._registerDeferred.resolve();
+                        return;
                     }
 
                     // Update status
                     this.set('status', new Status('sending registration request', Status.icon.SPINNER));
 
-                    this.get('api').register(result.value).then(
+                    this.get('api').register(new Identity(result.value)).then(
                         lang.hitch(this, '_registerComplete'),
-                        lang.hitch(this, '_handleException')
+                        lang.hitch(this, '_handleRegisterException')
                     );
-                    this.registerView.reset();
                 }));
 
                 return this._registerDeferred;
@@ -203,19 +197,33 @@ function(
                 // summary:
                 //		Handles xhr exceptions.
 
-                exception = json.fromJson(exception.response.text).error;
+                throwEx(exception).then(lang.hitch(this, function(standardizedException){
 
-                throwEx(exception);
+                    // Update status
+                    this.set('status', new Status(standardizedException.message, Status.icon.ERROR, 5000));
 
-                if (this._forgotCredentialPart1Deferred && (! this._forgotCredentialPart1Deferred.isFulfilled())){
-                    this._forgotCredentialPart1Deferred.reject(exception);
-                }
-                if (this._forgotCredentialPart2Deferred && (! this._forgotCredentialPart2Deferred.isFulfilled())){
-                    this._forgotCredentialPart2Deferred.reject(exception);
-                }
-                if (this._registerDeferred && (! this._registerDeferred.isFulfilled())){
-                    this._registerDeferred.reject(exception);
-                }
+                    if (this._forgotCredentialPart1Deferred && (! this._forgotCredentialPart1Deferred.isFulfilled())){
+                        this._forgotCredentialPart1Deferred.reject(exception);
+                    }
+                    if (this._forgotCredentialPart2Deferred && (! this._forgotCredentialPart2Deferred.isFulfilled())){
+                        this._forgotCredentialPart2Deferred.reject(exception);
+                    }
+                }));
+            },
+
+            _handleRegisterException: function(exception){
+                // summary:
+                //		Handles xhr exceptions.
+
+                throwEx(exception).then(lang.hitch(this, function(standardizedException){
+
+                    // Update status
+                    this.set('status', new Status(standardizedException.message, Status.icon.ERROR, 5000));
+
+                    standardizedException.handle.then(lang.hitch(this, function(){
+                        this.register();
+                    }));
+                }));
             }
         }
     );

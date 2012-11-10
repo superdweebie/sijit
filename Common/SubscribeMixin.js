@@ -14,7 +14,7 @@ define ([
         //		Sds/Common/SubscribeMixin
 
         return declare (
-            'Sds.Common.SubscribeMixin',
+            'Sds/Common/SubscribeMixin',
             null,
             {
                 // summary:

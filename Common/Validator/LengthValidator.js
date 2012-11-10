@@ -16,11 +16,6 @@ function(
 
             max: 255,
 
-            constructor: function(min, max){
-                this.min = min,
-                this.max = max
-            },
-
             _isValid: function(value){
 
                 var messages = [];

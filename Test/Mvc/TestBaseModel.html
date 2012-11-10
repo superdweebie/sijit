@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Testing Sds/Mvc/BaseModel</title>
+        <script type="text/javascript" src="../testconfig.js"></script>
+        <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			require([
+                'doh/main',
+                'dojo/_base/json',
+                'Sds/Mvc/BaseModel',
+                'dojo/domReady!'
+            ],
+            function(
+                doh,
+                json,
+                BaseModel
+            ){
+                doh.register("Sds/Test/Mvc/TestBaseModel", [
+
+                    function ToJSONTest(doh){
+                        var model = new BaseModel({
+                            fields: ['username', 'password'],
+                            username: 'toby',
+                            password: 'password1',
+                            other: 'other'
+                        });
+
+                        var jsonModel = json.toJson(model);
+
+                        doh.assertEqual('{"username":"toby","password":"password1"}', jsonModel);
+                    }
+                ]);
+
+                doh.runOnLoad();
+            });
+		</script>
+	</head>
+	<body>
+        <h1>Testing Sds/Mvc/BaseModel</h1>
+	</body>
+</html>
