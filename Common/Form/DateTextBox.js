@@ -41,6 +41,9 @@ function (
                 }));
                 on(this.domNode, 'hide', lang.hitch(this, function(){
                     this._datepickerHidden = true;
+                    if ( ! this.focused){
+                        this.onBlur();
+                    }
                 }));
             },
 
