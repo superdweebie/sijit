@@ -17,8 +17,12 @@ function(
                 dom.byId('test2Result').innerHTML = 'test2 called. arg a: ' + a + ', arg b: ' + b;
             },
             clear: function(){
-                dom.byId('test1Result').innerHTML = '';
-                dom.byId('test2Result').innerHTML = '';
+                dom.byId('test1Result').innerHTML = 'cleared';
+                dom.byId('test2Result').innerHTML = 'cleared';
+            },
+            ready: function(){
+                dom.byId('test1Result').innerHTML = 'ready';
+                dom.byId('test2Result').innerHTML = 'ready';
             }
         }
     );

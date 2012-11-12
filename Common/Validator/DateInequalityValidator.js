@@ -1,6 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/string',
     'dojo/date',
     'dojo/date/locale',
     'dojo/i18n!Sds/nls/validatorMessages',
@@ -9,6 +10,7 @@ define([
 function(
     declare,
     lang,
+    string,
     date,
     dateLocale,
     validatorMessages,
@@ -48,7 +50,7 @@ function(
                     case operators.LESS_THAN:
                         if ( ! (date.compare(this.compareValue, value, this.portion) > 0)){
                             result = false;
-                            messages.push(BaseValidator.formatMessage(
+                            messages.push(string.substitute(
                                 validatorMessages.inequalityValidatorLessThanMessage,
                                 {compareValue: dateLocale.format(this.compareValue, {selector: 'date', formatLength: this.formatLength})}
                             ));
@@ -57,7 +59,7 @@ function(
                     case operators.LESS_THAN_EQUAL:
                         if ( ! (date.compare(this.compareValue, value, this.portion) >= 0)){
                             result = false;
-                            messages.push(BaseValidator.formatMessage(
+                            messages.push(string.substitute(
                                 validatorMessages.inequalityValidatorLessThanOrEqualMessage,
                                 {compareValue: dateLocale.format(this.compareValue, {selector: 'date', formatLength: this.formatLength})}
                             ));
@@ -66,7 +68,7 @@ function(
                     case operators.GREATER_THAN:
                         if ( ! (date.compare(this.compareValue, value, this.portion) < 0)){
                             result = false;
-                            messages.push(BaseValidator.formatMessage(
+                            messages.push(string.substitute(
                                 validatorMessages.inequalityValidatorGreaterThanMessage,
                                 {compareValue: dateLocale.format(this.compareValue, {selector: 'date', formatLength: this.formatLength})}
                             ));
@@ -75,7 +77,7 @@ function(
                     case operators.GREATER_THAN_EQUAL:
                         if ( ! (date.compare(this.compareValue, value, this.portion) <= value)){
                             result = false;
-                            messages.push(BaseValidator.formatMessage(
+                            messages.push(string.substitute(
                                 validatorMessages.inequalityValidatorGreaterThanOrEqualMessage,
                                 {compareValue: dateLocale.format(this.compareValue, {selector: 'date', formatLength: this.formatLength})}
                             ));
@@ -84,7 +86,7 @@ function(
                     case operators.NOT_EQUAL:
                         if ( ! (date.compare(this.compareValue, value, this.portion) != 0)){
                             result = false;
-                            messages.push(BaseValidator.formatMessage(
+                            messages.push(string.substitute(
                                 validatorMessages.inequalityValidatorNotEqualMessage,
                                 {compareValue: dateLocale.format(this.compareValue, {selector: 'date', formatLength: this.formatLength})}
                             ));

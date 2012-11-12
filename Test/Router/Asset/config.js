@@ -4,16 +4,22 @@ function(){
         moduleManager: {
             'Sds/Router/router': {
                 params: {
-                    controllers: {
+                    defaultRoute: 'test/ready',
+                    routes: {
                         test: {
-                            name: 'Sds/Test/Router/Asset/TestController',
+                            controller: 'Sds/Test/Router/Asset/TestController',
                             defaultMethod: 'test1',
                             methods: {
                                 test1: 'test1',
                                 test2: 'test2',
                                 altTest2: 'test2',
-                                clear: 'clear'
+                                clear: 'clear',
+                                ready: 'ready'
                             }
+                        },
+                        'TestRouter.html': {
+                            controller: 'Sds/Test/Router/Asset/TestController',
+                            defaultMethod: 'ready'
                         }
                     }
                 }

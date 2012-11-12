@@ -1,6 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/string',
     'dojo/i18n!Sds/nls/validatorMessages',
     'Sds/Common/utils',
     'Sds/Common/Validator/BaseValidator'
@@ -8,6 +9,7 @@ define([
 function(
     declare,
     lang,
+    string,
     validatorMessages,
     utils,
     BaseValidator
@@ -59,7 +61,7 @@ function(
                 }
 
                 if ( ! result){
-                    messages.push(BaseValidator.formatMessage(
+                    messages.push(string.subsitute(
                         validatorMessages.dataTypeValidatorMessage,
                         {requiredType: this.requiredType}
                     ))

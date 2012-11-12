@@ -1,11 +1,13 @@
 define([
     'dojo/_base/declare',
+    'dojo/string',
     'dojo/i18n!Sds/nls/validatorMessages',
     'Sds/Common/Validator/IdentifierValidator',
     'Sds/Common/Validator/BaseValidator'
 ],
 function(
     declare,
+    string,
     validatorMessages,
     IdentifierValidator,
     BaseValidator
@@ -29,7 +31,7 @@ function(
                         result = false;
                         var identifierMessages = resultObject.messages;
                         for (var messageIndex in identifierMessages){
-                            messages.push(BaseValidator.formatMessage(
+                            messages.push(string.substitute(
                                 validatorMessages.identifierArrayValidatorMessage,
                                 {name: name, message: identifierMessages[messageIndex]}
                             ));
