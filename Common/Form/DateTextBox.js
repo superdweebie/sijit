@@ -24,8 +24,6 @@ function (
 
             _datepicker: undefined,
 
-            _datepickerHidden: true,
-
             // there is no typing for this input, so the delay timer can be removed
             // to make it feel more snappy
             delayTimeout: 0,
@@ -33,30 +31,18 @@ function (
             postCreate: function(){
                 this.inherited(arguments);
                 this._datepicker = new Datepicker(this.textbox, {format: dateLocale._parseInfo().bundle['dateFormat-' + this.formatLength]});
+                this.domNode.appendChild(this._datepicker.picker);
                 this._datepicker.setValue = lang.hitch(this, function(){
                     this.set('value', dateLocale.format(this._datepicker.date, {selector: 'date', formatLength: this.formatLength}));
                 });
-                on(this.domNode, 'show', lang.hitch(this, function(){
-                    this._datepickerHidden = false;
-                }));
-                on(this.domNode, 'hide', lang.hitch(this, function(){
-                    this._datepickerHidden = true;
-                    if ( ! this.focused){
-                        this.onBlur();
-                    }
-                }));
+                on(this.domNode, 'click', function(e){
+                    //if allowed to propogate, it will hide the datepicker
+                    e.stopPropagation();
+                });
             },
 
             onFocus: function(){
                 this._datepicker.show();
-                this.inherited(arguments);
-            },
-
-            onBlur: function(){
-                //block blur if the date picker is open - it's not really a propert blur event
-                if ( ! this._datepickerHidden){
-                    return;
-                }
                 this.inherited(arguments);
             },
 
