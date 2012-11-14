@@ -18,7 +18,7 @@
                 'dojo/when',
                 'Sds/AuthenticationModule/Exception/LoginFailedException',
                 'get!Sds/AuthenticationModule/AuthenticationController',
-                'get!mockLoginView',
+                'get!MockLoginView',
                 'dojo/domReady!'
             ],
             function(
@@ -31,6 +31,22 @@
 
                 // Define and register the tests
                 doh.register([
+
+                    function testLogout1(){
+
+                        var testResult = new doh.Deferred;
+
+                        when(authenticationController.logout(), function(){
+                            doh.assertFalse(authenticationController.get('loggedIn'));
+                            when(authenticationController.get('identity'), function(identity){
+                                doh.assertFalse(identity);
+                                testResult.callback(true);
+                            });
+                        });
+
+                        return testResult;
+                    },
+
                     function testLoginFail(){
 
                         var testResult = new doh.Deferred;
@@ -45,36 +61,40 @@
 
                         return testResult;
                     },
+                    {
+                        name: "testLoginSucceed",
+                        timeout: 2000,
+                        runTest: function(){
 
-                    function testLoginSucceed(){
+                            var testResult = new doh.Deferred;
 
-                        var testResult = new doh.Deferred;
+                            mockLoginView.value.identityName = 'toby';
+                            mockLoginView.value.credential = 'password';
 
-                        mockLoginView.value.identityName = 'toby';
-                        mockLoginView.value.credential = 'password';
-
-                        when(authenticationController.login(), function(){
-                            doh.assertTrue(authenticationController.get('loggedIn'));
-                            doh.assertEqual('toby', authenticationController.get('identity'));
-                            testResult.callback(true);
-                        });
-
-                        return testResult;
-                    },
-
-                    function testLogout(){
-
-                        var testResult = new doh.Deferred;
-
-                        when(authenticationController.logout(), function(){
-                            doh.assertFalse(authenticationController.get('loggedIn'));
-                            authenticationController.get('identity').then(function(identity){
-                                doh.assertFalse(identity);
+                            when(authenticationController.login(), function(){
+                                doh.assertTrue(authenticationController.get('loggedIn'));
+                                doh.assertEqual('toby', authenticationController.get('identity').identityName);
+                                testResult.callback(true);
                             });
-                            testResult.callback(true);
-                        });
 
-                        return testResult;
+                            return testResult;
+                        }
+                    },
+                    {
+                        name: "testLogout2",
+                        timeout: 2000,
+                        runTest: function(){
+                            var testResult = new doh.Deferred;
+                            when(authenticationController.logout(), function(){
+                                doh.assertFalse(authenticationController.get('loggedIn'));
+                                when(authenticationController.get('identity'), function(identity){
+                                    doh.assertFalse(identity);
+                                    testResult.callback(true);
+                                });
+                            });
+
+                            return testResult;
+                        }
                     }
                 ]);
 

@@ -68,7 +68,8 @@ define([
                     var defaultDirectives = {
                         declare: false,
                         define: false,
-                        cache: true
+                        cache: true,
+                        clone: false
                     };
 
                     switch (true){
@@ -172,7 +173,12 @@ define([
                                 }));
                             }
                         } else {
-                            object = lang.clone(baseObject); //Just clone the module
+                            if (config.directives.clone){
+                                object = lang.clone(baseObject); //Just clone the module
+                            } else {
+                                object = baseObject;
+                            }
+
                             when(this._inject(object, config), lang.hitch(this, function(injectedObject){
                                 when(this._inject(object, config), lang.hitch(this, function(injectedObject){
                                     resolveObject(injectedObject);

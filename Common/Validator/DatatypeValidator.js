@@ -61,7 +61,7 @@ function(
                 }
 
                 if ( ! result){
-                    messages.push(string.subsitute(
+                    messages.push(string.substitute(
                         validatorMessages.dataTypeValidatorMessage,
                         {requiredType: this.requiredType}
                     ))

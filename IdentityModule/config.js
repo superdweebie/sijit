@@ -27,6 +27,7 @@ function(){
             'Sds/IdentityModule/View/ForgotCredentialPart1': {
                 proxyMethods: [
                     'activate',
+                    'deactivate',
                     'reset',
                     'get',
                     'set',
@@ -36,6 +37,7 @@ function(){
             'Sds/IdentityModule/View/ForgotCredentialPart2': {
                 proxyMethods: [
                     'activate',
+                    'deactivate',
                     'reset',
                     'get',
                     'set',
@@ -45,6 +47,7 @@ function(){
             'Sds/IdentityModule/View/Register': {
                 proxyMethods: [
                     'activate',
+                    'deactivate',
                     'reset',
                     'get',
                     'set',
@@ -58,11 +61,15 @@ function(){
             },
             'Sds/Router/router': {
                 params: {
-                    controllers: {
+                    routes: {
                         identity: {
-                            name: 'Sds/IdentityModule/IdentityController',
+                            controller: 'Sds/IdentityModule/IdentityController',
                             methods: {
-                                register: 'register',
+                                register: {
+                                    enter: 'register',
+                                    leave: 'cancelRegister',
+                                    onEnterResolveRoute: -1
+                                },
                                 forgotCredential: 'forgotCredential',
                                 forgotCredentialPart1: 'forgotCredentialPart1',
                                 forgotCredentailPart2: 'forgotCredentialPart2'

@@ -4,7 +4,7 @@ function(){
         moduleManager: {
             'Sds/Router/router': {
                 params: {
-                    defaultRoute: 'test/ready',
+                    routeOnStartup: true,
                     routes: {
                         test: {
                             controller: 'Sds/Test/Router/Asset/TestController',

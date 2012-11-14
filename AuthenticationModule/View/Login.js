@@ -6,8 +6,8 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'Sds/Mvc/BaseView',
-    'Sds/Router/startedRouter!',
     'dojo/text!../Template/Login.html',
+    'Sds/Router/baseUrl!',
     'Sds/Common/Dialog',
     'get!Sds/AuthenticationModule/Login/IdentityName/Input',
     'get!Sds/AuthenticationModule/Login/Credential/Input',
@@ -21,8 +21,8 @@ function(
     TemplatedMixin,
     WidgetsInTemplateMixin,
     BaseView,
-    router,
     template,
+    baseUrl,
     Dialog
 ){
 
@@ -48,9 +48,9 @@ function(
         {
             templateString: template,
 
-            forgotCredentialRoute: undefined,
+            forgotCredentialRoute: baseUrl + '/identity/forgotCredential',
 
-            registerRoute: undefined,
+            registerRoute: baseUrl + '/identity/register',
 
             enableRememberMe: true,
 
@@ -106,13 +106,11 @@ function(
             onForgotCredentialClick: function(){
                 this.dialogNode.set('button', buttons.REGISTER);
                 this.deactivate();
-                router.go(this.forgotCredentialRoute);
             },
 
             onRegisterClick: function(){
                 this.dialogNode.set('button', buttons.FORGOT_CREDENTIAL);
                 this.deactivate();
-                router.go(this.registerRoute);
             }
         }
     );

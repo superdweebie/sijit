@@ -81,12 +81,7 @@ function(
                 var returnDeferred = new Deferred;
 
                 if (exception.response){
-                    exception = json.fromJson(exception.response.text).error;
-                }
-
-                if (exception._rpcErrorObject){
-                    exception.type = exception._rpcErrorObject.type;
-                    exception.code = exception._rpcErrorObject.code;
+                    exception = json.fromJson(exception.response.text);
                 }
 
                 var isRegistered = false;

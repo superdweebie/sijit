@@ -67,14 +67,6 @@ function(
                 return this.identityStore;
             },
 
-            forgotCredentialAction: function(){
-                return this.forgotCredentialPart1();
-            },
-
-            registerAction: function(){
-                return this.register();
-            },
-
             forgotCredentialPart1: function(){
                 // summary:
                 //		Prompt for password recovery details, and process
@@ -161,6 +153,10 @@ function(
                 }));
 
                 return this._registerDeferred;
+            },
+
+            cancelRegister: function(){
+                this._registerView.deactivate();
             },
 
             _apiGetter: function(){

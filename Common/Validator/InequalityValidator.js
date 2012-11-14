@@ -78,7 +78,7 @@ function(
                     case operators.NOT_EQUAL:
                         if ( ! (this.compareValue != value)){
                             result = false;
-                            messages.push(BaseValidator.formatMessage(
+                            messages.push(string.substitute(
                                 validatorMessages.inequalityValidatorNotEqualMessage,
                                 {compareValue: this.compareValue}
                             ));

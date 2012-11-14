@@ -25,30 +25,31 @@ define ([], function (){
                         "roles",
                         "_className"
                     ],
-                    _className: 'Sds\\IdentityModule\\DataModel\\Identity'
+                    _className: 'Sds\\IdentityModule\\DataModel\\Identity',
+                    _validator: 'Sds/IdentityModule/DataModel/Identity/Validator'
                 }
             },
 
             // Will return an validator that can be used to validate
             // a complete instance of the document/model
-            'Sds/IdentityModule/DataModel/Identity/validator': {
-                base: 'modelValidator',
+            'Sds/IdentityModule/DataModel/Identity/Validator': {
+                base: 'ModelValidator',
                 gets: {
                     validators: [
-                        "Sds\/IdentityModule\/DataModel\/Identity\/Firstname\/validator",
-                        "Sds\/IdentityModule\/DataModel\/Identity\/Lastname\/validator",
-                        "Sds\/IdentityModule\/DataModel\/Identity\/Email\/validator",
-                        "Sds\/IdentityModule\/DataModel\/Identity\/Credential\/validator",
-                        "Sds\/IdentityModule\/DataModel\/Identity\/IdentityName\/validator",
-                        "Sds\/IdentityModule\/DataModel\/Identity\/Roles\/validator"
+                        "Sds\/IdentityModule\/DataModel\/Identity\/Firstname\/Validator",
+                        "Sds\/IdentityModule\/DataModel\/Identity\/Lastname\/Validator",
+                        "Sds\/IdentityModule\/DataModel\/Identity\/Email\/Validator",
+                        "Sds\/IdentityModule\/DataModel\/Identity\/Credential\/Validator",
+                        "Sds\/IdentityModule\/DataModel\/Identity\/IdentityName\/Validator",
+                        "Sds\/IdentityModule\/DataModel\/Identity\/Roles\/Validator"
                     ]
                 }
             },
 
             // Will return a validator that can be used to check
             // the firstname field
-            'Sds/IdentityModule/DataModel/Identity/Firstname/validator': {
-                "base": "validatorGroup",
+            'Sds/IdentityModule/DataModel/Identity/Firstname/Validator': {
+                "base": "ValidatorGroup",
                 "gets": {
                     "validators": [
                         "Sds\/Common\/Validator\/RequiredValidator",
@@ -62,8 +63,8 @@ define ([], function (){
 
             // Will return a validator that can be used to check
             // the lastname field
-            'Sds/IdentityModule/DataModel/Identity/Lastname/validator': {
-                "base": "validatorGroup",
+            'Sds/IdentityModule/DataModel/Identity/Lastname/Validator': {
+                "base": "ValidatorGroup",
                 "gets": {
                     "validators": [
                         "Sds\/Common\/Validator\/RequiredValidator",
@@ -77,8 +78,8 @@ define ([], function (){
 
             // Will return a validator that can be used to check
             // the email field
-            'Sds/IdentityModule/DataModel/Identity/Email/validator': {
-                "base": "validatorGroup",
+            'Sds/IdentityModule/DataModel/Identity/Email/Validator': {
+                "base": "ValidatorGroup",
                 "gets": {
                     "validators": [
                         "Sds\/Common\/Validator\/RequiredValidator",
@@ -92,8 +93,8 @@ define ([], function (){
 
             // Will return a validator that can be used to check
             // the credential field
-            'Sds/IdentityModule/DataModel/Identity/Credential/validator': {
-                "base": "validatorGroup",
+            'Sds/IdentityModule/DataModel/Identity/Credential/Validator': {
+                "base": "ValidatorGroup",
                 "gets": {
                     "validators": [
                         "Sds\/Common\/Validator\/RequiredValidator",
@@ -107,8 +108,8 @@ define ([], function (){
 
             // Will return a validator that can be used to check
             // the identityName field
-            'Sds/IdentityModule/DataModel/Identity/IdentityName/validator': {
-                "base": "validatorGroup",
+            'Sds/IdentityModule/DataModel/Identity/IdentityName/Validator': {
+                "base": "ValidatorGroup",
                 "gets": {
                     "validators": [
                         "Sds\/Common\/Validator\/RequiredValidator",
@@ -122,8 +123,8 @@ define ([], function (){
 
             // Will return a validator that can be used to check
             // the roles field
-            'Sds/IdentityModule/DataModel/Identity/Roles/validator': {
-                "base": "validatorGroup",
+            'Sds/IdentityModule/DataModel/Identity/Roles/Validator': {
+                "base": "ValidatorGroup",
                 "gets": {
                     "validators": [
                         "Sds\/Common\/Validator\/IdentifierArrayValidator"
@@ -174,7 +175,7 @@ define ([], function (){
             'Sds/IdentityModule/DataModel/Identity/Firstname/Input': {
                 "base": "Sds\/Common\/Form\/ValidationTextBox",
                 "gets": {
-                    "validator": "Sds\/IdentityModule\/DataModel\/Identity\/Firstname\/validator"
+                    "validator": "Sds\/IdentityModule\/DataModel\/Identity\/Firstname\/Validator"
                 },
                 "directives": {
                     "define": true,
@@ -190,7 +191,7 @@ define ([], function (){
             'Sds/IdentityModule/DataModel/Identity/Lastname/Input': {
                 "base": "Sds\/Common\/Form\/ValidationTextBox",
                 "gets": {
-                    "validator": "Sds\/IdentityModule\/DataModel\/Identity\/Lastname\/validator"
+                    "validator": "Sds\/IdentityModule\/DataModel\/Identity\/Lastname\/Validator"
                 },
                 "directives": {
                     "define": true,
@@ -206,7 +207,7 @@ define ([], function (){
             'Sds/IdentityModule/DataModel/Identity/Email/Input': {
                 "base": "Sds\/Common\/Form\/ValidationTextBox",
                 "gets": {
-                    "validator": "Sds\/IdentityModule\/DataModel\/Identity\/Email\/validator"
+                    "validator": "Sds\/IdentityModule\/DataModel\/Identity\/Email\/Validator"
                 },
                 "directives": {
                     "define": true,
@@ -248,7 +249,7 @@ define ([], function (){
             'Sds/IdentityModule/DataModel/Identity/Credential/Input': {
                 "base": "Sds\/Common\/Form\/ValidationTextBox",
                 "gets": {
-                    "validator": "Sds\/IdentityModule\/DataModel\/Identity\/Credential\/validator"
+                    "validator": "Sds\/IdentityModule\/DataModel\/Identity\/Credential\/Validator"
                 },
                 "directives": {
                     "define": true,
@@ -265,7 +266,7 @@ define ([], function (){
             'Sds/IdentityModule/DataModel/Identity/IdentityName/Input': {
                 "base": "Sds\/Common\/Form\/ValidationTextBox",
                 "gets": {
-                    "validator": "Sds\/IdentityModule\/DataModel\/Identity\/IdentityName\/validator"
+                    "validator": "Sds\/IdentityModule\/DataModel\/Identity\/IdentityName\/Validator"
                 },
                 "directives": {
                     "define": true,
@@ -281,7 +282,7 @@ define ([], function (){
             'Sds/IdentityModule/DataModel/Identity/Roles/Input': {
                 "base": "Sds\/Common\/Form\/ValidationTextBox",
                 "gets": {
-                    "validator": "Sds\/IdentityModule\/DataModel\/Identity\/Roles\/validator"
+                    "validator": "Sds\/IdentityModule\/DataModel\/Identity\/Roles\/Validator"
                 },
                 "directives": {
                     "define": true,
