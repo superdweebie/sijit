@@ -9,7 +9,7 @@
         <input data-dojo-type="Sds/AuthenticationModule/Login/IdentityName/Input" />
         <input data-dojo-type="Sds/AuthenticationModule/Login/Credential/Input" />
         <input data-dojo-type="Sds/AuthenticationModule/Login/RememberMe/Input" data-dojo-attach-point="rememberMe" />
-        <button id="forgotCredentialButton" class="btn btn-link" data-dojo-attach-event="ondijitclick: onForgotCredentialClick">Forgot Password?</button>
-        <button id="registerButton" class="btn btn-link" data-dojo-attach-event="ondijitclick: onRegisterClick">Register</button>
+        <a href="${forgotCredentialRoute}" data-dojo-attach-event="ondijitclick: onForgotCredentialClick">Forgot Password?</a>
+        <a href="${registerRoute}" data-dojo-attach-event="ondijitclick: onRegisterClick">Register</a>
     </div>
 </div>

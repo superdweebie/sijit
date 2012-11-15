@@ -2,7 +2,6 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/json',
-    'dojo/string',
     'Sds/Common/utils',
     'dojo/Stateful'
 ],
@@ -10,7 +9,6 @@ function(
     declare,
     lang,
     json,
-    string,
     utils,
     Stateful
 ){
@@ -120,10 +118,6 @@ function(
             return true;
         }
         return false;
-    }
-
-    BaseValidator.formatMessage = function(/*string*/template, /*array*/params){
-        return string.substitute(template, params);
     }
 
     return BaseValidator;

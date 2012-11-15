@@ -5,7 +5,7 @@ function(){
             'Sds/AuthenticationModule/AuthenticationController': {
                 params: {
                     enableRememberMe: true,
-                    restUrl: 'http:/mysite.com/authenticatedIdentity'
+                    restUrl: 'http://mysite.com/authenticatedIdentity/'
                 },
                 proxies: {
                     loginView: 'Sds/AuthenticationModule/View/Login'
@@ -14,15 +14,12 @@ function(){
             'Sds/AuthenticationModule/View/Login': {
                 proxyMethods: [
                     'activate',
+                    'deactivate',
                     'reset',
                     'get',
                     'set',
                     'watch'
-                ],
-                params: {
-                    forgotCredentialRoute: '/identity/forgotCredential',
-                    registerRoute: '/identity/register'
-                }
+                ]
             },
             'Sds/AuthenticationModule/Login/IdentityName/Input': {
                 base: 'Sds/Common/Form/ValidationTextBox',
@@ -94,12 +91,19 @@ function(){
             },
             'Sds/Router/router': {
                 params: {
-                    controllers: {
-                        'authentication': {
-                            name: 'Sds/AuthenticationModule/AuthenticationController',
+                    routes: {
+                        authentication: {
+                            controller: 'Sds/AuthenticationModule/AuthenticationController',
                             methods: {
-                                login: 'login',
-                                logout: 'logout'
+                                login: {
+                                    enter: 'login',
+                                    leave: 'cancelLogin',
+                                    onEnterResolveRoute: -1
+                                },
+                                logout: {
+                                    enter: 'logout',
+                                    onEnterResolveRoute: -1
+                                }
                             }
                         }
                     }

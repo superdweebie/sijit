@@ -1,12 +1,14 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/string',
     'dojo/i18n!Sds/nls/validatorMessages',
     'Sds/Common/Validator/BaseValidator'
 ],
 function(
     declare,
     lang,
+    string,
     validatorMessages,
     BaseValidator
 ){
@@ -40,7 +42,7 @@ function(
                     case operators.LESS_THAN:
                         if ( ! (this.compareValue > value)){
                             result = false;
-                            messages.push(BaseValidator.formatMessage(
+                            messages.push(string.substitute(
                                 validatorMessages.inequalityValidatorLessThanMessage,
                                 {compareValue: this.compareValue}
                             ));
@@ -49,7 +51,7 @@ function(
                     case operators.LESS_THAN_EQUAL:
                         if ( ! (this.compareValue >= value)){
                             result = false;
-                            messages.push(BaseValidator.formatMessage(
+                            messages.push(string.substitute(
                                 validatorMessages.inequalityValidatorLessThanOrEqualMessage,
                                 {compareValue: this.compareValue}
                             ));
@@ -58,7 +60,7 @@ function(
                     case operators.GREATER_THAN:
                         if ( ! (this.compareValue < value)){
                             result = false;
-                            messages.push(BaseValidator.formatMessage(
+                            messages.push(string.substitute(
                                 validatorMessages.inequalityValidatorGreaterThanMessage,
                                 {compareValue: this.compareValue}
                             ));
@@ -67,7 +69,7 @@ function(
                     case operators.GREATER_THAN_EQUAL:
                         if ( ! (this.compareValue <= value)){
                             result = false;
-                            messages.push(BaseValidator.formatMessage(
+                            messages.push(string.substitute(
                                 validatorMessages.inequalityValidatorGreaterThanOrEqualMessage,
                                 {compareValue: this.compareValue}
                             ));
@@ -76,7 +78,7 @@ function(
                     case operators.NOT_EQUAL:
                         if ( ! (this.compareValue != value)){
                             result = false;
-                            messages.push(BaseValidator.formatMessage(
+                            messages.push(string.substitute(
                                 validatorMessages.inequalityValidatorNotEqualMessage,
                                 {compareValue: this.compareValue}
                             ));

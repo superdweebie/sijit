@@ -2,14 +2,14 @@ define([], function(){
     return {
         moduleManager: {
             'Sds/AuthenticationModule/AuthenticationController': {
-                gets: {
-                    api: 'Sds/Test/AuthenticationModule/Asset/MockAuthenticationApi'
-                },
                 proxies: {
-                    loginView: 'mockLoginView'
+                    loginView: 'MockLoginView'
+                },
+                gets: {
+                    store: 'Sds/Test/AuthenticationModule/Asset/MockAuthenticationStore'
                 }
             },
-            mockLoginView: {
+            MockLoginView: {
                 base: 'Sds/Test/AuthenticationModule/Asset/MockLoginView',
                 proxyMethods: [
                     'activate',
@@ -22,15 +22,15 @@ define([], function(){
             'Sds/Test/AuthenticationModule/Asset/MockIdentityController': {
                 base: {},
                 params: {
-                    register: function(){},
-                    forgotCredential: function(){}
+                    register: function(){console.debug('register')},
+                    forgotCredential: function(){console.debug('forgotCredential')}
                 }
             },
             'Sds/Router/router': {
                 params: {
-                    controllers: {
+                    routes: {
                         identity: {
-                            name: 'Sds/Test/AuthenticationModule/Asset/MockIdentityController',
+                            controller: 'Sds/Test/AuthenticationModule/Asset/MockIdentityController',
                             methods: {
                                 register: 'register',
                                 forgotCredential: 'forgotCredential'

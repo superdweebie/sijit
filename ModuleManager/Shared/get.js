@@ -9,7 +9,7 @@ define([
         // module:
         //		Sds/ModuleManager/Shared/get
         //
-        // An AMD plugin that return an instance of the requested object from the
+        // An AMD plugin that returns an instance of the requested object from the
         // shared ModuleManager
 
         return {
