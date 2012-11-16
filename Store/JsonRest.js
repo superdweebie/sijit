@@ -18,7 +18,7 @@ function(
             //     A standard dojo/store/JsonRest store with a few
             //     tweaks to make it work better with zf2 services
 
-            "-chains-": {
+            '-chains-': {
                 //Turn off constructor chaining so headers don't get wiped
                 constructor: "manual"
             },
@@ -27,7 +27,7 @@ function(
             //		Additional headers to pass in all requests to the server. These can be overridden
             //		by passing additional headers to calls to the store.
             headers: {
-                Accept: "application/json"
+                Accept: 'application/json'
             },
 
             constructor: function(options){
