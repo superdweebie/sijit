@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/Common/Sortable</title>
+		<style type="text/css">
+            @import "../../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../../themes/bootstrap/css/bootstrap-responsive.css";
+		</style>
+        <script type="text/javascript" src="../../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			require([
+                'dojo/parser',
+                'Sds/Common/Dnd/Sortable',
+                'dojo/domReady!'
+            ],
+            function(
+                parser
+            ){
+                parser.parse();
+            })
+		</script>
+        <style>
+            .dojoDndItem{
+                background-color: cyan;
+                width: 150px;
+                margin: 1px;
+                list-style-type: none;
+            }
+            .dojoDndItemOver{
+                background-color: red;
+            }
+            .dojoDndDummyItem{
+                opacity: 0.3;
+            }
+        </style>
+	</head>
+	<body>
+        <h1>Functional Testing Sds/Common/Dnd/Sortable</h1>
+        <br />
+
+        <ul data-dojo-type="Sds/Common/Dnd/Sortable">
+            <li>Item 1</li>
+            <li>Item 2</li>
+            <li>Item 3</li>
+            <li>Item 4</li>
+            <li>Item 5</li>
+            <li>Item 6</li>
+            <li>Item 7</li>
+            <li>Item 8</li>
+        </ul>
+	</body>
+</html>
