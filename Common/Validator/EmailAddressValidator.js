@@ -21,7 +21,7 @@ function(
 
                 if ( ! xweb.isEmailAddress(value)){
                     result = false;
-                    messages.push(validatorMessages.emailValidatorFailMessage);
+                    messages.push(validatorMessages.emailValidatorMessage);
                 }
 
                 return {result: result, messages: messages};

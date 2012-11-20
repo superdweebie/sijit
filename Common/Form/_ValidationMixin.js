@@ -2,24 +2,22 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
+    'dojo/when',
     'dojo/Deferred',
     'dojo/dom-class',
-    'dojox/timing',
-    'Sds/Common/Validator/BaseValidator',
-    'Sds/Common/Validator/validatorFactory',
     'Sds/Common/utils',
+    'get!ValidatorFactory',
     'dijit/_FocusMixin'
 ],
 function (
     declare,
     lang,
     array,
+    when,
     Deferred,
     domClass,
-    timing,
-    BaseValidator,
-    validatorFactory,
     utils,
+    ValidatorFactory,
     FocusMixin
 ){
 
@@ -27,6 +25,10 @@ function (
         'Sds/Common/Form/_ValidationMixin',
         [FocusMixin],
         {
+            // state: [readonly] String
+            //		Shows current state (ie, validation result) of input (""=Normal, Incomplete, or Error)
+            state: '',
+
             // messagePosition: string
             //      Possible values are:
             //      auto: if the message is one line, display inline. If it is multiline, display block
@@ -38,13 +40,12 @@ function (
             //      Should message be returned to a get('message') call?
             suppressMessages: true,
 
-            // onBlurSuppressMessages: boolean
-            //      Value for suppressMessages afte the first onBlur event
-            onBlurSuppressMessages: false,
+            preActivitySuppressMessages: true,
 
-            // state: [readonly] String
-            //		Shows current state (ie, validation result) of input (""=Normal, Incomplete, or Error)
-            state: '',
+            // postActivitySuppressMessages: boolean
+            //      Value for suppressMessages after the first onBlur event
+            //      or if the state changes from valid to invalid while having focus
+            postActivitySuppressMessages: false,
 
             // styleClasses: Object
             //      An object the defines the css classes that could be applied to _messageStyleNode
@@ -62,41 +63,64 @@ function (
             //      on validation failure
             style: 'info',
 
+            preActivityStyle: 'info',
+
             // onBlurStyle: string
             //      The style to change to after blur event
-            onBlurStyle: 'error',
+            //      or if the state changes from valid to invalid while having focus
+            postActivityStyle: 'error',
 
             _validatorSet: false,
 
             // validator: an instance of Sds/Common/Validator/BaseValidator.
             validator: undefined,
 
+            _onFocusValue: undefined,
+
+            messages: [],
+
             _messageStyleNode: undefined,
 
             _delayTimer: undefined,
 
-            delayTimeout: 500,
+            delayTimeout: 350,
+
+            _setValueTimestamp: 0,
 
             startup: function(){
                 this.inherited(arguments);
-                this._delayTimer = new timing.Timer(this.delayTimeout);
-                this._delayTimer.onTick = lang.hitch(this, function(){
-                    this._delayTimer.stop();
-                    this._validate();
-                });
+
+                this.watch('state', lang.hitch(this, function(p, o, newValue){
+                    if (newValue == '' ||
+                        (newValue != '' &&
+                        this._onFocusValue != undefined &&
+                        this._onFocusValue != '' &&
+                        this.get('focused'))
+                    ){
+                        this.set('style', this.postActivityStyle);
+                        this.set('suppressMessages', this.postActivitySuppressMessages);
+                    }
+                }));
+
                 this._startValidateTimer();
+            },
+
+            resetActivity: function(){
+                this.set('style', this.preActivityStyle);
+                this.set('suppressMessages', this.preActivitySuppressMessages);
             },
 
             _setValueAttr: function(){
                 // summary:
                 //		Hook so set('value', ...) works.
+                this._setValueTimestamp = new Date().getTime();
                 this.inherited(arguments);
                 this._startValidateTimer();
             },
 
             _setValidatorAttr: function(value){
                 // summary:
-                //     Will set the validator. The value parameter may be one of three
+                //     Will set the validator. The value must be an instance of BaseValidator parameter may be one of three
                 //     types:
                 //
                 //     Instance of BaseValidator - the validator property is set equal to this instance.
@@ -114,28 +138,30 @@ function (
                 validatorDeferred.then(lang.hitch(this, function(validator){
                     this.validator = validator;
                     this._validatorSet = true;
-                    this.validator.watch('messages', lang.hitch(this, function(prop, oldValue, newValue){
-                        this._updateMessages(newValue)
-                    }));
                     this._startValidateTimer();
                 }));
 
-                validatorFactory.create(value).then(function(validator){
+                when(ValidatorFactory.create(value), function(validator){
                     validatorDeferred.resolve(validator);
                 });
             },
 
-            _getMessages: function(){
+            _getMessagesAttr: function(){
                 if (this.suppressMessages){
                     return null;
                 }
-                return this.validator.get('messages');
+                return this.messages;
+            },
+
+            _setMessagesAttr: function(value){
+                this.messages = value;
+                this._updateMessages();
             },
 
             _setSuppressMessagesAttr: function(value){
                 this.suppressMessages = value;
                 if (this._started && this.validator){
-                    this._updateMessages(this.validator.get('messages'));
+                    this._updateMessages();
                 }
             },
 
@@ -150,14 +176,15 @@ function (
                 }
             },
 
-            onBlur: function(){
-                this.set('style', this.onBlurStyle);
-                this.set('suppressMessages', this.onBlurSuppressMessages);
-                this.inherited(arguments);
+            onFocus: function(){
+                this._onFocusValue = this._getValueToValidate();
+            },
 
-                // Stop the delay timer and force an immediate validation
-                this._delayTimer.stop();
-                this._validate();
+            onBlur: function(){
+                this.set('style', this.postActivityStyle);
+                this.set('suppressMessages', this.postActivitySuppressMessages);
+                this.inherited(arguments);
+                this._validateNow();
             },
 
             _startValidateTimer: function(){
@@ -167,44 +194,59 @@ function (
                 }
 
                 //Put in delay timer. Don't validate every single value change
-                if ( ! this._delayTimer.isRunning){
-                    this._delayTimer.start();
-                } else {
-                    this._delayTimer.stop(); //reset timer
-                    this._delayTimer.start();
+                clearTimeout(this._delayTimer);
+                this._delayTimer = setTimeout(lang.hitch(this, function(){
+                    this._validate();
+                }), this.delayTimeout);
+            },
+
+            _validateNow: function(){
+
+                if (! this._validatorSet || ! this._started){
+                    return;
                 }
+
+                // Stop the delay timer and force an immediate validation
+                clearTimeout(this._delayTimer);
+                this._validate();
             },
 
             _validate: function(){
 
-                var state;
-                var result = this.validator.isValid(this._getValueToValidate());
+                var processResult = lang.hitch(this, function(resultObject, timestamp){
 
-                switch (true){
-                    case (result === true):
-                        this._updateStyle(result);
-                        state = this._getChildrenState();
-                        break;
-                    case (result === false):
-                        this._updateStyle(result);
-                        state = 'Error';
-                        break;
-                    case BaseValidator.isDeferred(result):
-                        result.then(lang.hitch(this, function(asyncResult){
-                            var state;
-                            if (asyncResult){
-                                state = this._getChildrenState();
-                            } else {
-                                state = 'Error';
-                            }
-                            this._updateStyle(asyncResult);
-                            this.set('state', state);
-                        }));
-                        state = 'validating';
-                        break;
-                }
+                    if (this._setValueTimestamp > timestamp){
+                        // _validate has been called with a fresh value, so don't update the ui
+                        return null;
+                    }
 
-                this.set('state', state);
+                    var result = resultObject.result;
+                    var state;
+
+                    switch (true){
+                        case (result === true):
+                            this._updateStyle(result);
+                            state = this._getChildrenState();
+                            break;
+                        case (result === false):
+                            this._updateStyle(result);
+                            state = 'Error';
+                            break;
+                        case utils.isDeferred(result):
+                            result.then(function(resultObject){
+                                processResult(resultObject, timestamp);
+                            });
+                            state = 'validating';
+                            break;
+                    }
+
+                    this.set('messages', resultObject.messages);
+                    this.set('state', state);
+                    return null;
+                });
+
+                var value = this._getValueToValidate();
+                processResult(this.validator.isValid(value), new Date().getTime());
             },
 
             _getValueToValidate: function(){
@@ -218,7 +260,13 @@ function (
                 return '';
             },
 
-            _updateMessages: function(messages){
+            _updateMessages: function(){
+                var messages = this.get('messages');
+
+                if ( ! lang.isArray(messages)){
+                    return;
+                }
+
                 if (messages.length == 0 || this.suppressMessages){
                     domClass.add(this.inlineMessageWrapper, 'hide');
                     domClass.add(this.blockMessageWrapper, 'hide');

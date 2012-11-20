@@ -1,29 +1,37 @@
 define([
     'dojo/_base/declare',
+    'dojo/_base/lang',
+    'dojo/string',
     'dojo/i18n!Sds/nls/validatorMessages',
     'Sds/Common/Validator/BaseValidator'
 ],
 function(
     declare,
+    lang,
+    string,
     validatorMessages,
     BaseValidator
 ){
     // module:
     //		Sds/Common/Validator/InequalityValidator
 
-    return declare(
+    // These are the possible operators that can be tested for
+    var operators = {
+        LESS_THAN: '>',
+        LESS_THAN_EQUAL: '>=',
+        GREATER_THAN: '<',
+        GREATER_THAN_EQUAL: '<=',
+        NOT_EQUAL: '!='
+    };
+
+    var InequalityValidator = declare(
         'Sds/Common/Validator/InequalityValidator',
         [BaseValidator],
         {
 
-            operator: undefined,
+            operator: operators.GREATER_THAN,
 
-            compareValue: undefined,
-
-            constructor: function (operator, compareValue) {
-                this.operator = operator;
-                this.compareValue = compareValue;
-            },
+            compareValue: 0,
 
             _isValid: function(value){
                 var messages = [];
@@ -31,46 +39,46 @@ function(
                 var result = true;
 
                 switch (this.operator){
-                    case '>':
+                    case operators.LESS_THAN:
                         if ( ! (this.compareValue > value)){
                             result = false;
-                            messages.push(BaseValidator.formatMessage(
+                            messages.push(string.substitute(
                                 validatorMessages.inequalityValidatorLessThanMessage,
                                 {compareValue: this.compareValue}
                             ));
                         }
                         break;
-                    case '>=':
+                    case operators.LESS_THAN_EQUAL:
                         if ( ! (this.compareValue >= value)){
                             result = false;
-                            messages.push(BaseValidator.formatMessage(
+                            messages.push(string.substitute(
                                 validatorMessages.inequalityValidatorLessThanOrEqualMessage,
                                 {compareValue: this.compareValue}
                             ));
                         }
                         break;
-                    case '<':
+                    case operators.GREATER_THAN:
                         if ( ! (this.compareValue < value)){
                             result = false;
-                            messages.push(BaseValidator.formatMessage(
+                            messages.push(string.substitute(
                                 validatorMessages.inequalityValidatorGreaterThanMessage,
                                 {compareValue: this.compareValue}
                             ));
                         }
                         break;
-                    case '<=':
+                    case operators.GREATER_THAN_EQUAL:
                         if ( ! (this.compareValue <= value)){
                             result = false;
-                            messages.push(BaseValidator.formatMessage(
+                            messages.push(string.substitute(
                                 validatorMessages.inequalityValidatorGreaterThanOrEqualMessage,
                                 {compareValue: this.compareValue}
                             ));
                         }
                         break;
-                    case '!=':
+                    case operators.NOT_EQUAL:
                         if ( ! (this.compareValue != value)){
                             result = false;
-                            messages.push(BaseValidator.formatMessage(
+                            messages.push(string.substitute(
                                 validatorMessages.inequalityValidatorNotEqualMessage,
                                 {compareValue: this.compareValue}
                             ));
@@ -82,4 +90,8 @@ function(
             }
         }
     );
+
+    lang.mixin(InequalityValidator, operators);
+
+    return InequalityValidator;
 });

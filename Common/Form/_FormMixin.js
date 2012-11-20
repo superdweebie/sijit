@@ -12,7 +12,7 @@ function (
         'Sds/Common/Form/_FormMixin',
         [FormMixin],
         {
-            // Extends the standard dijit/form/_FormMixin to add an invalidWidgets function.
+            // Extends the standard dijit/form/_FormMixin
             //
             _getInvalidWidgetsAttr: function(){
                 // Returns an array of child widgets which have a state != '' (ie have invalid state)
@@ -23,6 +23,15 @@ function (
                         return false;
                     }
                 });
+            },
+
+            _setInputsAttr: function(/*array*/value){
+                //Takes an array of input constructors and appends them to the form
+                var input;
+                for (var index in value){
+                    input = new value[index];
+                    this.containerNode.appendChild(input.domNode);
+                }
             }
         }
     );

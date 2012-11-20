@@ -23,10 +23,10 @@ function (
             templateString: template,
 
             // message: String
-            //		Currently error/prompt message.
+            //		Current error/prompt message.
             message: '',
 
-            postCreate: function(){              
+            postCreate: function(){
                 this._messageStyleNode = this.domNode;
                 this.inherited(arguments);
             }

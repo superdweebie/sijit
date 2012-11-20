@@ -1,34 +1,19 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/string',
-    'dojo/when',
-    'dojo/Deferred',
+    'dojo/_base/json',
+    'Sds/Common/utils',
     'dojo/Stateful'
 ],
 function(
     declare,
     lang,
-    string,
-    when,
-    Deferred,
+    json,
+    utils,
     Stateful
 ){
     // module:
     //		Sds/Common/Validator/BaseValidator
-
-    var isDeferred = function(object){
-        //summary:
-        //     Helper method to determine if an object is an instance of Deferred
-        //
-        // returns:
-        //     boolean
-
-        if (object instanceof Deferred){
-            return true;
-        }
-        return false;
-    };
 
     var BaseValidator = declare(
         'Sds/Common/Validator/BaseValidator',
@@ -37,14 +22,6 @@ function(
             // summary:
             //		The base Validator module that all other Validator modules
             //		should inherit from.
-
-            // messages: array
-            //    An array of strings that indicate why this validator failed, or success
-            //    messages if the validation passed.
-            messages: [],
-
-            // valueString: string
-            _valueString: undefined,
 
             //haltOnPass: boolean
             //     If this validator is part of a ValidatorGroup, setting
@@ -82,31 +59,22 @@ function(
 
             isValid: function(value){
 
-                var valueString = value.toString();
-                this._valueString = valueString;
+                var valueString = json.toJson(value);
 
                 if (this.useCache){
-                    var cacheItem = this._validatedValuesCache[this._valueString];
+                    var cacheItem = this._validatedValuesCache[valueString];
                     if(cacheItem){
-                        this.set('messages', cacheItem.messages);
-                        return cacheItem.result;
+                        return cacheItem;
                     }
                 }
+
                 var resultObject = this._isValid(value);
-                var result = resultObject.result;
-                var messages = resultObject.messages;
 
                 if (this.useCache){
-                    this._addToCache(valueString, result, messages);
+                    this._addToCache(valueString, resultObject);
                 }
 
-                this.set('messages', messages);
-                if (isDeferred(result)){
-                    var resultDeferred = new Deferred;
-                    this._handleDeferredResult(valueString, result, resultDeferred);
-                    return resultDeferred;
-                }
-                return result;
+                return resultObject;
             },
 
             _isValid: function(value){
@@ -119,36 +87,22 @@ function(
                 //     {result: result, messages: messages}
             },
 
-            _handleDeferredResult: function(valueString, resultObjectDeferred, resultDeferred){
-                resultObjectDeferred.then(lang.hitch(this, function(resultObject){
-                    if (this._valueString == valueString){
-                        this.set('messages', resultObject.messages);
-                        if (isDeferred(resultObject.result)){ //handle nested Deferreds
-                            this._handleDeferredResult(valueString, resultObject.result, resultDeferred);
-                        } else {
-                            resultDeferred.resolve(resultObject.result);
-                        }
+            _addToCache: function(valueString, resultObject){
+
+                var cacheResult = lang.hitch(this, function(resultObject){
+                    if (utils.isDeferred(resultObject.result)){
+                        resultObject.result.then(function(resultObject){
+                            cacheResult(resultObject);
+                        });
                     } else {
-                        resultDeferred.cancel('Deferred validation late');
+                        if (this._validatedValuesCache.length > this.maxCacheSize){
+                            this._validatedValuesCache.shift();
+                        }
+                        this._validatedValuesCache[valueString] = resultObject;
                     }
-                }));
-            },
+                });
 
-            _addToCache: function(valueString, result, messages){
-
-                when(result, lang.hitch(this, function(resultObject){
-                    if (isDeferred(result)){
-                        result = resultObject.result;
-                        messages = resultObject.messages;
-                    }
-                    if (this._validatedValuesCache.length > this.maxCacheSize){
-                        this._validatedValuesCache.shift();
-                    }
-                    this._validatedValuesCache[valueString] = {
-                        result: result,
-                        messages: messages
-                    }
-                }));
+                cacheResult(resultObject);
             }
         }
     );
@@ -164,12 +118,6 @@ function(
             return true;
         }
         return false;
-    }
-
-    BaseValidator.isDeferred = isDeferred;
-
-    BaseValidator.formatMessage = function(/*string*/template, /*array*/params){
-        return string.substitute(template, params);
     }
 
     return BaseValidator;

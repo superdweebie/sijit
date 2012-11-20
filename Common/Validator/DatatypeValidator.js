@@ -1,11 +1,15 @@
 define([
     'dojo/_base/declare',
+    'dojo/_base/lang',
+    'dojo/string',
     'dojo/i18n!Sds/nls/validatorMessages',
     'Sds/Common/utils',
     'Sds/Common/Validator/BaseValidator'
 ],
 function(
     declare,
+    lang,
+    string,
     validatorMessages,
     utils,
     BaseValidator
@@ -27,11 +31,7 @@ function(
         'Sds/Common/Validator/DatatypeValidator',
         [BaseValidator],
         {
-            requiredType: undefined,
-
-            constructor: function(requiredType){
-                this.requiredType = requiredType;
-            },
+            requiredType: datatypes.STRING,
 
             _isValid: function(value){
                 // Will return true if the value is the required type.
@@ -61,7 +61,7 @@ function(
                 }
 
                 if ( ! result){
-                    messages.push(BaseValidator.formatMessage(
+                    messages.push(string.substitute(
                         validatorMessages.dataTypeValidatorMessage,
                         {requiredType: this.requiredType}
                     ))
@@ -72,7 +72,7 @@ function(
         }
     );
 
-    validator.datatypes = datatypes;
+    lang.mixin(validator, datatypes);
 
     return validator;
 });

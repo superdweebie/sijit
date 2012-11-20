@@ -5,7 +5,7 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'Sds/ExceptionModule/Exception/BaseException',
-    'Sds/View/BaseView',
+    'Sds/Mvc/BaseView',
     'dojo/text!../Template/Exception.html',
     'Sds/Common/Dialog'
 ],
@@ -36,7 +36,7 @@ function(
                 this.inherited(arguments);
                 document.body.appendChild(this.domNode);
             },
-            
+
             activate: function(value){
 
                 var returnValue = this.inherited(arguments);

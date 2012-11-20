@@ -27,8 +27,7 @@ function (
         //      OK: indicates that the 'ok' button was clicked to dismiss the dialog
         //      CANCEL: indicates that a 'cancel' button was clicked to dismiss the dialog
         OK: 'ok',
-        CANCEL: 'cancel',
-        BACKDROP_CANCEL: 'backdropCancel'
+        CANCEL: 'cancel'
     });
 
     var Dialog = declare(
@@ -40,8 +39,12 @@ function (
             templateString: template,
 
             buttons: buttons,
-            
+
+            disableStateButtons: ['ok'],
+
             suppressMessages: false,
+
+            _setTitleAttr: { node: "titleNode", type: "innerHTML" },
 
             postCreate: function(){
                 this._messageStyleNode = this.formValidatorMessage;
@@ -61,6 +64,16 @@ function (
 
             _getValueToValidate: function(){
                 return this.get('value').value;
+            },
+
+            resetActivity: function(){
+                this.inherited(arguments);
+                for(var index in this._descendants){
+                    var widget = this._descendants[index];
+                    if (widget.resetActivity){
+                        widget.resetActivity();
+                    }
+                }
             }
         }
     );

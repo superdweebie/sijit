@@ -2,15 +2,15 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/Deferred',
-    'Sds/Common/Validator/BaseValidator',
-    'Sds/Common/utils'
+    'Sds/Common/utils',
+    'Sds/Common/Validator/BaseValidator'
 ],
 function(
     declare,
     lang,
     Deferred,
-    BaseValidator,
-    utils
+    utils,
+    BaseValidator
 ){
     return declare(
         'Sds/Common/Validator/ValidatorGroup',
@@ -18,17 +18,11 @@ function(
         {
             validators: [],
 
-            constructor: function(validators){
-                if (validators){
-                    this.validators = validators;
-                }
-            },
-
             _isValid: function(value){
-                return this._concatMessages(this._loop(value, 0, {result: true, messagesLists: []}));
+                return this._concatResultObjectList(this._loop(value, 0, []));
             },
 
-            _loop: function(value, index, currentResultObject){
+            _loop: function(value, index, resultObjectList){
                 //Summary:
                 //    loops over all the validators in turn.
                 //    This code is slightly insane, but it works.
@@ -39,63 +33,83 @@ function(
                 //
 
                 if (this.validators.length <= index){
-                    return currentResultObject;
+                    return resultObjectList;
                 }
 
                 var validator = this.validators[index];
+                var currentResult = this._currentResult(resultObjectList);
 
-                if ( !(validator.skipOnPass && currentResultObject.result) && !(validator.skipOnFail && ! currentResultObject.result)){
+                if ( !(validator.skipOnPass && currentResult) && !(validator.skipOnFail && ! currentResult)){
 
-                    var validatorReturn = validator.isValid(value);
-                    if (BaseValidator.isDeferred(validatorReturn)){
+                    var resultObject = this._getResultObject(validator, value);
+
+                    if (utils.isDeferred(resultObject.result)){
 
                         var resultDeferred = new Deferred;
-                        currentResultObject.result = resultDeferred;
-                        currentResultObject.messagesLists[index] = validator.get('messages');
+                        resultObjectList[index] = {result: resultDeferred, messages: resultObject.messages};
 
-                        validatorReturn.then(lang.hitch(this, function(newResult){
-                            if (newResult){
+                        resultObject.result.then(lang.hitch(this, function(resultObject){
+                            resultObjectList[index] = resultObject;
+                            if (resultObject.result === true){
                                 if (validator.haltOnPass){halt = true}
                             } else {
-                                currentResultObject.result = false;
-                                currentResultObject.messagesLists[index] = validator.get('messages');
                                 if (validator.haltOnFail){halt = true}
                             }
+
                             if (halt){
-                                resultDeferred.resolve(this._concatMessages(currentResultObject));
+                                resultDeferred.resolve(this._concatResultObjectList(resultObjectList));
                             } else {
-                                resultDeferred.resolve(this._concatMessages(this._loop(value, index + 1, currentResultObject)));
+                                resultDeferred.resolve(this._concatResultObjectList(this._loop(value, index + 1, resultObjectList)));
                             }
                         }));
 
-                        return currentResultObject;
+                        return resultObjectList;
                     } else {
+                        resultObjectList[index] = resultObject;
+
                         var halt = false;
-                        if (validatorReturn){
+                        if (resultObject.result === true){
                             if (validator.haltOnPass){halt = true}
                         } else {
-                            currentResultObject.result = false;
                             if (validator.haltOnFail){halt = true}
                         }
-                        currentResultObject.messagesLists[index] = validator.get('messages');
 
                         if (halt){
-                            return currentResultObject;
+                            return resultObjectList;
                         } else {
-                            return this._loop(value, index + 1, currentResultObject);
+                            return this._loop(value, index + 1, resultObjectList);
                         }
                     }
                 }
 
-                return currentResultObject;
+                return resultObjectList;
             },
 
-            _concatMessages: function(resultObject){
-                var returnResultObject = {result: resultObject.result, messages: []};
-                for (var index in resultObject.messagesLists){
-                    returnResultObject.messages = returnResultObject.messages.concat(resultObject.messagesLists[index]);
+            _getResultObject: function(validator, value){
+                return validator.isValid(value);
+            },
+
+            _concatResultObjectList: function(resultObjectList){
+                var resultObject = {result: this._currentResult(resultObjectList), messages: []};
+                for (var index in resultObjectList){
+                    resultObject.messages = resultObject.messages.concat(resultObjectList[index].messages);
                 }
-                return returnResultObject;
+                return resultObject;
+            },
+
+            _currentResult: function(resultObjectList){
+                var result = true;
+                for (var index in resultObjectList){
+                    switch (true){
+                        case resultObjectList[index].result == false:
+                            result = false;
+                            break;
+                        case utils.isDeferred(resultObjectList[index].result):
+                            result = resultObjectList[index].result;
+                            return result;
+                    }
+                }
+                return result;
             }
         }
     );

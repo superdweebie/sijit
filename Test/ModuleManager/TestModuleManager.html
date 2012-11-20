@@ -1,0 +1,454 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Testing Sds/ModuleManager/ModuleManager</title>
+        <script type="text/javascript" src="../testconfig.js"></script>
+        <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			require([
+                'doh/main',
+                'dojo/when',
+                'Sds/ModuleManager/ModuleManager',
+                'Sds/ModuleManager/Proxy',
+                'Sds/Test/ModuleManager/Asset/config',
+                'dojo/domReady!'
+            ],
+            function(
+                doh,
+                when,
+                ModuleManager,
+                Proxy,
+                config
+            ){
+                doh.register("Sds/Test/ModuleManager/TestModuleManager", [
+
+                    function configTest(doh){
+
+                        var startingConfig = {
+                            testButton: {
+                                base: 'my/module',
+                                params: {
+                                    label: 'Test Button'
+                                }
+                            }
+                        };
+
+                        var customConfig = {
+                            testButton: {
+                                base: 'my/module',
+                                params: {
+                                    showLabel: false
+                                }
+                            }
+                        };
+
+                        var mergedConfig = {
+                            testButton: {
+                                base: 'my/module',
+                                params: {
+                                    label: 'Test Button',
+                                    showLabel: false
+                                }
+                            }
+                        }
+
+                        var changedConfig = {
+                            base: 'my/module',
+                            params: {
+                                label: 'changed'
+                            }
+                        };
+
+                        var moduleManager = new ModuleManager(startingConfig);
+
+                        doh.assertEqual(startingConfig, moduleManager.getConfig());
+
+                        moduleManager.mergeConfig(customConfig);
+                        doh.assertEqual(mergedConfig, moduleManager.getConfig());
+
+                        doh.assertEqual(mergedConfig.testButton, moduleManager.getIdentifierConfig('testButton'));
+
+                        moduleManager.setIdentifierConfig('testButton', changedConfig);
+                        doh.assertEqual(changedConfig, moduleManager.getIdentifierConfig('testButton'));
+                    },
+
+                    function noConfigTest(){
+
+                        var moduleManager = new ModuleManager();
+                        var deferredTest = new doh.Deferred;
+                        var zoo;
+
+                        // get with no config - just module name
+                        when(moduleManager.get('Sds/Test/ModuleManager/Asset/Zoo'), function(zoo){
+                            doh.assertEqual('the sijit zoo', zoo.name);
+                            zoo.name = 'other zoo';
+
+                            // get- should return cached Zoo cached with modified name
+                            when(moduleManager.get('Sds/Test/ModuleManager/Asset/Zoo'), function(zoo){
+                                doh.assertEqual('other zoo', zoo.name);
+
+                                moduleManager.clearCache();
+
+                                //should return new instance of Zoo - with original name
+                                when(moduleManager.get('Sds/Test/ModuleManager/Asset/Zoo'), function(zoo){
+                                    doh.assertEqual('the sijit zoo', zoo.name);
+                                    deferredTest.callback(true);
+                                });
+                            });
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function noBaseTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('Sds/Test/ModuleManager/Asset/Penguin'), function(penguin){
+                            doh.assertEqual('kate', penguin.name);
+                            deferredTest.callback(true);
+                        });
+
+                        return deferredTest;
+                    },
+
+
+                    function baseSetTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('zooWithBase'), function(zoo){
+                            doh.assertEqual('the sijit zoo', zoo.name);
+                            deferredTest.callback(true);
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function identifierBaseTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('zooIdentifierBase'), function(zoo){
+                            doh.assertEqual('the sijit zoo', zoo.name);
+                            deferredTest.callback(true);
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function objectBaseTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('objectBase'), function(object){
+                            doh.assertEqual('alan', object.name);
+                            deferredTest.callback(true);
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function paramsTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('zooParams'), function(zoo){
+                            doh.assertEqual('Zoo with param', zoo.name);
+                            deferredTest.callback(true);
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function params2Test(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('foodsParams'), function(food){
+                            doh.assertEqual('fish', food.penguin);
+                            doh.assertEqual('beef', food.lion);
+                            doh.assertEqual('grubs', food.meerkat);
+
+                            deferredTest.callback(true);
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function declareFalseTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('zooDeclareFalse'), function(zoo){
+                            doh.assertEqual('Zoo instance', zoo.name);
+
+                            deferredTest.callback(true);
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function declareTrueTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('ZooDeclareTrue'), function(Zoo){
+
+                            var zoo = new Zoo;
+
+                            doh.assertEqual('Zoo extended', zoo.name);
+                            zoo.name = 'Zoo changed';
+
+                            var zoo2 = new Zoo;
+                            doh.assertEqual('Zoo changed', zoo.name);
+                            doh.assertEqual('Zoo extended', zoo2.name);
+
+                            deferredTest.callback(true);
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function cacheTrueTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('zooCacheTrue'), function(zoo){
+
+                            doh.assertEqual('Zoo cache true', zoo.name);
+                            zoo.name = 'Zoo changed';
+
+                            when(moduleManager.get('zooCacheTrue'), function(cachedZoo){
+                                doh.assertEqual('Zoo changed', cachedZoo.name);
+                                deferredTest.callback(true);
+                            });
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function cacheFalseTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('zooCacheFalse'), function(zoo){
+
+                            doh.assertEqual('Zoo cache false', zoo.name);
+                            zoo.name = 'Zoo changed';
+
+                            when(moduleManager.get('zooCacheFalse'), function(cachedZoo){
+                                doh.assertEqual('Zoo cache false', cachedZoo.name);
+                                deferredTest.callback(true);
+                            });
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function defineFalseTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('zooDefineFalse'), function(zoo){
+
+                            doh.assertEqual('Zoo define false', zoo.name);
+
+                            try {
+                                require('zooDefineFalse');
+                            } catch (e) {
+                                doh.assertEqual('Error: undefinedModule', e);
+                                deferredTest.callback(true);
+                            }
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function defineTrueTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('zooDefineTrue'), function(zoo){
+
+                            doh.assertEqual('Zoo define true', zoo.name);
+
+                            require(['zooDefineTrue'], function(zooDefined){
+                                doh.assertEqual('Zoo define true', zooDefined.name);
+                                deferredTest.callback(true);
+                            });
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function defineTrue2Test(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('foodsDefineTrue'), function(food){
+
+                            doh.assertEqual('fish', food.penguin);
+                            doh.assertEqual('beef', food.lion);
+                            doh.assertEqual('grubs', food.meerkat);
+
+                            require(['foodsDefineTrue'], function(foodDefined){
+
+                                doh.assertEqual('fish', foodDefined.penguin);
+                                doh.assertEqual('beef', foodDefined.lion);
+                                doh.assertEqual('grubs', foodDefined.meerkat);
+                                deferredTest.callback(true);
+                            });
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function declareAndDefineTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('ZooDeclareAndDefine'), function(){
+
+                            require(['ZooDeclareAndDefine'], function(Zoo){
+
+                                var zoo = new Zoo;
+
+                                doh.assertEqual('Zoo declared and defined', zoo.name);
+                                zoo.name = 'Zoo changed';
+
+                                var zoo2 = new Zoo;
+                                doh.assertEqual('Zoo changed', zoo.name);
+                                doh.assertEqual('Zoo declared and defined', zoo2.name);
+
+                                deferredTest.callback(true);
+                            });
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function getsTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('zooWithGets'), function(zoo){
+
+                            doh.assertEqual('Zoo with gets', zoo.name);
+                            doh.assertEqual('lucy', zoo.lion1.name);
+                            doh.assertEqual('liz', zoo.lion2.name);
+                            doh.assertEqual('toby', zoo.tiger.name);
+
+                            deferredTest.callback(true);
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function getsArrayTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('zooWithGetsArray'), function(zoo){
+
+                            doh.assertEqual('Zoo with gets array', zoo.name);
+                            doh.assertEqual('lucy', zoo.cage[0].name);
+                            doh.assertEqual('liz', zoo.cage[1].name);
+
+                            deferredTest.callback(true);
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function nestedGetsConfigTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('zooWithNestedGetsConfig'), function(zoo){
+
+                            doh.assertEqual('Zoo with nested gets config', zoo.name);
+                            doh.assertEqual('tim', zoo.tiger.name);
+                            doh.assertEqual('liz', zoo.cage[0].name);
+                            doh.assertEqual('emma', zoo.cage[1].name);
+
+                            deferredTest.callback(true);
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function proxyMethodTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.proxy('zooWithProxyMethods'), function(zooProxy){
+                            doh.assertTrue(zooProxy.isInstanceOf(Proxy));
+                            zooProxy.listAnimals().then(function(names){
+                                doh.assertEqual(['lucy', 'liz', 'toby'], names);
+                                deferredTest.callback(true);
+                            });
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function proxiesTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('zooWithProxies'), function(zoo){
+                            doh.assertTrue(zoo.tiger.isInstanceOf(Proxy));
+                            zoo.tiger.makeSound().then(function(sound){
+                                doh.assertEqual('roar', sound);
+                                deferredTest.callback(true);
+                            });
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function moduleManagerAwareTest(){
+
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('Sds/Test/ModuleManager/Asset/Meerkat'), function(meerkat){
+                            doh.assertEqual(moduleManager, meerkat.moduleManager);
+
+                            deferredTest.callback(true);
+                        });
+
+                        return deferredTest;
+                    }
+                ]);
+
+                doh.runOnLoad();
+            });
+		</script>
+	</head>
+	<body>
+        <h1>Testing Sds/ModuleManager/ModuleManager</h1>
+	</body>
+</html>

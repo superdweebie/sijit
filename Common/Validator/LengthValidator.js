@@ -1,10 +1,12 @@
 define([
     'dojo/_base/declare',
+    'dojo/string',
     'dojo/i18n!Sds/nls/validatorMessages',
     'Sds/Common/Validator/BaseValidator'
 ],
 function(
     declare,
+    string,
     validatorMessages,
     BaseValidator
 ){
@@ -16,11 +18,6 @@ function(
 
             max: 255,
 
-            constructor: function(min, max){
-                this.min = min,
-                this.max = max
-            },
-
             _isValid: function(value){
 
                 var messages = [];
@@ -29,7 +26,7 @@ function(
 
                 if ( ! regEx.test(value)){
                     result = false;
-                    messages.push(BaseValidator.formatMessage(
+                    messages.push(string.substitute(
                         validatorMessages.lengthValidatorMessage,
                         {min: this.min, max: this.max}
                     ));

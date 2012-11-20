@@ -1,19 +1,20 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/when',
     'dojo/Deferred',
+    'Sds/Store/JsonRest',
     'Sds/Common/Status',
-    'dojox/rpc/Service',
     'dojo/Stateful',
-    'Sds/ExceptionModule/throwEx',
-    'dojox/rpc/JsonRPC'
+    'Sds/ExceptionModule/throwEx'
 ],
 function (
     declare,
     lang,
+    when,
     Deferred,
+    JsonRest,
     Status,
-    RpcService,
     Stateful,
     throwEx
 ){
@@ -24,15 +25,7 @@ function (
             // summary:
             //		Controlls identity login and logout.
 
-            //apiSmd: object | string
-            //    May be an SMD object, or a url that will return an SMD.
-            //    The SMD must define a json rpc interface to login and logout
-            //    of a server.
-            apiSmd: undefined,
-
-            //api: object
-            //    Is the api generated from the apiSmd
-            api: undefined,
+            restUrl: undefined,
 
             //identity: object
             //    The identity object returned after a successful login
@@ -52,6 +45,15 @@ function (
 
             enableRememberMe: undefined,
 
+            store: undefined,
+
+            _storeGetter: function(){
+                if (! this.store){
+                    this.store = new JsonRest({target: this.restUrl});
+                }
+                return this.store;
+            },
+
             login: function()
             {
                 // summary:
@@ -62,7 +64,8 @@ function (
 
                 this._loginDeferred = new Deferred();
 
-                this.loginView.activate(null, this.enableRememberMe).then(lang.hitch(this, function(result){
+                this.loginView.set('enableRememberMe', this.enableRememberMe);
+                this.loginView.activate().then(lang.hitch(this, function(result){
 
                     // Do nothing if form not valid.
                     if (result.state != ''){
@@ -75,19 +78,22 @@ function (
 
                     // Send data to server
                     var formValue = result.value;
+                    if (formValue.rememberMe){
+                        formValue.rememberMe = Boolean(formValue['rememberMe'].length);
+                    }
 
-                    this.get('api').login(
-                        formValue['identityName'],
-                        formValue['credential'],
-                        Boolean(formValue['rememberMe'].length)
-                    ).then(
+                    when(this.get('store').put(formValue),
                         lang.hitch(this, '_loginComplete'),
-                        lang.hitch(this, '_handleException')
+                        lang.hitch(this, '_loginException')
                     );
                     this.loginView.reset();
                 }));
 
                 return this._loginDeferred;
+            },
+
+            cancelLogin: function(){
+                this.loginView.deactivate();
             },
 
             logout: function()
@@ -100,38 +106,37 @@ function (
 
                 this._logoutDeferred = new Deferred();
 
-                // Update status
-                this.set('status', new Status('logging out', Status.icon.SPINNER));
+                when(this.get('identity'), lang.hitch(this, function(identity){
+                    if (! identity){
+                        this._logoutDeferred.resolve(true);
+                        return;
+                    }
 
-                // Send message to server
-                this.get('api').logout().then(
-                    lang.hitch(this, '_logoutComplete'),
-                    lang.hitch(this, '_handleException')
-                );
+                    // Update status
+                    this.set('status', new Status('logging out', Status.icon.SPINNER));
+
+                    // Send message to server
+                    this.get('store').remove(this.identity.id).then(
+                        lang.hitch(this, '_logoutComplete'),
+                        lang.hitch(this, '_logoutException')
+                    );
+                }));
+
                 return this._logoutDeferred;
             },
 
-            _apiGetter: function(){
-                // summary:
-                //		Get the json rpc api
-                // returns: object
-                //      Returns a json rpc api that can be used to call the server.
-
-                if ( ! this.api) {
-                    this.api = new RpcService(this.apiSmd);
-                }
-                return this.api;
-            },
-
             _identityGetter: function(){
-                if (this.identity == undefined){
-                    this._getIdentityDeferred = new Deferred;
-                    this.get('api').getIdentity().then(
-                        lang.hitch(this, '_getIdentityComplete'),
-                        lang.hitch(this, '_handleException')
-                    );
+                if (this.identity === undefined){
+                    if (this._getIdentityDeferred == undefined || this._getIdentityDeferred.isResolved()){
+                        this._getIdentityDeferred = new Deferred;
+                        when(this.get('store').get(''),
+                            lang.hitch(this, '_getIdentityComplete'),
+                            lang.hitch(this, '_getIdentityException')
+                        );
+                    }
                     return this._getIdentityDeferred;
                 }
+
                 return this.identity;
             },
 
@@ -143,8 +148,7 @@ function (
                 this.set('status', new Status('login complete', Status.icon.SUCCESS, 5000));
 
                 //Set the identity
-                this.set('identity', data.identity);
-                this.set('loggedIn', true);
+                this._getIdentityComplete(data);
                 this._loginDeferred.resolve(true);
             },
 
@@ -156,56 +160,77 @@ function (
                 this.set('status', new Status('logout complete', Status.icon.SUCCESS, 5000));
 
                 // Set identity
-                this.set('identity', data.identity);
-                this.set('loggedIn', false);
+                this._getIdentityComplete(data);
                 this._logoutDeferred.resolve(true);
             },
 
             _getIdentityComplete: function(data){
 
-                if (data.hasIdentity){
+                if (lang.isArray(data)){
+                    data = data[0];
+                }
+
+                if (data){
                     this.set('loggedIn', true);
                 } else {
+                    data = false;
                     this.set('loggedIn', false);
                 }
-                this.identity = data.identity; //Set the property first, otherwise _identityGetter is called again on the next line.
-                this.set('identity', this.identity); //Set via the setter so that watching callbacks fire
-                this._getIdentityDeferred.resolve(this.identity);
+                this.identity = data; //Set the property first, otherwise _identityGetter is called again on the next line.
+                this.set('identity', data); //Set via the setter so that watching callbacks fire
+
+                if ( ! this._getIdentityDeferred.isResolved()){
+                    this._getIdentityDeferred.resolve(data);
+                }
             },
 
-            _handleException: function(exception){
-                // summary:
-                //		Handles xhr exceptions during login and logout.
-
+            _loginException: function(exception){
                 throwEx(exception).then(lang.hitch(this, function(standardizedException){
-
-                    // Update status
-                    this.set('status', new Status(standardizedException.message, Status.icon.ERROR, 5000));
-
-                    // If the error has not happened on a get('identity') call,
-                    // refresh the identity from the server. Otherwise, just clear the
-                    // identity.
-                    if ( ! this._getIdentityDeferred || this._getIdentityDeferred.isFulfilled()){
-                        this.identity = undefined;
-                        this.get('identity');
-                    } else {
-                        // Clear the identity
-                        this.identity = false;
-                        this.set('identity', false);
-                        this.set('loggedIn', false);
-                    }
+                    this._handleException(standardizedException);
 
                     if (this._loginDeferred && (! this._loginDeferred.isFulfilled())){
                         this._loginDeferred.reject(standardizedException);
                     }
+                }));
+            },
+
+            _logoutException: function(exception){
+                throwEx(exception).then(lang.hitch(this, function(standardizedException){
+                    this._handleException(standardizedException);
+
                     if (this._logutDeferred && (! this._logoutDeferred.isFulfilled())){
                         this._logoutDeferred.reject(standardizedException);
                     }
+                }));
+            },
+
+            _getIdentityException: function(exception){
+                throwEx(exception).then(lang.hitch(this, function(standardizedException){
+                    this._handleException(standardizedException);
+
                     if (this._getIdentityDeferred && (! this._getIdentityDeferred.isFulfilled())){
                         this._getIdentityDeferred.reject(standardizedException);
                     }
-
                 }));
+            },
+
+            _handleException: function(exception){
+
+                // Update status
+                this.set('status', new Status(exception.message, Status.icon.ERROR, 5000));
+
+                // If the error has not happened on a get('identity') call,
+                // refresh the identity from the server. Otherwise, just clear the
+                // identity.
+                if ( ! this._getIdentityDeferred || this._getIdentityDeferred.isFulfilled()){
+                    this.identity = undefined;
+                    this.get('identity');
+                } else {
+                    // Clear the identity
+                    this.identity = false;
+                    this.set('identity', false);
+                    this.set('loggedIn', false);
+                }
             }
         }
     );

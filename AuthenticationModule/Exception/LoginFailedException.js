@@ -14,7 +14,7 @@ function(
         "LoginFailedException",
         function(message, options){
 
-            this.severity = severity.INFO;
+            this.severity = severity.NOTICE;
 
             this.display = true;
 

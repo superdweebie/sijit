@@ -8,7 +8,7 @@ define([
         Deferred,
         IdentityNameAvailableValidator
     ){
-        doh.register("Sds/Test/Validator/TestIdentityNameAvailableValidator", [
+        doh.register("Sds/Test/IdentityModule/Validator/TestIdentityNameAvailableValidator", [
 
             function PositiveTest(doh){
 
@@ -24,8 +24,8 @@ define([
                     }
                 };
 
-                validator.isValid('anything').then(function(result){
-                    doh.assertTrue(result);
+                validator.isValid('anything').result.then(function(resultObject){
+                    doh.assertTrue(resultObject.result);
                     resultDeferred.resolve();
                 });
 
@@ -46,8 +46,8 @@ define([
                     }
                 };
 
-                validator.isValid('anything').then(function(result){
-                    doh.assertFalse(result);
+                validator.isValid('anything').result.then(function(resultObject){
+                    doh.assertFalse(resultObject.result);
                     resultDeferred.resolve();
                 });
 

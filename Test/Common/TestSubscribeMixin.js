@@ -11,7 +11,7 @@ define([
         MockSubscribeObject
     ){
 
-        doh.register("Sds.Test.Common.TestSubscribeMixin", [
+        doh.register("Sds/Test/Common/TestSubscribeMixin", [
             function subscribeTest(doh){
 
                 var object = new MockSubscribeObject;

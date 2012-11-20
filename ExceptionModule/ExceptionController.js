@@ -25,7 +25,7 @@ function(
             // summary:
             //     Module providing exception display and logging
 
-            // exceptionView: Sds/View/BaseView
+            // exceptionView: Sds/Mvc/BaseView
             //     Responsible for displaying the exception
             exceptionView: undefined,
 
@@ -51,9 +51,12 @@ function(
                 if ((exception.display && this.displayLevel == -1) ||
                     this.displayLevel >= exception.severity
                 ) {
-                    this.exceptionView.activate(exception);
+                    this.exceptionView.activate(exception).then(function(){
+                        exception.handle.resolve();
+                    })
+                } else {
+                    exception.handle.resolve();
                 }
-
 
                 if ((exception.log && this.logLevel == -1) ||
                     this.logLevel >= exception.severity
@@ -71,15 +74,14 @@ function(
 
             standardize: function(exception){
 
+                if (exception instanceof BaseException){
+                    return exception;
+                }
+
                 var returnDeferred = new Deferred;
 
                 if (exception.response){
-                    exception = json.fromJson(exception.response.text).error;
-                }
-
-                if (exception._rpcErrorObject){
-                    exception.type = exception._rpcErrorObject.type;
-                    exception.code = exception._rpcErrorObject.code;
+                    exception = json.fromJson(exception.response.text);
                 }
 
                 var isRegistered = false;

@@ -60,14 +60,14 @@ function(
 		return text;
 	};
 
+    //List of plugin resolves to be added to the build profile
     var sdsplugins = {
         plugins: {
             "Sds/ConfigManager/configReady":"Sds/Build/plugin/configReady",
             "Sds/Router/startedRouter":"Sds/Build/plugin/startedRouter",
-            "Sds/ServiceManager/Shared/getServiceManager":"Sds/Build/plugin/getServiceManager",
-            "Sds/ServiceManager/Shared/getProxy":"Sds/Build/plugin/getProxy",
-            "Sds/ServiceManager/Shared/getObject":"Sds/Build/plugin/getObject",
-            "Sds/ServiceManager/Shared/createObject":"Sds/Build/plugin/createObject"
+            "Sds/ModuleManager/Shared/getModuleManager":"Sds/Build/plugin/getModuleManager",
+            "Sds/ModuleManager/Shared/proxy":"Sds/Build/plugin/proxy",
+            "Sds/ModuleManager/Shared/get":"Sds/Build/plugin/get"
         }
     };
 
@@ -82,7 +82,8 @@ function(
         var splitFilename = profile.selfFilename.split('.');
         var filename = '';
         var count = splitFilename.length;
-        for (var index in splitFilename){
+        var index;
+        for (index in splitFilename){
             if (index == count -1){
                 filename += '.preprocessed';
             }
@@ -91,8 +92,24 @@ function(
         filename = filename.slice(1, filename.length);
         delete profile.selfFilename;
 
-        configManager.merge(profile.mergeConfigs, profile).then(function(processedProfile){
-            fs.writeFileSync(filename, 'var profile = ' + json.toJson(processedProfile, true));
+        // timestamp layer names
+        if (profile.timestampLayers){
+            var newLayers = {};
+            var newName;
+            var timestamp = new Date().getTime().toString();
+            for (var name in profile.layers){
+                newLayers[name + timestamp] = profile.layers[name];
+            }
+            profile.layers = newLayers;
+        }
+        delete profile.timestampLayers;
+         
+        // merge configs into the defaultConfig
+        var mergedConfig = {};        
+        configManager.merge(profile.defaultConfig.mergeConfigs, mergedConfig).then(function(mergedConfig){            
+            profile.defaultConfig = utils.mixinDeep(profile.defaultConfig, mergedConfig);
+            delete(profile.defaultConfig.mergeConfigs);
+            fs.writeFileSync(filename, 'var profile = ' + json.toJson(profile, true));
             console.log('Preprocessed build profile written to: ' + filename);
         });
     });

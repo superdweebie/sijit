@@ -1,19 +1,16 @@
 define([], function(){
     return {
-        serviceManager: {
+        moduleManager: {
             'Sds/AuthenticationModule/AuthenticationController': {
-                getObjects: {
-                    api: 'mockAuthenticationApi'
+                proxies: {
+                    loginView: 'MockLoginView'
                 },
-                proxyObjects: {
-                    loginView: 'mockLoginView'
+                gets: {
+                    store: 'Sds/Test/AuthenticationModule/Asset/MockAuthenticationStore'
                 }
             },
-            mockAuthenticationApi: {
-                moduleName: 'Sds/Test/AuthenticationModule/Asset/MockAuthenticationApi'
-            },
-            mockLoginView: {
-                moduleName: 'Sds/Test/AuthenticationModule/Asset/MockLoginView',
+            MockLoginView: {
+                base: 'Sds/Test/AuthenticationModule/Asset/MockLoginView',
                 proxyMethods: [
                     'activate',
                     'reset',
@@ -22,11 +19,25 @@ define([], function(){
                     'watch'
                 ]
             },
-            'Sds/ExceptionModule/ExceptionController': {
-                moduleName: 'Sds/Test/AuthenticationModule/Asset/MockExceptionController',
-                proxyMethods: [
-                    'handle'
-                ]
+            'Sds/Test/AuthenticationModule/Asset/MockIdentityController': {
+                base: {},
+                params: {
+                    register: function(){console.debug('register')},
+                    forgotCredential: function(){console.debug('forgotCredential')}
+                }
+            },
+            'Sds/Router/router': {
+                params: {
+                    routes: {
+                        identity: {
+                            controller: 'Sds/Test/AuthenticationModule/Asset/MockIdentityController',
+                            methods: {
+                                register: 'register',
+                                forgotCredential: 'forgotCredential'
+                            }
+                        }
+                    }
+                }
             }
         }
     }

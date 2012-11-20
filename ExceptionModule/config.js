@@ -2,7 +2,7 @@ define(
     [],
     function(){
         return {
-            serviceManager: {
+            moduleManager: {
                 'Sds/ExceptionModule/ExceptionController': {
                     proxyMethods: [
                         'handle',
@@ -11,11 +11,11 @@ define(
                         'set',
                         'watch'
                     ],
-                    values: {
+                    params: {
                         serverUrl: 'http://localhost/ZendSkeletonApplication/exception/log',
                         registeredExceptions: {}
                     },
-                    proxyObjects: {
+                    proxies: {
                         exceptionView: 'Sds/ExceptionModule/View/Exception'
                     }
                 },

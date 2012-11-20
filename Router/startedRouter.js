@@ -1,5 +1,5 @@
 define([
-    'Sds/ServiceManager/Shared/getObject!Sds/Router/router'
+    'get!Sds/Router/router'
 ],
 function(
     router

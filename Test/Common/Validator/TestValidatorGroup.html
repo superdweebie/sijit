@@ -3,19 +3,11 @@
 <html>
 	<head>
 		<title>Testing Sds/Common/Validator/ValidatorGroup</title>
-		<script
-            type="text/javascript"
-            src="../../../../dojo/dojo.js"
-            data-dojo-config="
-                isDebug: true,
-                popup: true,
-                async: true
-            ">
-        </script>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
             require([
                     'doh/main',
-                    'dojo/Deferred',
                     'Sds/Common/Validator/DatatypeValidator',
                     'Sds/Common/Validator/IdentifierValidator',
                     'Sds/Common/Validator/ValidatorGroup',
@@ -24,7 +16,6 @@
                 ],
                 function(
                     doh,
-                    Deferred,
                     DatatypeValidator,
                     IdentifierValidator,
                     ValidatorGroup,
@@ -34,10 +25,10 @@
 
                         function ValidatorTest(doh){
 
-                            var validator = new ValidatorGroup([
-                                new DatatypeValidator(DatatypeValidator.datatypes.STRING),
+                            var validator = new ValidatorGroup({validators: [
+                                new DatatypeValidator({requiredType: DatatypeValidator.STRING}),
                                 new IdentifierValidator()
-                            ]);
+                            ]});
 
                             var testArray = [
                                 [true, 'username'],
@@ -48,42 +39,43 @@
                             var index;
                             for (index in testArray){
                                 if (testArray[index][0]){
-                                    doh.assertTrue(validator.isValid(testArray[index][1]));
+                                    doh.assertTrue(validator.isValid(testArray[index][1]).result);
                                 } else {
-                                    doh.assertFalse(validator.isValid(testArray[index][1]));
+                                    doh.assertFalse(validator.isValid(testArray[index][1]).result);
                                 }
                             }
                         },
 
-                        function deferredValidatorTest(doh){
+                        function deferredValidatorTest1(doh){
 
-                            var deferredTest = new Deferred;
+                            var deferredTest = new doh.Deferred;
 
-                            var validator = new ValidatorGroup([
+                            var validator = new ValidatorGroup({validators: [
                                 new DeferredValidator(),
-                                new DatatypeValidator(DatatypeValidator.datatypes.STRING),
-                            ]);
+                                new DatatypeValidator({requiredType: DatatypeValidator.STRING}),
+                            ]});
 
-                            var testArray = [
-                                [true, 'username'],
-                                [true, 'u'],
-                                [false, 1233456]
-                            ];
+                            validator.isValid('awesome').result.then(function(resultObject){
+                                doh.assertTrue(resultObject.result);
+                                deferredTest.callback(true);
+                            });
 
-                            var index;
-                            for (index in testArray){
-                                if (testArray[index][0]){
-                                    validator.isValid(testArray[index][1]).then(function(result){
-                                        doh.assertTrue(result);
-                                        deferredTest.resolve(true);
-                                    })
-                                } else {
-                                    validator.isValid(testArray[index][1]).then(function(result){
-                                        doh.assertFalse(result);
-                                        deferredTest.resolve(true);
-                                    })
-                                }
-                            }
+                            return deferredTest;
+                        },
+
+                        function deferredValidatorTest2(doh){
+
+                            var deferredTest = new doh.Deferred;
+
+                            var validator = new ValidatorGroup({validators: [
+                                new DeferredValidator(),
+                                new DatatypeValidator({requiredType: DatatypeValidator.STRING}),
+                            ]});
+
+                            validator.isValid(1233456).result.then(function(resultObject){
+                                doh.assertFalse(resultObject.result);
+                                deferredTest.callback(true);
+                            });
 
                             return deferredTest;
                         }
