@@ -7,24 +7,10 @@
             @import "../../../../themes/bootstrap/css/bootstrap.css";
             @import "../../../../themes/bootstrap/css/bootstrap-responsive.css";
 		</style>
-        <script type="text/javascript" src="../../../testconfig.js"></script>
-        <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
-		<script type="text/javascript">
-			require([
-                'dojo/parser',
-                'Sds/Common/Dnd/Sortable',
-                'dojo/domReady!'
-            ],
-            function(
-                parser
-            ){
-                parser.parse();
-            })
-		</script>
         <style>
             .dojoDndItem{
                 background-color: cyan;
-                width: 150px;
+                width: 250px;
                 margin: 1px;
                 list-style-type: none;
             }
@@ -38,11 +24,57 @@
                 opacity: 0.3;
             }
         </style>
+        <script type="text/javascript" src="../../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			require([
+                'dojo/parser',
+                'dojo/dom',
+                'dojo/dom-construct',
+                'Sds/Common/Dnd/Sortable',
+                'Sds/Common/Form/Textbox',
+                'dojo/domReady!'
+            ],
+            function(
+                parser,
+                dom,
+                domConstruct,
+                Sortable,
+                Textbox
+            ){
+                parser.parse().then(function(){
+                    var sortable = new Sortable;
+                    sortable.placeAt(dom.byId('sortable'), 'replace');
+
+                    sortable.addChild(domConstruct.create('div', {innerHTML : 'item 1'}));
+                    sortable.addChild(domConstruct.create('div', {innerHTML : 'item 2'}));
+                    sortable.addChild(domConstruct.create('div', {innerHTML : 'item 3'}));
+                    sortable.addChild(domConstruct.create('div', {innerHTML : 'item 4'}));
+                    sortable.addChild(domConstruct.create('div', {innerHTML : 'item 8'}));
+                    sortable.addChild(domConstruct.create('div', {innerHTML : 'item 7'}), 4);
+                    sortable.addChild(domConstruct.create('div', {innerHTML : 'item 6'}), 4);
+                    sortable.addChild(domConstruct.create('div', {innerHTML : 'item 5'}), 4);
+
+                    sortable = new Sortable;
+                    sortable.placeAt(dom.byId('sortableWidgets'), 'replace');
+
+                    sortable.addChild(new Textbox({value : 'item 1'}));
+                    sortable.addChild(new Textbox({value : 'item 2'}));
+                    sortable.addChild(new Textbox({value : 'item 3'}));
+                    sortable.addChild(new Textbox({value : 'item 4'}));
+                    sortable.addChild(new Textbox({value : 'item 8'}));
+                    sortable.addChild(new Textbox({value : 'item 7'}), 4);
+                    sortable.addChild(new Textbox({value : 'item 6'}), 4);
+                    sortable.addChild(new Textbox({value : 'item 5'}), 4);
+                });
+            })
+		</script>
 	</head>
 	<body>
         <h1>Functional Testing Sds/Common/Dnd/Sortable</h1>
         <br />
 
+        <p>Declaritive</p>
         <ul data-dojo-type="Sds/Common/Dnd/Sortable">
             <li>Item 1</li>
             <li>Item 2</li>
@@ -53,5 +85,23 @@
             <li>Item 7</li>
             <li>Item 8</li>
         </ul>
+
+        <p>Programatic</p>
+        <div id="sortable"></div>
+
+        <p>Declaritive with widgets in list</p>
+        <ul data-dojo-type="Sds/Common/Dnd/Sortable">
+            <input data-dojo-type="Sds/Common/Form/Textbox" value="Item 1" type="text"/>
+            <li><input data-dojo-type="Sds/Common/Form/Textbox" value="Item 2" type="text"/></li>
+            <li><input data-dojo-type="Sds/Common/Form/Textbox" value="Item 3" type="text"/></li>
+            <li><input data-dojo-type="Sds/Common/Form/Textbox" value="Item 4" type="text"/></li>
+            <li><input data-dojo-type="Sds/Common/Form/Textbox" value="Item 5" type="text"/></li>
+            <li><input data-dojo-type="Sds/Common/Form/Textbox" value="Item 6" type="text"/></li>
+            <li><input data-dojo-type="Sds/Common/Form/Textbox" value="Item 7" type="text"/></li>
+            <li><input data-dojo-type="Sds/Common/Form/Textbox" value="Item 8" type="text"/></li>
+        </ul>
+
+        <p>Programatic with widgets in list</p>
+        <div id="sortableWidgets"></div>
 	</body>
 </html>
