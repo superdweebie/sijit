@@ -5,9 +5,8 @@ define([
     'Sds/Common/Dnd/Moveable',
     'dojo/dom-construct',
     'dojo/dom-attr',
-    'dojo/dom-geometry',
     'dojo/dom-class',
-    'dijit/_Widget'
+    'dijit/_WidgetBase'
 ],
 function (
     declare,
@@ -16,31 +15,56 @@ function (
     Moveable,
     domConstruct,
     domAttr,
-    domGeom,
     domClass,
-    Widget
+    WidgetBase
 ){
     // module:
     //		Sds/Common/Dnd/Sortable
 
     return declare(
         'Sds/Common/Dnd/Sortable',
-        [Widget],
+        [WidgetBase],
         {
 
             dummyItem: undefined,
 
             buildRendering: function(){
+
+                if(!this.domNode){
+                    // Create root node if it wasn't created by _Templated
+                    this.domNode = this.srcNodeRef || this.ownerDocument.createElement("ul");
+                }
+
                 this.inherited(arguments);
 
                 // Add movers
-                array.forEach(this.srcNodeRef.children, lang.hitch(this, function(node){
-                    var moveable = new Moveable(node);
-                    moveable.on('firstMove', lang.hitch(this, 'onMoveableFirstMove'));
-                    moveable.on('moveStop', lang.hitch(this, 'onMoveableStop'));
-                    moveable.on('moved', lang.hitch(this, 'onMoveableMoved'));
-                    domClass.add(moveable.node, 'dojoDndItem');
-                }))
+                if (this.srcNodeRef){
+                    array.forEach(this.srcNodeRef.children, lang.hitch(this, function(node){
+                        var moveable = new Moveable(node);
+                        moveable.on('firstMove', lang.hitch(this, 'onMoveableFirstMove'));
+                        moveable.on('moveStop', lang.hitch(this, 'onMoveableStop'));
+                        moveable.on('moved', lang.hitch(this, 'onMoveableMoved'));
+                        domClass.add(moveable.node, 'dojoDndItem');
+                    }))
+                }
+            },
+
+            addChild: function(/*DomNode|dijit/_WidgetBase*/ child, /*Integer?*/ insertIndex){
+
+                var node;
+                if (child.isInstanceOf && child.isInstanceOf(WidgetBase)){
+                    node = domConstruct.create('li');
+                    node.appendChild(child.domNode);
+                } else {
+                    node = child;
+                }
+
+                var moveable = new Moveable(node);
+                moveable.on('firstMove', lang.hitch(this, 'onMoveableFirstMove'));
+                moveable.on('moveStop', lang.hitch(this, 'onMoveableStop'));
+                moveable.on('moved', lang.hitch(this, 'onMoveableMoved'));
+                domClass.add(moveable.node, 'dojoDndItem');
+                domConstruct.place(node, this.domNode, insertIndex);
             },
 
             onMoveableFirstMove: function(mover){
@@ -65,13 +89,13 @@ function (
 
             onMoveableMoved: function(e){
                 //Make the dummy item track the item being dragged
+                var refNode;
                 var insertY = e.leftTop.t + e.mover.node.offsetHeight / 2;
-                var position, refNode;
+
 
                 array.forEach(this.domNode.children, function(node){
                     if ( ! refNode && node !== e.mover.node){
-                        position = domGeom.position(node);
-                        if (insertY < position.y + position.h / 2){
+                        if (insertY < node.offsetTop + node.offsetHeight / 2){
                             refNode = node;
                         }
                     }
