@@ -43,6 +43,8 @@
                 Textbox
             ){
                 parser.parse().then(function(){
+
+                    //programatic
                     var sortable = new Sortable;
                     sortable.placeAt(dom.byId('sortable'), 'replace');
 
@@ -55,6 +57,19 @@
                     sortable.addChild(domConstruct.create('div', {innerHTML : 'item 6'}), 4);
                     sortable.addChild(domConstruct.create('div', {innerHTML : 'item 5'}), 4);
 
+                    //semi-programtic
+                    var sortable2 = dom.byId('sortable2');
+                    sortable2.appendChild(domConstruct.create('div', { 'class': 'sortableItem', innerHTML: 'Item 1'}));
+                    sortable2.appendChild(domConstruct.create('div', { 'class': 'sortableItem', innerHTML: 'Item 2'}));
+                    sortable2.appendChild(domConstruct.create('div', { 'class': 'sortableItem', innerHTML: 'Item 3'}));
+                    sortable2.appendChild(domConstruct.create('div', { 'class': 'sortableItem', innerHTML: 'Item 4'}));
+                    sortable2.appendChild(domConstruct.create('div', { 'class': 'sortableItem', innerHTML: 'Item 5'}));
+                    sortable2.appendChild(domConstruct.create('div', { 'class': 'sortableItem', innerHTML: 'Item 6'}));
+
+                    var sortable2Widget = new Sortable({}, sortable2);
+                    sortable2Widget.placeAt(sortable2, 'replace');
+
+                    //programatic with widgets
                     sortable = new Sortable;
                     sortable.placeAt(dom.byId('sortableWidgets'), 'replace');
 
@@ -88,6 +103,9 @@
 
         <p>Programatic</p>
         <div id="sortable"></div>
+
+        <p>Semi-Programatic</p>
+        <ol id="sortable2" class="myCustomClass"></ol>
 
         <p>Declaritive with widgets in list</p>
         <ul data-dojo-type="Sds/Common/Dnd/Sortable">
