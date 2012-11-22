@@ -2,6 +2,7 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
+    'dojo/query',
     'Sds/Common/Dnd/Moveable',
     'dojo/dom-construct',
     'dojo/dom-attr',
@@ -12,6 +13,7 @@ function (
     declare,
     lang,
     array,
+    query,
     Moveable,
     domConstruct,
     domAttr,
@@ -32,7 +34,7 @@ function (
 
                 if(!this.domNode){
                     // Create root node if it wasn't created by _Templated
-                    this.domNode = this.srcNodeRef || this.ownerDocument.createElement("ul");
+                    this.domNode = this.srcNodeRef || this.ownerDocument.createElement("ol");
                 }
 
                 this.inherited(arguments);
@@ -40,7 +42,11 @@ function (
                 // Add movers
                 if (this.srcNodeRef){
                     array.forEach(this.srcNodeRef.children, lang.hitch(this, function(node){
-                        var moveable = new Moveable(node);
+                        var handle;
+                        
+                        handle = this._getItemHandle(node);
+                        
+                        var moveable = new Moveable(node, {handle: handle});
                         moveable.on('firstMove', lang.hitch(this, 'onMoveableFirstMove'));
                         moveable.on('moveStop', lang.hitch(this, 'onMoveableStop'));
                         moveable.on('moved', lang.hitch(this, 'onMoveableMoved'));
@@ -51,20 +57,27 @@ function (
 
             addChild: function(/*DomNode|dijit/_WidgetBase*/ child, /*Integer?*/ insertIndex){
 
-                var node;
+                var node, handle;
                 if (child.isInstanceOf && child.isInstanceOf(WidgetBase)){
                     node = domConstruct.create('li');
                     node.appendChild(child.domNode);
                 } else {
                     node = child;
                 }
+                
+                handle = this._getItemHandle(node);
 
-                var moveable = new Moveable(node);
+                var moveable = new Moveable(node, {handle: handle});
                 moveable.on('firstMove', lang.hitch(this, 'onMoveableFirstMove'));
                 moveable.on('moveStop', lang.hitch(this, 'onMoveableStop'));
                 moveable.on('moved', lang.hitch(this, 'onMoveableMoved'));
                 domClass.add(moveable.node, 'dojoDndItem');
                 domConstruct.place(node, this.domNode, insertIndex);
+            },
+            
+            _getItemHandle: function(node) {
+                var handle = query(".dojoDndHandle", node);
+                return handle[0];
             },
 
             onMoveableFirstMove: function(mover){
