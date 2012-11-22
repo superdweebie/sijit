@@ -23,6 +23,11 @@
             .dojoDndDummyItem{
                 opacity: 0.3;
             }
+            .dojoDndHandle {
+                cursor: ns-resize;
+                float: right;
+                margin-right: 10px;
+            }
         </style>
         <script type="text/javascript" src="../../../testconfig.js"></script>
         <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
@@ -81,6 +86,17 @@
                     sortable.addChild(new Textbox({value : 'item 7'}), 4);
                     sortable.addChild(new Textbox({value : 'item 6'}), 4);
                     sortable.addChild(new Textbox({value : 'item 5'}), 4);
+                    
+                    //programatic with handle
+                    sortable = new Sortable;
+                    sortable.placeAt(dom.byId('sortableHandle'), 'replace');
+
+                    sortable.addChild(domConstruct.create('div', { 'class': 'sortableItem', innerHTML: 'Item 1 <span class="dojoDndHandle"><i class="icon-align-justify"></i></span>'}));
+                    sortable.addChild(domConstruct.create('div', { 'class': 'sortableItem', innerHTML: 'Item 2 <span class="dojoDndHandle"><i class="icon-align-justify"></i></span>'}));
+                    sortable.addChild(domConstruct.create('div', { 'class': 'sortableItem', innerHTML: 'Item 3 <span class="dojoDndHandle"><i class="icon-align-justify"></i></span>'}));
+                    sortable.addChild(domConstruct.create('div', { 'class': 'sortableItem', innerHTML: 'Item 4 <span class="dojoDndHandle"><i class="icon-align-justify"></i></span>'}));
+                    sortable.addChild(domConstruct.create('div', { 'class': 'sortableItem', innerHTML: 'Item 5 <span class="dojoDndHandle"><i class="icon-align-justify"></i></span>'}));
+                    sortable.addChild(domConstruct.create('div', { 'class': 'sortableItem', innerHTML: 'Item 6 <span class="dojoDndHandle"><i class="icon-align-justify"></i></span>'}));
                 });
             })
 		</script>
@@ -99,6 +115,18 @@
             <li>Item 6</li>
             <li>Item 7</li>
             <li>Item 8</li>
+        </ul>
+        
+        <p>Declaritive with Handle</p>
+        <ul data-dojo-type="Sds/Common/Dnd/Sortable">
+            <li>Item 1 <span class="dojoDndHandle"><i class="icon-align-justify"></i></span></li>
+            <li>Item 2 <span class="dojoDndHandle"><i class="icon-align-justify"></i></span></li>
+            <li>Item 3 <span class="dojoDndHandle"><i class="icon-align-justify"></i></span></li>
+            <li>Item 4 <span class="dojoDndHandle"><i class="icon-align-justify"></i></span></li>
+            <li>Item 5 <span class="dojoDndHandle"><i class="icon-align-justify"></i></span></li>
+            <li>Item 6 <span class="dojoDndHandle"><i class="icon-align-justify"></i></span></li>
+            <li>Item 7 <span class="dojoDndHandle"><i class="icon-align-justify"></i></span></li>
+            <li>Item 8 <span class="dojoDndHandle"><i class="icon-align-justify"></i></span></li>
         </ul>
 
         <p>Programatic</p>
@@ -121,5 +149,8 @@
 
         <p>Programatic with widgets in list</p>
         <div id="sortableWidgets"></div>
+        
+        <p>Programatic with handle</p>
+        <div id="sortableHandle"></div>
 	</body>
 </html>
