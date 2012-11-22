@@ -19,7 +19,6 @@
                 'dojo/store/Memory',
                 'Sds/Common/Form/TextBox',
                 'Sds/Common/Form/NumberTextBox',
-                'Sds/Common/Form/CurrencyTextBox',
                 'Sds/Common/Form/DateTextBox',
                 'Sds/Common/Form/ValidationTextBox',
                 'Sds/Common/Form/Textarea',
@@ -47,16 +46,11 @@
                         dom.byId('numberTextBox1Value').innerHTML = newValue;
                     });
 
-                    dom.byId('currencyTextBox1Value').innerHTML = registry.byId('currencyTextBox1').get('value');
-                    registry.byId('currencyTextBox1').watch('value', function(p, o, newValue){
-                        dom.byId('currencyTextBox1Value').innerHTML = newValue;
-                    });
-
                     dom.byId('dateTextBox1Value').innerHTML = registry.byId('dateTextBox1').get('value');
                     registry.byId('dateTextBox1').watch('value', function(p, o, newValue){
                         dom.byId('dateTextBox1Value').innerHTML = newValue;
                     });
-                    
+
                     dom.byId('dateTextBox2Value').innerHTML = registry.byId('dateTextBox2').get('value');
                     registry.byId('dateTextBox2').watch('value', function(p, o, newValue){
                         dom.byId('dateTextBox2Value').innerHTML = newValue;
@@ -288,18 +282,6 @@
                 id="numberTextBox1"
             />
             <p>Number Box Value: <pre id="numberTextBox1Value"></pre></p>
-
-            <h3>Sds/Common/Form/CurrencyTextBox</h3>
-
-            <p>Currency Box</p>
-            <input data-dojo-type="Sds/Common/Form/CurrencyTextBox"
-                type="text"
-                data-dojo-props="
-                    label:'Cost'
-                "
-                id="currencyTextBox1"
-            />
-            <p>Currency Box Value: <pre id="currencyTextBox1Value"></pre></p>
 
             <h3>Sds/Common/Form/DateTextBox</h3>
 
