@@ -41,11 +41,14 @@ be injected into them. For example:
 
     {
         object1: {
-            mid: 'MyNamespace/MyClass1'
+            base: 'MyNamespace/MyClass1'
+        },
+        object2: {
+            base: 'MyNamespace/MyClass1'
         }
     }
 
-This config defines two identifiers, `object1` and `object2`. Each identifier also has a `moduleName`
+This config defines two identifiers, `object1` and `object2`. Each identifier also has a `base`
 defined. The following call to `get` would return an instance of `MyNamespace/MyClass1`
 
     var myObject1 = moduleManager.get('object1');
@@ -55,14 +58,14 @@ the ModuleManager real power. The first is `params`. For example:
 
     {
         object1: {
-            mid: 'MyNamespace/MyClass1'
+            base: 'MyNamespace/MyClass1'
             params: {
                 a: 1,
                 b: 'hello'
             }
         },
         object2: {
-            mid: 'MyNamespace/MyClass1'
+            base: 'MyNamespace/MyClass1'
             params: {
                 a: 2,
                 b: 'hello again'
@@ -75,7 +78,7 @@ of `MyNamespace/MyClass1` with the properties `a` and `b` set to the values give
 in the config. Calling `moduleManager.get('object2')` would return a different
 instance of `MyNamespace/MyClass1` with the different properties, as given in the config.
 
-A this point the difference between three important ModuleManager functions needs
+A this point the difference between two important ModuleManager functions needs
 to be explained:
 
 `get(identifier)` will return an instnace of the object with the given identifier. If the identifier
@@ -93,7 +96,7 @@ Asside from injecting values, a ModuleManager can also inject objects. Eg:
 
     {
         object1: {
-            mid: 'MyNamespace/MyClass1'
+            base: 'MyNamespace/MyClass1'
             params: {
                 a: 1,
                 b: 'hello'
@@ -107,13 +110,13 @@ Asside from injecting values, a ModuleManager can also inject objects. Eg:
             }
         },
         object2: {
-            mid: 'MyNamespace/MyClass2'
+            base: 'MyNamespace/MyClass2'
         },
         object3: {
-            mid: 'MyNamespace/MyClass2'
+            base: 'MyNamespace/MyClass2'
         },
         object4: {
-            mid: 'MyNamespace/MyClass2'
+            base: 'MyNamespace/MyClass2'
         },
     }
 
@@ -129,7 +132,7 @@ then use a Proxy object, otherwise the ModuleManager will get stuck in an endles
 
 When injecting objects, the moduleManager will check the module to see if it has a prototype.
 If it does, then it will create a new instance, and inject that. If it does not, then it
-will inject a clone of the module.
+will just inject the module.
 
 
 #Proxy Objects
@@ -144,13 +147,13 @@ of method names that exist on the module. For example:
 
     {
         object1: {
-            mid: 'MyNamespace/MyClass1'
+            base: 'MyNamespace/MyClass1'
             proxies: {
                 a: 'object2'
             }
         },
         object2: {
-            mid: 'MyNamespace/MyClass2'
+            base: 'MyNamespace/MyClass2'
             proxyMethods: [
                 'method1',
                 'method2'
@@ -166,6 +169,134 @@ on the Proxy object will first load object2, then call the method of the same na
 on object2. Any arguments passed to `proxy.method1()` will be passed down to
 `object2.method1()`. `proxy.method1()` will return a Deferred which will resolve
 to the return value of `object2.method1()`.
+
+#Base
+
+Every identifier needs a base object that injections will be injected into. The base is 
+resolved in the following way:
+
+If no `base` is explicitly set, then the base is taken to be the same as the
+identifier. The following two examples are equivalent:
+
+    'My/Module': {    
+    }
+
+    'My/Module': {
+        base: 'My/Module'
+    }
+
+If the base is a string, the module manager config will first be searched for an identifer
+equal to that string. If a match is found, the referenced identifier will be used 
+as the base object. eg:
+
+    'object1: {
+        base: 'object2'
+        params: {
+            a: 5
+        }
+    },
+    'object2: {
+        'base: 'My/Module'
+    }
+ 
+Calling `get('object1')` would return an instance of `My/Module`, with `a = 5`.
+
+If the base is a string, but not equal to another identifier, the it is assumed that
+the string is the name of an AMD module. That AMD module will be loaded.
+
+If the base is an object, that object will be injected. eg:
+
+    'object1': {
+        base: {}
+        params: {
+            a: 5
+        }
+    }
+
+Calling `get('object1')` would simply return `{a: 5}`.
+
+#Directives
+
+The config for each identifier may inclide a `direcives` key. This controls exactly
+how the object is created.
+
+The default directives are:
+
+    directives: {
+        declare: false,
+        define: false,
+        cache: true,
+        clone: false
+    };
+
+##Declare
+
+If the declare directive is set to true, then `dojo/_base/declare` will be used on 
+the injected object, and a contstructor returned rather than an istance. This is 
+especially useful for injecting widgets that are created by the parser. eg if this 
+config is set:
+
+    'object1': {
+        base: 'dijit/Form/TextBox',
+        directives: {
+            declare: true
+        },
+        params: {
+            a: 1
+        }
+    }
+
+Then this markup could be used:
+
+    <script type="text/javascript">
+        require([
+            'dojo/parser',
+            'get!object1',
+        ],
+        function(
+            parser
+        ){
+            parser.parse()
+        })
+    </script>
+
+    <div data-dojo-type: 'object1'></div>
+
+This would result in a TextBox with a = 1.
+
+##Define
+
+If define is set to true, a new AMD module is defined with the identifier. eg, if
+this config is set:
+
+    'object1': {
+        base: 'My/Module',
+        directives: {
+            define: true
+        },
+        params: {
+            a: 1
+        }
+    }
+
+The the following code could be run:
+
+    require([get!object1], function(object1){})
+
+Later in code, if object1 is required again, becasue and AMD module has been defined,
+the `get!` is no longer needed. eg:
+
+    require([object1], function(object1){})
+
+##Cache
+
+The module manager automatically caches object. If you want to create a new instance
+every time `get` is called, then set `cache: false`.
+
+##Clone
+
+For objects that do not have a prototype, the base is whatever is returned by the AMD 
+loaded. If you want to clone the base before injection, set `clone: true`.
 
 #ModuleManagerAware
 
@@ -193,6 +324,20 @@ plugins takes an identifier that will be fetched from the shared moduleManager. 
     require(['Sds/ModuleManager/Shared/get!MyObject'], function(myObject){
         //Do something with myObject
     })
+
+It is suggested that you set up an alias to these plugins which makes them super simple
+to use. Put the followingi in your dojo config:
+
+    aliases: [
+        ['get', 'Sds/ModuleManager/Shared/get'],
+        ['proxy', 'Sds/ModuleManager/Shared/proxy'],
+    ]
+
+You can then call the plugins with shorter names like this:
+
+    require(['get!MyObject'], function(myObject){
+        //Do something with myObject
+    })    
 
 #Dojo Builds
 
@@ -223,3 +368,9 @@ Will include the ModuleManager
 To get the most out of the build system plugin resolvers, it is recomended that you
 use the build profile preprocessor. This will merge any required config modules, and
 add the plugins automatically.
+
+#Build profile preprocessor
+
+It is suggested that you use the sds build profile preprocessor to prepare your
+build profile for building. It will add the build plugin resolvers for you,
+and inflate config modules in the mergeConfigs key of your default config.
