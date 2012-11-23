@@ -1,15 +1,15 @@
 define([
     'dojo/_base/declare',
+    'dojo/_base/lang',
     'dojo/currency',
-    'Sds/Common/utils',
     'Sds/Common/Form/ValidationTextBox',
     'Sds/Common/Form/_NumberTextBoxMixin',
     'get!CurrencyValidator'
 ],
 function (
     declare,
+    lang,
     currency,
-    utils,
     ValidationTextBox,
     NumberTextBoxMixin,
     CurrencyValidator
@@ -22,7 +22,7 @@ function (
 
             placeholder: {format: 0},
 
-            validator: CurrencyValidator,
+            validator: [],
 
             _formatter: currency.format,
 
@@ -34,10 +34,44 @@ function (
 
             _setPlaceholderAttr: function(value){
                 if (value.hasOwnProperty('format')){
-                    value = this.blurFormat(value.format);
+                    value = this._formatter(value.format);
                 }
                 this.inherited(arguments, [value]);
-            }
+            },
+            
+            blurFormat: function(/*Number*/ value, /*number.__FormatOptions*/ constraints){
+                // summary:
+                //		Formats the value as a Number, according to constraints.
+                // tags:
+                //		protected
+                if (value == '' || value == undefined || value == null){
+                    return null;
+                }
+                
+                return this.inherited(arguments);                
+            },
+            
+            parse: function(/*String*/ value, /*number.__FormatOptions*/ constraints){
+                // summary:
+                //		Replaceable function to convert a formatted string to a number value
+                // tags:
+                //		protected extension
+                
+                if (value == '' || value == undefined || value == null){
+                    return null;
+                }                
+                
+                return this.inherited(arguments); 
+            },
+            
+            _setValidatorAttr: function(value){
+                
+                if ( ! lang.isArray(value)){
+                    value = [value];
+                }
+                value.push(CurrencyValidator);
+                this.inherited(arguments, [value]);                
+            }            
         }
     );
 });

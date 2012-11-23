@@ -31,13 +31,17 @@ function (
             //      For shorthand, if an array item is a string, it is equivalent to a
             //      text type definition.
             //
-            prepend: [],
+            prepend: undefined,
 
             // append: array
             //      Same as prepend
-            append: [],
+            append: undefined,
 
-            _appendageNodes: [],
+            _appendageNodes: undefined,
+
+            constructor: function(){
+                this._appendageNodes = [];
+            },
 
             _setPrependAttr: function(value){
 
