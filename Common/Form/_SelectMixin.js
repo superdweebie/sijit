@@ -57,7 +57,10 @@ function (
                         }))
                     }
                 }
-                this.set('value', source.value);
+                
+                if (this.source){
+                    this.set('value', source.value);
+                }
             },
 
             _setStoreLabelAttrAttr: function(storeLabelAttr){
