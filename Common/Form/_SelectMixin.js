@@ -2,6 +2,7 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
+    'dojo/on',
     'dojo/when',
     'dojo/dom-construct',
     'dijit/form/_FormValueMixin'
@@ -10,6 +11,7 @@ function (
     declare,
     lang,
     array,
+    on,
     when,
     domConstruct,
     FormValueMixin
@@ -63,6 +65,13 @@ function (
                 }
             },
 
+            startup: function(){
+                this.inherited(arguments);
+                on(this.select, 'change', lang.hitch(this, function(e){                   
+                    this.set('value', e.target.value);
+                }));
+            },
+            
             _setStoreLabelAttrAttr: function(storeLabelAttr){
                 this.storeLabelAttr = storeLabelAttr;
                 this._updateOptionsFromStore();
@@ -141,6 +150,7 @@ function (
 
             _setValueAttr: function(value){
                 this.select.value = value;
+                this.inherited(arguments);                
             },
 
             _getValueAttr: function(){
