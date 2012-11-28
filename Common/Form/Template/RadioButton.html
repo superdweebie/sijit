@@ -1,0 +1,15 @@
+<div class="control-group">
+    <div class="controls">
+        <label class="radio">
+            <input
+                ${!nameAttrSetting}
+                type="${type}"
+                ${checkedAttrSetting}
+                id="${id}"
+                data-dojo-attach-point="radio, focusNode"
+                data-dojo-attach-event="onclick:_onClick"
+            />
+            ${label}
+        </label>
+    </div>
+</div>
