@@ -20,7 +20,7 @@ function(
             //		no more than two decimal places. This validator is not
             //      for validating loacalised currency strings.
 
-            regEx: /^[0-9]+\.?[0-9]{0,2}$/,
+            regEx: /^\d+\.?\d{0,2}$/,
 
             _isValid: function(value){
                 var messages = [];
