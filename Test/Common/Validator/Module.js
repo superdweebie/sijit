@@ -10,6 +10,7 @@ define([
     'Sds/Test/Common/Validator/TestIdentifierArrayValidator',
     'Sds/Test/Common/Validator/TestIdentifierValidator',
     'Sds/Test/Common/Validator/TestInequalityValidator',
+    'Sds/Test/Common/Validator/TestRequiredValidator',
     'Sds/Test/Common/Validator/TestValidatorGroup',
     'Sds/Test/Common/Validator/TestValidatorFactory'
 ], 1);
