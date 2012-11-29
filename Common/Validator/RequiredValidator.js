@@ -14,13 +14,15 @@ function(
         {
 
             haltOnFail: true,
+            
+            regEx: /^\s+$/g,
 
             _isValid: function(value){
 
                 var messages = [];
                 var result = true;
 
-                if (value === undefined || value === null || value == ''){
+                if (value === undefined || value === null || value === '' || this.regEx.test(value)){
                     result = false;
                     messages.push(validatorMessages.requiredValidatorMessage);
                 }
