@@ -6,25 +6,12 @@ function(){
         ],
         moduleManager: {
             'Sds/IdentityModule/IdentityController': {
-                proxyMethods: [
-                    'forgotCredential',
-                    'forgotCredentialPart1',
-                    'forgotCredentialPart2',
-                    'register'
-                ],
                 params: {
-                    identityRestUrl: '/identity/rest/'
-                },
-                gets: {
-                    apiSmd: 'Sds/IdentityModule/Smd'
-                },
-                proxies: {
-                    forgotCredentialPart1View: 'Sds/IdentityModule/View/ForgotCredentialPart1',
-                    forgotCredentialPart2View: 'Sds/IdentityModule/View/ForgotCredentialPart2',
-                    registerView: 'Sds/IdentityModule/View/Register'
+                    identityRestUrl: 'http://mysite.com/identity/',
+                    forgotCredentialTokenRestUrl: 'http://mysite.com/forgotCredentialToken'
                 }
             },
-            'Sds/IdentityModule/View/ForgotCredentialPart1': {
+            'Sds/IdentityModule/View/ForgotCredentialCreateToken': {
                 proxyMethods: [
                     'activate',
                     'deactivate',
@@ -34,7 +21,7 @@ function(){
                     'watch'
                 ]
             },
-            'Sds/IdentityModule/View/ForgotCredentialPart2': {
+            'Sds/IdentityModule/View/ForgotCredentialUpdateToken': {
                 proxyMethods: [
                     'activate',
                     'deactivate',
@@ -55,8 +42,8 @@ function(){
                 ]
             },
             'Sds/IdentityModule/Validator/IdentityNameAvailableValidator': {
-                gets: {
-                    apiSmd: 'Sds/IdentityModule/Smd'
+                params: {
+                    restUrl: 'http://mysite.com/identity/'
                 }
             },
             'Sds/Router/router': {
@@ -70,9 +57,11 @@ function(){
                                     leave: 'cancelRegister',
                                     onEnterResolveRoute: -1
                                 },
-                                forgotCredential: 'forgotCredential',
-                                forgotCredentialPart1: 'forgotCredentialPart1',
-                                forgotCredentailPart2: 'forgotCredentialPart2'
+                                forgotCredential: {
+                                    enter: 'forgotCredential',
+                                    leave: 'cancelForgotCredential',
+                                    onEnterResolveRoute: -1
+                                }
                             }
                         }
                     }

@@ -7,11 +7,11 @@ define([
     'Sds/Mvc/BaseView',
     'dojo/text!../Template/Register.html',
     'Sds/Common/ValidationDialog',
-    'get!Sds/IdentityModule/DataModel/Identity/IdentityName/Input',
-    'get!Sds/IdentityModule/DataModel/Identity/Credential/Input',
-    'get!Sds/IdentityModule/DataModel/Identity/Firstname/Input',
-    'get!Sds/IdentityModule/DataModel/Identity/Lastname/Input',
-    'get!Sds/IdentityModule/DataModel/Identity/Email/Input'
+    'Sds/IdentityModule/DataModel/Identity/IdentityName/Input',
+    'Sds/IdentityModule/DataModel/Identity/Credential/Input',
+    'Sds/IdentityModule/DataModel/Identity/Firstname/Input',
+    'Sds/IdentityModule/DataModel/Identity/Lastname/Input',
+    'Sds/IdentityModule/DataModel/Identity/Email/Input'
 ],
 function(
     declare,

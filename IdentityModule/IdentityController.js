@@ -2,23 +2,26 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/Deferred',
-    'dojo/_base/json',
+    'Sds/Store/JsonRest',
     'Sds/Common/Status',
-    'dojox/rpc/Service',
     'dojo/Stateful',
-    'get!Sds/IdentityModule/DataModel/Identity',
-    'Sds/ExceptionModule/throwEx',
-    'dojox/rpc/JsonRPC'
+    'Sds/IdentityModule/DataModel/Identity',
+    'proxy!Sds/IdentityModule/View/ForgotCredentialCreateToken',
+    'proxy!Sds/IdentityModule/View/ForgotCredentialUpdateToken',
+    'proxy!Sds/IdentityModule/View/Register',
+    'Sds/ExceptionModule/throwEx'
 ],
 function(
     declare,
     lang,
     Deferred,
-    json,
+    JsonRest,
     Status,
-    RpcService,
     Stateful,
     Identity,
+    forgotCredentialCreateTokenView,
+    forgotCredentialUpdateTokenView,
+    registerView,
     throwEx
 ){
     return declare
@@ -29,42 +32,31 @@ function(
             // summary:
             //    Handles Identity CRUD, registration and password recovery
 
-            identityStoreUrl: undefined,
+
+            identityRestUrl: undefined,
 
             identityStore: undefined,
 
-            //apiSmd: object | string
-            //    May be an SMD object, or a url that will return an SMD.
-            //    The SMD must define a json rpc interface to register and
-            //    recover password
-            //    from a server.
-            apiSmd: undefined,
+            forgotCredentialTokenRestUrl: undefined,
 
-            //api: object
-            //    Is the api generated from the apiSmd
-            api: undefined,
-
-            // forgotCredentialPart1View: Sds/IdentityModule/View/ForgotCredentialPart1View | Sds/ModuleManager/Proxy
-            //     A recover password view part 1, or proxy to a recover password view.
-            forgotCredentialPart1View: undefined,
-
-            // forgotCredentialPart2View: Sds/IdentityModule/View/ForgotCredentialPart2View | Sds/ModuleManager/Proxy
-            //     A recover password view part 2, or proxy to a recover password view.
-            forgotCredentialPart2View: undefined,
-
-            // registerView: Sds/IdentityModule/RegisterView | Sds/ModuleManager/Proxy
-            //     A register view, or proxy to a register view.
-            registerView: undefined,
+            forgotCredentialTokenStore: undefined,
 
             //status: Sds/Common/Status
             //    An object indicating the current status
             status: undefined,
 
-            getIdentityStore: function(){
-                if ( ! this.identityStore) {
-                    this.identityStore = new JsonRest({target: this.identityStoreUrl});
+            _identityStoreGetter: function(){
+                if (! this.identityStore){
+                    this.identityStore = new JsonRest({target: this.identityRestUrl});
                 }
                 return this.identityStore;
+            },
+
+            _forgotCredentialTokenStoreGetter: function(){
+                if (! this.forgotCredentialTokenStore){
+                    this.forgotCredentialTokenStore = new JsonRest({target: this.forgotCredentialTokenRestUrl});
+                }
+                return this.forgotCredentialTokenStore;
             },
 
             forgotCredentialPart1: function(){
@@ -157,18 +149,6 @@ function(
 
             cancelRegister: function(){
                 this._registerView.deactivate();
-            },
-
-            _apiGetter: function(){
-                // summary:
-                //		Get the json rpc api
-                // returns: object
-                //      Returns a json rpc api that can be used to call the server.
-
-                if ( ! this.api) {
-                    this.api = new RpcService(this.apiSmd);
-                }
-                return this.api;
             },
 
             _forgotCredentialPart1Complete: function(data)

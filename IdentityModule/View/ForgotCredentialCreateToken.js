@@ -5,10 +5,10 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'Sds/Mvc/BaseView',
-    'dojo/text!../Template/ForgotCredentialPart1.html',
+    'dojo/text!../Template/ForgotCredentialCreateToken.html',
     'Sds/Common/ValidationDialog',
-    'get!Sds/IdentityModule/DataModel/Identity/IdentityName/Input',
-    'get!Sds/IdentityModule/DataModel/Identity/Email/Input'
+    'Sds/IdentityModule/DataModel/Identity/IdentityName/Input',
+    'Sds/IdentityModule/DataModel/Identity/Email/Input'
 ],
 function(
     declare,
@@ -20,7 +20,7 @@ function(
     template
 ){
     return declare(
-        'Sds/IdentityModule/View/ForgotCredentialPart1',
+        'Sds/IdentityModule/View/ForgotCredentialCreateToken',
         [
             Widget,
             TemplatedMixin,

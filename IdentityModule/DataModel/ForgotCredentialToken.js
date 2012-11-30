@@ -11,14 +11,15 @@ function(
     // which can be serialized to json.
 
     return declare(
-        'Sds/IdentityModule/DataModel/Profile',
+        'Sds/IdentityModule/DataModel/ForgotCredentialToken',
         [BaseModel],
         {
 
             _fields: [
-                "_className"
-            ],
-            _className: 'Sds\\IdentityModule\\DataModel\\Profile'
+                "code",
+                "identityName",
+                "expires"
+            ]
         }
     );
 });
