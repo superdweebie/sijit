@@ -2,26 +2,32 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/Deferred',
+    'dojo/when',
     'Sds/Store/JsonRest',
     'Sds/Common/Status',
     'dojo/Stateful',
     'Sds/IdentityModule/DataModel/Identity',
+    'Sds/IdentityModule/DataModel/Identity/ModelValidator',
+    'Sds/IdentityModule/Exception/InvalidArgumentException',
     'proxy!Sds/IdentityModule/View/ForgotCredentialCreateToken',
     'proxy!Sds/IdentityModule/View/ForgotCredentialUpdateToken',
-    'proxy!Sds/IdentityModule/View/Register',
+    'proxy!Sds/IdentityModule/View/CreateIdentity',
     'Sds/ExceptionModule/throwEx'
 ],
 function(
     declare,
     lang,
     Deferred,
+    when,
     JsonRest,
     Status,
     Stateful,
     Identity,
+    IdentityValidator,
+    InvalidArgumentException,
     forgotCredentialCreateTokenView,
     forgotCredentialUpdateTokenView,
-    registerView,
+    createIdentityView,
     throwEx
 ){
     return declare
@@ -47,7 +53,10 @@ function(
 
             _identityStoreGetter: function(){
                 if (! this.identityStore){
-                    this.identityStore = new JsonRest({target: this.identityRestUrl});
+                    this.identityStore = new JsonRest({
+                        idProperty: 'identityName',
+                        target: this.identityRestUrl
+                    });
                 }
                 return this.identityStore;
             },
@@ -128,19 +137,28 @@ function(
 
                 this._registerDeferred = new Deferred();
 
-                this.registerView.activate().then(lang.hitch(this, function(result){
+                createIdentityView.activate().then(lang.hitch(this, function(result){
                     // Do nothing if form not valid.
                     if (result.state != ''){
                         this._registerDeferred.resolve();
                         return;
                     }
 
+                    // Check that the identity we are about to send to the server is valid.
+                    var identityValidator = new IdentityValidator;
+                    var validatorResult = identityValidator.isValid(result.value);
+                    if ( ! validatorResult.result){
+                        this._registerException(new InvalidArgumentException(validatorResult.messages.join(' ')));
+                        return;
+                    }
+
                     // Update status
                     this.set('status', new Status('sending registration request', Status.icon.SPINNER));
 
-                    this.get('api').register(new Identity(result.value)).then(
+                    when(
+                        this.get('identityStore').put(result.value),
                         lang.hitch(this, '_registerComplete'),
-                        lang.hitch(this, '_handleRegisterException')
+                        lang.hitch(this, '_registerException')
                     );
                 }));
 
@@ -169,37 +187,20 @@ function(
                 this._registerDeferred.resolve(true);
             },
 
-            _handleException: function(exception){
-                // summary:
-                //		Handles xhr exceptions.
-
+            _registerException: function(exception){
                 throwEx(exception).then(lang.hitch(this, function(standardizedException){
+                    this._handleException(standardizedException);
 
-                    // Update status
-                    this.set('status', new Status(standardizedException.message, Status.icon.ERROR, 5000));
-
-                    if (this._forgotCredentialPart1Deferred && (! this._forgotCredentialPart1Deferred.isFulfilled())){
-                        this._forgotCredentialPart1Deferred.reject(exception);
-                    }
-                    if (this._forgotCredentialPart2Deferred && (! this._forgotCredentialPart2Deferred.isFulfilled())){
-                        this._forgotCredentialPart2Deferred.reject(exception);
+                    if (this._registerDeferred && (! this._registerDeferred.isFulfilled())){
+                        this._registerDeferred.reject(standardizedException);
                     }
                 }));
             },
 
-            _handleRegisterException: function(exception){
-                // summary:
-                //		Handles xhr exceptions.
+            _handleException: function(exception){
 
-                throwEx(exception).then(lang.hitch(this, function(standardizedException){
-
-                    // Update status
-                    this.set('status', new Status(standardizedException.message, Status.icon.ERROR, 5000));
-
-                    standardizedException.handle.then(lang.hitch(this, function(){
-                        this.register();
-                    }));
-                }));
+                // Update status
+                this.set('status', new Status(exception.message, Status.icon.ERROR, 5000));
             }
         }
     );

@@ -37,8 +37,6 @@ function(
                 }
 
                 return r;
-            },
-            reset: function(){
             }
         }
     );

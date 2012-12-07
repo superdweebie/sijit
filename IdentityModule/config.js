@@ -31,7 +31,7 @@ function(){
                     'watch'
                 ]
             },
-            'Sds/IdentityModule/View/Register': {
+            'Sds/IdentityModule/View/CreateIdentity': {
                 proxyMethods: [
                     'activate',
                     'deactivate',
@@ -52,14 +52,14 @@ function(){
                         identity: {
                             controller: 'Sds/IdentityModule/IdentityController',
                             methods: {
-                                register: {
-                                    enter: 'register',
-                                    leave: 'cancelRegister',
+                                identity: {
+                                    enter: 'identity',
+                                    leave: 'cancelIdentity',
                                     onEnterResolveRoute: -1
                                 },
-                                forgotCredential: {
-                                    enter: 'forgotCredential',
-                                    leave: 'cancelForgotCredential',
+                                forgotCredentialToken: {
+                                    enter: 'forgotCredentialToken',
+                                    leave: 'cancelForgotCredentialToken',
                                     onEnterResolveRoute: -1
                                 }
                             }

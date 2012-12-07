@@ -5,7 +5,7 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'Sds/Mvc/BaseView',
-    'dojo/text!../Template/Register.html',
+    'dojo/text!../Template/CreateIdentity.html',
     'Sds/Common/ValidationDialog',
     'Sds/IdentityModule/DataModel/Identity/IdentityName/Input',
     'Sds/IdentityModule/DataModel/Identity/Credential/Input',
@@ -23,7 +23,7 @@ function(
     template
 ){
     return declare(
-        'Sds/IdentityModule/RegisterView',
+        'Sds/IdentityModule/View/CreateIdentity',
         [
             Widget,
             TemplatedMixin,

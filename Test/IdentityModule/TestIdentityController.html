@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Unit Testing Sds/IdentityModule/IdentityController</title>
+		<style type="text/css">
+            @import "../../themes/bootstrap/css/bootstrap.css";
+            @import "../../themes/bootstrap/css/bootstrap-responsive.css";
+		</style>
+        <script type="text/javascript" src="../testconfig.js"></script>
+        <script type="text/javascript">
+            dojoConfig.mergeConfigs.push('Sds/Test/IdentityModule/Asset/config');
+        </script>
+        <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			require([
+                'doh/main',
+                'dojo/when',
+                'get!Sds/IdentityModule/IdentityController',
+                'get!Sds/IdentityModule/View/CreateIdentity',
+                'dojo/domReady!'
+            ],
+            function(
+                doh,
+                when,
+                identityController,
+                mockCreateIdentityView
+            ){
+
+                // Define and register the tests
+                doh.register([
+
+                    function testRegisterSucceed(){
+
+                        var testResult = new doh.Deferred;
+
+                        var identity = {
+                            identityName: 'lucy',
+                            credential: 'password1',
+                            firstname: 'Lucy',
+                            lastname: 'R',
+                            email: 'lucy@awesome.com'
+                        };
+
+                        mockCreateIdentityView.value = identity;
+
+                        when(identityController.register(), function(){
+                            var identityStore = identityController.get('identityStore');
+
+                            doh.assertEqual(identity, identityStore.get('lucy'));
+                            testResult.callback(true);
+                        });
+
+                        return testResult;
+                    },
+
+                    function testRegisterFail(){
+
+                        var testResult = new doh.Deferred;
+
+                        var identity = {
+                            identityName: 'lucy',
+                            credential: 'password1',
+                            firstname: 'Lucy',
+                            lastname: 'R',
+                            email: 'badly formed email'
+                        };
+
+                        mockCreateIdentityView.value = identity;
+
+                        when(
+                            identityController.register(),
+                            null,
+                            function (exception){
+                                doh.assertEqual('InvalidArgumentException', exception.name);
+                                testResult.callback(true);
+                            }
+                        );
+
+                        return testResult;
+                    }
+                ]);
+
+                // Kick off the test runner
+                doh.runOnLoad();
+            })
+		</script>
+	</head>
+	<body>
+        <h1>Unit Testing Sds/IdentityModule/IdentityController</h1>
+	</body>
+</html>
