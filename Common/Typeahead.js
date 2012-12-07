@@ -53,7 +53,6 @@ define([
                 
                 select: function (node) {
                     if(node.value) {
-                        console.log(node.value);
                         this.domNode.value = node.value;
                         this.emit('changed', node);
                     }

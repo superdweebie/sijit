@@ -77,7 +77,18 @@ function (
                     domProp.set(this.textbox, 'placeholder', this.label);
                 }
             },
-
+            
+            _setHelpBlockAttr: function(message) {
+                if (message){
+                    domConstruct.create(
+                        'span',
+                        {innerHTML: '<small>'+message+'</small>', 'class': 'help-block'},
+                        this.domNode,
+                        'last'
+                    );
+                }
+            },
+            
             focusFormat: function(value /*=====, constraints =====*/){
                 // summary:
                 //		Replaceable function to convert a value to a properly formatted string.

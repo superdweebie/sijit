@@ -35,6 +35,9 @@ function (
             //      inline: always display message inline. If the message is more than one line, only the first will be shown.
             //      block: alwyas display message as block, even when there is only one line.
             messagePosition: 'auto',
+            
+            // help-block: string
+            helpBlock: undefined,
 
             // suppressMessages: boolean
             //      Should message be returned to a get('message') call?
@@ -89,7 +92,7 @@ function (
 
             startup: function(){
                 this.inherited(arguments);
-
+                
                 this.watch('state', lang.hitch(this, function(p, o, newValue){
                     if (newValue == '' ||
                         (newValue != '' &&
@@ -269,20 +272,12 @@ function (
 
                 if (messages.length == 0 || this.suppressMessages){
                     domClass.add(this.inlineMessageWrapper, 'hide');
-                    domClass.add(this.blockMessageWrapper, 'hide');
                     this.inlineMessage.innerHTML = '';
-                    this.blockMessage.innerHTML = '';
                     return;
                 }
-                if ((this.messagePosition == 'auto' && messages.length > 1) || this.messagePosition == 'block'){
-                    this.inlineMessage.innerHTML = '';
-                    this.blockMessage.innerHTML = messages.join('<br />');
-                    domClass.remove(this.blockMessageWrapper, 'hide');
-                } else {
-                    this.blockMessage.innerHTML = '';
-                    this.inlineMessage.innerHTML = messages[0];
-                    domClass.remove(this.inlineMessageWrapper, 'hide');
-                }
+                
+                this.inlineMessage.innerHTML = messages[0];
+                domClass.remove(this.inlineMessageWrapper, 'hide');
             },
 
             _updateStyle: function(result){

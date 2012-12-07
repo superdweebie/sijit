@@ -183,6 +183,17 @@ function (
                     );
                 }
             },
+            
+            _setHelpBlockAttr: function(message) {
+                if (message){
+                    domConstruct.create(
+                        'span',
+                        {innerHTML: '<small>'+message+'</small>', 'class': 'help-block'},
+                        this.domNode,
+                        'last'
+                    );
+                }
+            },
 
             _setFocusNodeClassAttr: { node: "focusNode", type: "class" }
         }

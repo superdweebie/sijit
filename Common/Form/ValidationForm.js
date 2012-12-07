@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
     'dijit/_Widget',
-	'dijit/_TemplatedMixin',
+    'dijit/_TemplatedMixin',
     'Sds/Common/Form/_FormMixin',
     'Sds/Common/Form/_ValidationMixin',
     'dojo/text!./Template/ValidationForm.html'
