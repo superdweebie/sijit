@@ -257,12 +257,23 @@ function (
             },
 
             _getChildrenState: function(){
-                if (this._getState){
-                    return this._getState();
+                
+                if ( ! this._descendants){
+                    return '';                    
                 }
-                return '';
+                
+                var states = array.map(this._descendants, function(w){
+                    return w.get("state") || "";
+                });
+
+                return array.indexOf(states, "Error") >= 0 ? "Error" :
+                    array.indexOf(states, "Incomplete") >= 0 ? "Incomplete" : "";                            
             },
 
+            _getState: function(){
+                return this.state;
+            },
+            
             _updateMessages: function(){
                 var messages = this.get('messages');
 
