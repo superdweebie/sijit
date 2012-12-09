@@ -1,10 +1,11 @@
 define({ root:
 ({
-	alphaValidatorMessage: 'Must contain only the characters a-z, or A-Z.',
+    alphaValidatorMessage: 'Must contain only the characters a-z, or A-Z.',
     credentialValidatorLengthMessage: 'Must be between 6 and 40 characters long.',
     credentialValidatorAlphaMessage: 'Must contain at least one alpha character (a-z, A-Z)',
     credentialValidatorNumMessage: 'Must contain at least one numeric character (0-9)',
     currencyValidatorMessage: 'Must be currency format.',
+    creditCardValidatorMessage: 'Must be a valid credit card number.',
     dataTypeValidatorMessage: 'Value must be a ${requiredType}.',
     emailValidatorMessage: 'Must be a valid email address.',
     identifierArrayValidatorMessage: '${name} not valid. ${message}',
