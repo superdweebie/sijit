@@ -1,6 +1,7 @@
 define({ root:
 ({
     alphaValidatorMessage: 'Must contain only the characters a-z, or A-Z.',
+    cvvValidatorMessage: 'Must be a valid ccv card number.',    
     credentialValidatorLengthMessage: 'Must be between 6 and 40 characters long.',
     credentialValidatorAlphaMessage: 'Must contain at least one alpha character (a-z, A-Z)',
     credentialValidatorNumMessage: 'Must contain at least one numeric character (0-9)',

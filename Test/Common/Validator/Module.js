@@ -1,7 +1,9 @@
 define([
     'Sds/Test/Common/Validator/TestAlphaValidator',
     'Sds/Test/Common/Validator/TestBaseValidator',
+    'Sds/Test/Common/Validator/TestCvvValidator',    
     'Sds/Test/Common/Validator/TestCredentialValidator',
+    'Sds/Test/Common/Validator/TestCreditCardValidator',    
     'Sds/Test/Common/Validator/TestCurrencyValidator',
     'Sds/Test/Common/Validator/TestDatatypeValidator',
     'Sds/Test/Common/Validator/TestEmailAddressValidator',

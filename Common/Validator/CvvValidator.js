@@ -11,18 +11,20 @@ function(
     creditCard
 ){
     return declare(
-        'Sds/Common/Validator/CreditCardValidator',
+        'Sds/Common/Validator/CvvValidator',
         [BaseValidator],
         {
-                        
+            
+            type: 'mc',
+    
             _isValid: function(value){
 
                 var messages = [];
                 var result = true;
 
-                if ( ! creditCard.isValidCreditCardNumber(value)){
+                if ( ! creditCard.isValidCvv(value, this.type)){
                     result = false;
-                    messages.push(validatorMessages.creditCardValidatorMessage);
+                    messages.push(validatorMessages.cvvValidatorMessage);
                 }
 
                 return {result: result, messages: messages};
