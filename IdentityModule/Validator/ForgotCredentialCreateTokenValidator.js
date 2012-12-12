@@ -7,7 +7,7 @@ function(
     BaseValidator
 ){
     return declare(
-        'Sds/IdentityModule/Validator/ForgotCredentialPart1Validator',
+        'Sds/IdentityModule/Validator/ForgotCredentialCreateTokenValidator',
         [BaseValidator],
         {
             _isValid: function(value){

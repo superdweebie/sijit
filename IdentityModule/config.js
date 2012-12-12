@@ -1,30 +1,16 @@
 define([],
 function(){
     return {
-        mergeConfigs: [
-            'Sds/IdentityModule/DataModel/Identity'
-        ],
         moduleManager: {
-            'Sds/IdentityModule/IdentityController': {
-                proxyMethods: [
-                    'forgotCredential',
-                    'forgotCredentialPart1',
-                    'forgotCredentialPart2',
-                    'register'
-                ],
-                params: {
-                    identityRestUrl: '/identity/rest/'
-                },
+            'Sds/Store/storeManager': {
                 gets: {
-                    apiSmd: 'Sds/IdentityModule/Smd'
-                },
-                proxies: {
-                    forgotCredentialPart1View: 'Sds/IdentityModule/View/ForgotCredentialPart1',
-                    forgotCredentialPart2View: 'Sds/IdentityModule/View/ForgotCredentialPart2',
-                    registerView: 'Sds/IdentityModule/View/Register'
+                    stores: [
+                        'Sds/IdentityModule/DataModel/Identity/JsonRestStore',
+                        'Sds/IdentityModule/DataModel/ForgotCredentialToken/JsonRestStore'
+                    ]
                 }
             },
-            'Sds/IdentityModule/View/ForgotCredentialPart1': {
+            'Sds/IdentityModule/View/ForgotCredentialCreateToken': {
                 proxyMethods: [
                     'activate',
                     'deactivate',
@@ -34,7 +20,7 @@ function(){
                     'watch'
                 ]
             },
-            'Sds/IdentityModule/View/ForgotCredentialPart2': {
+            'Sds/IdentityModule/View/ForgotCredentialUpdateToken': {
                 proxyMethods: [
                     'activate',
                     'deactivate',
@@ -44,7 +30,7 @@ function(){
                     'watch'
                 ]
             },
-            'Sds/IdentityModule/View/Register': {
+            'Sds/IdentityModule/View/CreateIdentity': {
                 proxyMethods: [
                     'activate',
                     'deactivate',
@@ -53,11 +39,6 @@ function(){
                     'set',
                     'watch'
                 ]
-            },
-            'Sds/IdentityModule/Validator/IdentityNameAvailableValidator': {
-                gets: {
-                    apiSmd: 'Sds/IdentityModule/Smd'
-                }
             },
             'Sds/Router/router': {
                 params: {
@@ -65,14 +46,16 @@ function(){
                         identity: {
                             controller: 'Sds/IdentityModule/IdentityController',
                             methods: {
-                                register: {
-                                    enter: 'register',
-                                    leave: 'cancelRegister',
+                                identity: {
+                                    enter: 'identity',
+                                    leave: 'cancelIdentity',
                                     onEnterResolveRoute: -1
                                 },
-                                forgotCredential: 'forgotCredential',
-                                forgotCredentialPart1: 'forgotCredentialPart1',
-                                forgotCredentailPart2: 'forgotCredentialPart2'
+                                forgotCredentialToken: {
+                                    enter: 'forgotCredentialToken',
+                                    leave: 'cancelForgotCredentialToken',
+                                    onEnterResolveRoute: -1
+                                }
                             }
                         }
                     }

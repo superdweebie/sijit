@@ -2,20 +2,20 @@
 	"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<title>Functional Testing Sds/IdentityModule/RegisterView</title>
+		<title>Functional Testing Sds/IdentityModule/View/CreateIdentity</title>
 		<style type="text/css">
-            @import "../../../themes/bootstrap/css/bootstrap.css";
-            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
+            @import "../../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../../themes/bootstrap/css/bootstrap-responsive.css";
 		</style>
-        <script type="text/javascript" src="../../testconfig.js"></script>
-        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+        <script type="text/javascript" src="../../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			require([
                 'dojo/on',
                 'dojo/dom',
                 'dojo/dom-prop',
                 'dojo/_base/json',
-                'get!Sds/IdentityModule/View/Register',
+                'get!Sds/IdentityModule/View/CreateIdentity',
                 'dojo/domReady!',
                 'Sds/ConfigManager/ConfigReady!'
             ],
@@ -24,12 +24,12 @@
                 dom,
                 domProp,
                 json,
-                registerView
+                createIdentityView
             ){
                 domProp.set(dom.byId('formActivateButton'), 'disabled', false);
 
                 on(dom.byId('formActivateButton'), 'click', function(){
-                    registerView.activate().then(function(result){
+                    createIdentityView.activate().then(function(result){
                         dom.byId('ViewValue').innerHTML = json.toJson(result);
                     });
                 });
@@ -37,7 +37,7 @@
 		</script>
 	</head>
 	<body>
-        <h1>Functional Testing Sds/IdentityModule/RegisterView</h1>
+        <h1>Functional Testing Sds/IdentityModule/View/CreateIdentity</h1>
         <br />
         <button class="btn btn-primary btn-large" disabled="true" id="formActivateButton">Activate</button>
         <h3>ViewValue</h3>

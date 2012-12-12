@@ -1,5 +1,6 @@
 define([
-    'Sds/Test/IdentityModule/TestForgotCredentialPart1Validator',
     'Sds/Test/IdentityModule/TestCredentialMatchValidator',
+    'Sds/Test/IdentityModule/TestForgotCredentialCreateTokenValidator',
+    'Sds/Test/IdentityModule/TestIdentityController',
     'Sds/Test/IdentityModule/TestIdentityNameAvailableValidator'
 ], 1);
