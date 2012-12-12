@@ -1,13 +1,15 @@
 define ([
         'dojo/_base/config',
+        'dojo/_base/array',
         'dojo/Deferred',
-        'dojo/when',
+        'dojo/DeferredList',
         'Sds/Common/utils'
     ],
     function (
         dojoConfig,
+        array,
         Deferred,
-        when,
+        DeferredList,
         utils
     ) {
         // module:
@@ -43,21 +45,10 @@ define ([
 
             // Load required config modules
             if (mergeConfigs) {
-                var index;
-                var numToLoad =  mergeConfigs.length;
-                var loadConfigsDeferred = new Deferred();
-                var unmergedConfigs = [];
-                for (index = 0; index < numToLoad; index++) unmergedConfigs[index] = undefined;
 
-                for (index in mergeConfigs) {
-                    when(loadConfigModule(mergeConfigs[index], index), function(result){
-                        unmergedConfigs[result.moduleIndex] = result.configModule;
-                        --numToLoad;
-                        if (numToLoad == 0) {
-                            loadConfigsDeferred.resolve(unmergedConfigs);
-                        }
-                    });
-                }
+                var loadConfigsDeferred = new DeferredList(array.map(mergeConfigs, function(configMid){
+                    return loadConfigModule(configMid);
+                }));
 
                 // Merge config modules
                 loadConfigsDeferred.then(function(unmergedConfigs){
@@ -75,7 +66,7 @@ define ([
             return targetMerged;
         };
 
-        function loadConfigModule(moduleName, moduleIndex) {
+        function loadConfigModule(moduleName) {
             // summary:
             //		Load a single config module
 
@@ -84,16 +75,10 @@ define ([
             var resolveConfigModule = function(configModule){
                 if (configModule.mergeConfigs){
                     merge(configModule.mergeConfigs, configModule).then(function(configModule){
-                        deferredConfig.resolve({
-                            configModule: configModule,
-                            moduleIndex: moduleIndex
-                        });
+                        deferredConfig.resolve(configModule);
                     });
                 } else {
-                    deferredConfig.resolve({
-                        configModule: configModule,
-                        moduleIndex: moduleIndex
-                    });
+                    deferredConfig.resolve(configModule);
                 }
             };
 
@@ -110,7 +95,7 @@ define ([
             var mergedConfig = {};
 
             for (var index in unmergedConfigs) {
-                mergedConfig = utils.mixinDeep(mergedConfig, unmergedConfigs[index]);
+                mergedConfig = utils.mixinDeep(mergedConfig, unmergedConfigs[index][1]);
             }
             return mergedConfig;
         }

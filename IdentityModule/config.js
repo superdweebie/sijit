@@ -1,9 +1,6 @@
 define([],
 function(){
     return {
-        mergeConfigs: [
-            'Sds/IdentityModule/DataModel/Identity'
-        ],
         moduleManager: {
             'Sds/IdentityModule/IdentityController': {
                 params: {

@@ -7,6 +7,7 @@ define([
     'Sds/Common/Status',
     'dojo/Stateful',
     'Sds/IdentityModule/DataModel/Identity',
+    'Sds/IdentityModule/DataModel/Identity/JsonRestStore',
     'Sds/IdentityModule/DataModel/Identity/ModelValidator',
     'Sds/IdentityModule/Exception/InvalidArgumentException',
     'proxy!Sds/IdentityModule/View/ForgotCredentialCreateToken',
@@ -23,6 +24,7 @@ function(
     Status,
     Stateful,
     Identity,
+    IdentityStore,
     IdentityValidator,
     InvalidArgumentException,
     forgotCredentialCreateTokenView,
@@ -53,10 +55,7 @@ function(
 
             _identityStoreGetter: function(){
                 if (! this.identityStore){
-                    this.identityStore = new JsonRest({
-                        idProperty: 'identityName',
-                        target: this.identityRestUrl
-                    });
+                    this.identityStore = new IdentityStore
                 }
                 return this.identityStore;
             },

@@ -6,7 +6,7 @@ dojoConfig = {
     async: true,
     aliases: [
         ['get', 'Sds/ModuleManager/Shared/get'],
-        ['proxy', 'Sds/ModuleManager/Shared/proxy'],
+        ['proxy', 'Sds/ModuleManager/Shared/proxy']
     ],
     mergeConfigs: [
         'Sds/Common/Validator/config',

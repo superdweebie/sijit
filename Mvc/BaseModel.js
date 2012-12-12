@@ -3,14 +3,14 @@ define([
     'dojo/Deferred',
     'dojo/when',
     'dojo/Stateful',
-    'get!Sds/Mvc/ModelStore'
+    'get!Sds/Store/storeManager'
 ],
 function(
     declare,
     Deferred,
     when,
     Stateful,
-    modelStore
+    storeManager
 ){
     // module:
     //		Sds/Mvc/BaseModel
@@ -42,7 +42,7 @@ function(
 
                 //the value is a reference, so load it
                 var valueDeferred = new Deferred;
-                when(modelStore.get(value), function(resolvedValue){
+                when(storeManager.get(value['$ref']), function(resolvedValue){
                     valueDeferred.resolve(resolvedValue);
                 });
                 return valueDeferred;
