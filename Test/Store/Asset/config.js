@@ -8,7 +8,7 @@ define([
     return {
         moduleManager: {
             'Sds/Store/storeManager': {
-                params: {
+                gets: {
                     stores: [
                         new Memory({
                             idProperty: 'ref',

@@ -18,14 +18,36 @@
                 'dojo/when',
                 'get!Sds/IdentityModule/IdentityController',
                 'get!Sds/IdentityModule/View/CreateIdentity',
+                'get!Sds/Store/storeManager',
                 'dojo/domReady!'
             ],
             function(
                 doh,
                 when,
                 identityController,
-                mockCreateIdentityView
+                mockCreateIdentityView,
+                storeManager
             ){
+
+                //Modify the prototype for testing so the store doesn't send a real xhr request
+                var storeIdentity;
+                var proto = storeManager.getStore('Identity').__proto__;
+                while (true){
+                    if (proto.declaredClass == 'dojo.store.JsonRest'){
+                        proto.get = function(id){
+                            if (id == 'lucy'){
+                                return storeIdentity;
+                            } else {
+                                return;
+                            }
+                        }
+                        proto.put = function(data){
+                            storeIdentity = data;
+                        }
+                        break;
+                    }
+                    proto = proto.__proto__
+                }
 
                 // Define and register the tests
                 doh.register([
@@ -45,9 +67,11 @@
                         mockCreateIdentityView.value = identity;
 
                         when(identityController.register(), function(){
-                            var identityStore = identityController.get('identityStore');
+                            var identityStore = storeManager.getStore('Identity');
 
-                            doh.assertEqual(identity, identityStore.get('lucy'));
+                            var registeredIdentity = identityStore.get('lucy');
+                            doh.assertEqual(identity.firstname, registeredIdentity.firstname);
+                            doh.assertEqual(identity.lastname, registeredIdentity.lastname);
                             testResult.callback(true);
                         });
 
