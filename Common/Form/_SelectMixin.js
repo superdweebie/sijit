@@ -141,7 +141,7 @@ function (
 
             removeOption: function(value){
                 array.forEach(this.select.options, function(option){
-                    if (option.value == value){
+                    if (option && option.value == value){
                         domConstruct.destroy(option);
                     }
                 })
