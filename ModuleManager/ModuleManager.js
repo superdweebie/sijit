@@ -256,7 +256,7 @@ define([
                     //     protected
 
                     var object = this._getCached(identifier);
-                    if (object){
+                    if (object && ! utils.isDeferred(object)){
                         return object;
                     }
 

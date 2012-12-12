@@ -5,10 +5,13 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'Sds/Mvc/BaseView',
-    'dojo/text!../Template/ForgotCredentialPart1.html',
+    'dojo/text!../Template/CreateIdentity.html',
     'Sds/Common/ValidationDialog',
-    'get!Sds/IdentityModule/DataModel/Identity/IdentityName/Input',
-    'get!Sds/IdentityModule/DataModel/Identity/Email/Input'
+    'Sds/IdentityModule/DataModel/Identity/IdentityName/Input',
+    'Sds/IdentityModule/DataModel/Identity/Credential/Input',
+    'Sds/IdentityModule/DataModel/Identity/Firstname/Input',
+    'Sds/IdentityModule/DataModel/Identity/Lastname/Input',
+    'Sds/IdentityModule/DataModel/Identity/Email/Input'
 ],
 function(
     declare,
@@ -20,7 +23,7 @@ function(
     template
 ){
     return declare(
-        'Sds/IdentityModule/View/ForgotCredentialPart1',
+        'Sds/IdentityModule/View/CreateIdentity',
         [
             Widget,
             TemplatedMixin,
@@ -59,7 +62,9 @@ function(
             },
 
             _getValueAttr: function(){
-                return this.dialogNode.get('value').value;
+                var value = this.dialogNode.get('value').value;
+                value.credential = value.credential[0];
+                return value;
             }
         }
     );

@@ -14,9 +14,7 @@
 			require([
                 'dojo/parser',
                 'dojo/dom',
-                'dojo/on',
                 'dijit/registry',
-                'Sds/Common/Form/TextBox',
                 'Sds/Common/Form/NumberTextBox',
                 'Sds/Common/Form/DateTextBox',
                 'Sds/Common/Form/ValidationTextBox',
@@ -25,18 +23,15 @@
                 'Sds/Common/Form/ExpandingTextarea',
                 'Sds/Common/Form/ValidationExpandingTextarea',
                 'Sds/Common/Form/Checkbox',
+                'Sds/Common/Form/RadioButton',
                 'dojo/domReady!'
             ],
             function(
                 parser,
                 dom,
-                on,
                 registry
             ){
                 parser.parse().then(function(){
-                    on(registry.byId('textBox8').domNode, 'appendage-click', function(event){
-                        alert('Clicked ' + event.button);
-                    });
 
                     dom.byId('numberTextBox1Value').innerHTML = registry.byId('numberTextBox1').get('value');
                     registry.byId('numberTextBox1').watch('value', function(p, o, newValue){
@@ -61,82 +56,10 @@
         <br />
         <form class="form-horizontal">
 
-            <h3>Sds/Common/TextBox</h3>
-
-            <p>With placeholder</p>
-            <input data-dojo-type="Sds/Common/Form/TextBox"
-                type="text"
-                data-dojo-props="placeholder: 'Enter your name'"
-                id="textBox1"
-            />
-
-            <p>With label</p>
-            <input data-dojo-type="Sds/Common/Form/TextBox"
-                type="text"
-                data-dojo-props="label: 'Name'"
-                id="textBox2"
-            />
-
-            <p>With label and placeholder</p>
-            <input data-dojo-type="Sds/Common/Form/TextBox"
-                type="text"
-                data-dojo-props="label: 'Name', placeholder: 'Enter your name'"
-                id="textBox3"
-            />
-
-            <p>With label and value</p>
-            <input data-dojo-type="Sds/Common/Form/TextBox"
-                type="text"
-                value="Toby"
-                data-dojo-props="label: 'Name'"
-                id="textBox4"
-            />
-
-            <p>With label and value and span2 css class</p>
-            <input data-dojo-type="Sds/Common/Form/TextBox"
-                type="text"
-                value="Toby"
-                data-dojo-props="label: 'Name', focusNodeClass: ['span2']"
-                id="textBox5"
-            />
-
-            <p>Appendage text shorthand</p>
-            <input data-dojo-type="Sds/Common/Form/TextBox"
-                type="text"
-                value="Toby"
-                data-dojo-props="label: 'Name', prepend: ['pre1', 'pre2'], append: ['app1', 'app2']"
-                id="textBox6"
-            />
-
-            <p>Appendage text longhand</p>
-            <input data-dojo-type="Sds/Common/Form/TextBox"
-                type="text"
-                value="Toby"
-                data-dojo-props="
-                    label: 'Name',
-                    prepend: [{type: 'text', innerHTML: 'pre1'}, {type: 'text', innerHTML: 'pre2'}],
-                    append: [{type: 'text', innerHTML: 'app1'}, {type: 'text', innerHTML: 'app2'}]
-                "
-                id="textBox7"
-            />
-
-            <p>Appendage button (clickable)</p>
-            <input data-dojo-type="Sds/Common/Form/TextBox"
-                type="text"
-                value="Toby"
-                data-dojo-props="
-                    label: 'Name',
-                    prepend: [{type: 'button', innerHTML: 'pre1', clickMixin: {button: 'pre1'}}],
-                    append: [{type: 'button', innerHTML: 'app1', clickMixin: {button: 'app1'}}]
-                "
-                id="textBox8"
-            />
-
             <h3>Sds/Common/ValidationTextBox</h3>
 
             <p>Valid</p>
             <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                type="text"
                 value="Toby"
                 data-dojo-props="
                     label:'Name',
@@ -147,7 +70,6 @@
 
             <p>Invalid auto inline</p>
             <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                type="text"
                 value="Not Toby"
                 data-dojo-props="
                     label:'Name',
@@ -158,7 +80,6 @@
 
             <p>Invalid force inline</p>
             <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                type="text"
                 value=""
                 data-dojo-props="
                     label:'Name',
@@ -170,7 +91,6 @@
 
             <p>Invalid auto block</p>
             <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                type="text"
                 value=""
                 data-dojo-props="
                     label:'Name',
@@ -181,7 +101,6 @@
 
             <p>Invalid force block</p>
             <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                type="text"
                 value="Not Toby"
                 data-dojo-props="
                     label:'Name',
@@ -193,7 +112,6 @@
 
             <p>Valid with ValidatorGroup</p>
             <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                type="text"
                 value="Toby"
                 data-dojo-props="
                     label:'Name',
@@ -207,7 +125,6 @@
 
             <p>Super test Invalid with multiple Deferred Validators</p>
             <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                type="text"
                 value="not awesome"
                 data-dojo-props="
                     label:'Sijit is:',
@@ -229,7 +146,6 @@
 
             <p>No Validator Set</p>
             <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                type="text"
                 value=":-)"
                 data-dojo-props="
                     label:'Name'
@@ -241,7 +157,6 @@
 
             <p>Number Box</p>
             <input data-dojo-type="Sds/Common/Form/NumberTextBox"
-                type="text"
                 value=10000000
                 data-dojo-props="
                     label:'Number'
@@ -254,7 +169,6 @@
 
             <p>Date Box</p>
             <input data-dojo-type="Sds/Common/Form/DateTextBox"
-                type="text"
                 data-dojo-props="
                     label:'Date'
                 "
@@ -264,7 +178,6 @@
 
             <p>Date Box with validator (must be greater than today)</p>
             <input data-dojo-type="Sds/Common/Form/DateTextBox"
-                type="text"
                 data-dojo-props="
                     label:'Date',
                     validator: 'DateInequalityValidator'
@@ -276,7 +189,6 @@
             <h3>Sds/Common/Form/Textarea</h3>
             <p>Default</p>
             <textarea data-dojo-type="Sds/Common/Form/Textarea"
-                type="text"
                 data-dojo-props="
                     label:'About'
                 "
@@ -287,7 +199,6 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 
             <p>15 rows</p>
             <textarea data-dojo-type="Sds/Common/Form/Textarea"
-                type="text"
                 rows="15"
                 data-dojo-props="
                     label:'About'
@@ -301,7 +212,6 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 
             <p>Valid</p>
             <textarea data-dojo-type="Sds/Common/Form/ValidationTextarea"
-                type="text"
                 rows="10"
                 data-dojo-props="
                     label:'About',
@@ -314,7 +224,6 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 
             <p>Invalid</p>
             <textarea data-dojo-type="Sds/Common/Form/ValidationTextarea"
-                type="text"
                 rows="10"
                 data-dojo-props="
                     label:'About',
@@ -328,7 +237,6 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
             <h3>Sds/Common/Form/ExpandingTextarea</h3>
             <p>Default (does auto resize)</p>
             <textarea data-dojo-type="Sds/Common/Form/ExpandingTextarea"
-                type="text"
                 data-dojo-props="
                     label:'About'
                 "
@@ -341,7 +249,6 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 
             <p>Valid</p>
             <textarea data-dojo-type="Sds/Common/Form/ValidationExpandingTextarea"
-                type="text"
                 data-dojo-props="
                     label:'About',
                     validator: [
@@ -353,7 +260,6 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
 
             <p>Invalid</p>
             <textarea data-dojo-type="Sds/Common/Form/ValidationExpandingTextarea"
-                type="text"
                 data-dojo-props="
                     label:'About',
                     validator: [
@@ -363,7 +269,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
                 id="validationExpandingTextarea2"
              >12345</textarea>
 
-  
+
             <h3>Sds/Common/Form/Checkbox</h3>
 
             <input data-dojo-type="Sds/Common/Form/CheckBox"
@@ -372,9 +278,8 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
                     checked: true
                 "
                 id="checkbox1"
-                type="checkbox"
              />
-            
+
             <h3>Sds/Common/Form/RadioButton</h3>
 
             <input data-dojo-type="Sds/Common/Form/RadioButton"
@@ -384,7 +289,6 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
                     checked: true
                 "
                 id="radio1"
-                type="radio"
              />
             <input data-dojo-type="Sds/Common/Form/RadioButton"
                 data-dojo-props="
@@ -393,7 +297,6 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
                     checked: false
                 "
                 id="radio2"
-                type="radio"
              />
         </form>
 	</body>
