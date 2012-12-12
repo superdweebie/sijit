@@ -2,10 +2,12 @@ define([],
 function(){
     return {
         moduleManager: {
-            'Sds/IdentityModule/IdentityController': {
-                params: {
-                    identityRestUrl: 'http://mysite.com/identity/',
-                    forgotCredentialTokenRestUrl: 'http://mysite.com/forgotCredentialToken'
+            'Sds/Store/storeManager': {
+                gets: {
+                    stores: [
+                        'Sds/IdentityModule/DataModel/Identity/JsonRestStore',
+                        'Sds/IdentityModule/DataModel/ForgotCredentialToken/JsonRestStore'
+                    ]
                 }
             },
             'Sds/IdentityModule/View/ForgotCredentialCreateToken': {
@@ -37,11 +39,6 @@ function(){
                     'set',
                     'watch'
                 ]
-            },
-            'Sds/IdentityModule/Validator/IdentityNameAvailableValidator': {
-                params: {
-                    restUrl: 'http://mysite.com/identity/'
-                }
             },
             'Sds/Router/router': {
                 params: {

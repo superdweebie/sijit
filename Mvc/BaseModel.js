@@ -3,7 +3,7 @@ define([
     'dojo/Deferred',
     'dojo/when',
     'dojo/Stateful',
-    'get!Sds/Store/storeManager'
+    'proxy!Sds/Store/storeManager'
 ],
 function(
     declare,

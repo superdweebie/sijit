@@ -3,9 +3,9 @@ define([
     'dojo/_base/lang',
     'dojo/Deferred',
     'dojo/when',
-    'Sds/Store/JsonRest',
     'Sds/Common/Status',
     'dojo/Stateful',
+    'get!Sds/Store/storeManager',
     'Sds/IdentityModule/DataModel/Identity',
     'Sds/IdentityModule/DataModel/Identity/JsonRestStore',
     'Sds/IdentityModule/DataModel/Identity/ModelValidator',
@@ -20,9 +20,9 @@ function(
     lang,
     Deferred,
     when,
-    JsonRest,
     Status,
     Stateful,
+    storeManager,
     Identity,
     IdentityStore,
     IdentityValidator,
@@ -40,32 +40,9 @@ function(
             // summary:
             //    Handles Identity CRUD, registration and password recovery
 
-
-            identityRestUrl: undefined,
-
-            identityStore: undefined,
-
-            forgotCredentialTokenRestUrl: undefined,
-
-            forgotCredentialTokenStore: undefined,
-
             //status: Sds/Common/Status
             //    An object indicating the current status
             status: undefined,
-
-            _identityStoreGetter: function(){
-                if (! this.identityStore){
-                    this.identityStore = new IdentityStore
-                }
-                return this.identityStore;
-            },
-
-            _forgotCredentialTokenStoreGetter: function(){
-                if (! this.forgotCredentialTokenStore){
-                    this.forgotCredentialTokenStore = new JsonRest({target: this.forgotCredentialTokenRestUrl});
-                }
-                return this.forgotCredentialTokenStore;
-            },
 
             forgotCredentialPart1: function(){
                 // summary:
@@ -155,7 +132,7 @@ function(
                     this.set('status', new Status('sending registration request', Status.icon.SPINNER));
 
                     when(
-                        this.get('identityStore').put(result.value),
+                        storeManager.getStore('Identity').put(result.value),
                         lang.hitch(this, '_registerComplete'),
                         lang.hitch(this, '_registerException')
                     );

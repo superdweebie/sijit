@@ -4,7 +4,7 @@ define([
     'dojo/when',
     'dojo/i18n!Sds/nls/identityModule',
     'Sds/Common/Validator/BaseValidator',
-    'get!Sds/IdentityModule/IdentityController'
+    'get!Sds/Store/storeManager'
 ],
 function(
     declare,
@@ -12,7 +12,7 @@ function(
     when,
     il8n,
     BaseValidator,
-    identityController
+    storeManager
 ){
     return declare(
         'Sds/IdentityModule/Validator/IdentityNameAvailableValidator',
@@ -23,7 +23,7 @@ function(
 
                 var resultDeferred = new Deferred;
 
-                var identityStore = identityController.get('identityStore');
+                var identityStore = storeManager.getStore('Identity');
                 when(identityStore.get(value), function(identity){
                     if (identity == undefined){
                         //Store didn't return a value, so that username is probably available (it will be checked again server side)

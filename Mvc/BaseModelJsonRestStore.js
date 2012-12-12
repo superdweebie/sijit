@@ -15,10 +15,17 @@ function(
         [JsonRest],
         {
 
+            name: undefined,
+
             model: undefined,
 
             get: function(id){
-                return declare.safeMixin(new this.model, this.inherited(arguments));
+                var result = this.inherited(arguments);
+                if (result){
+                    return declare.safeMixin(new this.model, result);
+                } else {
+                    return null;
+                }
             },
 
             query: function(query, options){

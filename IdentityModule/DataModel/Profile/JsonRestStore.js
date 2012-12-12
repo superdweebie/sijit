@@ -2,28 +2,28 @@
 define([
     'dojo/_base/declare',
     'Sds/Mvc/BaseModelJsonRestStore',
-    'Sds/IdentityModule/DataModel/Identity'
+    'Sds/IdentityModule/DataModel/Profile'
 ],
 function(
     declare,
     BaseJsonRestStore,
-    Identity
+    Profile
 ){
     // Will return dojo object store to manage server model
     // instances with a json rest api.
 
     return declare(
-        'Sds/IdentityModule/DataModel/Identity/JsonRestStore',
+        'Sds/IdentityModule/DataModel/Profile/JsonRestStore',
         [BaseJsonRestStore],
         {
 
-            name: 'Identity',
+            name: 'Profile',
 
-            idProperty: 'identityName',
+            idProperty: '',
 
-            target: 'http://localhost/ZendSkeletonApplication/IdentityModule/Identity/',
+            target: 'http://localhost/ZendSkeletonApplication/IdentityModule/Profile/',
 
-            model: Identity
+            model: Profile
         }
     );
 });

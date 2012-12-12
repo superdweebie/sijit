@@ -12,6 +12,7 @@ dojoConfig = {
         'Sds/Common/Validator/config',
         'Sds/ExceptionModule/config',
         'Sds/Router/config',
+        'Sds/Store/config',
         'Sds/Mongo/config',
         'Sds/IdentityModule/config',
         'Sds/AuthenticationModule/config',

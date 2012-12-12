@@ -16,12 +16,33 @@
 			require([
                 'doh/main',
                 'Sds/IdentityModule/Validator/IdentityNameAvailableValidator',
+                'get!Sds/Store/storeManager',
                 'dojo/domReady!'
             ],
             function(
                 doh,
-                IdentityNameAvailableValidator
+                IdentityNameAvailableValidator,
+                storeManager
             ){
+
+                //Modify the prototype for testing so the store doesn't send a real xhr request
+                var proto = storeManager.getStore('Identity').__proto__;
+                while (true){
+                    if (proto.declaredClass == 'dojo.store.JsonRest'){
+                        proto.get = function(id){
+                            if (id == 'toby'){
+                                return {
+                                    identityName: 'toby',
+                                    firstname: 'Toby'
+                                }
+                            } else {
+                                return;
+                            }
+                        }
+                        break;
+                    }
+                    proto = proto.__proto__
+                }
 
                 // Define and register the tests
 
