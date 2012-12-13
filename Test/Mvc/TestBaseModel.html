@@ -4,18 +4,23 @@
 	<head>
 		<title>Testing Sds/Mvc/BaseModel</title>
         <script type="text/javascript" src="../testconfig.js"></script>
+        <script type="text/javascript">
+            dojoConfig.mergeConfigs.push('Sds/Test/Mvc/Asset/config');
+        </script>
         <script type="text/javascript" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			require([
                 'doh/main',
-                'dojo/_base/json',
+                'dojo/json',
                 'Sds/Mvc/BaseModel',
+                'Sds/Test/Mvc/Asset/Simple',
                 'dojo/domReady!'
             ],
             function(
                 doh,
                 json,
-                BaseModel
+                BaseModel,
+                Simple
             ){
                 doh.register("Sds/Test/Mvc/TestBaseModel", [
 
@@ -27,9 +32,26 @@
                             other: 'other'
                         });
 
-                        var jsonModel = json.toJson(model);
+                        var jsonModel = json.stringify(model);
 
                         doh.assertEqual('{"username":"toby","password":"password1"}', jsonModel);
+                    },
+
+                    function getRefTest(doh){
+
+                        var deferredTest = new doh.Deferred;
+
+                        var parent = new Simple({
+                            name: 'liz',
+                            child: {'$ref': 'Simple/lucy'}
+                        });
+
+                        parent.get('child').then(function(ref){
+                            doh.assertEqual('lucy', ref.name);
+                            deferredTest.callback(true);
+                        });
+
+                        return deferredTest;
                     }
                 ]);
 

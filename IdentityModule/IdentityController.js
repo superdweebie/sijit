@@ -2,23 +2,34 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/Deferred',
-    'dojo/_base/json',
+    'dojo/when',
     'Sds/Common/Status',
-    'dojox/rpc/Service',
     'dojo/Stateful',
-    'get!Sds/IdentityModule/DataModel/Identity',
-    'Sds/ExceptionModule/throwEx',
-    'dojox/rpc/JsonRPC'
+    'get!Sds/Store/storeManager',
+    'Sds/IdentityModule/DataModel/Identity',
+    'Sds/IdentityModule/DataModel/Identity/JsonRestStore',
+    'Sds/IdentityModule/DataModel/Identity/ModelValidator',
+    'Sds/IdentityModule/Exception/InvalidArgumentException',
+    'proxy!Sds/IdentityModule/View/ForgotCredentialCreateToken',
+    'proxy!Sds/IdentityModule/View/ForgotCredentialUpdateToken',
+    'proxy!Sds/IdentityModule/View/CreateIdentity',
+    'Sds/ExceptionModule/throwEx'
 ],
 function(
     declare,
     lang,
     Deferred,
-    json,
+    when,
     Status,
-    RpcService,
     Stateful,
+    storeManager,
     Identity,
+    IdentityStore,
+    IdentityValidator,
+    InvalidArgumentException,
+    forgotCredentialCreateTokenView,
+    forgotCredentialUpdateTokenView,
+    createIdentityView,
     throwEx
 ){
     return declare
@@ -29,43 +40,9 @@ function(
             // summary:
             //    Handles Identity CRUD, registration and password recovery
 
-            identityStoreUrl: undefined,
-
-            identityStore: undefined,
-
-            //apiSmd: object | string
-            //    May be an SMD object, or a url that will return an SMD.
-            //    The SMD must define a json rpc interface to register and
-            //    recover password
-            //    from a server.
-            apiSmd: undefined,
-
-            //api: object
-            //    Is the api generated from the apiSmd
-            api: undefined,
-
-            // forgotCredentialPart1View: Sds/IdentityModule/View/ForgotCredentialPart1View | Sds/ModuleManager/Proxy
-            //     A recover password view part 1, or proxy to a recover password view.
-            forgotCredentialPart1View: undefined,
-
-            // forgotCredentialPart2View: Sds/IdentityModule/View/ForgotCredentialPart2View | Sds/ModuleManager/Proxy
-            //     A recover password view part 2, or proxy to a recover password view.
-            forgotCredentialPart2View: undefined,
-
-            // registerView: Sds/IdentityModule/RegisterView | Sds/ModuleManager/Proxy
-            //     A register view, or proxy to a register view.
-            registerView: undefined,
-
             //status: Sds/Common/Status
             //    An object indicating the current status
             status: undefined,
-
-            getIdentityStore: function(){
-                if ( ! this.identityStore) {
-                    this.identityStore = new JsonRest({target: this.identityStoreUrl});
-                }
-                return this.identityStore;
-            },
 
             forgotCredentialPart1: function(){
                 // summary:
@@ -136,19 +113,28 @@ function(
 
                 this._registerDeferred = new Deferred();
 
-                this.registerView.activate().then(lang.hitch(this, function(result){
+                createIdentityView.activate().then(lang.hitch(this, function(result){
                     // Do nothing if form not valid.
                     if (result.state != ''){
                         this._registerDeferred.resolve();
                         return;
                     }
 
+                    // Check that the identity we are about to send to the server is valid.
+                    var identityValidator = new IdentityValidator;
+                    var validatorResult = identityValidator.isValid(result.value);
+                    if ( ! validatorResult.result){
+                        this._registerException(new InvalidArgumentException(validatorResult.messages.join(' ')));
+                        return;
+                    }
+
                     // Update status
                     this.set('status', new Status('sending registration request', Status.icon.SPINNER));
 
-                    this.get('api').register(new Identity(result.value)).then(
+                    when(
+                        storeManager.getStore('Identity').put(result.value),
                         lang.hitch(this, '_registerComplete'),
-                        lang.hitch(this, '_handleRegisterException')
+                        lang.hitch(this, '_registerException')
                     );
                 }));
 
@@ -157,18 +143,6 @@ function(
 
             cancelRegister: function(){
                 this._registerView.deactivate();
-            },
-
-            _apiGetter: function(){
-                // summary:
-                //		Get the json rpc api
-                // returns: object
-                //      Returns a json rpc api that can be used to call the server.
-
-                if ( ! this.api) {
-                    this.api = new RpcService(this.apiSmd);
-                }
-                return this.api;
             },
 
             _forgotCredentialPart1Complete: function(data)
@@ -189,37 +163,20 @@ function(
                 this._registerDeferred.resolve(true);
             },
 
-            _handleException: function(exception){
-                // summary:
-                //		Handles xhr exceptions.
-
+            _registerException: function(exception){
                 throwEx(exception).then(lang.hitch(this, function(standardizedException){
+                    this._handleException(standardizedException);
 
-                    // Update status
-                    this.set('status', new Status(standardizedException.message, Status.icon.ERROR, 5000));
-
-                    if (this._forgotCredentialPart1Deferred && (! this._forgotCredentialPart1Deferred.isFulfilled())){
-                        this._forgotCredentialPart1Deferred.reject(exception);
-                    }
-                    if (this._forgotCredentialPart2Deferred && (! this._forgotCredentialPart2Deferred.isFulfilled())){
-                        this._forgotCredentialPart2Deferred.reject(exception);
+                    if (this._registerDeferred && (! this._registerDeferred.isFulfilled())){
+                        this._registerDeferred.reject(standardizedException);
                     }
                 }));
             },
 
-            _handleRegisterException: function(exception){
-                // summary:
-                //		Handles xhr exceptions.
+            _handleException: function(exception){
 
-                throwEx(exception).then(lang.hitch(this, function(standardizedException){
-
-                    // Update status
-                    this.set('status', new Status(standardizedException.message, Status.icon.ERROR, 5000));
-
-                    standardizedException.handle.then(lang.hitch(this, function(){
-                        this.register();
-                    }));
-                }));
+                // Update status
+                this.set('status', new Status(exception.message, Status.icon.ERROR, 5000));
             }
         }
     );

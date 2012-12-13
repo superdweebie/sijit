@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Testing Sds/Store/storeManager</title>
+        <script type="text/javascript" src="../testconfig.js"></script>
+        <script type="text/javascript">
+            dojoConfig.mergeConfigs.push('Sds/Test/Store/Asset/config');
+        </script>
+        <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			require([
+                'doh/main',
+                'Sds/Test/Store/Asset/Simple',
+                'get!Sds/Store/storeManager',
+                'dojo/domReady!'
+            ],
+            function(
+                doh,
+                Simple,
+                storeManager
+            ){
+                doh.register("Sds/Test/Store/TestStoreManager", [
+
+                    function getStoreFromName(doh){
+
+                        var store = storeManager.getStore('statesStore');
+
+                        doh.assertTrue(store);
+                        doh.assertEqual('Tennessee', store.get('TN').name);
+                    },
+
+                    function getStoreFromModel(doh){
+
+                        var store = storeManager.getStore(Simple);
+
+                        doh.assertTrue(store);
+                        doh.assertEqual('Tennessee', store.get('TN').name);
+                    },
+
+
+                    function getStoreFromTarget(doh){
+
+                        var store = storeManager.getStore('TestTarget/');
+
+                        doh.assertTrue(store);
+                        doh.assertEqual('Tennessee', store.get('TN').name);
+                    },
+
+                    function getStoreFail(doh){
+
+                        var store = storeManager.getStore('Not store');
+
+                        doh.assertFalse(store);
+                    },
+
+                    function getObject(doh){
+
+                        var state = storeManager.get('TestTarget/TN');
+
+                        doh.assertTrue(state);
+                        doh.assertEqual('Tennessee', state.name);
+                    },
+                ]);
+
+                doh.runOnLoad();
+            });
+		</script>
+	</head>
+	<body>
+        <h1>Testing Sds/Store/storeManager</h1>
+	</body>
+</html>

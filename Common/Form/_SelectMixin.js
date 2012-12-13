@@ -59,7 +59,7 @@ function (
                         }))
                     }
                 }
-                
+
                 if (this.source){
                     this.set('value', source.value);
                 }
@@ -67,11 +67,11 @@ function (
 
             startup: function(){
                 this.inherited(arguments);
-                on(this.select, 'change', lang.hitch(this, function(e){                   
+                on(this.select, 'change', lang.hitch(this, function(e){
                     this.set('value', e.target.value);
                 }));
             },
-            
+
             _setStoreLabelAttrAttr: function(storeLabelAttr){
                 this.storeLabelAttr = storeLabelAttr;
                 this._updateOptionsFromStore();
@@ -140,17 +140,16 @@ function (
             },
 
             removeOption: function(value){
-                for (var index in this.select.options){
-                    if (this.select.options[index].value == value){
-                        domConstruct.destroy(this.select.options[index]);
-                        break;
+                array.forEach(this.select.options, function(option){
+                    if (option && option.value == value){
+                        domConstruct.destroy(option);
                     }
-                }
+                })
             },
 
             _setValueAttr: function(value){
                 this.select.value = value;
-                this.inherited(arguments);                
+                this.inherited(arguments);
             },
 
             _getValueAttr: function(){
