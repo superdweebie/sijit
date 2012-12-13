@@ -12,22 +12,13 @@
         <h3 data-dojo-attach-point="titleNode"></h3>
     </div>
     <div class="modal-body">
-        <div class="control-group" data-dojo-attach-point="formValidatorMessage">
-            <span
-                class="help-inline"
-                data-dojo-attach-point="inlineMessageWrapper"
-            >
-                <small data-dojo-attach-point="inlineMessage"></small>
-            </span>
-            <span
-                class="help-block"
-                data-dojo-attach-point="blockMessageWrapper"
-            >
-                <small data-dojo-attach-point="blockMessage"></small>
-            </span>
+        <div data-dojo-attach-point='containerNode' class="control-group">
+            <small 
+                data-dojo-attach-point="validationMessage" 
+                data-dojo-type="Sds/Common/Form/ValidationMessage"
+                data-dojo-props="messagePosition: '${messagePosition}'"
+            ></small>                    
         </div>
-        <div data-dojo-attach-point='containerNode'>
-    </div>
     </div>
     <div class="modal-footer">
         <button class="btn" data-dojo-attach-event="ondijitclick: onCancelClick">Close</button>

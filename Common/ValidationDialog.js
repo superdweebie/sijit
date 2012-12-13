@@ -3,15 +3,18 @@ define([
     'dojo/_base/lang',
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
+    'dijit/_WidgetsInTemplateMixin',    
     'Sds/Common/_DialogMixin',
     'Sds/Common/Form/_ValidationMixin',
-    'dojo/text!./Template/ValidationDialog.html'
+    'dojo/text!./Template/ValidationDialog.html',
+    'Sds/Common/Form/ValidationMessage'    
 ],
 function (
     declare,
     lang,
     Widget,
     TemplatedMixin,
+    WidgetsInTemplateMixin,
     DialogMixin,
     ValidationMixin,
     template
@@ -32,12 +35,18 @@ function (
 
     var Dialog = declare(
         'Sds/Common/ValidationDialog',
-        [Widget, TemplatedMixin, DialogMixin, ValidationMixin],
+        [Widget, TemplatedMixin, WidgetsInTemplateMixin, DialogMixin, ValidationMixin],
         {
             // templateString: string
             //      The widget template. To override this, use the paths directive on the AMD loader.
             templateString: template,
 
+            // message: String
+            //		Current error/prompt message.
+            message: '',
+
+            messagePosition: 'auto',
+            
             buttons: buttons,
 
             disableStateButtons: ['ok'],

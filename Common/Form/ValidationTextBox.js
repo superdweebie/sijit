@@ -29,12 +29,7 @@ function (
             //		Current error/prompt message.
             message: '',
 
-            messagePosition: 'auto',
-            
-            postCreate: function(){
-                this._messageStyleNode = this.domNode;
-                this.inherited(arguments);
-            }
+            messagePosition: 'auto'          
         }
     );
 });

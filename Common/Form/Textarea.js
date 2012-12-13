@@ -16,7 +16,12 @@ function (
         'Sds/Common/Form/Textarea',
         [Widget, TemplatedMixin, TextBoxMixin],
         {
-            templateString: template
+            templateString: template,
+            
+            postCreate: function(){
+                this.set('value', this.textbox.value);
+                this.inherited(arguments);
+            }            
         }
     );
 });

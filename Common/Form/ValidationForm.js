@@ -2,28 +2,36 @@ define([
     'dojo/_base/declare',
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
+    'dijit/_WidgetsInTemplateMixin',    
     'Sds/Common/Form/_FormMixin',
     'Sds/Common/Form/_ValidationMixin',
-    'dojo/text!./Template/ValidationForm.html'
+    'dojo/text!./Template/ValidationForm.html',
+    'Sds/Common/Form/ValidationMessage'    
 ],
 function (
     declare,
     Widget,
     TemplatedMixin,
+    WidgetsInTemplateMixin,    
     FormMixin,
     ValidationMixin,
     template
 ){
     return declare(
         'Sds/Common/Form/ValidationForm',
-        [Widget, TemplatedMixin, FormMixin, ValidationMixin],
+        [Widget, TemplatedMixin, WidgetsInTemplateMixin, FormMixin, ValidationMixin],
         {
             templateString: template,
 
+            // message: String
+            //		Current error/prompt message.
+            message: '',
+
+            messagePosition: 'auto',
+            
             suppressMessages: false,
 
             postCreate: function(){
-                this._messageStyleNode = this.formValidatorMessage;
                 this.watch('value', function(){
                     this._startValidateTimer();
                 });

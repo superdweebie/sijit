@@ -1,6 +1,10 @@
 <div class="control-group">
     <div class="controls">
         <textarea data-dojo-attach-point='focusNode,containerNode,textbox' autocomplete='off'></textarea>
-        <span class="help-inline hide" data-dojo-attach-point="inlineMessageWrapper"><small data-dojo-attach-point="inlineMessage"></small></span>
+        <small 
+            data-dojo-attach-point="validationMessage" 
+            data-dojo-type="Sds/Common/Form/ValidationMessage"
+            data-dojo-props="messagePosition: '${messagePosition}'"
+        ></small>
     </div>
 </div>

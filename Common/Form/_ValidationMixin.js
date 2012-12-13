@@ -286,11 +286,18 @@ function (
                     remove = utils.arraySubtract(remove, add);
                 }
 
+                var styleNode;
+                if (this.containerNode){
+                    styleNode = this.containerNode;
+                } else {
+                    styleNode = this.domNode;
+                }
+                
                 array.forEach(add, function(item){
-                    domClass.add(this.domNode, item);
+                    domClass.add(styleNode, item);
                 }, this);
                 array.forEach(remove, function(item){
-                    domClass.remove(this.domNode, item);
+                    domClass.remove(styleNode, item);
                 }, this);
             }
         }

@@ -18,10 +18,6 @@
                 'Sds/Common/Form/NumberTextBox',
                 'Sds/Common/Form/DateTextBox',
                 'Sds/Common/Form/ValidationTextBox',
-                'Sds/Common/Form/Textarea',
-                'Sds/Common/Form/ValidationTextarea',
-                'Sds/Common/Form/ExpandingTextarea',
-                'Sds/Common/Form/ValidationExpandingTextarea',
                 'Sds/Common/Form/Checkbox',
                 'Sds/Common/Form/RadioButton',
                 'dojo/domReady!'
@@ -185,90 +181,6 @@
                 id="dateTextBox2"
             />
             <p>Date Box Value: <pre id="dateTextBox2Value"></pre></p>
-
-            <h3>Sds/Common/Form/Textarea</h3>
-            <p>Default</p>
-            <textarea data-dojo-type="Sds/Common/Form/Textarea"
-                data-dojo-props="
-                    label:'About'
-                "
-                id="textarea1"
-             >
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </textarea>
-
-            <p>15 rows</p>
-            <textarea data-dojo-type="Sds/Common/Form/Textarea"
-                rows="15"
-                data-dojo-props="
-                    label:'About'
-                "
-                id="textarea2"
-             >
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </textarea>
-
-            <h3>Sds/Common/Form/ValidationTextarea</h3>
-
-            <p>Valid</p>
-            <textarea data-dojo-type="Sds/Common/Form/ValidationTextarea"
-                rows="10"
-                data-dojo-props="
-                    label:'About',
-                    validator: [
-                        {base: 'LengthValidator', params: {min: 10, max: 1000}}
-                    ]
-                "
-                id="validationTextarea1"
-             >Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
-
-            <p>Invalid</p>
-            <textarea data-dojo-type="Sds/Common/Form/ValidationTextarea"
-                rows="10"
-                data-dojo-props="
-                    label:'About',
-                    validator: [
-                        {base: 'LengthValidator', params: {min: 10, max: 1000}}
-                    ]
-                "
-                id="validationTextarea2"
-             >12345</textarea>
-
-            <h3>Sds/Common/Form/ExpandingTextarea</h3>
-            <p>Default (does auto resize)</p>
-            <textarea data-dojo-type="Sds/Common/Form/ExpandingTextarea"
-                data-dojo-props="
-                    label:'About'
-                "
-                id="expandingTextarea1"
-             >
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </textarea>
-
-            <h3>Sds/Common/Form/ValidationExpandingTextarea</h3>
-
-            <p>Valid</p>
-            <textarea data-dojo-type="Sds/Common/Form/ValidationExpandingTextarea"
-                data-dojo-props="
-                    label:'About',
-                    validator: [
-                        {base: 'LengthValidator', params: {min: 10, max: 1000}}
-                    ]
-                "
-                id="validationExpandingTextarea1"
-             >Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
-
-            <p>Invalid</p>
-            <textarea data-dojo-type="Sds/Common/Form/ValidationExpandingTextarea"
-                data-dojo-props="
-                    label:'About',
-                    validator: [
-                        {base: 'LengthValidator', params: {min: 10, max: 1000}}
-                    ]
-                "
-                id="validationExpandingTextarea2"
-             >12345</textarea>
-
 
             <h3>Sds/Common/Form/Checkbox</h3>
 
