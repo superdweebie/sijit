@@ -2,15 +2,18 @@ define([
     'dojo/_base/declare',
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
+    'dijit/_WidgetsInTemplateMixin',
     'Sds/Common/Form/_TextBoxMixin',
     'Sds/Common/Form/_ValidationMixin',
     'Sds/Common/Form/_AppendageMixin',
-    'dojo/text!./Template/ValidationTextBox.html'
+    'dojo/text!./Template/ValidationTextBox.html',
+    'Sds/Common/Form/ValidationMessage'
 ],
 function (
     declare,
     Widget,
     TemplatedMixin,
+    WidgetsInTemplateMixin,
     TextBoxMixin,
     ValidationMixin,
     AppendageMixin,
@@ -18,7 +21,7 @@ function (
 ){
     return declare(
         'Sds/Common/Form/ValidationTextBox',
-        [Widget, TemplatedMixin, TextBoxMixin, AppendageMixin, ValidationMixin],
+        [Widget, TemplatedMixin, WidgetsInTemplateMixin, TextBoxMixin, AppendageMixin, ValidationMixin],
         {
             templateString: template,
 
@@ -26,6 +29,8 @@ function (
             //		Current error/prompt message.
             message: '',
 
+            messagePosition: 'auto',
+            
             postCreate: function(){
                 this._messageStyleNode = this.domNode;
                 this.inherited(arguments);

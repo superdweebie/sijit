@@ -2,7 +2,11 @@
     <div class="controls">
         <div data-dojo-attach-point="appendagesWrapper">
             <input type="${type}" id="${id}" value="${value}" data-dojo-attach-point="textbox, focusNode">
-            <span class="help-inline hide" data-dojo-attach-point="inlineMessageWrapper"><small data-dojo-attach-point="inlineMessage"></small></span>
+            <span 
+                data-dojo-attach-point="validationMessage" 
+                data-dojo-type="Sds/Common/Form/ValidationMessage"
+                data-dojo-props="messagePosition: '${messagePosition}'"
+            ></span>
         </div>
     </div>
 </div>

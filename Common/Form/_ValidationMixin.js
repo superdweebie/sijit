@@ -29,16 +29,6 @@ function (
             //		Shows current state (ie, validation result) of input (""=Normal, Incomplete, or Error)
             state: '',
 
-            // messagePosition: string
-            //      Possible values are:
-            //      auto: if the message is one line, display inline. If it is multiline, display block
-            //      inline: always display message inline. If the message is more than one line, only the first will be shown.
-            //      block: alwyas display message as block, even when there is only one line.
-            messagePosition: 'auto',
-            
-            // help-block: string
-            helpBlock: undefined,
-
             // suppressMessages: boolean
             //      Should message be returned to a get('message') call?
             suppressMessages: true,
@@ -51,7 +41,7 @@ function (
             postActivitySuppressMessages: false,
 
             // styleClasses: Object
-            //      An object the defines the css classes that could be applied to _messageStyleNode
+            //      An object the defines the css classes that could be applied to this.domNode
             //      when a validation failure occurs
             styleClasses: {
                 none : [],
@@ -81,8 +71,6 @@ function (
             _onFocusValue: undefined,
 
             messages: [],
-
-            _messageStyleNode: undefined,
 
             _delayTimer: undefined,
 
@@ -275,20 +263,13 @@ function (
             },
             
             _updateMessages: function(){
-                var messages = this.get('messages');
-
-                if ( ! lang.isArray(messages)){
-                    return;
+                if (this.validationMessage){                    
+                    if (this.suppressMessages){
+                        this.validationMessage.hide();                          
+                    } else {
+                        this.validationMessage.show(this.get('messages'));                   
+                    }
                 }
-
-                if (messages.length == 0 || this.suppressMessages){
-                    domClass.add(this.inlineMessageWrapper, 'hide');
-                    this.inlineMessage.innerHTML = '';
-                    return;
-                }
-                
-                this.inlineMessage.innerHTML = messages[0];
-                domClass.remove(this.inlineMessageWrapper, 'hide');
             },
 
             _updateStyle: function(result){
@@ -306,10 +287,10 @@ function (
                 }
 
                 array.forEach(add, function(item){
-                    domClass.add(this._messageStyleNode, item);
+                    domClass.add(this.domNode, item);
                 }, this);
                 array.forEach(remove, function(item){
-                    domClass.remove(this._messageStyleNode, item);
+                    domClass.remove(this.domNode, item);
                 }, this);
             }
         }
