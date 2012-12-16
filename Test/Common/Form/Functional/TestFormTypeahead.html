@@ -1,0 +1,394 @@
+<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01//EN'
+	'http://www.w3.org/TR/html4/strict.dtd'>
+<html>
+	<head>
+		<title>Functional Testing Sds/Common/Form/Typeahead</title>
+		<style type='text/css'>
+            @import '../../../../themes/bootstrap/css/bootstrap.css';
+            @import '../../../../themes/bootstrap/css/bootstrap-responsive.css';
+            @import '../../../../../bootstrap/assets/datepicker.css';
+		</style>
+        <script type='text/javascript' src='../../../testconfig.js'></script>
+        <script type="text/javascript">
+            dojoConfig.mergeConfigs.push('TestFormTypeahead/config');
+        </script>        
+        <script type='text/javascript' src='../../../../../dojo/dojo.js'></script>        
+		<script type='text/javascript'>
+            define('TestFormTypeahead/config', [], function(){
+                return {
+                    moduleManager: {
+                        'Sds/Store/storeManager': {
+                            gets: {
+                                stores: [
+                                    new Memory({
+                                        data: [
+                                            {id: 0, name: 'Alabama'},
+                                            {id: 1, name: 'Alaska'},
+                                            {id: 2, name: 'Arizona'},
+                                            {id: 3, name: 'Arkansas'},
+                                            {id: 4, name: 'California'},
+                                            {id: 5, name: 'Colorado'},
+                                            {id: 6, name: 'Connecticut'},
+                                            {id: 7, name: 'Delaware'},
+                                            {id: 8, name: 'Florida'},
+                                            {id: 9, name: 'Georgia'},
+                                            {id: 10, name: 'Hawaii'},
+                                            {id: 12, name: 'Idaho'},
+                                            {id: 13, name: 'Illinois'},
+                                            {id: 14, name: 'Indiana'},
+                                            {id: 15, name: 'Iowa'},
+                                            {id: 16, name: 'Kansas'},
+                                            {id: 17, name: 'Kentucky'},
+                                            {id: 18, name: 'Louisiana'},
+                                            {id: 19, name: 'Maine'},
+                                            {id: 20, name: 'Maryland'},
+                                            {id: 21, name: 'Massachusetts'},
+                                            {id: 22, name: 'Michigan'},
+                                            {id: 23, name: 'Minnesota'},
+                                            {id: 24, name: 'Mississippi'},
+                                            {id: 25, name: 'Missouri'},
+                                            {id: 26, name: 'Montana'},
+                                            {id: 27, name: 'Nebraska'},
+                                            {id: 28, name: 'Nevada'},
+                                            {id: 29, name: 'New Hampshire'},
+                                            {id: 30, name: 'New Jersey'},
+                                            {id: 31, name: 'New Mexico'},
+                                            {id: 32, name: 'New York'},
+                                            {id: 33, name: 'North Dakota'},
+                                            {id: 34, name: 'North Carolina'},
+                                            {id: 35, name: 'Ohio'},
+                                            {id: 36, name: 'Oklahoma'},
+                                            {id: 37, name: 'Oregon'},
+                                            {id: 38, name: 'Pennsylvania'},
+                                            {id: 39, name: 'Rhode Island'},
+                                            {id: 40, name: 'South Carolina'},
+                                            {id: 41, name: 'South Dakota'},
+                                            {id: 42, name: 'Tennessee'},
+                                            {id: 43, name: 'Texas'},
+                                            {id: 44, name: 'Utah'},
+                                            {id: 45, name: 'Vermont'},
+                                            {id: 46, name: 'Virginia'},
+                                            {id: 47, name: 'Washington'},
+                                            {id: 48, name: 'West Virginia'},
+                                            {id: 49, name: 'Wisconsin'},
+                                            {id: 50, name: 'Wyoming'} 
+                                        ],
+                                        name: 'statesStore'
+                                    })
+                                ]
+                            }
+                        }
+                    }
+                }
+            });
+            
+			require([
+                'dojo/parser',
+                'dojo/dom',
+                'dijit/registry',
+                'dojo/store/Memory',
+                'Sds/Common/Form/Typeahead',
+                'dojo/domReady!'
+            ],
+            function(
+                parser,
+                dom,
+                registry,
+                MemoryStore
+            ){
+                parser.parse().then(function(){
+
+                    dom.byId('typhead1Value').innerHTML = registry.byId('typhead1').get('value');
+                    registry.byId('typeahead1').watch('value', function(p, o, newValue){                        
+                        dom.byId('typeahead1Value').innerHTML = newValue;
+                    });
+                    
+                    var data = [
+                        {id: 0, name: 'Alabama'},
+                        {id: 1, name: 'Alaska'},
+                        {id: 2, name: 'Arizona'},
+                        {id: 3, name: 'Arkansas'},
+                        {id: 4, name: 'California'},
+                        {id: 5, name: 'Colorado'},
+                        {id: 6, name: 'Connecticut'},
+                        {id: 7, name: 'Delaware'},
+                        {id: 8, name: 'Florida'},
+                        {id: 9, name: 'Georgia'},
+                        {id: 10, name: 'Hawaii'},
+                        {id: 12, name: 'Idaho'},
+                        {id: 13, name: 'Illinois'},
+                        {id: 14, name: 'Indiana'},
+                        {id: 15, name: 'Iowa'},
+                        {id: 16, name: 'Kansas'},
+                        {id: 17, name: 'Kentucky'},
+                        {id: 18, name: 'Louisiana'},
+                        {id: 19, name: 'Maine'},
+                        {id: 20, name: 'Maryland'},
+                        {id: 21, name: 'Massachusetts'},
+                        {id: 22, name: 'Michigan'},
+                        {id: 23, name: 'Minnesota'},
+                        {id: 24, name: 'Mississippi'},
+                        {id: 25, name: 'Missouri'},
+                        {id: 26, name: 'Montana'},
+                        {id: 27, name: 'Nebraska'},
+                        {id: 28, name: 'Nevada'},
+                        {id: 29, name: 'New Hampshire'},
+                        {id: 30, name: 'New Jersey'},
+                        {id: 31, name: 'New Mexico'},
+                        {id: 32, name: 'New York'},
+                        {id: 33, name: 'North Dakota'},
+                        {id: 34, name: 'North Carolina'},
+                        {id: 35, name: 'Ohio'},
+                        {id: 36, name: 'Oklahoma'},
+                        {id: 37, name: 'Oregon'},
+                        {id: 38, name: 'Pennsylvania'},
+                        {id: 39, name: 'Rhode Island'},
+                        {id: 40, name: 'South Carolina'},
+                        {id: 41, name: 'South Dakota'},
+                        {id: 42, name: 'Tennessee'},
+                        {id: 43, name: 'Texas'},
+                        {id: 44, name: 'Utah'},
+                        {id: 45, name: 'Vermont'},
+                        {id: 46, name: 'Virginia'},
+                        {id: 47, name: 'Washington'},
+                        {id: 48, name: 'West Virginia'},
+                        {id: 49, name: 'Wisconsin'},
+                        {id: 50, name: 'Wyoming'}                        
+                    ];
+
+                    var stateStore = new MemoryStore({
+                        data: data
+                    });
+
+                    var typeahead;
+
+                    typeahead = registry.byId('typeahead4');
+                    typeahead.set('store', stateStore);
+
+                    typeahead = registry.byId('typeahead5');
+                    typeahead.set('store', stateStore);
+                });
+            })
+		</script>
+	</head>
+	<body>
+        <h1>Functional Testing Sds/Common/Form/Typeahead</h1>
+        <br />
+        <form class='form-horizontal'>
+
+            <p>Typeahead, no explicit value</p>
+            <input id='typeahead1' 
+                data-dojo-type="Sds/Common/Form/Typeahead"                
+                data-dojo-props="
+                    label: 'State',
+                    data: [
+                        'Alabama',
+                        'Alaska',
+                        'Arizona',
+                        'Arkansas',
+                        'California',
+                        'Colorado',
+                        'Connecticut',
+                        'Delaware',
+                        'Florida',
+                        'Georgia',
+                        'Hawaii',
+                        'Idaho',
+                        'Illinois',
+                        'Indiana',
+                        'Iowa',
+                        'Kansas',
+                        'Kentucky',
+                        'Louisiana',
+                        'Maine',
+                        'Maryland',
+                        'Massachusetts',
+                        'Michigan',
+                        'Minnesota',
+                        'Mississippi',
+                        'Missouri',
+                        'Montana',
+                        'Nebraska',
+                        'Nevada',
+                        'New Hampshire',
+                        'New Jersey',
+                        'New Mexico',
+                        'New York',
+                        'North Dakota',
+                        'North Carolina',
+                        'Ohio',
+                        'Oklahoma',
+                        'Oregon',
+                        'Pennsylvania',
+                        'Rhode Island',
+                        'South Carolina',
+                        'South Dakota',
+                        'Tennessee',
+                        'Texas',
+                        'Utah',
+                        'Vermont',
+                        'Virginia',
+                        'Washington',
+                        'West Virginia',
+                        'Wisconsin',
+                        'Wyoming'
+                     ]
+                "
+            >
+
+            <p>Typhead Value: <pre id='typeahead1Value'></pre></p>
+        
+            <p>Typeahead, with explicit value</p>
+            <input id='typeahead2' 
+                data-dojo-type="Sds/Common/Form/Typeahead"                
+                data-dojo-props="
+                    label: 'State',
+                    value: 'Alabama',
+                    data: [
+                        'Alabama',
+                        'Alaska',
+                        'Arizona',
+                        'Arkansas',
+                        'California',
+                        'Colorado',
+                        'Connecticut',
+                        'Delaware',
+                        'Florida',
+                        'Georgia',
+                        'Hawaii',
+                        'Idaho',
+                        'Illinois',
+                        'Indiana',
+                        'Iowa',
+                        'Kansas',
+                        'Kentucky',
+                        'Louisiana',
+                        'Maine',
+                        'Maryland',
+                        'Massachusetts',
+                        'Michigan',
+                        'Minnesota',
+                        'Mississippi',
+                        'Missouri',
+                        'Montana',
+                        'Nebraska',
+                        'Nevada',
+                        'New Hampshire',
+                        'New Jersey',
+                        'New Mexico',
+                        'New York',
+                        'North Dakota',
+                        'North Carolina',
+                        'Ohio',
+                        'Oklahoma',
+                        'Oregon',
+                        'Pennsylvania',
+                        'Rhode Island',
+                        'South Carolina',
+                        'South Dakota',
+                        'Tennessee',
+                        'Texas',
+                        'Utah',
+                        'Vermont',
+                        'Virginia',
+                        'Washington',
+                        'West Virginia',
+                        'Wisconsin',
+                        'Wyoming'
+                    ]
+                "
+            >
+        
+            <p>Typeahead, with css class</p>
+            <input id='typeahead3' 
+                data-dojo-type="Sds/Common/Form/Typeahead"                
+                data-dojo-props="
+                    label: 'State',
+                    focusNodeClass: 'span2',
+                    value: 'Alabama',
+                    data: [
+                        'Alabama',
+                        'Alaska',
+                        'Arizona',
+                        'Arkansas',
+                        'California',
+                        'Colorado',
+                        'Connecticut',
+                        'Delaware',
+                        'Florida',
+                        'Georgia',
+                        'Hawaii',
+                        'Idaho',
+                        'Illinois',
+                        'Indiana',
+                        'Iowa',
+                        'Kansas',
+                        'Kentucky',
+                        'Louisiana',
+                        'Maine',
+                        'Maryland',
+                        'Massachusetts',
+                        'Michigan',
+                        'Minnesota',
+                        'Mississippi',
+                        'Missouri',
+                        'Montana',
+                        'Nebraska',
+                        'Nevada',
+                        'New Hampshire',
+                        'New Jersey',
+                        'New Mexico',
+                        'New York',
+                        'North Dakota',
+                        'North Carolina',
+                        'Ohio',
+                        'Oklahoma',
+                        'Oregon',
+                        'Pennsylvania',
+                        'Rhode Island',
+                        'South Carolina',
+                        'South Dakota',
+                        'Tennessee',
+                        'Texas',
+                        'Utah',
+                        'Vermont',
+                        'Virginia',
+                        'Washington',
+                        'West Virginia',
+                        'Wisconsin',
+                        'Wyoming'
+                    ]
+                "
+            >            
+            
+            <p>Typeahead, using data store (separate display and value fields)</p>
+            <input id='typeahead4' 
+                data-dojo-type="Sds/Common/Form/Typeahead"                
+                data-dojo-props="
+                    label: 'State',
+                    storeLabelAttr: 'name'
+                "
+            >   
+
+            <p>Typeahead, using data store with queryDelay = 300 (for stores that hit a server)</p>
+            <input id='typeahead5' 
+                data-dojo-type="Sds/Common/Form/Typeahead"                
+                data-dojo-props="
+                    label: 'State',
+                    queryDelay: 300,
+                    storeLabelAttr: 'name'                    
+                "
+            >  
+            
+            <p>Typeahead, using data store pulled from storeManager</p>
+            <input id='typeahead6' 
+                data-dojo-type="Sds/Common/Form/Typeahead"                
+                data-dojo-props="
+                    label: 'State',
+                    store: 'typehead6'
+                "
+            >  
+            
+        </form>
+	</body>
+</html>
