@@ -1,33 +1,26 @@
 define([
     'dojo/_base/declare',
     'dijit/_Widget',
-	'dijit/_TemplatedMixin',
-    'dijit/_WidgetsInTemplateMixin',    
+	'dijit/_TemplatedMixin',  
     'Sds/Common/Form/_TextBoxMixin',
     'Sds/Common/Form/_ValidationMixin',
-    'dojo/text!./Template/ValidationTextarea.html',
-    'Sds/Common/Form/ValidationMessage'    
+    'Sds/Common/Form/_ValidationMessagesMixin',    
+    'dojo/text!./Template/ValidationTextarea.html'  
 ],
 function (
     declare,
     Widget,
     TemplatedMixin,
-    WidgetsInTemplateMixin,
     TextBoxMixin,
     ValidationMixin,
+    ValidationMessagesMixin,
     template    
 ){
     return declare(
         'Sds/Common/Form/ValidationTextarea',
-        [Widget, TemplatedMixin, WidgetsInTemplateMixin, TextBoxMixin, ValidationMixin],
+        [Widget, TemplatedMixin, WidgetsInTemplateMixin, TextBoxMixin, ValidationMixin, ValidationMessagesMixin],
         {
             templateString: template,
-
-            // message: String
-            //		Current error/prompt message.
-            message: '',
-
-            messagePosition: 'auto',
             
             postCreate: function(){
                 this.set('value', this.textbox.value);

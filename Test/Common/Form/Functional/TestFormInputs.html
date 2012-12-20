@@ -17,7 +17,6 @@
                 'dijit/registry',
                 'Sds/Common/Form/NumberTextBox',
                 'Sds/Common/Form/DateTextBox',
-                'Sds/Common/Form/ValidationTextBox',
                 'Sds/Common/Form/Checkbox',
                 'Sds/Common/Form/RadioButton',
                 'dojo/domReady!'
@@ -51,103 +50,6 @@
         <h1>Functional Testing Sds/Common/Form Inputs</h1>
         <br />
         <form class="form-horizontal">
-
-            <h3>Sds/Common/ValidationTextBox</h3>
-
-            <p>Valid</p>
-            <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                value="Toby"
-                data-dojo-props="
-                    label:'Name',
-                    validator: 'PersonalNameValidator'
-                "
-                id="validationTextBox1"
-             />
-
-            <p>Invalid auto inline</p>
-            <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                value="Not Toby"
-                data-dojo-props="
-                    label:'Name',
-                    validator: 'PersonalNameValidator'
-                "
-                id="validationTextBox2"
-             />
-
-            <p>Invalid force inline</p>
-            <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                value=""
-                data-dojo-props="
-                    label:'Name',
-                    messagePosition: 'inline',
-                    validator: 'PersonalNameValidator'
-                "
-                id="validationTextBox3"
-             />
-
-            <p>Invalid auto block</p>
-            <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                value=""
-                data-dojo-props="
-                    label:'Name',
-                    validator: 'PersonalNameValidator'
-                "
-                id="validationTextBox4"
-             />
-
-            <p>Invalid force block</p>
-            <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                value="Not Toby"
-                data-dojo-props="
-                    label:'Name',
-                    messagePosition: 'block',
-                    validator: 'PersonalNameValidator'
-                "
-                id="validationTextBox5"
-             />
-
-            <p>Valid with ValidatorGroup</p>
-            <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                value="Toby"
-                data-dojo-props="
-                    label:'Name',
-                    validator: [
-                        'NotRequiredValidator',
-                        'PersonalNameValidator'
-                    ]
-                "
-                id="validationTextBox6"
-             />
-
-            <p>Super test Invalid with multiple Deferred Validators</p>
-            <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                value="not awesome"
-                data-dojo-props="
-                    label:'Sijit is:',
-                    messagePosition: 'block',
-                    validator: [
-                        'AlphaValidator',
-                        'Sds/Test/Common/Validator/Asset/DeferredValidator',
-                        {base: 'LengthValidator', params: {min: 1, max: 7}},
-                        'AlphaValidator',
-                        {base: 'Sds/Test/Common/Validator/Asset/DeferredValidator', params: {timeout: 3000}},
-                        {base: 'LengthValidator', params: {min: 4, max: 8}},
-                        'Sds/Test/Common/Validator/Asset/DeferredValidator',
-                        {base: 'LengthValidator', params: {min: 5, max: 8}},
-                    ],
-                    suppressMessages: false
-                "
-                id="validationTextBox9"
-             />
-
-            <p>No Validator Set</p>
-            <input data-dojo-type="Sds/Common/Form/ValidationTextBox"
-                value=":-)"
-                data-dojo-props="
-                    label:'Name'
-                "
-                id="validationTextBox10"
-             />
 
             <h3>Sds/Common/Form/NumberTextBox</h3>
 

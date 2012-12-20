@@ -2,34 +2,27 @@ define([
     'dojo/_base/declare',
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
-    'dijit/_WidgetsInTemplateMixin',
     'Sds/Common/Form/_TextBoxMixin',
     'Sds/Common/Form/_ValidationMixin',
     'Sds/Common/Form/_AppendageMixin',
-    'dojo/text!./Template/ValidationTextBox.html',
-    'Sds/Common/Form/ValidationMessage'
+    'Sds/Common/Form/_ValidationMessagesMixin',
+    'dojo/text!./Template/ValidationTextBox.html'
 ],
 function (
     declare,
     Widget,
-    TemplatedMixin,
-    WidgetsInTemplateMixin,
+    TemplatedMixin,   
     TextBoxMixin,
     ValidationMixin,
     AppendageMixin,
+    ValidationMessagesMixin,
     template
 ){
     return declare(
         'Sds/Common/Form/ValidationTextBox',
-        [Widget, TemplatedMixin, WidgetsInTemplateMixin, TextBoxMixin, AppendageMixin, ValidationMixin],
+        [Widget, TemplatedMixin, TextBoxMixin, AppendageMixin, ValidationMixin, ValidationMessagesMixin],
         {
-            templateString: template,
-
-            // message: String
-            //		Current error/prompt message.
-            message: '',
-
-            messagePosition: 'auto'          
+            templateString: template      
         }
     );
 });

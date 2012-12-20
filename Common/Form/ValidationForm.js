@@ -1,25 +1,24 @@
 define([
     'dojo/_base/declare',
     'dijit/_Widget',
-    'dijit/_TemplatedMixin',
-    'dijit/_WidgetsInTemplateMixin',    
+    'dijit/_TemplatedMixin',  
     'Sds/Common/Form/_FormMixin',
     'Sds/Common/Form/_ValidationMixin',
-    'dojo/text!./Template/ValidationForm.html',
-    'Sds/Common/Form/ValidationMessage'    
+    'Sds/Common/Form/_ValidationMessagesMixin',    
+    'dojo/text!./Template/ValidationForm.html'   
 ],
 function (
     declare,
     Widget,
     TemplatedMixin,
-    WidgetsInTemplateMixin,    
     FormMixin,
     ValidationMixin,
+    ValidationMessagesMixin,
     template
 ){
     return declare(
         'Sds/Common/Form/ValidationForm',
-        [Widget, TemplatedMixin, WidgetsInTemplateMixin, FormMixin, ValidationMixin],
+        [Widget, TemplatedMixin, FormMixin, ValidationMixin, ValidationMessagesMixin],
         {
             templateString: template,
 

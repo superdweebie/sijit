@@ -5,7 +5,9 @@ define([
     'dojo/on',
     'dojo/when',
     'dojo/dom-construct',
-    'dijit/form/_FormValueMixin'
+    'Sds/Common/Form/_LabelMixin',
+    'Sds/Common/Form/_HelpMessagesMixin',
+    'dijit/form/_FormValueMixin',    
 ],
 function (
     declare,
@@ -14,15 +16,14 @@ function (
     on,
     when,
     domConstruct,
+    LabelMixin,
+    HelpMessagesMixin,
     FormValueMixin
 ){
     return declare(
         'Sds/Common/Form/_SelectMixin',
-        [FormValueMixin],
+        [LabelMixin, HelpMessagesMixin, FormValueMixin],
         {
-            // label: string
-            label: undefined,
-
             // store: dojo/store/api/Store
             //		A store to use for getting our list of options - rather than reading them
             //		from the `<option>` html tags.
@@ -169,31 +170,7 @@ function (
                 }));
                 return options;
             },
-
-            _setLabelAttr: function(value) {
-                this.label = value;
-
-                if (this.label){
-                    domConstruct.create(
-                        'label',
-                        {innerHTML: this.label, 'class': 'control-label', 'for': this.id},
-                        this.domNode,
-                        'first'
-                    );
-                }
-            },
             
-            _setHelpBlockAttr: function(message) {
-                if (message){
-                    domConstruct.create(
-                        'span',
-                        {innerHTML: '<small>'+message+'</small>', 'class': 'help-block'},
-                        this.domNode,
-                        'last'
-                    );
-                }
-            },
-
             _setFocusNodeClassAttr: { node: "focusNode", type: "class" }
         }
     )

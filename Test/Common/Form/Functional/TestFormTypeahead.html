@@ -14,7 +14,7 @@
         </script>        
         <script type='text/javascript' src='../../../../../dojo/dojo.js'></script>        
 		<script type='text/javascript'>
-            define('TestFormTypeahead/config', [], function(){
+            define('TestFormTypeahead/config', ['dojo/store/Memory'], function(Memory){
                 return {
                     moduleManager: {
                         'Sds/Store/storeManager': {
@@ -84,6 +84,7 @@
             
 			require([
                 'dojo/parser',
+                'dojo/aspect',
                 'dojo/dom',
                 'dijit/registry',
                 'dojo/store/Memory',
@@ -92,13 +93,14 @@
             ],
             function(
                 parser,
+                aspect,
                 dom,
                 registry,
                 MemoryStore
             ){
                 parser.parse().then(function(){
 
-                    dom.byId('typhead1Value').innerHTML = registry.byId('typhead1').get('value');
+                    dom.byId('typeahead1Value').innerHTML = registry.byId('typeahead1').get('value');
                     registry.byId('typeahead1').watch('value', function(p, o, newValue){                        
                         dom.byId('typeahead1Value').innerHTML = newValue;
                     });
@@ -167,6 +169,10 @@
 
                     typeahead = registry.byId('typeahead5');
                     typeahead.set('store', stateStore);
+                    aspect.before(typeahead, '_getStoreAttr', function(){
+                        dom.byId('storeQueried').innerHTML = dom.byId('storeQueried').innerHTML + 'now ';                        
+                    });
+                   
                 });
             })
 		</script>
@@ -237,13 +243,14 @@
             >
 
             <p>Typhead Value: <pre id='typeahead1Value'></pre></p>
-        
-            <p>Typeahead, with explicit value</p>
+      
+            <p>Typeahead, with explicit value, and list length max 10</p>
             <input id='typeahead2' 
                 data-dojo-type="Sds/Common/Form/Typeahead"                
                 data-dojo-props="
                     label: 'State',
                     value: 'Alabama',
+                    items: 10,
                     data: [
                         'Alabama',
                         'Alaska',
@@ -298,14 +305,13 @@
                     ]
                 "
             >
-        
+            
             <p>Typeahead, with css class</p>
             <input id='typeahead3' 
                 data-dojo-type="Sds/Common/Form/Typeahead"                
                 data-dojo-props="
                     label: 'State',
                     focusNodeClass: 'span2',
-                    value: 'Alabama',
                     data: [
                         'Alabama',
                         'Alaska',
@@ -366,26 +372,29 @@
                 data-dojo-type="Sds/Common/Form/Typeahead"                
                 data-dojo-props="
                     label: 'State',
-                    storeLabelAttr: 'name'
+                    storeLabel: 'name'
                 "
             >   
 
-            <p>Typeahead, using data store with queryDelay = 300 (for stores that hit a server)</p>
+            <p>Typeahead, using data store with queryThrottle = 2000 (for stores that hit a server)</p>
             <input id='typeahead5' 
                 data-dojo-type="Sds/Common/Form/Typeahead"                
                 data-dojo-props="
                     label: 'State',
-                    queryDelay: 300,
-                    storeLabelAttr: 'name'                    
+                    queryThrottle: 2000,
+                    storeLabel: 'name'                    
                 "
             >  
+            
+            <p>Store queried: <pre id='storeQueried'></pre></p>            
             
             <p>Typeahead, using data store pulled from storeManager</p>
             <input id='typeahead6' 
                 data-dojo-type="Sds/Common/Form/Typeahead"                
                 data-dojo-props="
                     label: 'State',
-                    store: 'typehead6'
+                    storeLabel: 'name',                    
+                    store: 'statesStore'
                 "
             >  
             

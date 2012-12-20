@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<title>Functional Testing Sds/Common/ValidationForm</title>
+		<title>Functional Testing Sds/ValidationForm</title>
 		<style type="text/css">
             @import "../../../../themes/bootstrap/css/bootstrap.css";
             @import "../../../../themes/bootstrap/css/bootstrap-responsive.css";
@@ -40,7 +40,7 @@
 		</script>
 	</head>
 	<body>
-        <h1>Functional Testing Sds/Common/ValidationForm</h1>
+        <h1>Functional Testing Sds/ValidationForm</h1>
         <br />
 
         <h3>Valid Form with form validator</h3>
@@ -90,7 +90,7 @@
                 data-dojo-props="
                     label: 'username1',
                     name: 'username1',
-                    validator: {base: 'Sds/Common/Validator/LengthValidator', params: {max: 4, min: 2}}"
+                    validator: {base: 'Sds/Validator/LengthValidator', params: {max: 4, min: 2}}"
             />
             <input
                 id="username2"
@@ -99,7 +99,7 @@
                 data-dojo-props="
                     label: 'username2',
                     name: 'username2',
-                    validator: {base: 'Sds/Common/Validator/LengthValidator', params: {max: 4, min: 2}}"
+                    validator: {base: 'Sds/Validator/LengthValidator', params: {max: 4, min: 2}}"
             />
         </form>
         <button class="btn btn-primary btn-large" id="listInvalidButton">List invalid widgets</button>

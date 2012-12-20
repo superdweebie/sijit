@@ -65,7 +65,7 @@ function (
 
             _validatorSet: false,
 
-            // validator: an instance of Sds/Common/Validator/BaseValidator.
+            // validator: an instance of Sds/Validator/BaseValidator.
             validator: undefined,
 
             _onFocusValue: undefined,
@@ -263,13 +263,7 @@ function (
             },
             
             _updateMessages: function(){
-                if (this.validationMessage){                    
-                    if (this.suppressMessages){
-                        this.validationMessage.hide();                          
-                    } else {
-                        this.validationMessage.show(this.get('messages'));                   
-                    }
-                }
+                this.set('validationMessages', this.get('messages'));
             },
 
             _updateStyle: function(result){
