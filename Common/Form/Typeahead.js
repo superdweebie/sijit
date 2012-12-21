@@ -46,6 +46,8 @@ function (
                        
             items: 8,
             
+            minLength: 1,
+            
             // queryThrottle: integer
             // A value in milliseconds
             // The store will not be queried at a rate faster than the set queryThrottle interval.
@@ -68,9 +70,13 @@ function (
               
                 //override Typeahead lookup function to use the dojo/store with timing delay
                 this._typeahead.lookup = lang.hitch(this, function(){
-                                        
+                    
+                    this._typeahead.query = this.get('value');                     
+                    if (!this._typeahead.query || this._typeahead.query.length < this.minLength) {
+                        return this._typeahead.shown ? this._typeahead.hide() : this._typeahead;
+                    }
+            
                     var queryStore = lang.hitch(this, function(){
-                        this._typeahead.query = this.get('value');
                         var re = new RegExp(this._typeahead.query, 'i');
                         var storeLabel = this.storeLabel;                    
                         var query = function(object){
@@ -95,8 +101,7 @@ function (
                         }), this.queryThrottle);
                         queryStore();
                     } else {
-                        this._pendingQuery = true;
-                        this._typeahead.query = this.get('value');                        
+                        this._pendingQuery = true;                       
                         this._typeahead.process(this._cachedResult);                         
                     }
                 });
