@@ -15,9 +15,9 @@ function(
                 var messages = [];
 
                 var result = true;
-                if (value.username != 'Toby'){
+                if (value.username1 != value.username2){
                     result = false;
-                    messages.push('Username must be Toby');
+                    messages.push('Username1 must be the same as Username2');
                 }
 
                 return {result: result, messages: messages};
