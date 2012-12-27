@@ -1,21 +1,21 @@
 define([
     'dojo/_base/declare',
-    'Sds/Common/Form/TextBox',
+    'Sds/Common/Form/ValidationTextBox',
     'Sds/Common/Form/_TypeaheadMixin',    
     'dojo/text!./Template/Typeahead.html'    
 ],
 function (
     declare,
-    TextBox,
+    ValidationTextBox,
     TypeaheadMixin,
     template
 ){
     // module:
-    //		Sds/Common/Typeahead
+    //		Sds/Common/ValidationTypeahead
 
     return declare(
-        'Sds/Common/Form/Typeahead',
-        [TextBox, TypeaheadMixin],
+        'Sds/Common/Form/ValidationTypeahead',
+        [ValidationTextBox, TypeaheadMixin],
         {            
             templateString: template            
         }

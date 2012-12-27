@@ -89,6 +89,7 @@
                 'dijit/registry',
                 'dojo/store/Memory',
                 'Sds/Common/Form/Typeahead',
+                'Sds/Common/Form/ValidationTypeahead',                
                 'dojo/domReady!'
             ],
             function(
@@ -398,7 +399,17 @@
                     store: 'statesStore'
                 "
             >  
-            
+
+            <p>Validation Typeahead</p>
+            <input id='typeahead7' 
+                data-dojo-type="Sds/Common/Form/ValidationTypeahead"                
+                data-dojo-props="
+                    label: 'State',
+                    storeLabel: 'name',                    
+                    store: 'statesStore',
+                    validator: 'RequiredValidator'
+                "
+            >              
         </form>
 	</body>
 </html>
