@@ -9,6 +9,7 @@ define ([], function (){
             },
             'AlphaValidator': {base: 'Sds/Validator/AlphaValidator', directives: {cache: false}},
             'CredentialValidator': {base: 'Sds/Validator/CredentialValidator', directives: {cache: false}},
+            'CreditCardExpiryValidator': {base: 'Sds/Validator/CreditCardExpiryValidator', directives: {cache: false}},            
             'CreditCardValidator': {base: 'Sds/Validator/CreditCardValidator', directives: {cache: false}},
             'CurrencyValidator': {base: 'Sds/Validator/CurrencyValidator', directives: {cache: false}},
             'CvvValidator': {base: 'Sds/Validator/CvvValidator', directives: {cache: false}},

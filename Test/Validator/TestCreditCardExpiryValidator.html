@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Testing Sds/Validator/CreditCardExpiryValidator</title>
+        <script type="text/javascript" src="../testconfig.js"></script>
+        <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+            require([
+                    'doh/main',
+                    'Sds/Validator/CreditCardExpiryValidator',
+                    'dojo/domReady!'
+                ],
+                function(
+                    doh,
+                    CreditCardExpiryValidator
+                ){
+                    doh.register("Sds/Test/Validator/TestCreditCardExpiryValidator", [
+
+                        function ValidatorTest(doh){
+                            var validator = new CreditCardExpiryValidator;
+
+                            var thisYear = (new Date().getUTCFullYear() + '').substring(2);
+                            var thisMonth = new Date().getUTCMonth() + '';
+
+                            doh.assertFalse(validator.isValid('a120').result); //fails, alphas are not allowed
+                            doh.assertFalse(validator.isValid('120').result); //fails, too short                
+                            doh.assertFalse(validator.isValid('00120').result); //fails, too long                  
+                            doh.assertTrue(validator.isValid('0120').result); //test string input             
+                            doh.assertFalse(validator.isValid('0105').result); //year in the past
+                            doh.assertTrue(validator.isValid(thisMonth + thisYear).result); //test now
+
+                            //test last month
+                            var lastMonth = (thisMonth - 1) + '';
+                            if (lastMonth == '0'){
+                                lastMonth = '12';
+                                --thisYear;
+                            }
+                            doh.assertFalse(validator.isValid(lastMonth + thisYear).result);
+                        }
+
+                    ]);
+
+                    doh.runOnLoad();
+                }
+            );
+
+		</script>
+	</head>
+	<body>
+        <h1>Testing Sds/Validator/CreditCardExpiryValidator</h1>
+	</body>
+</html>
