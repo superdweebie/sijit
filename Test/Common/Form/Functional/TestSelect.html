@@ -9,8 +9,35 @@
             @import "../../../../../bootstrap/assets/datepicker.css";
 		</style>
         <script type="text/javascript" src="../../../testconfig.js"></script>
+        <script type="text/javascript">
+            dojoConfig.mergeConfigs.push('TestSelect/config');
+        </script>         
         <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
+            define('TestSelect/config', ['dojo/store/Memory'], function(Memory){
+                return {
+                    moduleManager: {
+                        'Sds/Store/storeManager': {
+                            gets: {
+                                stores: [
+                                    new Memory({
+                                        idProperty: 'ref',
+                                        data: [
+                                            {ref: 'TN', name: 'Tennessee'},
+                                            {ref: 'VA', name: 'Virginia'},
+                                            {ref: 'WA', name: 'Washington'},
+                                            {ref: 'FL', name: 'Florida'},
+                                            {ref: 'CA', name: 'California'}
+                                        ],
+                                        name: 'statesStore'
+                                    })
+                                ]
+                            }
+                        }
+                    }
+                }
+            });            
+            
 			require([
                 'dojo/parser',
                 'dojo/dom',
@@ -48,16 +75,16 @@
                     var select;
 
                     select = registry.byId('select6');
-                    select.set('storeLabelAttr', 'name');
+                    select.set('storeLabel', 'name');
                     select.set('store', stateStore);
 
                     select = registry.byId('select7');
-                    select.set('storeLabelAttr', 'name');
+                    select.set('storeLabel', 'name');
                     select.set('query', {name: /^.*i.*$/});
                     select.set('store', stateStore);
 
                     select = registry.byId('select8');
-                    select.set('storeLabelAttr', 'name');
+                    select.set('storeLabel', 'name');
                     select.set('query', {name: /^.*i.*$/});
                     select.set('store', stateStore);
                     select.set('query', {name: /^.*g.*$/});
@@ -156,6 +183,16 @@
                 <option value="CA">California</option>
             </select>
 
+            <p>Single line select, using data from storeManager</p>
+            <select
+                id="select10"
+                data-dojo-type="Sds/Common/Form/Select"
+                data-dojo-props="
+                    label: 'State', 
+                    store: 'statesStore', 
+                    storeLabel: 'name'"
+            >
+            </select>            
         </form>
 	</body>
 </html>
