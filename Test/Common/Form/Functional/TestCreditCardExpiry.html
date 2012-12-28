@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/Common/Form/CreditCardExpiry</title>
+		<style type="text/css">
+            @import "../../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../../themes/bootstrap/css/bootstrap-responsive.css";
+            @import "../../../../../bootstrap/assets/datepicker.css";
+		</style>
+        <script type="text/javascript" src="../../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			require([
+                'dojo/parser',
+                'dojo/dom',
+                'dojo/json',
+                'dijit/registry',
+                'Sds/Common/Form/CreditCardExpiry',
+                'dojo/domReady!'
+            ],
+            function(
+                parser,
+                dom,
+                json,
+                registry
+            ){
+                parser.parse().then(function(){
+                    
+                    
+                    registry.byId('creditCardExpiry1').watch('state', function(p, o, n){
+                        dom.byId('creditCardExpiry1State').innerHTML = json.stringify(n);
+                    });
+                    dom.byId('creditCardExpiry1State').innerHTML = json.stringify(registry.byId('creditCardExpiry1').get('state'));                             
+          
+                    registry.byId('creditCardExpiry1').watch('value', function(p, o, n){
+                        dom.byId('creditCardExpiry1Value').innerHTML = json.stringify(n);
+                    });                    
+                    dom.byId('creditCardExpiry1Value').innerHTML = json.stringify(registry.byId('creditCardExpiry1').get('value'));                             
+                });
+            })
+		</script>
+	</head>
+	<body>
+        <h1>Functional Testing Sds/Common/Form/CreditCardExpiry</h1>
+        <br />
+        <form class="form-horizontal">
+
+            <h3>Sds/Common/Form/CreditCardExpiry</h3>
+
+            <input data-dojo-type="Sds/Common/Form/CreditCardExpiry"
+                id="creditCardExpiry1"
+            />
+
+            <p>State: <pre id="creditCardExpiry1State"></pre></p>              
+            <p>Value: <pre id="creditCardExpiry1Value"></pre></p>            
+        </form>
+	</body>
+</html>

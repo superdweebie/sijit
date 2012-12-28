@@ -19,18 +19,20 @@ function(
                     result = true;
                                       
                 // Check fomat
-                if ( ! /^\d\d\d\d$/.test(value)){
+                if ( ! /^\d\d$/.test(value.month) ||  ! /^\d\d\d\d$/.test(value.year)){
                     result = false;
                     messages.push(validatorMessages.creditCardExpiryValidatorMessage);                    
                 }
                 
-                var month = parseInt(value.substring(0,2)),
-                    year = parseInt(value.substring(2)),
+                var month = parseInt(value.month),
+                    year = parseInt(value.year),
                     compareMonth = new Date().getUTCMonth(),
-                    compareYear = parseInt((new Date().getUTCFullYear() + '').substring(2)); 
+                    compareYear = new Date().getUTCFullYear(); 
                     
                 // Check date is valid
-                if (year < compareYear ||
+                if (month < 1 || 
+                    month > 12 ||
+                    year < compareYear ||
                     (year == compareYear && month < compareMonth)
                 ) {
                     result = false;                    
