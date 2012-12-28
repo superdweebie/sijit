@@ -6,6 +6,7 @@ define({ root:
     credentialValidatorAlphaMessage: 'Must contain at least one alpha character (a-z, A-Z)',
     credentialValidatorNumMessage: 'Must contain at least one numeric character (0-9)',
     currencyValidatorMessage: 'Must be currency format.',
+    creditCardExpiryValidatorMessage: 'Must be a valid credit card expiry date.',    
     creditCardValidatorMessage: 'Must be a valid credit card number.',
     dataTypeValidatorMessage: 'Value must be a ${requiredType}.',
     emailValidatorMessage: 'Must be a valid email address.',

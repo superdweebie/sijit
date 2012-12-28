@@ -10,11 +10,11 @@
 		</style>
         <script type='text/javascript' src='../../../testconfig.js'></script>
         <script type="text/javascript">
-            dojoConfig.mergeConfigs.push('TestFormTypeahead/config');
+            dojoConfig.mergeConfigs.push('TestTypeahead/config');
         </script>        
         <script type='text/javascript' src='../../../../../dojo/dojo.js'></script>        
 		<script type='text/javascript'>
-            define('TestFormTypeahead/config', ['dojo/store/Memory'], function(Memory){
+            define('TestTypeahead/config', ['dojo/store/Memory'], function(Memory){
                 return {
                     moduleManager: {
                         'Sds/Store/storeManager': {
@@ -89,6 +89,7 @@
                 'dijit/registry',
                 'dojo/store/Memory',
                 'Sds/Common/Form/Typeahead',
+                'Sds/Common/Form/ValidationTypeahead',                
                 'dojo/domReady!'
             ],
             function(
@@ -398,7 +399,17 @@
                     store: 'statesStore'
                 "
             >  
-            
+
+            <p>Validation Typeahead</p>
+            <input id='typeahead7' 
+                data-dojo-type="Sds/Common/Form/ValidationTypeahead"                
+                data-dojo-props="
+                    label: 'State',
+                    storeLabel: 'name',                    
+                    store: 'statesStore',
+                    validator: 'RequiredValidator'
+                "
+            >              
         </form>
 	</body>
 </html>

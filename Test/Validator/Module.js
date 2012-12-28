@@ -3,6 +3,7 @@ define([
     'Sds/Test/Validator/TestBaseValidator',
     'Sds/Test/Validator/TestCvvValidator',    
     'Sds/Test/Validator/TestCredentialValidator',
+    'Sds/Test/Validator/TestCreditCardExpiryValidator',      
     'Sds/Test/Validator/TestCreditCardValidator',    
     'Sds/Test/Validator/TestCurrencyValidator',
     'Sds/Test/Validator/TestDatatypeValidator',
