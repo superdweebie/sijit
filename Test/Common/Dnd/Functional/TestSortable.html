@@ -20,6 +20,12 @@
             .dojoDndItemOver{
                 background-color: red;
             }
+            .dojoDndItemHandle,
+            .icon-sort{
+                background-color: #000;
+                cursor: pointer;
+                float: right;
+            }
             .dojoDndDummyItem{
                 opacity: 0.3;
             }
@@ -81,6 +87,24 @@
                     sortable.addChild(new Textbox({value : 'item 7'}), 4);
                     sortable.addChild(new Textbox({value : 'item 6'}), 4);
                     sortable.addChild(new Textbox({value : 'item 5'}), 4);
+                    
+                    
+                    sortable = new Sortable;
+                    sortable.placeAt(dom.byId('sortableWidgets2'), 'replace');
+                    sortable.addChild(domConstruct.create('div', { 'class': 'sortableItem', innerHTML: 'Item 1 <span class="dojoDndItemHandle">handle</span>'}));
+                    sortable.addChild(domConstruct.create('div', { 'class': 'sortableItem', innerHTML: 'Item 2 <span class="dojoDndItemHandle">handle</span>'}));
+                    
+                    sortable = new Sortable;
+                    sortable.placeAt(dom.byId('sortableWidgets3'), 'replace');
+                    var item1 = domConstruct.create('div', { 'class': 'sortableItem', innerHTML: 'Item 1'});
+                    var handle1 = domConstruct.create('span', {innerHTML: '<span class="icon-sort"></span>'});
+                    item1.appendChild(handle1);
+                    sortable.addChild(item1, null, {handle: handle1});
+                    var item2 = domConstruct.create('div', { 'class': 'sortableItem', innerHTML: 'Item 2'});
+                    var handle2 = domConstruct.create('span', {innerHTML: '<span class="icon-sort"></span>'});
+                    item2.appendChild(handle2);
+                    sortable.addChild(item2, null, {handle: handle2});
+                    
                 });
             })
 		</script>
@@ -121,5 +145,11 @@
 
         <p>Programatic with widgets in list</p>
         <div id="sortableWidgets"></div>
+        
+        <p>Programatic with class handles</p>
+        <div id="sortableWidgets2"></div>
+        
+        <p>Programatic with programatic handles</p>
+        <div id="sortableWidgets3"></div>
 	</body>
 </html>

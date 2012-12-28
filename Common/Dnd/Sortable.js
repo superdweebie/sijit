@@ -2,20 +2,24 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
+    'dojo/query',
     'Sds/Common/Dnd/Moveable',
     'dojo/dom-construct',
     'dojo/dom-attr',
     'dojo/dom-class',
+    'dojo/Evented',
     'dijit/_WidgetBase'
 ],
 function (
     declare,
     lang,
     array,
+    query,
     Moveable,
     domConstruct,
     domAttr,
     domClass,
+    Evented,
     WidgetBase
 ){
     // module:
@@ -23,7 +27,7 @@ function (
 
     return declare(
         'Sds/Common/Dnd/Sortable',
-        [WidgetBase],
+        [WidgetBase, Evented],
         {
 
             dummyItem: undefined,
@@ -49,17 +53,33 @@ function (
                 }
             },
 
-            addChild: function(/*DomNode|dijit/_WidgetBase*/ child, /*Integer?*/ insertIndex){
-
+            addChild: function(/*DomNode|dijit/_WidgetBase*/ child, /*Integer?*/ insertIndex, /*Object*/ options){
                 var node;
+ 
                 if (child.isInstanceOf && child.isInstanceOf(WidgetBase)){
                     node = domConstruct.create('li');
                     node.appendChild(child.domNode);
                 } else {
                     node = child;
                 }
-
-                var moveable = new Moveable(node);
+                
+                //look for handle class in node
+                var handle = query('.dojoDndItemHandle', node);
+                //use first instance for handle
+                if(handle[0]) {
+                    if(typeof(options) == 'object') {
+                        lang.mixin(options, {handle: handle[0]});
+                    } else {
+                        options = {handle: handle[0]};
+                    }
+                }
+           
+                if(typeof(options) == 'object') {
+                    var moveable = new Moveable(node, options);
+                } else {
+                    var moveable = new Moveable(node);
+                }
+                
                 moveable.on('firstMove', lang.hitch(this, 'onMoveableFirstMove'));
                 moveable.on('moveStop', lang.hitch(this, 'onMoveableStop'));
                 moveable.on('moved', lang.hitch(this, 'onMoveableMoved'));
@@ -68,7 +88,6 @@ function (
             },
 
             onMoveableFirstMove: function(mover){
-
                 //Create the dummy item
                 this.dummyItem = lang.clone(mover.node);
                 domClass.remove(this.dummyItem, 'dojoMoveItem');
@@ -79,12 +98,27 @@ function (
                 } else {
                     domConstruct.place(this.dummyItem, mover.node.nextElementSibling, 'before');
                 }
+                this.emit('firstMove', mover);
             },
 
             onMoveableStop: function(mover){
+                var index=0, i=0, prevNode=undefined;
+                
                 //Replace the dummy item with the one that has been dragged
                 domAttr.remove(mover.node, 'style');
                 domConstruct.place(mover.node, this.dummyItem, 'replace');
+                
+                
+                array.forEach(this.domNode.children, function(node){
+                    if (node === mover.node){
+                        index = i;
+                    }
+                    i++;
+                });
+                if(index!=0) {
+                    prevNode=this.domNode.children[index-1];
+                }
+                this.emit('moveStop', mover, prevNode);
             },
 
             onMoveableMoved: function(e){
