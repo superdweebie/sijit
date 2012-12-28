@@ -24,12 +24,12 @@
                             var thisMonth = new Date().getUTCMonth();
 
                             doh.assertFalse(validator.isValid({month: 'a', year: '2020'}).result); //fails, alphas are not allowed
-                            doh.assertFalse(validator.isValid({month: '1', year: '2020'}).result); //fails, too short                
+                            doh.assertTrue(validator.isValid({month: '1', year: '2020'}).result);                
                             doh.assertFalse(validator.isValid({month: '001', year: '2013'}).result); //fails, too long                  
                             doh.assertFalse(validator.isValid({month: '00', year: '2013'}).result); //fails, invalid month
                             doh.assertFalse(validator.isValid({month: '13', year: '2013'}).result); //fails, invalid month
-                            doh.assertTrue(validator.isValid({month: '01', year: '2013'}).result); //test string input             
-                            doh.assertFalse(validator.isValid({month: '01', year: '2010'}).result); //year in the past
+                            doh.assertTrue(validator.isValid({month: '1', year: '2013'}).result); //test string input             
+                            doh.assertFalse(validator.isValid({month: '1', year: '2010'}).result); //year in the past
                             doh.assertTrue(validator.isValid({month: '' + thisMonth, year: '' + thisYear}).result); //test now
 
                             //test last month

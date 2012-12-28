@@ -19,7 +19,7 @@ function(
                     result = true;
                                       
                 // Check fomat
-                if ( ! /^\d\d$/.test(value.month) ||  ! /^\d\d\d\d$/.test(value.year)){
+                if ( ! /^\d{1,2}$/.test(value.month) ||  ! /^\d\d\d\d$/.test(value.year)){
                     result = false;
                     messages.push(validatorMessages.creditCardExpiryValidatorMessage);                    
                 }
