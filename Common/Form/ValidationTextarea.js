@@ -3,6 +3,7 @@ define([
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',  
     'Sds/Common/Form/_TextBoxMixin',
+    'dijit/_WidgetsInTemplateMixin',
     'Sds/Common/Form/_ValidationMixin',
     'Sds/Common/Form/_ValidationMessagesMixin',    
     'dojo/text!./Template/ValidationTextarea.html'  
@@ -12,6 +13,7 @@ function (
     Widget,
     TemplatedMixin,
     TextBoxMixin,
+    WidgetsInTemplateMixin,
     ValidationMixin,
     ValidationMessagesMixin,
     template    
