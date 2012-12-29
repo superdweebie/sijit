@@ -2,10 +2,11 @@
     <div class="row-fluid">
         <select data-dojo-type="Sds/Common/Form/Select" 
             name="month"
-            class="span6"
             data-dojo-props="
                 label: 'Expiry Month',
-                sortByLabel: false
+                sortByLabel: false,
+                'class': 'span6',
+                focusNodeClass: 'span12'
                 "                
         >
             <option value="1">01</option>
@@ -23,11 +24,13 @@
         </select>
         <select data-dojo-type="Sds/Common/Form/Select" 
             name="year"
-            class="span6"            
             data-dojo-props="
-                label: 'Expiry Year'
+                label: 'Expiry Year',
+                'class': 'span6',
+                focusNodeClass: 'span12'
                 "
         >
+            <option value="2012">12</option>
             <option value="2013">13</option>
             <option value="2014">14</option>
             <option value="2015">15</option>

@@ -33,7 +33,7 @@ function(
                 if (month < 1 || 
                     month > 12 ||
                     year < compareYear ||
-                    (year == compareYear && month < compareMonth)
+                    (year == compareYear && (month-1) < compareMonth)
                 ) {
                     result = false;                    
                     messages.push(validatorMessages.creditCardExpiryValidatorMessage);                      
