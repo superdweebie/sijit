@@ -3,10 +3,12 @@ define([
     'dojo/_base/lang',
     'dojo/_base/array',   
     'dojo/query',
-    'dojo/dom-attr',    
+    'dojo/dom-attr',
+    'dojo/when',
     'dojo/store/Memory',
     'bootstrap/Typeahead',
-    'get!Sds/Store/storeManager'
+    'get!Sds/Store/storeManager',
+    'dojo/Evented'
 ],
 function (
     declare,
@@ -14,16 +16,18 @@ function (
     array,    
     query,
     domAttr,
+    when,
     Memory,
     Typeahead,
-    storeManager
+    storeManager,
+    Evented
 ){
     // module:
     //		Sds/Common/_TypeaheadMixin
 
     return declare(
         'Sds/Common/Form/Typeahead',
-        [],
+        [Evented],
         {
             
             //_typeahead: bootstrap/Typeahead,
@@ -48,6 +52,8 @@ function (
             
             _pendingQuery: false,
             
+            _cachedItems: [],
+            
             //_cachedResult: undefined,
             
             postCreate: function(){
@@ -66,18 +72,18 @@ function (
                     }
             
                     var queryStore = lang.hitch(this, function(){
-                        var re = new RegExp(this._typeahead.query, 'i');
-                        var storeLabel = this.storeLabel;                    
-                        var query = function(object){
-                            return object[storeLabel].match(re)
-                        };
-
-                        //this._typeahead.matcher = storeResultMatcher;
-                        this._cachedResult = this.get('store').query(query).map(lang.hitch(this, function(item){
-                            return item[this.storeLabel];
+                        when(this.get('store').query(this.getQuery(this._typeahead.query)), lang.hitch(this, function (data) {
+                            this._cachedResult = data.map(lang.hitch(this, function(item){
+                                
+                                if(array.indexOf(this._cachedItems, item) == -1) {
+                                    this._cachedItems.push(item);
+                                }
+                                
+                                return item[this.storeLabel];
+                            }));
+                            this._typeahead.process(this._cachedResult);
                         }));
-                        this._typeahead.process(this._cachedResult);                        
-                    })
+                    });
                     
                     if (this._readyToQuery){
                         this._readyToQuery = false;
@@ -98,14 +104,44 @@ function (
                 //override Typeahead select
                 this._typeahead.select = lang.hitch(this, function () {
                     this._pendingQuery = false;
-                    var li = query('.active', this._typeahead.menuNode)[0];
-                    this.set('value', this._typeahead.updater(domAttr.get(li, 'data-value')));
-                    return this._typeahead.hide();
+                    return this.setInputValue();
                 });                
             },
+            
+            getSelectedItem: function() {
+                var selected, value = this.getSelectedValue();
+                
+                array.forEach(this._cachedItems, lang.hitch(this, function(item){
+                    if(item[this.storeLabel] == value) {
+                        selected = item;
+                    }
+                }));
+                
+                return selected;
+            },
+            
+            getSelectedValue: function() {
+                var li = query('.active', this._typeahead.menuNode)[0];
+                return domAttr.get(li, 'data-value');
+            },
+            
+            setInputValue: function() {
+                var val = this.getSelectedValue();
+                this.set('value', this._typeahead.updater(val));
+                this.emit('changed', val);
+                return this._typeahead.hide();
+            },
+            
+            getQuery: function(value) {
+                var re = new RegExp(value, 'i');
+                var storeLabel = this.storeLabel;
+                
+                return function(object){
+                    return object[storeLabel].match(re)
+                };
+            },
                         
-            _getStoreAttr: function(){
-
+            _getStoreAttr: function() {
                 //set up the data store                                
                 if (this.store){
                     if (typeof this.store == 'string'){
