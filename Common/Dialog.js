@@ -1,6 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/keys',    
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
     'Sds/Common/_DialogMixin',
@@ -9,6 +10,7 @@ define([
 function (
     declare,
     lang,
+    keys,
     Widget,
     TemplatedMixin,
     DialogMixin,
@@ -24,8 +26,10 @@ function (
         // description:
         //      OK: indicates that the 'ok' button was clicked to dismiss the dialog
         //      CANCEL: indicates that a 'cancel' button was clicked to dismiss the dialog
-        OK: 'ok',
-        CANCEL: 'cancel'
+        //
+        //      Hotkeys are also defined.
+        OK: {name: 'ok', keys: keys.ENTER},
+        CANCEL: {name: 'cancel', keys: keys.ESCAPE}
     });
 
     var Dialog = declare(
@@ -33,23 +37,13 @@ function (
         [Widget, TemplatedMixin, DialogMixin],
         {
             // templateString: string
-            //      The widget template. To override this, use the paths directive on the AMD loader.
             templateString: template,
 
             buttons: buttons,
 
             disableStateButtons: ['ok'],
 
-            _setTitleAttr: { node: "titleNode", type: "innerHTML" },
-
-            resetActivity: function(){
-                for(var index in this._descendants){
-                    var widget = this._descendants[index];
-                    if (widget.resetActivity){
-                        widget.resetActivity();
-                    }
-                }
-            }
+            _setTitleAttr: { node: "titleNode", type: "innerHTML" }
         }
     );
 

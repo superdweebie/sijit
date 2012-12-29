@@ -1,6 +1,8 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/_base/array',
+    'dojo/_base/event',
     'dojo/Deferred',
     'dojo/on',
     'dojo/dom-prop',
@@ -12,6 +14,8 @@ define([
 function (
     declare,
     lang,
+    array,
+    event,
     Deferred,
     on,
     domProp,
@@ -63,27 +67,53 @@ function (
             //     Indicates if the modal is visible/active
             visible: false,
 
+            _keypressHandlers: [],
+            
             buildRendering: function(){
 
-                // Add onClick handlers for any buttons that don't have them
-                var functionName;
-                for (var index in this.buttons){
-                    functionName = 'on' + utils.ucFirst(this.buttons[index]) + 'Click';
-                    if (! this[functionName]){
-                        this._addClickHandler(functionName, this.buttons[index]);
-                    }
+                // Add onClick handlers for any buttons that don't have them                
+                for (var index in this.buttons){                    
+                    this._addClickHandler(this.buttons[index].name || this.buttons[index]);                   
                 }
 
                 this.inherited(arguments);
             },
 
-            _addClickHandler: function(functionName, buttonValue){
-                this[functionName] = function(){
-                    this.set('button', buttonValue);
-                    this.hide();
+            resetActivity: function(){
+                array.forEach(this._decendants, function(widget){
+                    if (widget.resetActivity){
+                        widget.resetActivity();
+                    }                    
+                })
+            },
+            
+            _addClickHandler: function(name){
+                var functionName = 'on' + utils.ucFirst(name) + 'Click';
+                if (! this[functionName]){
+                    this[functionName] = function(){
+                        this.set('button', name);
+                        this.hide();
+                    }                    
                 }
             },
 
+            _addKeypressHandler: function(button){
+                this._keypressHandlers.push(on(document, 'keypress', lang.hitch(this, function(evt){
+                    if ( ! lang.isArray(button.keys)){
+                        button.keys = [button.keys];
+                    }
+                    array.forEach(button.keys, lang.hitch(this, function(key){                                                
+                        if (
+                            (typeof key == 'object' && (evt.charCode || evt.keyCode) == key.code && evt.ctrlKey == key.ctrl) ||
+                            ((evt.charCode || evt.keyCode) == key)
+                        ){
+                            event.stop(evt);
+                            this['on' + utils.ucFirst(button.name) + 'Click']();
+                        }                        
+                    }));
+                })))               
+            },
+            
             postCreate: function(){
                 this.inherited(arguments);
                 this._modal = new Modal(this.domNode);
@@ -93,12 +123,12 @@ function (
                 // summary:
                 //     Enables and disables the buttons when the state is changed
 
-                for (var item in this.disableStateButtons){
+                for (var index in this.disableStateButtons){
                     if(this.state == '') {
-                        domProp.set(this[this.disableStateButtons[item] + 'Node'], 'disabled', false);
+                        domProp.set(this[this.disableStateButtons[index] + 'Node'], 'disabled', false);
                     } else {
-                        domProp.set(this[this.disableStateButtons[item] + 'Node'], 'disabled', true);
-                    }
+                        domProp.set(this[this.disableStateButtons[index] + 'Node'], 'disabled', true);
+                    }                    
                 }
             },
 
@@ -124,11 +154,7 @@ function (
                 // summary:
                 //    Event called by the template when the backdrop is clicked.
                 this.set('button', buttons.BACKDROP_CANCEL);
-                this.visible = false;
-                if(this._returnValueDeferred)
-                {
-                    this._returnValueDeferred.resolve(this.get('value'))
-                }
+                this.hide();
             },
 
             show: function(/*object*/value)
@@ -141,6 +167,12 @@ function (
                 // returns: A deferred that will resolve to the dialog value when the
                 //          dialog is hidden
 
+                for (var index in this.buttons){
+                    if (typeof this.buttons[index] == 'object'){
+                        this._addKeypressHandler(this.buttons[index]);
+                    }                    
+                }
+                
                 this.set('value', value);
 
                 if (this.visible){
@@ -165,7 +197,12 @@ function (
             {
                 // summary:
                 //    Hide the dialog. Calling this will resolve the deferred returned by show()
-
+                
+                array.forEach(this._keypressHandlers, function(handler){
+                    handler.remove()
+                });
+                this._keyPressHandlers = [];
+                
                 this._modal.hide();
                 this.visible = false;
 
