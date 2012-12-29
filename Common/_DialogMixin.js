@@ -6,6 +6,7 @@ define([
     'dojo/Deferred',
     'dojo/on',
     'dojo/dom-prop',
+    'dojo/dom-construct',
     'Sds/Common/utils',
     'Sds/Common/Form/_FormMixin',
     'dijit/_OnDijitClickMixin',
@@ -19,6 +20,7 @@ function (
     Deferred,
     on,
     domProp,
+    domConstruct,
     utils,
     FormMixin,
     OnDijitClickMixin,
@@ -132,6 +134,15 @@ function (
                 }
             },
 
+            _setContentAttr: function(content){
+                if (content.domNode){
+                    domConstruct.empty(this.containerNode);
+                    this.containerNode.appendChild(content.domNode);
+                } else {
+                    this.containerNode.innerHTML = content;
+                }
+            },
+            
             _getValueAttr: function(){
                 // summary:
                 //     The value of the dialog is a composite object:
