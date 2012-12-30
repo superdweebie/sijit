@@ -14,7 +14,7 @@
                 'dojo/dom',
                 'dojo/on',
                 'dojo/when',
-                'dojo/_base/json',
+                'dojo/json',
                 'dojo/parser',
                 'dijit/registry',
                 'Sds/Common/Dialog',
@@ -37,7 +37,7 @@
 
                     on(dom.byId('showDialog'), 'click', function(){
                         when(registry.byId('testDialog').show(), function(result){
-                            dom.byId('ReturnValue').innerHTML = json.toJson(result, true);
+                            dom.byId('ReturnValue').innerHTML = json.stringify(result, null, '    ');
                         });
                     });
 

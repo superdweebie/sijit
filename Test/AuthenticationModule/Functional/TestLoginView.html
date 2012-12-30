@@ -17,7 +17,7 @@
                 'dojo/parser',
                 'dojo/on',
                 'dojo/dom',
-                'dojo/_base/json',
+                'dojo/json',
                 'dojo/dom-prop',
                 'dijit/registry',
                 'get!Sds/AuthenticationModule/View/Login',
@@ -41,7 +41,7 @@
                 on(dom.byId('formActivateButton'), 'click', function(){
                     loginView.set('enableRememberMe', Boolean(registry.byId('showRememberMeCheckBox').get('value')));
                     loginView.activate().then(function(result){
-                        dom.byId('ViewValue').innerHTML = json.toJson(result, true);
+                        dom.byId('ViewValue').innerHTML = json.stringify(result, null, '    ');
                     });
                 });
 

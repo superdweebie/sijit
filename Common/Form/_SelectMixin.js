@@ -5,7 +5,10 @@ define([
     'dojo/on',
     'dojo/when',
     'dojo/dom-construct',
-    'dijit/form/_FormValueMixin'
+    'Sds/Common/Form/_LabelMixin',
+    'Sds/Common/Form/_HelpMessagesMixin',
+    'dijit/form/_FormValueMixin',   
+    'get!Sds/Store/storeManager'    
 ],
 function (
     declare,
@@ -14,32 +17,28 @@ function (
     on,
     when,
     domConstruct,
-    FormValueMixin
+    LabelMixin,
+    HelpMessagesMixin,
+    FormValueMixin,
+    storeManager
 ){
     return declare(
         'Sds/Common/Form/_SelectMixin',
-        [FormValueMixin],
+        [LabelMixin, HelpMessagesMixin, FormValueMixin],
         {
-            // label: string
-            label: undefined,
-
             // store: dojo/store/api/Store
             //		A store to use for getting our list of options - rather than reading them
             //		from the `<option>` html tags.
-            store: undefined,
 
             // query: object
             //		A query to use when fetching items from our store
-            query: undefined,
 
             // queryOptions: object
             //		Query options to use when fetching from the store
-            queryOptions: undefined,
 
-            // storeLabelAttr: string
+            // storeLabel: string
             //		The entries in the drop down list come from this attribute in the dojo.store items.
             //		If ``store`` is set, labelAttr must be set too.
-            storeLabelAttr: undefined,
 
             // sortByLabel: Boolean
             sortByLabel: true,
@@ -50,7 +49,7 @@ function (
                 var source = this.srcNodeRef;
 
                 // Add options tags if not using store
-                if (this.store){
+                if (this.get('store')){
                     this._updateOptionsFromStore();
                 } else {
                     if(source && source.options){
@@ -72,8 +71,8 @@ function (
                 }));
             },
 
-            _setStoreLabelAttrAttr: function(storeLabelAttr){
-                this.storeLabelAttr = storeLabelAttr;
+            _setStoreLabelAttr: function(storeLabel){
+                this.storeLabel = storeLabel;
                 this._updateOptionsFromStore();
             },
 
@@ -82,13 +81,23 @@ function (
                 this._updateOptionsFromStore();
             },
 
+            _getStoreAttr: function(){
+                               
+                if (this.store && typeof this.store == 'string'){
+                    //get store from storeManager
+                    this.store = storeManager.getStore(this.store);     
+                }
+            
+                return this.store;
+            },
+            
             _setQueryAttr: function(query){
                 this.query = query;
                 this._updateOptionsFromStore();
             },
 
             _updateOptionsFromStore: function(){
-                if (this.store && this.storeLabelAttr){
+                if (this.store && this.storeLabel){
                     when(this.store.query(this.query, this.queryOptions), lang.hitch(this, function(data){
                         var existingOptions = this.get('options');
                         var idProperty = this.store.idProperty;
@@ -113,7 +122,7 @@ function (
                         }
 
                         array.forEach(addOptions, lang.hitch(this, function(option){
-                            this.addOption(option[idProperty], option[this.storeLabelAttr]);
+                            this.addOption(option[idProperty], option[this.storeLabel]);
                         }));
                     }));
                 }
@@ -169,20 +178,7 @@ function (
                 }));
                 return options;
             },
-
-            _setLabelAttr: function(value) {
-                this.label = value;
-
-                if (this.label){
-                    domConstruct.create(
-                        'label',
-                        {innerHTML: this.label, 'class': 'control-label', 'for': this.id},
-                        this.domNode,
-                        'first'
-                    );
-                }
-            },
-
+            
             _setFocusNodeClassAttr: { node: "focusNode", type: "class" }
         }
     )

@@ -5,5 +5,6 @@ define([
     'Sds/Test/ConfigManager/Module',
     'Sds/Test/ModuleManager/Module',
     'Sds/Test/Mvc/Module',
-    'Sds/Test/Store/Module'
+    'Sds/Test/Store/Module',
+    'Sds/Test/Validator/Module',    
 ], 1);

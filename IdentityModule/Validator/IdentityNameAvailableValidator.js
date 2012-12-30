@@ -3,7 +3,7 @@ define([
     'dojo/Deferred',
     'dojo/when',
     'dojo/i18n!Sds/nls/identityModule',
-    'Sds/Common/Validator/BaseValidator',
+    'Sds/Validator/BaseValidator',
     'get!Sds/Store/storeManager'
 ],
 function(
