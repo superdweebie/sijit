@@ -101,6 +101,11 @@ function (
                 this.set('suppressMessages', this.preActivitySuppressMessages);
             },
 
+            triggerActivity: function(){
+                this.set('style', this.postActivityStyle);
+                this.set('suppressMessages', this.postActivitySuppressMessages);                
+            },
+            
             _setValueAttr: function(){
                 // summary:
                 //		Hook so set('value', ...) works.
@@ -172,8 +177,7 @@ function (
             },
 
             onBlur: function(){
-                this.set('style', this.postActivityStyle);
-                this.set('suppressMessages', this.postActivitySuppressMessages);
+                this.triggerActivity();
                 this.inherited(arguments);
                 this._validateNow();
             },
