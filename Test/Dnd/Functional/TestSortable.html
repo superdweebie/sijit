@@ -4,8 +4,8 @@
 	<head>
 		<title>Functional Testing Sds/Common/Sortable</title>
 		<style type="text/css">
-            @import "../../../../themes/bootstrap/css/bootstrap.css";
-            @import "../../../../themes/bootstrap/css/bootstrap-responsive.css";
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
 		</style>
         <style>
             .dojoDndItem{
@@ -30,14 +30,14 @@
                 opacity: 0.3;
             }
         </style>
-        <script type="text/javascript" src="../../../testconfig.js"></script>
-        <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			require([
                 'dojo/parser',
                 'dojo/dom',
                 'dojo/dom-construct',
-                'Sds/Common/Dnd/Sortable',
+                'Sds/Dnd/Sortable',
                 'Sds/Common/Form/Textbox',
                 'dojo/domReady!'
             ],
@@ -110,11 +110,11 @@
 		</script>
 	</head>
 	<body>
-        <h1>Functional Testing Sds/Common/Dnd/Sortable</h1>
+        <h1>Functional Testing Sds/Dnd/Sortable</h1>
         <br />
 
         <p>Declaritive</p>
-        <ul data-dojo-type="Sds/Common/Dnd/Sortable">
+        <ul data-dojo-type="Sds/Dnd/Sortable">
             <li>Item 1</li>
             <li>Item 2</li>
             <li>Item 3</li>
@@ -132,7 +132,7 @@
         <ol id="sortable2" class="myCustomClass"></ol>
 
         <p>Declaritive with widgets in list</p>
-        <ul data-dojo-type="Sds/Common/Dnd/Sortable">
+        <ul data-dojo-type="Sds/Dnd/Sortable">
             <input data-dojo-type="Sds/Common/Form/Textbox" value="Item 1" type="text"/>
             <li><input data-dojo-type="Sds/Common/Form/Textbox" value="Item 2" type="text"/></li>
             <li><input data-dojo-type="Sds/Common/Form/Textbox" value="Item 3" type="text"/></li>

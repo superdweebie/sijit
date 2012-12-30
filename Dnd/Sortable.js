@@ -3,7 +3,7 @@ define([
     'dojo/_base/lang',
     'dojo/_base/array',
     'dojo/query',
-    'Sds/Common/Dnd/Moveable',
+    'Sds/Dnd/Moveable',
     'dojo/dom-construct',
     'dojo/dom-attr',
     'dojo/dom-class',
@@ -23,10 +23,10 @@ function (
     WidgetBase
 ){
     // module:
-    //		Sds/Common/Dnd/Sortable
+    //		Sds/Dnd/Sortable
 
     return declare(
-        'Sds/Common/Dnd/Sortable',
+        'Sds/Dnd/Sortable',
         [WidgetBase, Evented],
         {
 

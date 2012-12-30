@@ -7,10 +7,10 @@ function (
     Moveable
 ){
     // module:
-    //		Sds/Common/Dnd/Moveable
+    //		Sds/Dnd/Moveable
 
     return declare(
-        'Sds/Common/Dnd/Moveable',
+        'Sds/Dnd/Moveable',
         [Moveable],
         {
             delay: 80,
