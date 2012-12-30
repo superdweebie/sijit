@@ -12,7 +12,7 @@
 		<script type="text/javascript">
 			require([
                 'dojo/dom',
-                'dojo/_base/json',
+                'dojo/json',
                 'get!Sds/AuthenticationModule/AuthenticationController',
                 'Sds/Router/startedRouter!',
                 'dojo/domReady!'
@@ -24,15 +24,15 @@
             ){
 
                 authenticationController.watch('status', function(property, oldValue, newValue){
-                    dom.byId('Status').innerHTML = json.toJson(newValue, true);
+                    dom.byId('Status').innerHTML = json.stringify(newValue, null, '    ');
                 });
 
                 authenticationController.watch('loggedIn', function(property, oldValue, newValue){
-                    dom.byId('LoggedIn').innerHTML = json.toJson(newValue, true);
+                    dom.byId('LoggedIn').innerHTML = json.stringify(newValue, null, '    ');
                 });
 
                 authenticationController.watch('identity', function(property, oldValue, newValue){
-                    dom.byId('Identity').innerHTML = json.toJson(newValue, true);
+                    dom.byId('Identity').innerHTML = json.stringify(newValue, null, '    ');
                 });
 
                 authenticationController.get('identity');

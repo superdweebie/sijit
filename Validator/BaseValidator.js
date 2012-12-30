@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/_base/json',
+    'dojo/json',
     'Sds/Common/utils',
     'dojo/Stateful'
 ],
@@ -59,7 +59,7 @@ function(
 
             isValid: function(value){
 
-                var valueString = json.toJson(value);
+                var valueString = json.stringify(value);
 
                 if (this.useCache){
                     var cacheItem = this._validatedValuesCache[valueString];

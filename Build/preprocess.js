@@ -1,7 +1,7 @@
 define([
     'require',
     'dojo/has',
-    'dojo/_base/json',
+    'dojo/json',
     'util/build/fs',
     'Sds/ConfigManager/configManager',
     'Sds/Common/utils'
@@ -109,7 +109,7 @@ function(
         configManager.merge(profile.defaultConfig.mergeConfigs, mergedConfig).then(function(mergedConfig){            
             profile.defaultConfig = utils.mixinDeep(profile.defaultConfig, mergedConfig);
             delete(profile.defaultConfig.mergeConfigs);
-            fs.writeFileSync(filename, 'var profile = ' + json.toJson(profile, true));
+            fs.writeFileSync(filename, 'var profile = ' + json.stringify(profile, null, '    '));
             console.log('Preprocessed build profile written to: ' + filename);
         });
     });
