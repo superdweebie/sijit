@@ -88,8 +88,8 @@ function (
             },
 
             onMoveableFirstMove: function(mover){
-                //Create the dummy item
-                this.dummyItem = lang.clone(mover.node);
+                //Create the dummy item             
+                this.dummyItem = lang.clone(mover.node);            
                 domClass.remove(this.dummyItem, 'dojoMoveItem');
                 domClass.add(this.dummyItem, 'dojoDndDummyItem');
                 domAttr.remove(this.dummyItem, 'style');
@@ -102,13 +102,18 @@ function (
             },
 
             onMoveableStop: function(mover){
+       
+                if ( ! this.dummyItem){
+                    //No dummy item created, means that no actual mode happend - move stop triggered by mouseup
+                    return;
+                }
+                
                 var index=0, i=0, prevNode=undefined;
                 
                 //Replace the dummy item with the one that has been dragged
                 domAttr.remove(mover.node, 'style');
                 domConstruct.place(mover.node, this.dummyItem, 'replace');
-                
-                
+                                
                 array.forEach(this.domNode.children, function(node){
                     if (node === mover.node){
                         index = i;
@@ -118,6 +123,7 @@ function (
                 if(index!=0) {
                     prevNode=this.domNode.children[index-1];
                 }
+                this.dummyItem = undefined;
                 this.emit('moveStop', mover, prevNode);
             },
 

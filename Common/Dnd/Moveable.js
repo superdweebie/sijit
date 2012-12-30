@@ -22,19 +22,19 @@ function (
             },
 
             onFirstMove: function(mover, e){
-                //Add event emission (much nicer than publishing topics)
+                //An event emission (much nicer than publishing topics)
                 this.inherited(arguments);
                 this.emit('firstMove', mover);
             },
 
             onMoveStop: function(/*Mover*/ mover){
-                //Add event emission (much nicer than publishing topics)
+                //An event emission (much nicer than publishing topics)
                 this.inherited(arguments);
                 this.emit('moveStop', mover);
             },
 
             onMoved: function(mover, leftTop){
-                //Add event emission (much nicer than publishing topics)
+                //An event emission (much nicer than publishing topics)
                 this.emit('moved', {mover: mover, leftTop: leftTop});
             }
         }
