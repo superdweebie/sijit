@@ -29,13 +29,6 @@ function (
             //		Shows current state (ie, validation result) of input (""=Normal, Incomplete, or Error)
             state: '',
 
-            // messagePosition: string
-            //      Possible values are:
-            //      auto: if the message is one line, display inline. If it is multiline, display block
-            //      inline: always display message inline. If the message is more than one line, only the first will be shown.
-            //      block: alwyas display message as block, even when there is only one line.
-            messagePosition: 'auto',
-
             // suppressMessages: boolean
             //      Should message be returned to a get('message') call?
             suppressMessages: true,
@@ -48,7 +41,7 @@ function (
             postActivitySuppressMessages: false,
 
             // styleClasses: Object
-            //      An object the defines the css classes that could be applied to _messageStyleNode
+            //      An object the defines the css classes that could be applied to this.domNode
             //      when a validation failure occurs
             styleClasses: {
                 none : [],
@@ -72,14 +65,12 @@ function (
 
             _validatorSet: false,
 
-            // validator: an instance of Sds/Common/Validator/BaseValidator.
+            // validator: an instance of Sds/Validator/BaseValidator.
             validator: undefined,
 
             _onFocusValue: undefined,
 
             messages: [],
-
-            _messageStyleNode: undefined,
 
             _delayTimer: undefined,
 
@@ -89,7 +80,7 @@ function (
 
             startup: function(){
                 this.inherited(arguments);
-
+                
                 this.watch('state', lang.hitch(this, function(p, o, newValue){
                     if (newValue == '' ||
                         (newValue != '' &&
@@ -110,6 +101,11 @@ function (
                 this.set('suppressMessages', this.preActivitySuppressMessages);
             },
 
+            triggerActivity: function(){
+                this.set('style', this.postActivityStyle);
+                this.set('suppressMessages', this.postActivitySuppressMessages);                
+            },
+            
             _setValueAttr: function(){
                 // summary:
                 //		Hook so set('value', ...) works.
@@ -181,8 +177,7 @@ function (
             },
 
             onBlur: function(){
-                this.set('style', this.postActivityStyle);
-                this.set('suppressMessages', this.postActivitySuppressMessages);
+                this.triggerActivity();
                 this.inherited(arguments);
                 this._validateNow();
             },
@@ -272,28 +267,7 @@ function (
             },
             
             _updateMessages: function(){
-                var messages = this.get('messages');
-
-                if ( ! lang.isArray(messages)){
-                    return;
-                }
-
-                if (messages.length == 0 || this.suppressMessages){
-                    domClass.add(this.inlineMessageWrapper, 'hide');
-                    domClass.add(this.blockMessageWrapper, 'hide');
-                    this.inlineMessage.innerHTML = '';
-                    this.blockMessage.innerHTML = '';
-                    return;
-                }
-                if ((this.messagePosition == 'auto' && messages.length > 1) || this.messagePosition == 'block'){
-                    this.inlineMessage.innerHTML = '';
-                    this.blockMessage.innerHTML = messages.join('<br />');
-                    domClass.remove(this.blockMessageWrapper, 'hide');
-                } else {
-                    this.blockMessage.innerHTML = '';
-                    this.inlineMessage.innerHTML = messages[0];
-                    domClass.remove(this.inlineMessageWrapper, 'hide');
-                }
+                this.set('validationMessages', this.get('messages'));
             },
 
             _updateStyle: function(result){
@@ -310,11 +284,18 @@ function (
                     remove = utils.arraySubtract(remove, add);
                 }
 
+                var styleNode;
+                if (this.containerNode){
+                    styleNode = this.containerNode;
+                } else {
+                    styleNode = this.domNode;
+                }
+                
                 array.forEach(add, function(item){
-                    domClass.add(this._messageStyleNode, item);
+                    domClass.add(styleNode, item);
                 }, this);
                 array.forEach(remove, function(item){
-                    domClass.remove(this._messageStyleNode, item);
+                    domClass.remove(styleNode, item);
                 }, this);
             }
         }

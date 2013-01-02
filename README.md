@@ -39,7 +39,7 @@ distributed config definition.
 
 A module to handle dependency injection.
 
-##Common/Validator
+##Validator
 
 A group of modules that provide a standardised validation interface.
 

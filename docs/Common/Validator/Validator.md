@@ -1,4 +1,4 @@
-Common/Validator
+Validator
 ================
 
 This is a group of modules which provide a standardised validation interface.
@@ -20,14 +20,14 @@ characters:
 
     define([
         'dojo/_base/declare',
-        'Sds/Common/Validator/BaseValidator'
+        'Sds/Validator/BaseValidator'
     ],
     function(
         declare,
         BaseValidator
     ){
         return declare(
-            'Sds/Common/Validator/AlphaValidator',
+            'Sds/Validator/AlphaValidator',
             [BaseValidator],
             {
                 regEx: /^[a-zA-Z]+$/,
@@ -50,7 +50,7 @@ characters:
 
 This example validator could be used like this:
 
-    require([Sds/Common/Validator/AlphaValidator], function(AlphaValidator){
+    require([Sds/Validator/AlphaValidator], function(AlphaValidator){
         var validator = new AlphaValidator;
         if ( ! validator.isValid('asdf')){
             console.dir(validator.get('messages')
@@ -77,9 +77,9 @@ LengthValidator and the AlphaValidator:
 
     define([
         'dojo/_base/declare',
-        'Sds/Common/Validator/ValidatorGroup',
-        'Sds/Common/Validator/LengthValidator',
-        'Sds/Common/Validator/AlphaValidator'
+        'Sds/Validator/ValidatorGroup',
+        'Sds/Validator/LengthValidator',
+        'Sds/Validator/AlphaValidator'
     ],
     function(
         declare,
@@ -88,7 +88,7 @@ LengthValidator and the AlphaValidator:
         AlphaValidator
     ){
         return declare(
-            'Sds/Common/Validator/PersonalNameValidator',
+            'Sds/Validator/PersonalNameValidator',
             [ValidatorGroup],
             {
                 constructor: function(){
@@ -103,7 +103,7 @@ LengthValidator and the AlphaValidator:
 
 The PersonalNameValidator is then used the same as a normal validator:
 
-    require([Sds/Common/Validator/PersonalNameValidator], function(PersonalNameValidator){
+    require([Sds/Validator/PersonalNameValidator], function(PersonalNameValidator){
         var validator = new PersonalNameValidator;
         if ( ! validator.isValid('Tim')){
             console.dir(validator.get('messages')
@@ -147,15 +147,15 @@ Create may be called in one of two different ways.
 Create may be called with a string giving the moduleName, and an options object which will be mixed
 into the validator instance. eg:
 
-    create('Sds/Common/Validator/LengthValidator, {min: 10, max:20})
+    create('Sds/Validator/LengthValidator, {min: 10, max:20})
 
-This will return a Deferred, which will resolve to an instnace of Sds/Common/Validator/LengthValidator with the
+This will return a Deferred, which will resolve to an instnace of Sds/Validator/LengthValidator with the
 min and max options set.
 
 
 Alternately, create may be called with a single object with both `class` and `options` keys:
 
-     create({'class': 'Sds/Common/Validator/LengthValidator', options: {min:10, max: 20}})
+     create({'class': 'Sds/Validator/LengthValidator', options: {min:10, max: 20}})
 
 #createGroup
 
@@ -165,9 +165,9 @@ The validators array may be Validator instances, or a form compatibile with the 
 `create` method. eg:
 
     createGroup([
-        'Sds/Common/Validator/AlphaValidator',
+        'Sds/Validator/AlphaValidator',
         {
-            'class': 'Sds/Common/Validator/LengthValidator',
+            'class': 'Sds/Validator/LengthValidator',
             options: {min: 10, max: 120}
         }
     ])

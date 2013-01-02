@@ -4,7 +4,8 @@ define([
     'dojo/on',
     'dojo/_base/lang',
     'dojo/dom-prop',
-    'dojo/dom-construct',
+    'Sds/Common/Form/_LabelMixin',
+    'Sds/Common/Form/_HelpMessagesMixin',
     'dijit/form/_FormValueMixin'
 ],
 function (
@@ -13,12 +14,13 @@ function (
     on,
     lang,
     domProp,
-    domConstruct,
+    LabelMixin,
+    HelpMessagesMixin,
     FormValueMixin
 ){
     return declare(
         'Sds/Common/Form/_TextBoxMixin',
-        [FormValueMixin],
+        [LabelMixin, HelpMessagesMixin, FormValueMixin],
         {
             // Lots of this code is copied across from dijit/form/_TextBoxMixin
             // Some of it is simplified. Some of it is massaged to work with
@@ -49,9 +51,6 @@ function (
             // placeholder: string
             placeholder: undefined,
 
-            // label: string
-            label: undefined,
-
             _setPlaceholderAttr: function(value) {
                 this.placeholder = value;
 
@@ -63,21 +62,13 @@ function (
             },
 
             _setLabelAttr: function(value) {
-                this.label = value;
-
-                if (this.label){
-                    domConstruct.create(
-                        'label',
-                        {innerHTML: this.label, 'class': 'control-label', 'for': this.id},
-                        this.domNode,
-                        'first'
-                    );
-                }
+                this.inherited(arguments);
+                
                 if (!this.placeholder){
                     domProp.set(this.textbox, 'placeholder', this.label);
                 }
             },
-
+                        
             focusFormat: function(value /*=====, constraints =====*/){
                 // summary:
                 //		Replaceable function to convert a value to a properly formatted string.

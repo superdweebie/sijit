@@ -2,7 +2,7 @@ define([
     'dojo/_base/declare',
     'dojo/Deferred',
     'dojo/_base/lang',
-    'dojo/_base/json',
+    'dojo/json',
     'dojo/request/script',
     'Sds/ExceptionModule/Exception/BaseException',
     'Sds/ExceptionModule/Exception/InvalidTypeException',
@@ -81,7 +81,7 @@ function(
                 var returnDeferred = new Deferred;
 
                 if (exception.response){
-                    exception = json.fromJson(exception.response.text);
+                    exception = json.parse(exception.response.text);
                 }
 
                 var isRegistered = false;

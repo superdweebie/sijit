@@ -5,31 +5,24 @@ define([
     'Sds/Common/Form/_TextBoxMixin',
     'Sds/Common/Form/_ValidationMixin',
     'Sds/Common/Form/_AppendageMixin',
+    'Sds/Common/Form/_ValidationMessagesMixin',
     'dojo/text!./Template/ValidationTextBox.html'
 ],
 function (
     declare,
     Widget,
-    TemplatedMixin,
+    TemplatedMixin,   
     TextBoxMixin,
     ValidationMixin,
     AppendageMixin,
+    ValidationMessagesMixin,
     template
 ){
     return declare(
         'Sds/Common/Form/ValidationTextBox',
-        [Widget, TemplatedMixin, TextBoxMixin, AppendageMixin, ValidationMixin],
+        [Widget, TemplatedMixin, TextBoxMixin, AppendageMixin, ValidationMixin, ValidationMessagesMixin],
         {
-            templateString: template,
-
-            // message: String
-            //		Current error/prompt message.
-            message: '',
-
-            postCreate: function(){
-                this._messageStyleNode = this.domNode;
-                this.inherited(arguments);
-            }
+            templateString: template      
         }
     );
 });
