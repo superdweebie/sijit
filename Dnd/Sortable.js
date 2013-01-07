@@ -30,7 +30,7 @@ function (
         [WidgetBase, Evented],
         {
 
-            dummyItem: undefined,
+            //dummyItem: undefined,
 
             buildRendering: function(){
 
@@ -95,11 +95,17 @@ function (
                 domClass.remove(this.dummyItem, 'dojoMoveItem');
                 domClass.add(this.dummyItem, 'dojoDndDummyItem');
                 domAttr.remove(this.dummyItem, 'style');
-                if (mover.node.previousElementSibling){
-                    domConstruct.place(this.dummyItem, mover.node.previousElementSibling, 'after');
-                } else {
-                    domConstruct.place(this.dummyItem, mover.node.nextElementSibling, 'before');
+                switch (true){
+                    case mover.node.previousElementSibling:
+                        domConstruct.place(this.dummyItem, mover.node.previousElementSibling, 'after');
+                        break;
+                    case mover.node.nextElementSibling:
+                        domConstruct.place(this.dummyItem, mover.node.nextElementSibling, 'before');
+                        break;
+                    default:
+                        domConstruct.place(this.dummyItem, mover.node, 'before');
                 }
+                
                 this.emit('firstMove', mover);
             },
 
