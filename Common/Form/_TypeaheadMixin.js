@@ -76,7 +76,7 @@ function (
             
                     var queryStore = lang.hitch(this, function(){
                         when(this.get('store').query(this.getQuery(this._typeahead.query)), lang.hitch(this, function (data) {
-                            this._cachedResult = data.map(lang.hitch(this, function(item){
+                            this._cachedResult = array.map(data, lang.hitch(this, function(item){
                                 
                                 if(array.indexOf(this._cachedItems, item) == -1) {
                                     this._cachedItems.push(item);
