@@ -39,6 +39,8 @@ function (
                     this.domNode = this.srcNodeRef || this.ownerDocument.createElement("ul");
                 }
 
+                this.containerNode = this.domNode;
+                
                 this.inherited(arguments);
 
                 // Add movers
