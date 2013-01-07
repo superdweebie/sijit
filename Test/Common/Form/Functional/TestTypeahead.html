@@ -409,7 +409,19 @@
                     store: 'statesStore',
                     validator: 'RequiredValidator'
                 "
-            >              
+            > 
+            
+            <p>Typeahead with appendages</p>
+            <input id='typeahead8' 
+                data-dojo-type="Sds/Common/Form/Typeahead"                
+                data-dojo-props="
+                    label: 'State',
+                    storeLabel: 'name',                    
+                    store: 'statesStore',
+                    prepend: ['pre1', 'pre2'], 
+                    append: ['app1', 'app2']
+                "
+            >             
         </form>
 	</body>
 </html>

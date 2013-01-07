@@ -58,10 +58,13 @@ function (
             
             postCreate: function(){
                 this.inherited(arguments);
-                                                        
-                this._typeahead = new Typeahead(this.textbox, {
-                    items: this.items
-                });
+                                    
+                this._typeahead = new Typeahead(
+                    this.appendagesWrapper ? this.appendagesWrapper : this.focusNode,
+                    {                    
+                        items: this.items
+                    }
+                );
               
                 //override Typeahead lookup function to use the dojo/store with timing delay
                 this._typeahead.lookup = lang.hitch(this, function(){

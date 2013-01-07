@@ -31,13 +31,13 @@ function (
             //      For shorthand, if an array item is a string, it is equivalent to a
             //      text type definition.
             //
-            prepend: undefined,
+            //prepend: undefined,
 
             // append: array
             //      Same as prepend
-            append: undefined,
+            //append: undefined,
 
-            _appendageNodes: undefined,
+            //_appendageNodes: undefined,
 
             constructor: function(){
                 this._appendageNodes = [];
@@ -73,6 +73,11 @@ function (
                 this._appendageDifference(value);
             },
 
+            _createAppendagesWrapper: function(){
+                this.appendagesWrapper = domConstruct.create('div', null, this.focusNode, 'after');
+                domConstruct.place(this.focusNode, this.appendagesWrapper, 'first');
+            },
+            
             _createDefinition: function(value, isPrepend){
                 var definition = value;
                 if (typeof(value) == 'string'){
@@ -130,6 +135,10 @@ function (
 
             _addAppendage: function(definition){
 
+                if (! this.appendagesWrapper){
+                    this._createAppendagesWrapper();
+                }
+                
                 if (definition.isPrepend){
                     domClass.add(this.appendagesWrapper,'input-prepend');
                 } else {
