@@ -100,10 +100,11 @@ function (
             },
 
             _addKeypressHandler: function(button){
-                this._keypressHandlers.push(on(document, 'keypress', lang.hitch(this, function(evt){
+                this._keypressHandlers.push(on(window, 'keydown', lang.hitch(this, function(evt){
                     if ( ! lang.isArray(button.keys)){
                         button.keys = [button.keys];
                     }
+
                     array.forEach(button.keys, lang.hitch(this, function(key){                                                
                         if (
                             (typeof key == 'object' && (evt.charCode || evt.keyCode) == key.code && evt.ctrlKey == key.ctrl) ||
