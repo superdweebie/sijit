@@ -19,6 +19,7 @@
                 'dijit/registry',
                 'Sds/Common/Dialog',
                 'Sds/Common/Form/TextBox',
+                'Sds/Common/Form/DateTextBox',
                 'dojo/domReady!'
             ],
             function(
@@ -69,7 +70,16 @@
                 <button id="validState" class="btn">set valid state</button>
                 <button id="invalidState" class="btn">set invalid state</button>
             </p>
-            <p><input id="hello" data-dojo-type="Sds/Common/Form/TextBox" value="hello" name="helloInput"/></p>
+            <p><input id="hello" data-dojo-type="Sds/Common/Form/TextBox" value="hello" name="helloInput"/></p
+            <p>
+                <input id="date" 
+                       data-dojo-type="Sds/Common/Form/DateTextBox"
+                       name="dateInput"
+                       data-dojo-props="
+                            label:'Date start',
+                            format: 'dd-mm-yyyy'"
+                       />
+            </p>
         </div>
 	</body>
 </html>
