@@ -6,6 +6,27 @@
 		<style type="text/css">
             @import "../../../themes/bootstrap/css/bootstrap.css";
             @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
+            .no-scroll {
+                overflow: hidden;
+            }
+            
+            .modal-scroll {
+                bottom: 0;
+                left: 0;
+                overflow-x: auto;
+                overflow-y: scroll;
+                position: fixed;
+                right: 0;
+                top: 0;
+                z-index: 9999;
+            }
+            .modal-scroll .modal {
+                position: static;
+                overflow: hidden;
+                z-index: 2;
+                top: 100px;
+                margin: 20px auto !important;
+            }
 		</style>
         <script type="text/javascript" src="../../testconfig.js"></script>
         <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
@@ -71,5 +92,4 @@
             </p>
             <p><input id="hello" data-dojo-type="Sds/Common/Form/TextBox" value="hello" name="helloInput"/></p>
         </div>
-	</body>
 </html>

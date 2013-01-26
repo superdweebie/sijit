@@ -6,6 +6,7 @@ define([
     'dojo/Deferred',
     'dojo/on',
     'dojo/dom-prop',
+    'dojo/dom-class',
     'dojo/dom-construct',
     'Sds/Common/utils',
     'Sds/Common/Form/_FormMixin',
@@ -20,6 +21,7 @@ function (
     Deferred,
     on,
     domProp,
+    domClass,
     domConstruct,
     utils,
     FormMixin,
@@ -197,7 +199,9 @@ function (
 
                 this.watch('state', lang.hitch(this, '_updateDisableStateButtons'));
                 this.connectChildren();
-
+                
+                domClass.add(document.body, 'no-scroll');
+                
                 this._modal.show();
                 on(this._modal.backdropNode, 'click', lang.hitch(this, 'onBackdropClick'));
 
@@ -216,6 +220,9 @@ function (
                 this._keyPressHandlers = [];
                 
                 this._modal.hide();
+                
+                domClass.remove(document.body, 'no-scroll');
+                
                 this.visible = false;
 
                 var value = this.get('value');
