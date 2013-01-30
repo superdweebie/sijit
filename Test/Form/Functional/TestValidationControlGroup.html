@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/ValidationControlGroup</title>
+		<style type="text/css">
+            @import "../../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../../themes/bootstrap/css/bootstrap-responsive.css";
+		</style>
+        <script type="text/javascript" src="../../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			require([
+                'dojo/parser',
+                'dojo/on',
+                'dojo/dom',
+                'dijit/registry',
+                'Sds/Form/ValidationControlGroup',
+                'Sds/Form/ValidationTextBox',
+                'dojo/domReady!'
+            ],
+            function(
+                parser,
+                on,
+                dom,
+                registry
+            ){
+                parser.parse().then(function(){
+                    on(dom.byId('listInvalidButton'), 'click', function(){
+                        var widgets = registry.byId('controlGroup1').get('invalidWidgets');
+                        var ids = [];
+                        for (var index in widgets){
+                            ids.push(widgets[index].get('id'));
+                        }
+                        dom.byId('invalidWidgetsList').innerHTML = ids.toString();
+                    });
+                });
+            })
+		</script>
+	</head>
+	<body>
+        <h1>Functional Testing Sds/ValidationControlGroup</h1>
+        <br />
+
+        <h3>ValidationControlGroup holding two ValidationTextBoxes</h3>
+        <div
+            id="controlGroup1"
+            data-dojo-type="Sds/Form/ValidationControlGroup"
+            data-dojo-props="validator: {base: 'Sds/Test/Form/Asset/MultiFieldValidator'}"
+        >
+
+            <input
+                id="username1"
+                data-dojo-type="Sds/Form/ValidationTextBox"
+                value="Not Toby"
+                data-dojo-props="
+                    label: 'username1',
+                    name: 'username1',
+                    validator: {base: 'Sds/Validator/LengthValidator', params: {max: 4, min: 2}}"
+            />
+            <input
+                id="username2"
+                data-dojo-type="Sds/Form/ValidationTextBox"
+                value="Toby"
+                data-dojo-props="
+                    label: 'username2',
+                    name: 'username2',
+                    validator: {base: 'Sds/Validator/LengthValidator', params: {max: 4, min: 2}}"
+            />
+        </div>
+        <button class="btn btn-primary btn-large" id="listInvalidButton">List invalid widgets</button>
+        <p><pre id="invalidWidgetsList"></pre></p>
+	</body>
+</html>

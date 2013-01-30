@@ -22,7 +22,7 @@ function(){
                 ]
             },
             'Sds/AuthenticationModule/Login/IdentityName/Input': {
-                base: 'Sds/Common/Form/ValidationTextBox',
+                base: 'Sds/Form/ValidationTextBox',
                 directives: {
                     declare: true,
                     define: true
@@ -36,7 +36,7 @@ function(){
                 }
             },
             'Sds/AuthenticationModule/Login/Credential/Input': {
-                base: 'Sds/Common/Form/ValidationTextBox',
+                base: 'Sds/Form/ValidationTextBox',
                 directives: {
                     declare: true,
                     define: true
@@ -51,7 +51,7 @@ function(){
                 }
             },
             'Sds/AuthenticationModule/Login/RememberMe/Input': {
-                base: 'Sds/Common/Form/Checkbox',
+                base: 'Sds/Form/Checkbox',
                 directives: {
                     declare: true,
                     define: true

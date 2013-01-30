@@ -16,7 +16,7 @@ function(){
                 }
             },
             'StatesSelect': {
-                base: 'Sds/Common/Form/Select',
+                base: 'Sds/Form/Select',
                 directives: {
                     declare: true,
                     define: true

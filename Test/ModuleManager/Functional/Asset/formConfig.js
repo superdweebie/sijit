@@ -60,7 +60,7 @@ define ([], function (){
                 }
             },
             'Test/Form': {
-                base: 'Sds/Common/Form/ValidationForm',
+                base: 'Sds/Form/ValidationForm',
                 directives: {
                     declare: true,
                     define: true
@@ -77,7 +77,7 @@ define ([], function (){
                 }
             },
             'Test/Username/Input': {
-                base: 'Sds/Common/Form/ValidationTextBox',
+                base: 'Sds/Form/ValidationTextBox',
                 directives: {
                     declare: true,
                     define: true
@@ -91,7 +91,7 @@ define ([], function (){
                 }
             },
             'Test/Password/Input': {
-                base: 'Sds/Common/Form/ValidationTextBox',
+                base: 'Sds/Form/ValidationTextBox',
                 directives: {
                     declare: true,
                     define: true

@@ -8,7 +8,7 @@ define([
     'dojo/dom-prop',
     'dojo/dom-construct',
     'Sds/Common/utils',
-    'Sds/Common/Form/_FormMixin',
+    'Sds/Form/_FormMixin',
     'dijit/_OnDijitClickMixin',
     'bootstrap/Modal'
 ],
@@ -70,12 +70,12 @@ function (
             visible: false,
 
             _keypressHandlers: [],
-            
+
             buildRendering: function(){
 
-                // Add onClick handlers for any buttons that don't have them                
-                for (var index in this.buttons){                    
-                    this._addClickHandler(this.buttons[index].name || this.buttons[index]);                   
+                // Add onClick handlers for any buttons that don't have them
+                for (var index in this.buttons){
+                    this._addClickHandler(this.buttons[index].name || this.buttons[index]);
                 }
 
                 this.inherited(arguments);
@@ -85,17 +85,17 @@ function (
                 array.forEach(this._decendants, function(widget){
                     if (widget.resetActivity){
                         widget.resetActivity();
-                    }                    
+                    }
                 })
             },
-            
+
             _addClickHandler: function(name){
                 var functionName = 'on' + utils.ucFirst(name) + 'Click';
                 if (! this[functionName]){
                     this[functionName] = function(){
                         this.set('button', name);
                         this.hide();
-                    }                    
+                    }
                 }
             },
 
@@ -105,18 +105,18 @@ function (
                         button.keys = [button.keys];
                     }
 
-                    array.forEach(button.keys, lang.hitch(this, function(key){                                                
+                    array.forEach(button.keys, lang.hitch(this, function(key){
                         if (
                             (typeof key == 'object' && (evt.charCode || evt.keyCode) == key.code && evt.ctrlKey == key.ctrl) ||
                             ((evt.charCode || evt.keyCode) == key)
                         ){
                             event.stop(evt);
                             this['on' + utils.ucFirst(button.name) + 'Click']();
-                        }                        
+                        }
                     }));
-                })))               
+                })))
             },
-            
+
             postCreate: function(){
                 this.inherited(arguments);
                 this._modal = new Modal(this.domNode);
@@ -131,7 +131,7 @@ function (
                         domProp.set(this[this.disableStateButtons[index] + 'Node'], 'disabled', false);
                     } else {
                         domProp.set(this[this.disableStateButtons[index] + 'Node'], 'disabled', true);
-                    }                    
+                    }
                 }
             },
 
@@ -143,7 +143,7 @@ function (
                     this.containerNode.innerHTML = content;
                 }
             },
-            
+
             _getValueAttr: function(){
                 // summary:
                 //     The value of the dialog is a composite object:
@@ -182,9 +182,9 @@ function (
                 for (var index in this.buttons){
                     if (typeof this.buttons[index] == 'object'){
                         this._addKeypressHandler(this.buttons[index]);
-                    }                    
+                    }
                 }
-                
+
                 this.set('value', value);
 
                 if (this.visible){
@@ -209,12 +209,12 @@ function (
             {
                 // summary:
                 //    Hide the dialog. Calling this will resolve the deferred returned by show()
-                
+
                 array.forEach(this._keypressHandlers, function(handler){
                     handler.remove()
                 });
                 this._keyPressHandlers = [];
-                
+
                 this._modal.hide();
                 this.visible = false;
 
