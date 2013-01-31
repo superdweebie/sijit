@@ -2,20 +2,20 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/Deferred',
-    'Sds/Validator/BaseValidator',
+    'Sds/Validator/Base',
 ],
 function(
     declare,
     lang,
     Deferred,
-    BaseValidator
+    Base
 ){
     // module:
     //		Sds/Test/Validator/DeferredValidator
 
     return declare(
         'Sds/Test/Validator/DeferredValidator',
-        [BaseValidator],
+        [Base],
         {
 
             timeout: 1000,

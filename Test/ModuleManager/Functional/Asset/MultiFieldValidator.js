@@ -1,14 +1,14 @@
 define([
     'dojo/_base/declare',
-    'Sds/Validator/BaseValidator'
+    'Sds/Validator/Base'
 ],
 function(
     declare,
-    BaseValidator
+    Base
 ){
     return declare(
         'Sds/Test/ModuleManager/Functional/Asset/MultiFieldValidator',
-        [BaseValidator],
+        [Base],
         {
 
             _isValid: function(value){

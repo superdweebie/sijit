@@ -2,29 +2,29 @@ define ([], function (){
     return {
         moduleManager: {
             'ValidatorFactory': {
-                base: 'Sds/Validator/validatorFactory',
+                base: 'Sds/Validator/factory',
                 gets: {
-                    validatorManager: 'Sds/ModuleManager/Shared/getModuleManager!'
+                    manager: 'Sds/ModuleManager/Shared/getModuleManager!'
                 }
             },
-            'AlphaValidator': {base: 'Sds/Validator/AlphaValidator', directives: {cache: false}},
-            'CredentialValidator': {base: 'Sds/Validator/CredentialValidator', directives: {cache: false}},
-            'CreditCardExpiryValidator': {base: 'Sds/Validator/CreditCardExpiryValidator', directives: {cache: false}},            
-            'CreditCardValidator': {base: 'Sds/Validator/CreditCardValidator', directives: {cache: false}},
-            'CurrencyValidator': {base: 'Sds/Validator/CurrencyValidator', directives: {cache: false}},
-            'CvvValidator': {base: 'Sds/Validator/CvvValidator', directives: {cache: false}},
-            'DatatypeValidator': {base: 'Sds/Validator/DatatypeValidator', directives: {cache: false}},
-            'DateInequalityValidator': {base: 'Sds/Validator/DateInequalityValidator', directives: {cache: false}},
-            'EmailAddressValidator': {base: 'Sds/Validator/EmailAddressValidator', directives: {cache: false}},
-            'IdentifierArrayValidator': {base: 'Sds/Validator/IdentifierArrayValidator', directives: {cache: false}},
-            'IdentifierValidator': {base: 'Sds/Validator/IdentifierValidator', directives: {cache: false}},
-            'IndequalityValidator': {base: 'Sds/Validator/InequalityValidator', directives: {cache: false}},
-            'LengthValidator': {base: 'Sds/Validator/LengthValidator', directives: {cache: false}},
-            'ModelValidator': {base: 'Sds/Validator/ModelValidator', directives: {cache: false}},
-            'NotRequiredValidator': {base: 'Sds/Validator/NotRequiredValidator', directives: {cache: false}},
-            'PersonalNameValidator': {base: 'Sds/Validator/PersonalNameValidator', directives: {cache: false}},
-            'RequiredValidator': {base: 'Sds/Validator/RequiredValidator', directives: {cache: false}},
-            'ValidatorGroup': {base: 'Sds/Validator/ValidatorGroup', directives: {cache: false}}
+            'Alpha': {base: 'Sds/Validator/Alpha', directives: {cache: false}},
+            'Credential': {base: 'Sds/Validator/Credential', directives: {cache: false}},
+            'CreditCardExpiry': {base: 'Sds/Validator/CreditCardExpiry', directives: {cache: false}},
+            'CreditCard': {base: 'Sds/Validator/CreditCard', directives: {cache: false}},
+            'Currency': {base: 'Sds/Validator/Currency', directives: {cache: false}},
+            'Cvv': {base: 'Sds/Validator/Cvv', directives: {cache: false}},
+            'Datatype': {base: 'Sds/Validator/Datatype', directives: {cache: false}},
+            'DateInequality': {base: 'Sds/Validator/DateInequality', directives: {cache: false}},
+            'EmailAddress': {base: 'Sds/Validator/EmailAddress', directives: {cache: false}},
+            'IdentifierArray': {base: 'Sds/Validator/IdentifierArray', directives: {cache: false}},
+            'Identifier': {base: 'Sds/Validator/Identifier', directives: {cache: false}},
+            'Indequality': {base: 'Sds/Validator/Inequality', directives: {cache: false}},
+            'Length': {base: 'Sds/Validator/Length', directives: {cache: false}},
+            'Model': {base: 'Sds/Validator/Model', directives: {cache: false}},
+            'NotRequired': {base: 'Sds/Validator/NotRequired', directives: {cache: false}},
+            'PersonalName': {base: 'Sds/Validator/PersonalName', directives: {cache: false}},
+            'Required': {base: 'Sds/Validator/Required', directives: {cache: false}},
+            'Group': {base: 'Sds/Validator/Group', directives: {cache: false}}
         }
     };
 });

@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Testing Sds/Validator/Datatype</title>
+        <script type="text/javascript" src="../testconfig.js"></script>
+        <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+            require([
+                    'doh/main',
+                    'Sds/Validator/Datatype',
+                    'dojo/domReady!'
+                ],
+                function(
+                    doh,
+                    Datatype
+                ){
+
+                    doh.register("Sds/Test/Validator/TestDatatype", [
+
+                        function StringTest(doh){
+                            var validator = new Datatype({requiredType: Datatype.STRING});
+
+                            doh.assertTrue(validator.isValid('password1').result);
+                            doh.assertFalse(validator.isValid(1).result);
+                        },
+
+                        function BooleanTest(doh){
+                            var validator = new Datatype({requiredType: Datatype.BOOLEAN});
+
+                            doh.assertTrue(validator.isValid(true).result);
+                            doh.assertTrue(validator.isValid(false).result);
+                        },
+
+                        function IntTest(doh){
+                            var validator = new Datatype({requiredType: Datatype.INT});
+
+                            doh.assertTrue(validator.isValid(1).result);
+                            doh.assertTrue(validator.isValid('1').result);
+
+                            doh.assertFalse(validator.isValid(1.1).result);
+                            doh.assertFalse(validator.isValid('1.1').result);
+                            doh.assertFalse(validator.isValid('password').result);
+                        },
+
+                        function FloatTest(doh){
+                            var validator = new Datatype({requiredType: Datatype.FLOAT});
+
+                            doh.assertTrue(validator.isValid(1).result);
+                            doh.assertTrue(validator.isValid('1').result);
+                            doh.assertTrue(validator.isValid(1.1).result);
+                            doh.assertTrue(validator.isValid('1.1').result);
+
+                            doh.assertFalse(validator.isValid('password').result);
+                        }
+
+                    ]);
+
+                    doh.runOnLoad();
+                }
+            );
+
+		</script>
+	</head>
+	<body>
+        <h1>Testing Sds/Validator/Datatype</h1>
+	</body>
+</html>

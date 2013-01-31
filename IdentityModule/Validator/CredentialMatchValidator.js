@@ -1,14 +1,14 @@
 define([
     'dojo/_base/declare',
-    'Sds/Validator/BaseValidator'
+    'Sds/Validator/Base'
 ],
 function(
     declare,
-    BaseValidator
+    Base
 ){
     return declare(
         'Sds/IdentityModule/Validator/CredentialMatchValidator',
-        [BaseValidator],
+        [Base],
         {
             _isValid: function(value){
                 if (value.value){

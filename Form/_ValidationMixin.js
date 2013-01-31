@@ -65,7 +65,7 @@ function (
 
             _validatorSet: false,
 
-            // validator: an instance of Sds/Validator/BaseValidator.
+            // validator: an instance of Sds/Validator/Base.
             validator: undefined,
 
             _onFocusValue: undefined,
@@ -116,10 +116,10 @@ function (
 
             _setValidatorAttr: function(value){
                 // summary:
-                //     Will set the validator. The value must be an instance of BaseValidator parameter may be one of three
+                //     Will set the validator. The value must be an instance of Base parameter may be one of three
                 //     types:
                 //
-                //     Instance of BaseValidator - the validator property is set equal to this instance.
+                //     Instance of Base - the validator property is set equal to this instance.
                 //
                 //     Array - if an array, it is assumed to be an array of validators, or validator definitions.
                 //     The array will be passed to validatorFactory.createGroup(). The validator property

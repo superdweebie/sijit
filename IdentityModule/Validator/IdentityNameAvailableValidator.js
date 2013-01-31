@@ -3,7 +3,7 @@ define([
     'dojo/Deferred',
     'dojo/when',
     'dojo/i18n!Sds/nls/identityModule',
-    'Sds/Validator/BaseValidator',
+    'Sds/Validator/Base',
     'get!Sds/Store/storeManager'
 ],
 function(
@@ -11,12 +11,12 @@ function(
     Deferred,
     when,
     il8n,
-    BaseValidator,
+    Base,
     storeManager
 ){
     return declare(
         'Sds/IdentityModule/Validator/IdentityNameAvailableValidator',
-        [BaseValidator],
+        [Base],
         {
 
             _isValid: function(value){
