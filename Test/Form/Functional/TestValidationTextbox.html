@@ -4,12 +4,12 @@
 	<head>
 		<title>Functional Testing Sds/Form/ValidationTextbox</title>
 		<style type="text/css">
-            @import "../../../../themes/bootstrap/css/bootstrap.css";
-            @import "../../../../themes/bootstrap/css/bootstrap-responsive.css";
-            @import "../../../../../bootstrap/assets/datepicker.css";
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
+            @import "../../../../bootstrap/assets/datepicker.css";
 		</style>
-        <script type="text/javascript" src="../../../testconfig.js"></script>
-        <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			require([
                 'dojo/parser',
@@ -33,7 +33,7 @@
                 value="Toby"
                 data-dojo-props="
                     label:'Name',
-                    validator: 'PersonalNameValidator'
+                    validator: 'PersonalName'
                 "
                 id="validationTextBox1"
              />
@@ -43,7 +43,7 @@
                 value="Not Toby"
                 data-dojo-props="
                     label:'Name',
-                    validator: 'PersonalNameValidator'
+                    validator: 'PersonalName'
                 "
                 id="validationTextBox2"
              />
@@ -54,7 +54,7 @@
                 data-dojo-props="
                     label:'Name',
                     messagePosition: 'inline',
-                    validator: 'PersonalNameValidator'
+                    validator: 'PersonalName'
                 "
                 id="validationTextBox3"
              />
@@ -64,7 +64,7 @@
                 value=""
                 data-dojo-props="
                     label:'Name',
-                    validator: 'PersonalNameValidator'
+                    validator: 'PersonalName'
                 "
                 id="validationTextBox4"
              />
@@ -75,7 +75,7 @@
                 data-dojo-props="
                     label:'Name',
                     messagePosition: 'block',
-                    validator: 'PersonalNameValidator'
+                    validator: 'PersonalName'
                 "
                 id="validationTextBox5"
              />
@@ -86,8 +86,8 @@
                 data-dojo-props="
                     label:'Name',
                     validator: [
-                        'NotRequiredValidator',
-                        'PersonalNameValidator'
+                        'NotRequired',
+                        'PersonalName'
                     ]
                 "
                 id="validationTextBox6"
@@ -100,14 +100,14 @@
                     label:'Sijit is:',
                     messagePosition: 'block',
                     validator: [
-                        'AlphaValidator',
+                        'Alpha',
                         'Sds/Test/Validator/Asset/DeferredValidator',
-                        {base: 'LengthValidator', params: {min: 1, max: 7}},
-                        'AlphaValidator',
+                        {base: 'Length', params: {min: 1, max: 7}},
+                        'Alpha',
                         {base: 'Sds/Test/Validator/Asset/DeferredValidator', params: {timeout: 3000}},
-                        {base: 'LengthValidator', params: {min: 4, max: 8}},
+                        {base: 'Length', params: {min: 4, max: 8}},
                         'Sds/Test/Validator/Asset/DeferredValidator',
-                        {base: 'LengthValidator', params: {min: 5, max: 8}},
+                        {base: 'Length', params: {min: 5, max: 8}},
                     ],
                     suppressMessages: false
                 "
@@ -128,7 +128,7 @@
                 value=""
                 data-dojo-props="
                     label:'Name',
-                    validator: 'PersonalNameValidator',
+                    validator: 'PersonalName',
                     helpMessages: 'Please enter your name'
                 "
                 id="validationTextBox11"

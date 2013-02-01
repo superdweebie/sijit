@@ -27,11 +27,13 @@ function(
                     break;
                 case lang.isArray(config):
                     config = array.map(config, lang.hitch(this, function(item){
-                        if (this.abreviations[item]){
-                            return this.abreviations[item];
-                        } else {
-                            return item;
+                        switch (true){
+                            case Boolean(this.abreviations[item]):
+                                return this.abreviations[item];
+                            case Boolean(this.abreviations[item.base]):
+                                return item.base = this.abreviations[item.base];
                         }
+                        return item;
                     }));
                     config = {
                         base: 'Sds/Filter/Group',
@@ -40,6 +42,8 @@ function(
                         }
                     };
                     break;
+                case Boolean(this.abreviations[config.base]):
+                    config.base = this.abreviations[config.base];
             }
 
             return this.manager.get(config);

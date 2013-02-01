@@ -4,12 +4,12 @@
 	<head>
 		<title>Functional Testing Sds/Form/Textareas Inputs</title>
 		<style type="text/css">
-            @import "../../../../themes/bootstrap/css/bootstrap.css";
-            @import "../../../../themes/bootstrap/css/bootstrap-responsive.css";
-            @import "../../../../../bootstrap/assets/datepicker.css";
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
+            @import "../../../../bootstrap/assets/datepicker.css";
 		</style>
-        <script type="text/javascript" src="../../../testconfig.js"></script>
-        <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			require([
                 'dojo/parser',
@@ -30,7 +30,6 @@
         <h1>Functional Testing Sds/Form/Textareas Inputs</h1>
         <br />
         <form class="form-horizontal">
-
 
             <h3>Sds/Form/Textarea</h3>
             <p>Default</p>
@@ -61,9 +60,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
                 rows="10"
                 data-dojo-props="
                     label:'About',
-                    validator: [
-                        {base: 'LengthValidator', params: {min: 10, max: 1000}}
-                    ]
+                    validator: {base: 'Length', params: {min: 10, max: 1000}}
                 "
                 id="validationTextarea1"
              >Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
@@ -73,9 +70,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
                 rows="10"
                 data-dojo-props="
                     label:'About',
-                    validator: [
-                        {base: 'LengthValidator', params: {min: 10, max: 1000}}
-                    ]
+                    validator: {base: 'Length', params: {min: 10, max: 1000}}
                 "
                 id="validationTextarea2"
              >12345</textarea>
@@ -97,9 +92,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
             <textarea data-dojo-type="Sds/Form/ValidationExpandingTextarea"
                 data-dojo-props="
                     label:'About',
-                    validator: [
-                        {base: 'LengthValidator', params: {min: 10, max: 1000}}
-                    ]
+                    validator: {base: 'Length', params: {min: 10, max: 1000}}
                 "
                 id="validationExpandingTextarea1"
              >Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
@@ -108,9 +101,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
             <textarea data-dojo-type="Sds/Form/ValidationExpandingTextarea"
                 data-dojo-props="
                     label:'About',
-                    validator: [
-                        {base: 'LengthValidator', params: {min: 10, max: 1000}}
-                    ]
+                    validator: {base: 'Length', params: {min: 10, max: 1000}}
                 "
                 id="validationExpandingTextarea2"
              >12345</textarea>

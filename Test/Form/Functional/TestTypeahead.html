@@ -4,15 +4,15 @@
 	<head>
 		<title>Functional Testing Sds/Form/Typeahead</title>
 		<style type='text/css'>
-            @import '../../../../themes/bootstrap/css/bootstrap.css';
-            @import '../../../../themes/bootstrap/css/bootstrap-responsive.css';
-            @import '../../../../../bootstrap/assets/datepicker.css';
+            @import '../../../themes/bootstrap/css/bootstrap.css';
+            @import '../../../themes/bootstrap/css/bootstrap-responsive.css';
+            @import '../../../../bootstrap/assets/datepicker.css';
 		</style>
-        <script type='text/javascript' src='../../../testconfig.js'></script>
+        <script type='text/javascript' src='../../testconfig.js'></script>
         <script type="text/javascript">
             dojoConfig.mergeConfigs.push('TestTypeahead/config');
         </script>
-        <script type='text/javascript' src='../../../../../dojo/dojo.js'></script>
+        <script type='text/javascript' src='../../../../dojo/dojo.js'></script>
 		<script type='text/javascript'>
             define('TestTypeahead/config', ['dojo/store/Memory'], function(Memory){
                 return {
@@ -407,7 +407,7 @@
                     label: 'State',
                     storeLabel: 'name',
                     store: 'statesStore',
-                    validator: 'RequiredValidator'
+                    validator: 'Required'
                 "
             >
 
