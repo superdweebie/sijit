@@ -11,10 +11,10 @@ function(
     Base
 ){
     // module:
-    //		Sds/Test/Validator/DeferredValidator
+    //		Sds/Test/Validator/Asset/DeferredValidator
 
     return declare(
-        'Sds/Test/Validator/DeferredValidator',
+        'Sds/Test/Validator/Asset/DeferredValidator',
         [Base],
         {
 

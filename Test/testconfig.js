@@ -10,6 +10,7 @@ dojoConfig = {
     ],
     mergeConfigs: [
         'Sds/Validator/config',
+        'Sds/Filter/config',
         'Sds/ExceptionModule/config',
         'Sds/Router/config',
         'Sds/Store/config',

@@ -1,8 +1,8 @@
 define ([], function (){
     return {
         moduleManager: {
-            'ValidatorFactory': {
-                base: 'Sds/Validator/factory',
+            'FilterFactory': {
+                base: 'Sds/Filter/factory',
                 gets: {
                     manager: 'Sds/ModuleManager/Shared/getModuleManager!'
                 }

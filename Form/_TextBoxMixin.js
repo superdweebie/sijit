@@ -5,6 +5,7 @@ define([
     'dojo/_base/lang',
     'dojo/dom-prop',
     'Sds/Form/_LabelMixin',
+    'Sds/Form/_FilterMixin',
     'Sds/Form/_HelpMessagesMixin',
     'dijit/form/_FormValueMixin'
 ],
@@ -15,34 +16,22 @@ function (
     lang,
     domProp,
     LabelMixin,
+    FilterMixin,
     HelpMessagesMixin,
     FormValueMixin
 ){
     return declare(
         'Sds/Form/_TextBoxMixin',
-        [LabelMixin, HelpMessagesMixin, FormValueMixin],
+        [LabelMixin, FilterMixin, HelpMessagesMixin, FormValueMixin],
         {
-            // Lots of this code is copied across from dijit/form/_TextBoxMixin
+            // Some of this code is copied across from dijit/form/_TextBoxMixin
             // Some of it is simplified. Some of it is massaged to work with
             // the validation system. Some is changed so that value and state
             // are always updated.
             //
 
-            // trim: Boolean
-            //		Removes leading and trailing whitespace if true.  Default is true.
-            trim: true,
-
-            // uppercase: Boolean
-            //		Converts all characters to uppercase if true.  Default is false.
-            uppercase: false,
-
-            // lowercase: Boolean
-            //		Converts all characters to lowercase if true.  Default is false.
-            lowercase: false,
-
-            // propercase: Boolean
-            //		Converts the first character of each word to uppercase if true.
-            propercase: false,
+            // Apply trim filter by default
+            filter: 'Trim',
 
             // inputClasses: array
             //      An array of css classes to be applied directly to the native input tag
@@ -120,46 +109,7 @@ function (
                 } else {
                     this.textbox.value = this.blurFormat(value, this.constraints);
                 }
-                this.inherited(arguments, [this.parse(this.filter(value), this.constraints)]);
-            },
-
-            filter: function(val){
-                // summary:
-                //		Auto-corrections (such as trimming) that are applied to textbox
-                //		value on blur or form submit.
-                // description:
-                //		For MappedTextBox subclasses, this is called twice
-                //
-                //		- once with the display value
-                //		- once the value as set/returned by set('value', ...)
-                //
-                //		and get('value'), ex: a Number for NumberTextBox.
-                //
-                //		In the latter case it does corrections like converting null to NaN.  In
-                //		the former case the NumberTextBox.filter() method calls this.inherited()
-                //		to execute standard trimming code in TextBox.filter().
-                //
-                //		TODO: break this into two methods in 2.0
-                //
-                // tags:
-                //		protected extension
-                if(val === null){ return this._blankValue; }
-                if(typeof val != "string"){ return val; }
-                if(this.trim){
-                    val = lang.trim(val);
-                }
-                if(this.uppercase){
-                    val = val.toUpperCase();
-                }
-                if(this.lowercase){
-                    val = val.toLowerCase();
-                }
-                if(this.propercase){
-                    val = val.replace(/[^\s]+/g, function(word){
-                        return word.substring(0,1).toUpperCase() + word.substring(1);
-                    });
-                }
-                return val;
+                this.inherited(arguments, [this.parse(this.applyFilter(value), this.constraints)]);
             },
 
             _setFocusNodeClassAttr: { node: "focusNode", type: "class" },

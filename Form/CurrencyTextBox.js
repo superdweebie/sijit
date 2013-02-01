@@ -4,7 +4,8 @@ define([
     'dojo/currency',
     'Sds/Form/ValidationTextBox',
     'Sds/Form/_NumberTextBoxMixin',
-    'get!CurrencyValidator'
+    'Sds/Validator/Currency',
+    'Sds/Filter/PadCurrency'
 ],
 function (
     declare,
@@ -12,7 +13,8 @@ function (
     currency,
     ValidationTextBox,
     NumberTextBoxMixin,
-    CurrencyValidator
+    CurrencyValidator,
+    PadCurrencyFilter
 ){
     return declare(
         'Sds/Form/CurrencyTextBox',
@@ -69,7 +71,16 @@ function (
                 if ( ! lang.isArray(value)){
                     value = [value];
                 }
-                value.push(CurrencyValidator);
+                value.push(new CurrencyValidator);
+                this.inherited(arguments, [value]);
+            },
+
+            _setFilterAttr: function(value){
+
+                if ( ! lang.isArray(value)){
+                    value = [value];
+                }
+                value.push(new PadCurrencyFilter({currency: this.currency}));
                 this.inherited(arguments, [value]);
             }
         }

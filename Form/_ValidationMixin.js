@@ -38,7 +38,7 @@ function (
             // postActivitySuppressMessages: boolean
             //      Value for suppressMessages after the first onBlur event
             //      or if the state changes from valid to invalid while having focus
-            postActivitySuppressMessages: false,
+            //postActivitySuppressMessages: false,
 
             // styleClasses: Object
             //      An object the defines the css classes that could be applied to this.domNode
@@ -63,16 +63,16 @@ function (
             //      or if the state changes from valid to invalid while having focus
             postActivityStyle: 'error',
 
-            _validatorSet: false,
+            //_validatorSet: false,
 
             // validator: an instance of Sds/Validator/Base.
-            validator: undefined,
+            //validator: undefined,
 
-            _onFocusValue: undefined,
+            //_onFocusValue: undefined,
 
             messages: [],
 
-            _delayTimer: undefined,
+            //_delayTimer: undefined,
 
             delayTimeout: 350,
 
@@ -122,7 +122,7 @@ function (
                 //     Instance of Base - the validator property is set equal to this instance.
                 //
                 //     Array - if an array, it is assumed to be an array of validators, or validator definitions.
-                //     The array will be passed to validatorFactory.createGroup(). The validator property
+                //     The array will be passed to validatorFactory.create(). The validator property
                 //     will be set to the returned instance of ValidatorGroup
                 //
                 //     Object - an an object, it is assumbed to be a validator definition.
@@ -272,8 +272,8 @@ function (
 
             _updateStyle: function(result){
 
-                var add = [];
-                var remove = [];
+                var add = [],
+                    remove = [];
 
                 for(var item in this.styleClasses){
                     remove = remove.concat(this.styleClasses[item]);
