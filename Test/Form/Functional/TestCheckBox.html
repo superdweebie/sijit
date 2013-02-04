@@ -2,38 +2,42 @@
 	"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<title>Functional Testing Select with Store</title>
+		<title>Functional Testing Sds/Form/CheckBox</title>
 		<style type="text/css">
             @import "../../../themes/bootstrap/css/bootstrap.css";
             @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
 		</style>
         <script type="text/javascript" src="../../testconfig.js"></script>
-        <script type="text/javascript">
-            dojoConfig.mergeConfigs.push('Sds/Test/ModuleManager/Functional/Asset/selectConfig');
-        </script>
         <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			require([
                 'dojo/parser',
-                'get!StatesSelect'
+                'dojo/dom',
+                'dijit/registry',
+                'Sds/Form/Checkbox',
+                'Sds/Form/RadioButton',
+                'dojo/domReady!'
             ],
             function(
                 parser
             ){
-                parser.parse()
+                parser.parse();
             })
 		</script>
 	</head>
 	<body>
-        <h1>Functional Testing Select with Store</h1>
+        <h1>Functional Testing Sds/Form/CheckBox</h1>
         <br />
         <form class="form-horizontal">
 
-            <p>Single line select, using data store</p>
-            <select
-                data-dojo-type="StatesSelect"
-            >
-            </select>
+            <input data-dojo-type="Sds/Form/CheckBox"
+                data-dojo-props="
+                    label:'Remember Me',
+                    checked: true
+                "
+                id="checkbox1"
+             />
+
         </form>
 	</body>
 </html>

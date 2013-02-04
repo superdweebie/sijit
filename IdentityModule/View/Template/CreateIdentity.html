@@ -1,0 +1,37 @@
+<div>
+    <div
+        data-dojo-type="Sds/Common/Dialog"
+        title = "User registration"
+        class = "form-horizontal"
+        data-dojo-attach-point="dialogNode"
+    >
+        <div>Please enter your details.</div>
+        <br />
+        <input
+            data-dojo-type="Sds/IdentityModule/DataModel/Identity/IdentityName/Input"
+            data-dojo-props="validator: [
+                'Required',
+                'Identifier',
+                'Sds/IdentityModule/Validator/IdentityNameAvailable'
+            ]"
+        />
+        <div
+            data-dojo-type="Sds/Form/ValidationControlGroup"
+            data-dojo-props="
+                name: 'credential',
+                validator: 'Sds/IdentityModule/Validator/CredentialMatch'
+            "
+        >
+            <input
+                data-dojo-type="Sds/IdentityModule/DataModel/Identity/Credential/Input"
+                data-dojo-props="label: 'Password'"
+            />
+            <input data-dojo-type="Sds/IdentityModule/DataModel/Identity/Credential/Input"
+                data-dojo-props="label: 'Password again'"
+            />
+        </div>
+        <input data-dojo-type="Sds/IdentityModule/DataModel/Identity/Firstname/Input" />
+        <input data-dojo-type="Sds/IdentityModule/DataModel/Identity/Lastname/Input" />
+        <input data-dojo-type="Sds/IdentityModule/DataModel/Identity/Email/Input" />
+    </div>
+</div>

@@ -14,7 +14,6 @@ function(){
                 proxyMethods: [
                     'activate',
                     'deactivate',
-                    'reset',
                     'get',
                     'set',
                     'watch'
@@ -24,7 +23,6 @@ function(){
                 proxyMethods: [
                     'activate',
                     'deactivate',
-                    'reset',
                     'get',
                     'set',
                     'watch'
@@ -34,7 +32,6 @@ function(){
                 proxyMethods: [
                     'activate',
                     'deactivate',
-                    'reset',
                     'get',
                     'set',
                     'watch'

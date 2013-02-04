@@ -15,15 +15,17 @@ function(
     storeManager
 ){
     return declare(
-        'Sds/IdentityModule/Validator/IdentityNameAvailableValidator',
+        'Sds/IdentityModule/Validator/IdentityNameAvailable',
         [Base],
         {
+
+            storeName: 'Identity',
 
             _isValid: function(value){
 
                 var resultDeferred = new Deferred;
 
-                var identityStore = storeManager.getStore('Identity');
+                var identityStore = storeManager.getStore(this.storeName);
                 when(identityStore.get(value), function(identity){
                     if (identity == undefined){
                         //Store didn't return a value, so that username is probably available (it will be checked again server side)

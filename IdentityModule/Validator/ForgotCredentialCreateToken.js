@@ -1,16 +1,19 @@
 define([
     'dojo/_base/declare',
+    'dojo/i18n!Sds/nls/identityModule',
     'Sds/Validator/Base'
 ],
 function(
     declare,
+    il8n,
     Base
 ){
     return declare(
-        'Sds/IdentityModule/Validator/CredentialMatchValidator',
+        'Sds/IdentityModule/Validator/ForgotCredentialCreateToken',
         [Base],
         {
             _isValid: function(value){
+
                 if (value.value){
                     value = value.value;
                 }
@@ -18,10 +21,11 @@ function(
                 var messages = [];
 
                 var result = true;
-                if (value.credential[0] != value.credential[1]) {
-                    messages.push('Both passwords are not the same.');
+                if ( ! value.identityName && ! value.email) {
+                    messages.push(il8n.forgotCredentialCreate);
                     result = false;
                 }
+
                 return {result: result, messages: messages};
             }
         }

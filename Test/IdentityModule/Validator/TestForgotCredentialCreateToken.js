@@ -1,15 +1,15 @@
 define([
         'doh/main',
-        'Sds/IdentityModule/Validator/ForgotCredentialCreateTokenValidator'
+        'Sds/IdentityModule/Validator/ForgotCredentialCreateToken'
     ],
     function(
         doh,
-        ForgotCredentialCreateTokenValidator
+        ForgotCredentialCreateToken
     ){
-        doh.register("Sds/Test/IdentityModule/Validator/TestForgotCredentialCreateTokenValidator", [
+        doh.register("Sds/Test/IdentityModule/Validator/TestForgotCredentialCreateToken", [
 
             function PositiveTest1(doh){
-                var validator = new ForgotCredentialCreateTokenValidator;
+                var validator = new ForgotCredentialCreateToken;
 
                 var model = {};
                 model.identityName = 'Lucy';
@@ -19,7 +19,7 @@ define([
             },
 
             function PostiviteTest2(doh){
-                var validator = new ForgotCredentialCreateTokenValidator;
+                var validator = new ForgotCredentialCreateToken;
 
                 var model = {};
                 model.identityName = undefined;
@@ -29,7 +29,7 @@ define([
             },
 
             function NegativeTest(doh){
-                var validator = new ForgotCredentialCreateTokenValidator;
+                var validator = new ForgotCredentialCreateToken;
 
                 var model = {};
                 model.identityName = undefined;

@@ -5,15 +5,14 @@ define([], function(){
                 proxies: {
                     loginView: 'MockLoginView'
                 },
-                gets: {
-                    store: 'Sds/Test/AuthenticationModule/Asset/MockAuthenticationStore'
+                params: {
+                    storeName: 'mockAuthStore'
                 }
             },
             MockLoginView: {
                 base: 'Sds/Test/AuthenticationModule/Asset/MockLoginView',
                 proxyMethods: [
                     'activate',
-                    'reset',
                     'get',
                     'set',
                     'watch'
@@ -24,6 +23,13 @@ define([], function(){
                 params: {
                     register: function(){console.debug('register')},
                     forgotCredential: function(){console.debug('forgotCredential')}
+                }
+            },
+            'Sds/Store/storeManager': {
+                gets: {
+                    stores: [
+                        'Sds/Test/AuthenticationModule/Asset/MockAuthenticationStore'
+                    ]
                 }
             },
             'Sds/Router/router': {

@@ -1,25 +1,29 @@
 define([
     'dojo/_base/declare',
+    'dojo/i18n!Sds/nls/identityModule',
     'Sds/Validator/Base'
 ],
 function(
     declare,
+    il8n,
     Base
 ){
     return declare(
-        'Sds/Test/ModuleManager/Functional/Asset/MultiFieldValidator',
+        'Sds/IdentityModule/Validator/CredentialMatch',
         [Base],
         {
-
             _isValid: function(value){
+                if (value.value){
+                    value = value.value;
+                }
+
                 var messages = [];
 
                 var result = true;
-                if (value.username != 'Toby'){
+                if (value.credential[0] != value.credential[1]) {
+                    messages.push(il8n.credentialMatch);
                     result = false;
-                    messages.push('Username must be Toby');
                 }
-
                 return {result: result, messages: messages};
             }
         }

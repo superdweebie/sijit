@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/Form/RadioButton</title>
+		<style type="text/css">
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
+		</style>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			require([
+                'dojo/parser',
+                'dojo/dom',
+                'dijit/registry',
+                'Sds/Form/Checkbox',
+                'dojo/domReady!'
+            ],
+            function(
+                parser
+            ){
+                parser.parse();
+            })
+		</script>
+	</head>
+	<body>
+        <h1>Functional Testing Sds/Form/RadioButton</h1>
+        <br />
+        <form class="form-horizontal">
+
+            <input data-dojo-type="Sds/Form/RadioButton"
+                data-dojo-props="
+                    label: 'Yes',
+                    name: 'radioGroup[]',
+                    checked: true
+                "
+                id="radio1"
+             />
+            <input data-dojo-type="Sds/Form/RadioButton"
+                data-dojo-props="
+                    label: 'No',
+                    name: 'radioGroup[]',
+                    checked: false
+                "
+                id="radio2"
+             />
+        </form>
+	</body>
+</html>

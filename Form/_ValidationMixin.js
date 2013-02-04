@@ -285,7 +285,9 @@ function (
                 }
 
                 var styleNode;
-                if (this.containerNode){
+                if (this.styleNode) {
+                    styleNode = this.styleNode;
+                } else if (this.containerNode) {
                     styleNode = this.containerNode;
                 } else {
                     styleNode = this.domNode;

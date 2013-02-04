@@ -12,20 +12,18 @@ function (lang, config, array, Deferred) {
         // summary:
         //      Recursively mix the properties of two objects
 
-        var empty = {};
         for (var name in source) {
-            if(!(name in dest) || (dest[name] !== source[name] && (!(name in empty) || empty[name] !== source[name]))){
-                try {
-                    if ( source[name].constructor==Object ) {
-                        dest[name] = mixinDeep(dest[name], source[name]);
-                    } else if (lang.isArray(dest[name]) && lang.isArray(source[name])){
-                        // Concat arrays, rather than overwrite
-                        dest[name] = dest[name].concat(source[name]);
-                    } else {
-                        dest[name] = source[name];
-                    }
-                } catch(e) {
-                    // Property in destination object not set. Create it and set its value.
+            if( ! (name in dest)){
+                dest[name] = source[name];
+                continue;
+            }
+            if (dest[name] != source[name]){
+                if ( source[name].constructor==Object ) {
+                    dest[name] = mixinDeep(dest[name], source[name]);
+                } else if (lang.isArray(dest[name]) && lang.isArray(source[name])){
+                    // Concat arrays, rather than overwrite
+                    dest[name] = dest[name].concat(source[name]);
+                } else {
                     dest[name] = source[name];
                 }
             }

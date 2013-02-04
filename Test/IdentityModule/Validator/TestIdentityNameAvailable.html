@@ -2,26 +2,26 @@
 	"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<title>Unit Testing Sds/IdentityModule/Validator/IdentityNameAvailableValidator</title>
+		<title>Unit Testing Sds/IdentityModule/Validator/IdentityNameAvailable</title>
 		<style type="text/css">
-            @import "../../themes/bootstrap/css/bootstrap.css";
-            @import "../../themes/bootstrap/css/bootstrap-responsive.css";
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
 		</style>
-        <script type="text/javascript" src="../testconfig.js"></script>
+        <script type="text/javascript" src="../../testconfig.js"></script>
         <script type="text/javascript">
             dojoConfig.mergeConfigs.push('Sds/Test/IdentityModule/Asset/config');
         </script>
-        <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
 			require([
                 'doh/main',
-                'Sds/IdentityModule/Validator/IdentityNameAvailableValidator',
+                'Sds/IdentityModule/Validator/IdentityNameAvailable',
                 'get!Sds/Store/storeManager',
                 'dojo/domReady!'
             ],
             function(
                 doh,
-                IdentityNameAvailableValidator,
+                IdentityNameAvailable,
                 storeManager
             ){
 
@@ -54,7 +54,7 @@
                     function PositiveTest(doh){
 
                         var testResult = new doh.Deferred;
-                        var validator = new IdentityNameAvailableValidator;
+                        var validator = new IdentityNameAvailable;
 
                         validator.isValid('lucy').result.then(function(resultObject){
                             doh.assertTrue(resultObject.result);
@@ -67,7 +67,7 @@
                     function NegativeTest(doh){
 
                         var testResult = new doh.Deferred;
-                        var validator = new IdentityNameAvailableValidator;
+                        var validator = new IdentityNameAvailable;
 
                         validator.isValid('toby').result.then(function(resultObject){
                             doh.assertFalse(resultObject.result);
@@ -84,6 +84,6 @@
 		</script>
 	</head>
 	<body>
-        <h1>Unit Testing Sds/IdentityModule/Validator/IdentityNameAvailableValidator</h1>
+        <h1>Unit Testing Sds/IdentityModule/Validator/IdentityNameAvailable</h1>
 	</body>
 </html>
