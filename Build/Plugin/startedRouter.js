@@ -1,4 +1,4 @@
-define(['Sds/Build/Plugin/extractMidsFromConfig'], function(extractMidsFromConfig) {
+define(function() {
 
 	return {
 		start:function(

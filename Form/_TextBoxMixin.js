@@ -38,7 +38,7 @@ function (
             inputClasses: [],
 
             // placeholder: string
-            placeholder: undefined,
+            //placeholder: undefined,
 
             _setPlaceholderAttr: function(value) {
                 this.placeholder = value;

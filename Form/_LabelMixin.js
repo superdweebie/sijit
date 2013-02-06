@@ -19,11 +19,20 @@ function (
             _setLabelAttr: function(value) {
                 this.label = value;
 
+                var labelNode;
+                if (this.labelNode) {
+                    labelNode = this.labelNode;
+                } else if (this.containerNode) {
+                    labelNode = this.containerNode;
+                } else {
+                    labelNode = this.domNode;
+                }
+
                 if (this.label){
                     domConstruct.create(
                         'label',
                         {innerHTML: this.label, 'class': 'control-label', 'for': this.id},
-                        this.domNode,
+                        labelNode,
                         'first'
                     );
                 }

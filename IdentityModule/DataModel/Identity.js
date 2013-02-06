@@ -16,8 +16,6 @@ function(
         ],
         {
             _fields: [
-            	"firstname",
-            	"lastname",
             	"email",
             	"profile",
             	"credential",

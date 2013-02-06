@@ -36,7 +36,7 @@ function(
             get: function(/*String*/name){
 
                 var value = this.inherited(arguments);
-                if ( ! value['$ref']){
+                if ( ! value || ! value['$ref']){
                     return value;
                 }
 

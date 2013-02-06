@@ -7,7 +7,6 @@ define([
     'dojo/Stateful',
     'get!Sds/Store/storeManager',
     'Sds/IdentityModule/DataModel/Identity',
-    'Sds/IdentityModule/DataModel/Identity/JsonRestStore',
     'Sds/IdentityModule/DataModel/Identity/ModelValidator',
     'Sds/IdentityModule/Exception/InvalidArgumentException',
     'proxy!Sds/IdentityModule/View/ForgotCredentialCreateToken',
@@ -24,7 +23,6 @@ function(
     Stateful,
     storeManager,
     Identity,
-    IdentityStore,
     IdentityValidator,
     InvalidArgumentException,
     forgotCredentialCreateTokenView,
@@ -42,7 +40,7 @@ function(
 
             //status: Sds/Common/Status
             //    An object indicating the current status
-            status: undefined,
+            //status: undefined,
 
             forgotCredentialPart1: function(){
                 // summary:

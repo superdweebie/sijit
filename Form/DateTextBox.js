@@ -1,6 +1,8 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
+    "dojo/dom-construct",
+    "dojo/dom-style",
     'dojo/on',
     'dojo/date/locale',
     'Sds/Form/ValidationTextBox',
@@ -9,6 +11,8 @@ define([
 function (
     declare,
     lang,
+    domConstruct,
+    domStyle,
     on,
     dateLocale,
     ValidationTextBox,
@@ -31,7 +35,11 @@ function (
             postCreate: function(){
                 this.inherited(arguments);
                 this._datepicker = new Datepicker(this.textbox, {format: dateLocale._parseInfo().bundle['dateFormat-' + this.formatLength]});
-                this.domNode.appendChild(this._datepicker.picker);
+                //append to body to avoid relative parent containers
+                domConstruct.place(this._datepicker.picker, document.body);
+                domStyle.set(this._datepicker.picker, {
+                    zIndex:99999
+                });
                 this._datepicker.setValue = lang.hitch(this, function(){
                     this.set('value', dateLocale.format(this._datepicker.date, {selector: 'date', formatLength: this.formatLength}));
                 });

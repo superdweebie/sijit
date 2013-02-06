@@ -27,9 +27,9 @@ function (
 
         // if the base url is undefined, it will be set to the
         // url when the router is started
-        baseUrl: undefined,
+        //baseUrl: undefined,
 
-        dojoBaseUrl: undefined,
+        //dojoBaseUrl: undefined,
 
         dojoRelativeBaseUrl: false,
 
@@ -53,21 +53,21 @@ function (
         // controllerManager: Sds/ModuleManager/ModuleManager
         //    This must be an instance of the ModuleManager. This is where
         //    the configured controller instances will be pulled from.
-        controllerManager: undefined,
+        //controllerManager: undefined,
 
-        active: undefined,
+        //active: undefined,
 
         resolve: function(route){
-
-            var resultDeferred = new Deferred;
 
             // strip off the base url first
             if (route.indexOf(this.baseUrl) == 0){
                 route = route.substring(this.baseUrl.length + 1);
             }
 
-            var pieces = route.split('/');
-            var config = this.routes[pieces[0]];
+            var resultDeferred = new Deferred,
+                pieces = route.split('/'),
+                config = this.routes[pieces[0]];
+
             if (config){
                 var method;
                 if (pieces[1]){
@@ -170,9 +170,11 @@ function (
 
                     //If dojo base is a relative path, it may need to be modified
                     if (this.dojoRelativeBaseUrl){
-                        var num = result.route.split('/').length - 1;
-                        var prepend = '';
-                        for (var i = 0; i < num; i++){
+                        var num = result.route.split('/').length - 1,
+                            prepend = '',
+                            i;
+
+                        for (i = 0; i < num; i++){
                             prepend += '../';
                         }
                         require.baseUrl = prepend + this.dojoBaseUrl;

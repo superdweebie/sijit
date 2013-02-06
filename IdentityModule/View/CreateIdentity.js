@@ -12,7 +12,8 @@ define([
     'Sds/IdentityModule/DataModel/Identity/Credential/Input',
     'Sds/IdentityModule/DataModel/Identity/Firstname/Input',
     'Sds/IdentityModule/DataModel/Identity/Lastname/Input',
-    'Sds/IdentityModule/DataModel/Identity/Email/Input'
+    'Sds/IdentityModule/DataModel/Identity/Email/Input',
+    'Sds/Form/Captcha'
 ],
 function(
     declare,

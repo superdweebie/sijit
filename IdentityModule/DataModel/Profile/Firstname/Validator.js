@@ -3,28 +3,28 @@ define([
     'dojo/_base/declare',    
     'Sds/Validator/Group',
     'Sds/Validator/Required',
-    'Sds/Validator/Identifier'
+    'Sds/Validator/PersonalName'
 ],
 function(
     declare,    
     Group,
     Required,
-    Identifier
+    PersonalName
 ){
     // Will return a validator that can be used to check
-    // the identityName field
+    // the firstname field
 
     return declare(
-        'Sds/IdentityModule/DataModel/Profile/IdentityName/Validator',
+        'Sds/IdentityModule/DataModel/Profile/Firstname/Validator',
         [            
             Group        
         ],
         {
-            field: 'identityName',
+            field: 'firstname',
             
             validators: [
             	new Required,
-            	new Identifier
+            	new PersonalName
             ]
         }
     );

@@ -64,10 +64,32 @@ function(
     var sdsplugins = {
         plugins: {
             "Sds/ConfigManager/configReady":"Sds/Build/plugin/configReady",
+            "Sds/Router/baseUrl":"Sds/Build/plugin/baseUrl",
             "Sds/Router/startedRouter":"Sds/Build/plugin/startedRouter",
             "Sds/ModuleManager/Shared/getModuleManager":"Sds/Build/plugin/getModuleManager",
             "Sds/ModuleManager/Shared/proxy":"Sds/Build/plugin/proxy",
             "Sds/ModuleManager/Shared/get":"Sds/Build/plugin/get"
+        }
+    };
+
+    //List of AMD aliases to be added tothe build profile
+    var sdsAliases = [
+        ['get', 'Sds/ModuleManager/Shared/get'],
+        ['proxy', 'Sds/ModuleManager/Shared/proxy']
+    ];
+
+    var testLayer = {
+        "Sds/Test/Built":{
+            "custombase":false,
+            "boot":false,
+            "include":[
+                "Sds/Form/Captcha",
+                "Sds/Form/CheckBox",
+                "Sds/Form/TextBox"
+            ],
+            "exclude": [
+                "dojo"
+            ]
         }
     };
 
@@ -77,6 +99,15 @@ function(
 
         // inject extra build plugin resolvers
         profile = utils.mixinDeep(profile, sdsplugins);
+
+        // add amd aliases
+        if ( ! profile.defaultConfig){
+            profile.defaultConfig = {};
+        }
+        if ( ! profile.defaultConfig.aliases){
+            profile.defaultConfig.aliases = [];
+        }
+        profile.defaultConfig.aliases = profile.defaultConfig.aliases.concat(sdsAliases);
 
         // determine preprocessed filename
         var splitFilename = profile.selfFilename.split('.');
@@ -103,14 +134,21 @@ function(
             profile.layers = newLayers;
         }
         delete profile.timestampLayers;
-         
+
+        //add test layer for maxi builds
+        if ( ! profile.mini){
+            profile.layers = utils.mixinDeep(profile.layers, testLayer);
+        }
+
         // merge configs into the defaultConfig
-        var mergedConfig = {};        
-        configManager.merge(profile.defaultConfig.mergeConfigs, mergedConfig).then(function(mergedConfig){            
-            profile.defaultConfig = utils.mixinDeep(profile.defaultConfig, mergedConfig);
-            delete(profile.defaultConfig.mergeConfigs);
-            fs.writeFileSync(filename, 'var profile = ' + json.stringify(profile, null, '    '));
-            console.log('Preprocessed build profile written to: ' + filename);
-        });
+        if (profile.defaultConfig.mergeConfigs){
+            var mergedConfig = {};
+            configManager.merge(profile.defaultConfig.mergeConfigs, mergedConfig).then(function(mergedConfig){
+                profile.defaultConfig = utils.mixinDeep(profile.defaultConfig, mergedConfig);
+                delete(profile.defaultConfig.mergeConfigs);
+                fs.writeFileSync(filename, 'var profile = ' + json.stringify(profile, null, '    '));
+                console.log('Preprocessed build profile written to: ' + filename);
+            });
+        }
     });
 });
