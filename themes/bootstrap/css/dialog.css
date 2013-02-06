@@ -22,4 +22,7 @@
     top: 100px;
     margin: 20px auto !important;
 }
-
+.modal-body {
+    max-height: none;
+    overflow: hidden;
+}
