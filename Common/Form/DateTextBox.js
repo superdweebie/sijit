@@ -38,7 +38,7 @@ function (
                 //append to body to avoid relative parent containers
                 domConstruct.place(this._datepicker.picker, document.body);
                 domStyle.set(this._datepicker.picker, {
-                    zIndex:9999
+                    zIndex: 99999
                 });
                 this._datepicker.setValue = lang.hitch(this, function(){
                     this.set('value', dateLocale.format(this._datepicker.date, {selector: 'date', formatLength: this.formatLength}));

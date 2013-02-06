@@ -57,10 +57,10 @@ function (
                             this.addOption(option.value, option.text);
                         }))
                     }
-                }
-
-                if (this.source){
-                    this.set('value', source.value);
+                    
+                    if (this.source){
+                        this.set('value', source.value);
+                    }
                 }
             },
 
@@ -124,6 +124,11 @@ function (
                         array.forEach(addOptions, lang.hitch(this, function(option){
                             this.addOption(option[idProperty], option[this.storeLabel]);
                         }));
+                        
+                        //select value after options have been added
+                        if(this.params.value) {
+                            this.set('value', this.params.value);
+                        }
                     }));
                 }
             },
