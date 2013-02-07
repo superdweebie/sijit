@@ -31,23 +31,23 @@ function(
             'Group'
         ],
 
-		expand: function(base){
-			if (array.indexOf(this.abreviations, base) != -1) {
-				return 'Sds/Validator/' + base;
-			}
-			return base;
-		},
+        expand: function(base){
+            if (array.indexOf(this.abreviations, base) != -1) {
+                return 'Sds/Validator/' + base;
+            }
+            return base;
+        },
 		
         create: function(config){
 
             switch (true){
                 case lang.isArray(config):
                     config = array.map(config, lang.hitch(this, function(item){
-						if (typeof item == 'object') {
-							item.base = this.expand(item.base);
-							return item;
-						}
-						return this.expand(item);
+                        if (typeof item == 'object') {
+                            item.base = this.expand(item.base);
+                            return item;
+                        }
+                        return this.expand(item);
                     }));
                     config = {
                         base: 'Sds/Validator/Group',
@@ -58,9 +58,9 @@ function(
                     break;
                 case typeof config == 'object':
                     config.base = this.expand(config.base);
-					break;
-				default:
-					config = this.expand(config);
+                    break;
+                default:
+                    config = this.expand(config);
             }
 
             return this.manager.get(config);

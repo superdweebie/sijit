@@ -1,6 +1,6 @@
 define([
     'dojo/_base/declare',
-    'Sds/Filter/Base'
+    './Base'
 ],
 function(
     declare,

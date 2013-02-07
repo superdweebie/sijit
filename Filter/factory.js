@@ -10,30 +10,32 @@ function(
 
         //manager: undefined,
 
-        abreviations: {
-            Trim: 'Sds/Filter/Trim',
-            Lowercase: 'Sds/Filter/Lowercase',
-            Propercase: 'Sds/Filter/Propercase',
-            PadCurrency: 'Sds/Filter/PadCurrency',
-            Uppercase: 'Sds/Filter/Uppercase',
-            Group: 'Sds/Filter/Group'
-        },
+        abreviations: [
+            'Trim',
+            'Lowercase',
+            'Propercase',
+            'PadCurrency',
+            'Uppercase',
+            'Group'
+        ],
 
+        expand: function(base){
+            if (array.indexOf(this.abreviations, base) != -1) {
+                return 'Sds/Filter/' + base;
+            }
+            return base;
+        },
+		
         create: function(config){
 
             switch (true){
-                case Boolean(this.abreviations[config]):
-                    config = this.abreviations[config];
-                    break;
                 case lang.isArray(config):
                     config = array.map(config, lang.hitch(this, function(item){
-                        switch (true){
-                            case Boolean(this.abreviations[item]):
-                                return this.abreviations[item];
-                            case Boolean(this.abreviations[item.base]):
-                                return item.base = this.abreviations[item.base];
+                        if (typeof item == 'object') {
+                            item.base = this.expand(item.base);
+                            return item;
                         }
-                        return item;
+                        return this.expand(item);
                     }));
                     config = {
                         base: 'Sds/Filter/Group',
@@ -42,8 +44,11 @@ function(
                         }
                     };
                     break;
-                case Boolean(this.abreviations[config.base]):
-                    config.base = this.abreviations[config.base];
+                case typeof config == 'object':
+                    config.base = this.expand(config.base);
+                    break;
+                default:
+                    config = this.expand(config);
             }
 
             return this.manager.get(config);

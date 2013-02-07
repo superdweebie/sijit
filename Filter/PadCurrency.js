@@ -2,7 +2,7 @@ define([
     'dojo/_base/declare',
     'dojo/cldr/monetary',
     'dojo/i18n!dojo/cldr/nls/number',
-    'Sds/Filter/Base'
+    './Base'
 ],
 function(
     declare,

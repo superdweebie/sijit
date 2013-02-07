@@ -8,17 +8,9 @@
             dojoConfig.mergeConfigs.push('TestStore/config');
         </script>
         <script type="text/javascript" src="../../../dojo/dojo.js"></script>
-		<script type="text/javascript">
+        <script type="text/javascript">
 
-            define(
-                'TestStore/config',
-            [
-                'dojo/Store/Memory',
-                'Sds/Test/Store/Asset/Simple'
-            ], function(
-                Memory,
-                Simple
-            ){
+            define('TestStore/config', ['dojo/store/Memory', 'Sds/Test/Store/Asset/Simple'], function(Memory, Simple){
                 return {
                     moduleManager: {
                         'Sds/Store/storeManager': {
@@ -44,7 +36,7 @@
                 }
             });
 
-			require([
+            require([
                 'doh/main',
                 'Sds/Test/Store/Asset/Simple',
                 'get!Sds/Store/storeManager',
