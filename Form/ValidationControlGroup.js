@@ -2,9 +2,9 @@ define([
     'dojo/_base/declare',
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
-    'Sds/Form/_FormMixin',
-    'Sds/Form/_ValidationMixin',
-    'Sds/Form/_ValidationMessagesMixin',
+    './_FormMixin',
+    './_ValidationMixin',
+    './_ValidationMessagesMixin',
     'dojo/text!./Template/ValidationControlGroup.html'
 ],
 function (

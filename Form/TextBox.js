@@ -2,8 +2,8 @@ define([
     'dojo/_base/declare',
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
-    'Sds/Form/_TextBoxMixin',
-    'Sds/Form/_AppendageMixin',
+    './_TextBoxMixin',
+    './_AppendageMixin',
     'dojo/text!./Template/TextBox.html'
 ],
 function (

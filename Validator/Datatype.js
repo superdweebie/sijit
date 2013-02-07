@@ -4,7 +4,7 @@ define([
     'dojo/string',
     'dojo/i18n!Sds/nls/validatorMessages',
     'Sds/Common/utils',
-    'Sds/Validator/Base'
+    './Base'
 ],
 function(
     declare,

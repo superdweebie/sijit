@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
-    'Sds/Form/TextBox',
-    'Sds/Form/_NumberTextBoxMixin'
+    './TextBox',
+    './_NumberTextBoxMixin'
 ],
 function (
     declare,

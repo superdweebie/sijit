@@ -1,6 +1,6 @@
 define([
     'dojo/_base/declare',
-    'Sds/Validator/Base'
+    './Base'
 ],
 function(
     declare,

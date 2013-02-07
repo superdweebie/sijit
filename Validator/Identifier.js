@@ -1,8 +1,8 @@
 define([
     'dojo/_base/declare',
-    'Sds/Validator/Group',
-    'Sds/Validator/Length',
-    'Sds/Validator/IdentifierChars'
+    './Group',
+    './Length',
+    './IdentifierChars'
 ],
 function(
     declare,

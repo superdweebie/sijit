@@ -63,12 +63,13 @@ function(
     //List of plugin resolves to be added to the build profile
     var sdsplugins = {
         plugins: {
-            "Sds/ConfigManager/configReady":"Sds/Build/plugin/configReady",
-            "Sds/Router/baseUrl":"Sds/Build/plugin/baseUrl",
-            "Sds/Router/startedRouter":"Sds/Build/plugin/startedRouter",
-            "Sds/ModuleManager/Shared/getModuleManager":"Sds/Build/plugin/getModuleManager",
-            "Sds/ModuleManager/Shared/proxy":"Sds/Build/plugin/proxy",
-            "Sds/ModuleManager/Shared/get":"Sds/Build/plugin/get"
+            "Sds/ConfigManager/configReady":"Sds/Build/Plugin/configReady",
+            "Sds/Router/baseUrl":"Sds/Build/Plugin/baseUrl",
+            "Sds/Router/startedRouter":"Sds/Build/Plugin/startedRouter",
+            "Sds/ModuleManager/Shared/getModuleManager":"Sds/Build/Plugin/getModuleManager",
+            "Sds/ModuleManager/Shared/proxy":"Sds/Build/Plugin/proxy",
+            "Sds/ModuleManager/Shared/get":"Sds/Build/Plugin/get",
+			"dojo/text":"Sds/Build/Plugin/text",
         }
     };
 
@@ -85,7 +86,22 @@ function(
             "include":[
                 "Sds/Form/Captcha",
                 "Sds/Form/CheckBox",
-                "Sds/Form/TextBox"
+                "Sds/Form/CreditCardExpiry",
+                "Sds/Form/CurrencyTextBox",
+                "Sds/Form/DateTextBox",
+                "Sds/Form/NumberTextBox",
+                "Sds/Form/PasswordTextBox",
+                "Sds/Form/RadioButton",
+                "Sds/Form/Select",
+                "Sds/Form/Textarea",
+                "Sds/Form/ExapandingTextarea",
+                "Sds/Form/ValidationTextarea",
+                "Sds/Form/ValidationExpandingTextarea",
+                "Sds/Form/ValidationTypeahead",
+                "Sds/Form/TextBox",
+                "Sds/Form/Typeahead",
+                "Sds/Form/ValidationControlGroup",
+                "Sds/Form/ValidationTextBox"
             ],
             "exclude": [
                 "dojo"

@@ -1,10 +1,10 @@
 define([
     'dojo/_base/declare',
-    'Sds/Form/ValidationControlGroup',
+    './ValidationControlGroup',
     'dijit/_WidgetsInTemplateMixin',
     'Sds/Validator/CreditCardExpiry',
     'dojo/text!./Template/CreditCardExpiry.html',
-    'Sds/Form/Select'
+    './Select'
 ],
 function (
     declare,

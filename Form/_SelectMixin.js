@@ -5,8 +5,8 @@ define([
     'dojo/on',
     'dojo/when',
     'dojo/dom-construct',
-    'Sds/Form/_LabelMixin',
-    'Sds/Form/_HelpMessagesMixin',
+    './_LabelMixin',
+    './_HelpMessagesMixin',
     'dijit/form/_FormValueMixin',
     'get!Sds/Store/storeManager'
 ],

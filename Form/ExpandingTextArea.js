@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
     'dijit/form/_ExpandingTextAreaMixin',
-    'Sds/Form/Textarea'
+    './Textarea'
 ],
 function (
     declare,

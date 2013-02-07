@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
-    'Sds/Form/ValidationTextBox',
-    'Sds/Form/_TypeaheadMixin',
+    './ValidationTextBox',
+    './_TypeaheadMixin',
     'dojo/text!./Template/Typeahead.html'
 ],
 function (

@@ -5,10 +5,45 @@
 		<title>Testing Sds/Store/storeManager</title>
         <script type="text/javascript" src="../testconfig.js"></script>
         <script type="text/javascript">
-            dojoConfig.mergeConfigs.push('Sds/Test/Store/Asset/config');
+            dojoConfig.mergeConfigs.push('TestStore/config');
         </script>
         <script type="text/javascript" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
+
+            define(
+                'TestStore/config',
+            [
+                'dojo/Store/Memory',
+                'Sds/Test/Store/Asset/Simple'
+            ], function(
+                Memory,
+                Simple
+            ){
+                return {
+                    moduleManager: {
+                        'Sds/Store/storeManager': {
+                            gets: {
+                                stores: [
+                                    new Memory({
+                                        idProperty: 'ref',
+                                        data: [
+                                            {ref: 'TN', name: 'Tennessee'},
+                                            {ref: 'VA', name: 'Virginia'},
+                                            {ref: 'WA', name: 'Washington'},
+                                            {ref: 'FL', name: 'Florida'},
+                                            {ref: 'CA', name: 'California'}
+                                        ],
+                                        target: 'TestTarget/',
+                                        name: 'statesStore',
+                                        model: Simple
+                                    })
+                                ]
+                            }
+                        }
+                    }
+                }
+            });
+
 			require([
                 'doh/main',
                 'Sds/Test/Store/Asset/Simple',

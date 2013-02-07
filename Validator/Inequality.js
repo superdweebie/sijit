@@ -3,7 +3,7 @@ define([
     'dojo/_base/lang',
     'dojo/string',
     'dojo/i18n!Sds/nls/validatorMessages',
-    'Sds/Validator/Base'
+    './Base'
 ],
 function(
     declare,

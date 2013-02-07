@@ -2,7 +2,7 @@ define(
     [],
     function(){
         return {
-            moduleManager: {
+            configTest: {
                 test1: {
                     base: 'Test1',
                     params: {

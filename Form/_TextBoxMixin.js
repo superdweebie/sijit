@@ -4,10 +4,11 @@ define([
     'dojo/on',
     'dojo/_base/lang',
     'dojo/dom-prop',
-    'Sds/Form/_LabelMixin',
-    'Sds/Form/_FilterMixin',
-    'Sds/Form/_HelpMessagesMixin',
-    'dijit/form/_FormValueMixin'
+    './_LabelMixin',
+    './_FilterMixin',
+    './_HelpMessagesMixin',
+    'dijit/form/_FormValueMixin',
+    'Sds/Filter/Trim'
 ],
 function (
     declare,

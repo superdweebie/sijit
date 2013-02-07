@@ -1,11 +1,11 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    "dojo/dom-construct",
-    "dojo/dom-style",
+    'dojo/dom-construct',
+    'dojo/dom-style',
     'dojo/on',
     'dojo/date/locale',
-    'Sds/Form/ValidationTextBox',
+    './ValidationTextBox',
     'bootstrap/Datepicker'
 ],
 function (

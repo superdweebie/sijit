@@ -2,7 +2,7 @@ define([
     'dojo/_base/declare',
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
-    'Sds/Form/_SelectMixin',
+    './_SelectMixin',
     'dojo/text!./Template/Select.html'
 ],
 function (

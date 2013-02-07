@@ -2,7 +2,7 @@ define([
     'dojo/_base/declare',
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
-    'Sds/Form/_TextBoxMixin',
+    './_TextBoxMixin',
     'dojo/text!./Template/Textarea.html'
 ],
 function (

@@ -18,6 +18,7 @@ var profile = {
         },
         popup: true,
         async: true,
+        debug: false,
         mergeConfigs: [
             'Sds/Validator/config',
             'Sds/Filter/config',
@@ -26,8 +27,7 @@ var profile = {
             'Sds/Store/config',
             'Sds/Mongo/config',
             'Sds/IdentityModule/config',
-            'Sds/AuthenticationModule/config',
-            'Sds/Test/config'
+            'Sds/AuthenticationModule/config'
         ]
     },
     timestampLayers: false,

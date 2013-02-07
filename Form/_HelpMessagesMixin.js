@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/array',
-    'Sds/Form/_MessagesMixin'
+    './_MessagesMixin'
 ],
 function (
     declare,

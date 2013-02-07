@@ -1,6 +1,6 @@
 define([
     'dojo/_base/declare',
-    'Sds/Form/ValidationTextBox',
+    './ValidationTextBox',
     'dojo/text!./Template/PasswordTextBox.html'
 ],
 function (

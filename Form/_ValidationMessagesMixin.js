@@ -1,6 +1,6 @@
 define([
     'dojo/_base/declare',
-    'Sds/Form/_MessagesMixin'
+    './_MessagesMixin'
 ],
 function(
     declare,

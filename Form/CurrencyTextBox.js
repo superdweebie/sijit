@@ -2,8 +2,8 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/currency',
-    'Sds/Form/ValidationTextBox',
-    'Sds/Form/_NumberTextBoxMixin',
+    './ValidationTextBox',
+    './_NumberTextBoxMixin',
     'Sds/Validator/Currency',
     'Sds/Filter/PadCurrency'
 ],

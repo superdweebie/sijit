@@ -3,7 +3,7 @@ define([
     'dojo/_base/lang',
     'dojo/Deferred',
     'Sds/Common/utils',
-    'Sds/Validator/Base'
+    './Base'
 ],
 function(
     declare,

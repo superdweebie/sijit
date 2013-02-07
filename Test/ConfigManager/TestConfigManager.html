@@ -16,6 +16,7 @@
                 ]
             ">
         </script>
+        <script type="text/javascript" src="../Built.js"></script>
 		<script type="text/javascript">
 			require([
                 'doh/main',
@@ -49,7 +50,7 @@
                                 }
                             }
                         }
-                        doh.assertEqual(expectedConfig, dojoConfig.moduleManager);
+                        doh.assertEqual(expectedConfig, dojoConfig.configTest);
                    }
                 ]);
                 doh.runOnLoad();

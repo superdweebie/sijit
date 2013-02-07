@@ -2,10 +2,10 @@ define([
     'dojo/_base/declare',
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
-    'Sds/Form/_TextBoxMixin',
-    'Sds/Form/_ValidationMixin',
-    'Sds/Form/_AppendageMixin',
-    'Sds/Form/_ValidationMessagesMixin',
+    './_TextBoxMixin',
+    './_ValidationMixin',
+    './_AppendageMixin',
+    './_ValidationMessagesMixin',
     'dojo/text!./Template/ValidationTextBox.html'
 ],
 function (

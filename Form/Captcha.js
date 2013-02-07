@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
-    'Sds/Form/ValidationTextBox',
-    'get!Sds/Form/captchaSrc',
+    './ValidationTextBox',
+    'get!./captchaSrc',
     'dojo/text!./Template/Captcha.html'
 ],
 function (
@@ -11,7 +11,7 @@ function (
     template
 ){
     return declare(
-        'Sds/Form/PasswordTextBox',
+        'Sds/Form/Captcha',
         [ValidationTextBox],
         {
             templateString: template,
