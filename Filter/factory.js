@@ -16,7 +16,8 @@ function(
             'Propercase',
             'PadCurrency',
             'Uppercase',
-            'Group'
+            'Group',
+            'HexColor'
         ],
 
         expand: function(base){
@@ -25,7 +26,7 @@ function(
             }
             return base;
         },
-		
+
         create: function(config){
 
             switch (true){

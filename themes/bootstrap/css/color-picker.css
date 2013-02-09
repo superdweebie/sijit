@@ -1,0 +1,26 @@
+/*
+    Css for Sds/Form/ColorPicker
+*/
+
+.color-picker-swatch {
+    border-radius: 3px;
+    display: block;
+    height: 20px;
+    width: 35px;
+}
+
+.color-picker-underlay {
+    background-image: url("../img/colorpicker/underlay.png");
+    width: 150px;
+    height: 150px;
+}
+
+.color-picker-hue {
+    background-image: url("../img/colorpicker/hue.png");
+    height: 150px;
+    width: 10px;
+}
+
+.color-picker-hex .controls {
+    margin-left: 0px;
+}

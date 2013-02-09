@@ -9,9 +9,14 @@ function(
     BaseView
 ){
     return declare(
-        'Sds/Test/IdentityModule/Test/Asset/MockCreateIdentityView',
+        'Sds/Test/IdentityModule/Test/Asset/MockView',
         [BaseView],
         {
+
+            //state: undefined,
+
+            //value: undefined,
+
             activate: function(){
                 var r = new Deferred;
 

@@ -14,6 +14,7 @@ if (window.location.href.indexOf(dojo_rel_dir) == -1){
             ['proxy', 'Sds/ModuleManager/Shared/proxy']
         ],
         mergeConfigs: [
+            'Sds/Form/config',
             'Sds/Validator/config',
             'Sds/Filter/config',
             'Sds/ExceptionModule/config',

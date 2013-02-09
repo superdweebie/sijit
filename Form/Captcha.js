@@ -16,7 +16,7 @@ function (
         {
             templateString: template,
 
-            imageSrc: captchaSrc,
+            imageSrc: captchaSrc.url,
 
             name: 'captcha',
 
