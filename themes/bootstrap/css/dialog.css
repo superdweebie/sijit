@@ -1,0 +1,28 @@
+/*
+    Css for Sds/Common/Dialog
+*/
+
+.no-scroll {
+    overflow: hidden;
+}
+.modal-scroll {
+    bottom: 0;
+    left: 0;
+    overflow-x: auto;
+    overflow-y: scroll;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 9999;
+}
+.modal-scroll .modal {
+    position: static;
+    overflow: hidden;
+    z-index: 2;
+    top: 100px;
+    margin: 20px auto !important;
+}
+.modal-body {
+    max-height: none;
+    overflow: hidden;
+}

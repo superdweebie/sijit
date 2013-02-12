@@ -6,10 +6,8 @@ define([
     'Sds/Common/Status',
     'dojo/Stateful',
     'get!Sds/Store/storeManager',
-    'Sds/IdentityModule/DataModel/Identity',
-    'Sds/IdentityModule/DataModel/Identity/JsonRestStore',
-    'Sds/IdentityModule/DataModel/Identity/ModelValidator',
-    'Sds/IdentityModule/Exception/InvalidArgumentException',
+    './DataModel/Identity/ModelValidator',
+    './Exception/InvalidArgumentException',
     'proxy!Sds/IdentityModule/View/ForgotCredentialCreateToken',
     'proxy!Sds/IdentityModule/View/ForgotCredentialUpdateToken',
     'proxy!Sds/IdentityModule/View/CreateIdentity',
@@ -23,8 +21,6 @@ function(
     Status,
     Stateful,
     storeManager,
-    Identity,
-    IdentityStore,
     IdentityValidator,
     InvalidArgumentException,
     forgotCredentialCreateTokenView,
@@ -34,7 +30,6 @@ function(
 ){
     return declare
     (
-        'Sds/IdentityModule/IdentityController',
         [Stateful],
         {
             // summary:
@@ -42,21 +37,35 @@ function(
 
             //status: Sds/Common/Status
             //    An object indicating the current status
-            status: undefined,
+            //status: undefined,
 
-            forgotCredentialPart1: function(){
+            forgotCredential: function(id){
                 // summary:
-                //		Prompt for password recovery details, and process
+                // If id is supplied, will prompt for new credential.
+                // If id is not supplied, will propmt to create new forgotCredential token
                 // returns: Deferred
-                //      Returned deferred will resolve when the whole password recovery
-                //      process is complete.
+                // Returned deferred will resolve when the prompt is complete.
 
-                this._forgotCredentialPart1Deferred = new Deferred();
+                if (id){
+                    return this._updateForgotCredentialToken(id);
+                } else {
+                    return this._createForgotCredentialToken();
+                }
+            },
 
-                this.forgotCredentialPart1View.activate().then(lang.hitch(this, function(result){
+            cancelForgotCredential: function(){
+                forgotCredentialCreateTokenView.deactivate();
+                forgotCredentialUpdateTokenView.deactivate();
+            },
+
+            _createForgotCredentialToken: function(){
+
+                this._createForgotCredentialDeferred = new Deferred();
+
+                forgotCredentialCreateTokenView.activate().then(lang.hitch(this, function(result){
                     // Do nothing if form not valid.
                     if (result.state != ''){
-                        this._forgotCredentialPart1Deferred.resolve();
+                        this._createForgotCredentialDeferred.resolve();
                         return;
                     }
 
@@ -64,29 +73,36 @@ function(
                     this.set('status', new Status('sending password recovery request', Status.icon.SPINNER));
 
                     // Send data to server
-                    var formValue = result.value;
-
-                    this.get('api').forgotCredentialPart1(formValue['identityName'], formValue['email']).then(
-                        lang.hitch(this, '_forgotCredentialPart1Complete'),
-                        lang.hitch(this, '_handleException')
+                    when(
+                        storeManager.getStore('ForgotCredentialToken').put(result.value),
+                        lang.hitch(this, '_createForgotCredentialTokenComplete'),
+                        lang.hitch(this, function(exception){
+                            this._handleException(exception, this._createForgotCredentialDeferred);
+                        })
                     );
                 }));
 
-                return this._forgotCredentialPart1Deferred;
+                return this._createForgotCredentialDeferred;
             },
 
-            forgotCredentialPart2: function(){
+            _createForgotCredentialTokenComplete: function(data)
+            {
+                this.set('status', new Status('password recovery email sent', Status.icon.SUCCESS, 5000));
+                this._createForgotCredentialDeferred.resolve(true);
+            },
+
+            _updateForgotCredentialToken: function(code){
                 // summary:
-                //     Prompt for the server generated forgotCredentialCode and a new
-                //     password to complete the password recovery process
+                // Prompt for a new
+                // password to complete the password recovery process
                 // retrurns: Deferred
 
-                this._forgotCredentialPart2Deferred = new Deferred();
+                this._updateForgotCredentialDeferred = new Deferred();
 
-                this.forgotCredentialPart2View.activate().then(lang.hitch(this, function(result){
+                forgotCredentialUpdateTokenView.activate().then(lang.hitch(this, function(result){
                     // Do nothing if form not valid.
                     if (result.state != ''){
-                        this._forgotCredentialPart2Deferred.resolve();
+                        this._updateForgotCredentialDeferred.resolve();
                         return;
                     }
 
@@ -94,15 +110,27 @@ function(
                     this.set('status', new Status('sending password change request', Status.icon.SPINNER));
 
                     // Send data to server
-                    var formValue = result.value;
-
-                    this.get('api').forgotCredentialPart2(formValue['identityName'], formValue['password'][0], formValue['passwordRecoveryCode']).then(
-                        lang.hitch(this, '_forgotCredentialPart2Complete'),
-                        lang.hitch(this, '_handleException')
-                    );
+                    when(
+                        storeManager.getStore('ForgotCredentialToken').put(
+                            {
+                                code: code,
+                                credential: result.value.credential[0]
+                            }
+                        ),
+                        lang.hitch(this, '_updateForgotCredentialTokenComplete'),
+                        lang.hitch(this, function(exception){
+                            this._handleException(exception, this._updateForgotCredentialDeferred);
+                        })
+                    )
                 }));
 
-                return this._forgotCredentialPart2Deferred;
+                return this._updateForgotCredentialDeferred;
+            },
+
+            _updateForgotCredentialTokenComplete: function(data)
+            {
+                this.set('status', new Status('password changed', Status.icon.SUCCESS, 5000));
+                this._updateForgotCredentialDeferred.resolve(true);
             },
 
             register: function(){
@@ -124,7 +152,10 @@ function(
                     var identityValidator = new IdentityValidator;
                     var validatorResult = identityValidator.isValid(result.value);
                     if ( ! validatorResult.result){
-                        this._registerException(new InvalidArgumentException(validatorResult.messages.join(' ')));
+                        this._handleException(
+                            new InvalidArgumentException(validatorResult.messages.join(' ')),
+                            this._registerDeferred
+                        );
                         return;
                     }
 
@@ -134,7 +165,9 @@ function(
                     when(
                         storeManager.getStore('Identity').put(result.value),
                         lang.hitch(this, '_registerComplete'),
-                        lang.hitch(this, '_registerException')
+                        lang.hitch(this, function(exception){
+                            this._handleException(exception, this._registerDeferred);
+                        })
                     );
                 }));
 
@@ -142,19 +175,7 @@ function(
             },
 
             cancelRegister: function(){
-                this._registerView.deactivate();
-            },
-
-            _forgotCredentialPart1Complete: function(data)
-            {
-                this.set('status', new Status('password recovery email sent', Status.icon.SUCCESS, 5000));
-                this._forgotCredentialPart1Deferred.resolve(true);
-            },
-
-            _forgotCredentialPart2Complete: function(data)
-            {
-                this.set('status', new Status('password changed', Status.icon.SUCCESS, 5000));
-                this._forgotCredentialPart2Deferred.resolve(true);
+                createIdentityView.deactivate();
             },
 
             _registerComplete: function(data)
@@ -163,20 +184,16 @@ function(
                 this._registerDeferred.resolve(true);
             },
 
-            _registerException: function(exception){
-                throwEx(exception).then(lang.hitch(this, function(standardizedException){
-                    this._handleException(standardizedException);
+            _handleException: function(exception, deferred){
 
-                    if (this._registerDeferred && (! this._registerDeferred.isFulfilled())){
-                        this._registerDeferred.reject(standardizedException);
+                throwEx(exception).then(lang.hitch(this, function(standardizedException){
+                    // Update status
+                    this.set('status', new Status(exception.message, Status.icon.ERROR, 5000));
+
+                    if (deferred && (! deferred.isFulfilled())){
+                        deferred.reject(standardizedException);
                     }
                 }));
-            },
-
-            _handleException: function(exception){
-
-                // Update status
-                this.set('status', new Status(exception.message, Status.icon.ERROR, 5000));
             }
         }
     );

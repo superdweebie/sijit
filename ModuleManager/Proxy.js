@@ -9,8 +9,7 @@ function (
 
     return declare
     (
-        'Sds/ModuleManager/Proxy',
-        null,
+        [],
         {
             // summary:
             //		A proxy to get or use an object.

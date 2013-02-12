@@ -5,8 +5,8 @@ function(){
             'Sds/Store/storeManager': {
                 gets: {
                     stores: [
-                        'Sds/IdentityModule/DataModel/Identity/JsonRestStore',
-                        'Sds/IdentityModule/DataModel/ForgotCredentialToken/JsonRestStore'
+                        'Sds/IdentityModule/DataModel/Identity/JsonRest',
+                        'Sds/IdentityModule/DataModel/ForgotCredentialToken/JsonRest'
                     ]
                 }
             },
@@ -14,7 +14,6 @@ function(){
                 proxyMethods: [
                     'activate',
                     'deactivate',
-                    'reset',
                     'get',
                     'set',
                     'watch'
@@ -24,7 +23,6 @@ function(){
                 proxyMethods: [
                     'activate',
                     'deactivate',
-                    'reset',
                     'get',
                     'set',
                     'watch'
@@ -34,7 +32,6 @@ function(){
                 proxyMethods: [
                     'activate',
                     'deactivate',
-                    'reset',
                     'get',
                     'set',
                     'watch'

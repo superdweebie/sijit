@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/Form/ValidationTextbox</title>
+		<style type="text/css">
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
+		</style>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+        <script type="text/javascript" src="../../Built.js"></script>
+		<script type="text/javascript">
+			require([
+                'dojo/parser',
+                'Sds/Form/ValidationTextBox',
+                'dojo/domReady!'
+            ],
+            function(
+                parser
+            ){
+                parser.parse();
+            })
+		</script>
+	</head>
+	<body>
+        <h1>Functional Testing Sds/Form/ValidationTextbox</h1>
+
+        <form class="form-horizontal">
+
+            <p>Valid</p>
+            <input data-dojo-type="Sds/Form/ValidationTextBox"
+                value="Toby"
+                data-dojo-props="
+                    label:'Name',
+                    validator: 'PersonalName'
+                "
+                id="validationTextBox1"
+             />
+
+            <p>Invalid auto inline</p>
+            <input data-dojo-type="Sds/Form/ValidationTextBox"
+                value="Not Toby"
+                data-dojo-props="
+                    label:'Name',
+                    validator: 'PersonalName'
+                "
+                id="validationTextBox2"
+             />
+
+            <p>Invalid force inline</p>
+            <input data-dojo-type="Sds/Form/ValidationTextBox"
+                value=""
+                data-dojo-props="
+                    label:'Name',
+                    messagePosition: 'inline',
+                    validator: 'PersonalName'
+                "
+                id="validationTextBox3"
+             />
+
+            <p>Invalid auto block</p>
+            <input data-dojo-type="Sds/Form/ValidationTextBox"
+                value=""
+                data-dojo-props="
+                    label:'Name',
+                    validator: 'PersonalName'
+                "
+                id="validationTextBox4"
+             />
+
+            <p>Invalid force block</p>
+            <input data-dojo-type="Sds/Form/ValidationTextBox"
+                value="Not Toby"
+                data-dojo-props="
+                    label:'Name',
+                    messagePosition: 'block',
+                    validator: 'PersonalName'
+                "
+                id="validationTextBox5"
+             />
+
+            <p>Valid with ValidatorGroup</p>
+            <input data-dojo-type="Sds/Form/ValidationTextBox"
+                value="Toby"
+                data-dojo-props="
+                    label:'Name',
+                    validator: [
+                        'NotRequired',
+                        'PersonalName'
+                    ]
+                "
+                id="validationTextBox6"
+             />
+
+            <p>Super test Invalid with multiple Deferred Validators</p>
+            <input data-dojo-type="Sds/Form/ValidationTextBox"
+                value="not awesome"
+                data-dojo-props="
+                    label:'Sijit is:',
+                    messagePosition: 'block',
+                    validator: [
+                        'Alpha',
+                        'Sds/Test/Validator/Asset/DeferredValidator',
+                        {base: 'Length', params: {min: 1, max: 7}},
+                        'Alpha',
+                        {base: 'Sds/Test/Validator/Asset/DeferredValidator', params: {timeout: 3000}},
+                        {base: 'Length', params: {min: 4, max: 8}},
+                        'Sds/Test/Validator/Asset/DeferredValidator',
+                        {base: 'Length', params: {min: 5, max: 8}},
+                    ],
+                    suppressMessages: false
+                "
+                id="validationTextBox9"
+             />
+
+            <p>No Validator Set</p>
+            <input data-dojo-type="Sds/Form/ValidationTextBox"
+                value=":-)"
+                data-dojo-props="
+                    label:'Name'
+                "
+                id="validationTextBox10"
+             />
+
+            <p>Invalid auto block with help message</p>
+            <input data-dojo-type="Sds/Form/ValidationTextBox"
+                value=""
+                data-dojo-props="
+                    label:'Name',
+                    validator: 'PersonalName',
+                    helpMessages: 'Please enter your name'
+                "
+                id="validationTextBox11"
+             />
+        </form>
+	</body>
+</html>

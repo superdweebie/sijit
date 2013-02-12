@@ -10,7 +10,6 @@ function (
     //		Sds/Dnd/Moveable
 
     return declare(
-        'Sds/Dnd/Moveable',
         [Moveable],
         {
             delay: 80,

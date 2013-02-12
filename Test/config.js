@@ -4,11 +4,7 @@ function(){
         moduleManager: {
             'Sds/AuthenticationModule/AuthenticationController': {
                 params: {
-                    enableRememberMe: true,
-                    restUrl: 'http://localhost/ZendSkeletonApplication/authenticatedIdentity/'
-                },
-                proxies: {
-                    loginView: 'Sds/AuthenticationModule/View/Login'
+                    enableRememberMe: true
                 }
             },
             'Sds/ExceptionModule/ExceptionController': {

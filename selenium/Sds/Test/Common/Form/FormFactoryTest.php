@@ -8,7 +8,7 @@ class FormFactoryTest extends AbstractWebDriverTest {
 
     public function setUp(){
         parent::setUp();
-        $this->open('Sds/Test/Common/Form/Functional/TestFormFactory.html');
+        $this->open('Sds/Test/Form/Functional/TestFormFactory.html');
     }
 
     public function testFormFactory(){

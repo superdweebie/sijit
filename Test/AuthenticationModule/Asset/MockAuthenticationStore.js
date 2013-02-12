@@ -7,6 +7,9 @@ function(
     RequestError
 ){
     return {
+
+        name: 'mockAuthStore',
+
         loggedIn: false,
 
         get: function(id){

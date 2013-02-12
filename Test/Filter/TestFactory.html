@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Testing Sds/Filter/factory</title>
+        <script type="text/javascript" src="../testconfig.js"></script>
+        <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+            require([
+                    'doh/main',
+                    'dojo/when',
+                    'get!FilterFactory',
+                    'dojo/domReady!'
+                ],
+                function(
+                    doh,
+                    when,
+                    filterFactory
+                ){
+                    doh.register("Sds/Test/Filter/TestFactory", [
+
+                        function CreateTest1(doh){
+
+                            var testDeferred = new doh.Deferred;
+
+                            when(filterFactory.create({base: 'Sds/Filter/Trim'}), function(filter){
+
+                                var testArray = [
+                                    ['abcd', 'abcd'],
+                                    ['abcd', ' abcd']
+                                ];
+
+                                var index;
+                                for (index in testArray){
+                                    doh.assertEqual(testArray[index][0], filter.filter(testArray[index][1]));
+                                }
+
+                                testDeferred.callback(true);
+                            });
+
+                            return testDeferred;
+                        },
+
+                        function CreateTest2(doh){
+
+                            var testDeferred = new doh.Deferred;
+
+                            when(filterFactory.create('Sds/Filter/Trim'), function(filter){
+
+                                var testArray = [
+                                    ['abcd', 'abcd'],
+                                    ['abcd', ' abcd']
+                                ];
+
+                                var index;
+                                for (index in testArray){
+                                    doh.assertEqual(testArray[index][0], filter.filter(testArray[index][1]));
+                                }
+
+                                testDeferred.callback(true);
+                            });
+
+                            return testDeferred;
+                        },
+
+                        function CreateGroupTest1(doh){
+
+                            var testDeferred = new doh.Deferred;
+
+                            when(filterFactory.create([
+                                {
+                                    base: 'Sds/Filter/Trim'
+                                },
+                                'Sds/Filter/Uppercase'
+                            ]), function(filter){
+
+                                var testArray = [
+                                    ['ABCD', 'abcd'],
+                                    ['ABCD', ' abcd']
+                                ];
+
+                                var index;
+                                for (index in testArray){
+                                    doh.assertEqual(testArray[index][0], filter.filter(testArray[index][1]));
+                                }
+
+                                testDeferred.callback(true);
+                            });
+
+                            return testDeferred;
+                        },
+
+                        function CreateGroupTest2(doh){
+
+                            var testDeferred = new doh.Deferred;
+
+                            when(filterFactory.create('Sds/Filter/Trim'), function(trimFilter){
+                                when(filterFactory.create([
+                                    {
+                                        base: 'Sds/Filter/Uppercase'
+                                    },
+                                    trimFilter
+                                ]), function(filter){
+
+                                    var testArray = [
+                                        ['ABCD', 'abcd'],
+                                        ['ABCD', ' abcd']
+                                    ];
+
+                                    var index;
+                                    for (index in testArray){
+                                        doh.assertEqual(testArray[index][0], filter.filter(testArray[index][1]));
+                                    }
+
+                                    testDeferred.callback(true);
+                                });
+                            });
+
+                            return testDeferred;
+                        }
+                    ]);
+
+                    doh.runOnLoad();
+                }
+            );
+
+		</script>
+	</head>
+	<body>
+        <h1>Testing Sds/Filter/factory</h1>
+	</body>
+</html>

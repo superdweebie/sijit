@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Testing Sds/Mvc/BaseModelJsonRestStore</title>
+        <script type="text/javascript" src="../testconfig.js"></script>
+        <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			require([
+                'doh/main',
+                'dojo/when',
+                'Sds/Test/Mvc/Asset/JsonRestStore',
+                'Sds/Test/Mvc/Asset/Simple',
+                'dojo/domReady!'
+            ],
+            function(
+                doh,
+                when,
+                JsonRestStore,
+                Simple
+            ){
+                doh.register("Sds/Test/Mvc/TestJsonRest", [
+
+                    function getTest(doh){
+
+                        var deferredTest = new doh.Deferred;
+                        var store = new JsonRestStore;
+
+                        //Modify the prototype for testing so the store doesn't send a real xhr request
+                        var proto = store.__proto__;
+                        while (true){
+                            if (proto.declaredClass == 'dojo.store.JsonRest'){
+                                proto.get = function(id){
+                                    return {
+                                        id: 1,
+                                        name: 'simple object'
+                                    }
+                                }
+                                break;
+                            }
+                            proto = proto.__proto__
+                        }
+
+                        when(store.get(1), function(result){
+                            doh.assertTrue(result.isInstanceOf(Simple));
+                            doh.assertEqual('simple object', result.name);
+                            deferredTest.callback(true);
+                        });
+
+                        return deferredTest;
+                    },
+
+                    function queryTest(doh){
+
+                        var deferredTest = new doh.Deferred;
+                        var store = new JsonRestStore;
+
+                        //Modify the prototype for testing so the store doesn't send a real xhr request
+                        var proto = store.__proto__;
+                        while (true){
+                            if (proto.declaredClass == 'dojo.store.JsonRest'){
+                                proto.query = function(){
+                                    return [
+                                        {id: 1, name: 'simple1'},
+                                        {id: 2, name: 'simple2'}
+                                    ];
+                                }
+                                break;
+                            }
+                            proto = proto.__proto__
+                        }
+
+                        when(store.query(), function(result){
+                            for (var index in result){
+                                doh.assertTrue(result[index].isInstanceOf(Simple));
+                            }
+                            deferredTest.callback(true);
+                        });
+
+                        return deferredTest;
+                    }
+                ]);
+
+                doh.runOnLoad();
+            });
+		</script>
+	</head>
+	<body>
+        <h1>Testing Sds/Mvc/BaseModelJsonRestStore</h1>
+	</body>
+</html>

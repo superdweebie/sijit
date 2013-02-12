@@ -18,7 +18,6 @@ function(
     //      A view may also be responsible for displaying or collecting data.
 
     return declare(
-        'Sds/Mvc/BaseView',
         [Stateful],
         {
             // state: string

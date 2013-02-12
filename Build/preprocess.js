@@ -63,11 +63,49 @@ function(
     //List of plugin resolves to be added to the build profile
     var sdsplugins = {
         plugins: {
-            "Sds/ConfigManager/configReady":"Sds/Build/plugin/configReady",
-            "Sds/Router/startedRouter":"Sds/Build/plugin/startedRouter",
-            "Sds/ModuleManager/Shared/getModuleManager":"Sds/Build/plugin/getModuleManager",
-            "Sds/ModuleManager/Shared/proxy":"Sds/Build/plugin/proxy",
-            "Sds/ModuleManager/Shared/get":"Sds/Build/plugin/get"
+            "Sds/ConfigManager/configReady":"Sds/Build/Plugin/configReady",
+            "Sds/Router/baseUrl":"Sds/Build/Plugin/baseUrl",
+            "Sds/Router/startedRouter":"Sds/Build/Plugin/startedRouter",
+            "Sds/ModuleManager/Shared/getModuleManager":"Sds/Build/Plugin/getModuleManager",
+            "Sds/ModuleManager/Shared/proxy":"Sds/Build/Plugin/proxy",
+            "Sds/ModuleManager/Shared/get":"Sds/Build/Plugin/get",
+            "dojo/text":"Sds/Build/Plugin/text",
+        }
+    };
+
+    //List of AMD aliases to be added tothe build profile
+    var sdsAliases = [
+        ['get', 'Sds/ModuleManager/Shared/get'],
+        ['proxy', 'Sds/ModuleManager/Shared/proxy']
+    ];
+
+    var testLayer = {
+        "Sds/Test/Built":{
+            "custombase":false,
+            "boot":false,
+            "include":[
+                //"Sds/Form/Captcha",
+                //"Sds/Form/CheckBox",
+                //"Sds/Form/CreditCardExpiry",
+                //"Sds/Form/CurrencyTextBox",
+                "Sds/Form/DateTextBox",
+                //"Sds/Form/NumberTextBox",
+                //"Sds/Form/PasswordTextBox",
+                //"Sds/Form/RadioButton",
+                "Sds/Form/Select",
+                //"Sds/Form/Textarea",
+                //"Sds/Form/ExapandingTextarea",
+                //"Sds/Form/ValidationTextarea",
+                //"Sds/Form/ValidationExpandingTextarea",
+                "Sds/Form/ValidationTypeahead",
+                "Sds/Form/TextBox",
+                "Sds/Form/Typeahead",
+                //"Sds/Form/ValidationControlGroup",
+                "Sds/Form/ValidationTextBox"
+            ],
+            "exclude": [
+                "dojo"
+            ]
         }
     };
 
@@ -77,6 +115,15 @@ function(
 
         // inject extra build plugin resolvers
         profile = utils.mixinDeep(profile, sdsplugins);
+
+        // add amd aliases
+        if ( ! profile.defaultConfig){
+            profile.defaultConfig = {};
+        }
+        if ( ! profile.defaultConfig.aliases){
+            profile.defaultConfig.aliases = [];
+        }
+        profile.defaultConfig.aliases = profile.defaultConfig.aliases.concat(sdsAliases);
 
         // determine preprocessed filename
         var splitFilename = profile.selfFilename.split('.');
@@ -96,21 +143,49 @@ function(
         if (profile.timestampLayers){
             var newLayers = {};
             var newName;
+            var changes = [];
             var timestamp = new Date().getTime().toString();
+
+            //create new layer names
             for (var name in profile.layers){
-                newLayers[name + timestamp] = profile.layers[name];
+                if (profile.layers[name].boot){
+                    newLayers[name] = profile.layers[name];
+                } else {
+                    newName = name + '-' + timestamp;
+                    newLayers[newName] = profile.layers[name];
+                    changes.push([name, newName]);
+                    profile.defaultConfig.aliases.push([name, newName]);
+                }
+            }
+
+            //rewrite layer excludes with new names
+            for (name in newLayers){
+                for (var i in newLayers[name].exclude){
+                    for (var k in changes){
+                        if (changes[k][0] == newLayers[name].exclude[i]){
+                            newLayers[name].exclude[i] = changes[k][1];
+                        }
+                    }
+                }
             }
             profile.layers = newLayers;
         }
         delete profile.timestampLayers;
-         
+
+        //add test layer for maxi builds
+        if ( ! profile.mini){
+            profile.layers = utils.mixinDeep(profile.layers, testLayer);
+        }
+
         // merge configs into the defaultConfig
-        var mergedConfig = {};        
-        configManager.merge(profile.defaultConfig.mergeConfigs, mergedConfig).then(function(mergedConfig){            
-            profile.defaultConfig = utils.mixinDeep(profile.defaultConfig, mergedConfig);
-            delete(profile.defaultConfig.mergeConfigs);
-            fs.writeFileSync(filename, 'var profile = ' + json.stringify(profile, null, '    '));
-            console.log('Preprocessed build profile written to: ' + filename);
-        });
+        if (profile.defaultConfig.mergeConfigs){
+            var mergedConfig = {};
+            configManager.merge(profile.defaultConfig.mergeConfigs, mergedConfig).then(function(mergedConfig){
+                profile.defaultConfig = utils.mixinDeep(profile.defaultConfig, mergedConfig);
+                delete(profile.defaultConfig.mergeConfigs);
+                fs.writeFileSync(filename, 'var profile = ' + json.stringify(profile, null, '    '));
+                console.log('Preprocessed build profile written to: ' + filename);
+            });
+        }
     });
 });

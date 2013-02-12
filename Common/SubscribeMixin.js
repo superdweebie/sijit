@@ -14,8 +14,7 @@ define ([
         //		Sds/Common/SubscribeMixin
 
         return declare (
-            'Sds/Common/SubscribeMixin',
-            null,
+            [],
             {
                 // summary:
                 //		Can be mixed into objects that need to subscribe to topics

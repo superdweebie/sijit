@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/Form/Select</title>
+		<style type="text/css">
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
+            @import "../../../../bootstrap/assets/datepicker.css";
+		</style>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript">
+            dojoConfig.mergeConfigs.push('TestSelect/config');
+        </script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+        <script type="text/javascript" src="../../Built.js"></script>
+		<script type="text/javascript">
+            define('TestSelect/config', ['dojo/store/Memory'], function(Memory){
+                return {
+                    moduleManager: {
+                        'Sds/Store/storeManager': {
+                            gets: {
+                                stores: [
+                                    new Memory({
+                                        idProperty: 'ref',
+                                        data: [
+                                            {ref: 'TN', name: 'Tennessee'},
+                                            {ref: 'VA', name: 'Virginia'},
+                                            {ref: 'WA', name: 'Washington'},
+                                            {ref: 'FL', name: 'Florida'},
+                                            {ref: 'CA', name: 'California'}
+                                        ],
+                                        name: 'statesStore'
+                                    })
+                                ]
+                            }
+                        }
+                    }
+                }
+            });
+
+			require([
+                'dojo/parser',
+                'dojo/dom',
+                'dijit/registry',
+                'dojo/store/Memory',
+                'Sds/Form/Select',
+                'dojo/domReady!'
+            ],
+            function(
+                parser,
+                dom,
+                registry,
+                MemoryStore
+            ){
+                parser.parse().then(function(){
+
+                    dom.byId('select1Value').innerHTML = registry.byId('select1').get('value');
+                    registry.byId('select1').watch('value', function(p, o, newValue){
+                        dom.byId('select1Value').innerHTML = newValue;
+                    });
+
+                    var data = [
+                        {ref: 'TN', name: 'Tennessee'},
+                        {ref: 'VA', name: 'Virginia'},
+                        {ref: 'WA', name: 'Washington'},
+                        {ref: 'FL', name: 'Florida'},
+                        {ref: 'CA', name: 'California'}
+                    ];
+
+                    var stateStore = new MemoryStore({
+                        idProperty: 'ref',
+                        data: data
+                    });
+
+                    var select;
+
+                    select = registry.byId('select6');
+                    select.set('storeLabel', 'name');
+                    select.set('store', stateStore);
+
+                    select = registry.byId('select7');
+                    select.set('storeLabel', 'name');
+                    select.set('query', {name: /^.*i.*$/});
+                    select.set('store', stateStore);
+
+                    select = registry.byId('select8');
+                    select.set('storeLabel', 'name');
+                    select.set('query', {name: /^.*i.*$/});
+                    select.set('store', stateStore);
+                    select.set('query', {name: /^.*g.*$/});
+                });
+            })
+		</script>
+	</head>
+	<body>
+        <h1>Functional Testing Sds/Form/Select</h1>
+        <br />
+        <form class="form-horizontal">
+
+            <p>Single line select, no explicit selection</p>
+            <select id="select1" data-dojo-type="Sds/Form/Select" data-dojo-props="label: 'State'">
+                <option value="TN">Tennessee</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="FL">Florida</option>
+                <option value="CA">California</option>
+            </select>
+
+            <p>Select Value: <pre id="select1Value"></pre></p>
+
+
+            <p>Single line select, with selection and help message</p>
+            <select id="select2" data-dojo-type="Sds/Form/Select" data-dojo-props="label: 'State', helpMessages: 'Please select a state'">
+                <option value="TN">Tennessee</option>
+                <option value="VA" selected="selected">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="FL">Florida</option>
+                <option value="CA">California</option>
+            </select>
+
+            <p>Single line select, programatic options</p>
+            <select id="select3" data-dojo-type="Sds/Form/Select" data-dojo-props="
+                options: {
+                    TN: 'Tennessee',
+                    VA: 'Virginia',
+                    WA: 'Washington',
+                    FL: 'Florida',
+                    CA: 'California'
+                },
+                value: 'CA',
+                label: 'State'
+            ">
+            </select>
+
+            <p>Single line select, with css class</p>
+            <select id="select4" data-dojo-type="Sds/Form/Select" data-dojo-props="label: 'State', focusNodeClass: 'span2'">
+                <option value="TN">Tennessee</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="FL">Florida</option>
+                <option value="CA">California</option>
+            </select>
+
+            <p>Single line select, unsorted</p>
+            <select id="select5" data-dojo-type="Sds/Form/Select" data-dojo-props="label: 'State', sortByLabel: false">
+                <option value="TN">Tennessee</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="FL">Florida</option>
+                <option value="CA">California</option>
+            </select>
+
+            <p>Single line select, using data store</p>
+            <select
+                id="select6"
+                data-dojo-type="Sds/Form/Select"
+                data-dojo-props="label: 'State'"
+            >
+            </select>
+
+            <p>Single line select, using data store with query (any name with an 'i')</p>
+            <select
+                id="select7"
+                data-dojo-type="Sds/Form/Select"
+                data-dojo-props="label: 'State'"
+            >
+            </select>
+
+            <p>Single line select, using data store with query change (any name with a 'g')</p>
+            <select
+                id="select8"
+                data-dojo-type="Sds/Form/Select"
+                data-dojo-props="label: 'State'"
+            >
+            </select>
+
+            <p>Multiple select</p>
+            <select id="select9" data-dojo-type="Sds/Form/Select" multiple="multiple" data-dojo-props="label: 'State'">
+                <option value="TN">Tennessee</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="FL">Florida</option>
+                <option value="CA">California</option>
+            </select>
+
+            <p>Single line select, using data from storeManager</p>
+            <select
+                id="select10"
+                data-dojo-type="Sds/Form/Select"
+                data-dojo-props="
+                    label: 'State',
+                    store: 'statesStore',
+                    storeLabel: 'name'"
+            >
+            </select>
+        </form>
+	</body>
+</html>

@@ -20,7 +20,6 @@ function(
     //		it does add some helpful convenience, particularly the toJSON function
 
     return declare(
-        'Sds/Mvc/BaseModel',
         [Stateful],
         {
 
@@ -36,7 +35,7 @@ function(
             get: function(/*String*/name){
 
                 var value = this.inherited(arguments);
-                if ( ! value['$ref']){
+                if ( ! value || ! value['$ref']){
                     return value;
                 }
 

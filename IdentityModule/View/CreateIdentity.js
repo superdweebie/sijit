@@ -5,13 +5,15 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'Sds/Mvc/BaseView',
-    'dojo/text!../Template/CreateIdentity.html',
-    'Sds/Common/ValidationDialog',
+    'dojo/text!./Template/CreateIdentity.html',
+    'Sds/Common/Dialog',
+    'Sds/Form/ValidationControlGroup',
     'Sds/IdentityModule/DataModel/Identity/IdentityName/Input',
     'Sds/IdentityModule/DataModel/Identity/Credential/Input',
     'Sds/IdentityModule/DataModel/Identity/Firstname/Input',
     'Sds/IdentityModule/DataModel/Identity/Lastname/Input',
-    'Sds/IdentityModule/DataModel/Identity/Email/Input'
+    'Sds/IdentityModule/DataModel/Identity/Email/Input',
+    'Sds/Form/Captcha'
 ],
 function(
     declare,
@@ -23,7 +25,6 @@ function(
     template
 ){
     return declare(
-        'Sds/IdentityModule/View/CreateIdentity',
         [
             Widget,
             TemplatedMixin,

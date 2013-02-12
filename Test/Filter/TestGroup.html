@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Testing Sds/Filter/Group</title>
+        <script type="text/javascript" src="../testconfig.js"></script>
+        <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+            require([
+                    'doh/main',
+                    'Sds/Filter/Trim',
+                    'Sds/Filter/Uppercase',
+                    'Sds/Filter/Group',
+                    'Sds/Test/Filter/Asset/DeferredFilter',
+                    'dojo/domReady!'
+                ],
+                function(
+                    doh,
+                    Trim,
+                    Uppercase,
+                    Group,
+                    DeferredFilter
+                ){
+                    doh.register("Sds/Test/Filter/TestGroup", [
+
+                        function FilterTest(doh){
+
+                            var filter = new Group({filters: [
+                                new Trim,
+                                new Uppercase
+                            ]});
+
+                            var testArray = [
+                                ['AB CD', 'ab cd'],
+                                ['ABCD', '  abcd   ']
+                            ];
+
+                            var index;
+                            for (index in testArray){
+                                doh.assertEqual(testArray[index][0], filter.filter(testArray[index][1]));
+                            }
+                        },
+
+                        function deferredFilterTest(doh){
+
+                            var deferredTest = new doh.Deferred;
+
+                            var filter = new Group({filters: [
+                                new DeferredFilter,
+                                new Uppercase
+                            ]});
+
+                            filter.filter('awesome').then(function(value){
+                                doh.assertEqual('PROCESSEDAWESOME', value);
+                                deferredTest.callback(true);
+                            });
+
+                            return deferredTest;
+                        }
+                    ]);
+
+                    doh.runOnLoad();
+                }
+            );
+
+		</script>
+	</head>
+	<body>
+        <h1>Testing Sds/Filter/Group</h1>
+	</body>
+</html>

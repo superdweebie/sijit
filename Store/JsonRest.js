@@ -11,7 +11,6 @@ function(
     JsonRest
 ){
     return declare (
-        'Sds/Store/JsonRest',
         [JsonRest],
         {
             // summary:

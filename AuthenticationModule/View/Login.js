@@ -9,9 +9,9 @@ define([
     'dojo/text!../Template/Login.html',
     'Sds/Router/baseUrl!',
     'Sds/Common/Dialog',
-    'get!Sds/AuthenticationModule/Login/IdentityName/Input',
-    'get!Sds/AuthenticationModule/Login/Credential/Input',
-    'get!Sds/AuthenticationModule/Login/RememberMe/Input'
+    'Sds/IdentityModule/DataModel/Identity/IdentityName/Input',
+    'Sds/IdentityModule/DataModel/Identity/Credential/Input',
+    'Sds/Form/CheckBox'
 ],
 function(
     declare,
@@ -38,7 +38,6 @@ function(
     });
 
     var Login = declare(
-        'Sds/AuthenticationModule/View/Login',
         [
             Widget,
             TemplatedMixin,

@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Testing Sds/Validator/Group</title>
+        <script type="text/javascript" src="../testconfig.js"></script>
+        <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+            require([
+                    'doh/main',
+                    'Sds/Validator/Datatype',
+                    'Sds/Validator/Identifier',
+                    'Sds/Validator/Group',
+                    'Sds/Test/Validator/Asset/DeferredValidator',
+                    'dojo/domReady!'
+                ],
+                function(
+                    doh,
+                    Datatype,
+                    Identifier,
+                    Group,
+                    DeferredValidator
+                ){
+                    doh.register("Sds/Test/Validator/TestGroup", [
+
+                        function ValidatorTest(doh){
+
+                            var validator = new Group({validators: [
+                                new Datatype({requiredType: Datatype.STRING}),
+                                new Identifier()
+                            ]});
+
+                            var testArray = [
+                                [true, 'username'],
+                                [false, 'u'],
+                                [false, 1233456]
+                            ];
+
+                            var index;
+                            for (index in testArray){
+                                if (testArray[index][0]){
+                                    doh.assertTrue(validator.isValid(testArray[index][1]).result);
+                                } else {
+                                    doh.assertFalse(validator.isValid(testArray[index][1]).result);
+                                }
+                            }
+                        },
+
+                        function deferredValidatorTest1(doh){
+
+                            var deferredTest = new doh.Deferred;
+
+                            var validator = new Group({validators: [
+                                new DeferredValidator(),
+                                new Datatype({requiredType: Datatype.STRING}),
+                            ]});
+
+                            validator.isValid('awesome').result.then(function(resultObject){
+                                doh.assertTrue(resultObject.result);
+                                deferredTest.callback(true);
+                            });
+
+                            return deferredTest;
+                        },
+
+                        function deferredValidatorTest2(doh){
+
+                            var deferredTest = new doh.Deferred;
+
+                            var validator = new Group({validators: [
+                                new DeferredValidator(),
+                                new Datatype({requiredType: Datatype.STRING}),
+                            ]});
+
+                            validator.isValid(1233456).result.then(function(resultObject){
+                                doh.assertFalse(resultObject.result);
+                                deferredTest.callback(true);
+                            });
+
+                            return deferredTest;
+                        }
+                    ]);
+
+                    doh.runOnLoad();
+                }
+            );
+
+		</script>
+	</head>
+	<body>
+        <h1>Testing Sds/Validator/Group</h1>
+	</body>
+</html>

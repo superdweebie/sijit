@@ -8,13 +8,31 @@
             @import "../../../../themes/bootstrap/css/bootstrap-responsive.css";
 		</style>
         <script type="text/javascript" src="../../../testconfig.js"></script>
+        <script type="text/javascript">
+            dojoConfig.mergeConfigs.push('TestCreateIdentity/config');
+        </script>
         <script type="text/javascript" src="../../../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
+
+            define('TestCreateIdentity/config', [], function(){
+                return {
+                    moduleManager: {
+                        'Sds/Store/storeManager': {
+                            gets: {
+                                stores: [
+                                    'Sds/Test/IdentityModule/Functional/View/Asset/MockIdentityStore'
+                                ]
+                            }
+                        }
+                    }
+                }
+            });
+
 			require([
                 'dojo/on',
                 'dojo/dom',
                 'dojo/dom-prop',
-                'dojo/_base/json',
+                'dojo/json',
                 'get!Sds/IdentityModule/View/CreateIdentity',
                 'dojo/domReady!',
                 'Sds/ConfigManager/ConfigReady!'
@@ -30,7 +48,7 @@
 
                 on(dom.byId('formActivateButton'), 'click', function(){
                     createIdentityView.activate().then(function(result){
-                        dom.byId('ViewValue').innerHTML = json.toJson(result);
+                        dom.byId('ViewValue').innerHTML = json.stringify(result, null, '    ');
                     });
                 });
             })
@@ -41,6 +59,6 @@
         <br />
         <button class="btn btn-primary btn-large" disabled="true" id="formActivateButton">Activate</button>
         <h3>ViewValue</h3>
-        <p id="ViewValue"></p>
+        <pre id="ViewValue"></pre>
 	</body>
 </html>

@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Testing Sds/Validator/Required</title>
+        <script type="text/javascript" src="../testconfig.js"></script>
+        <script type="text/javascript" src="../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+            require([
+                    'doh/main',
+                    'Sds/Validator/Required',
+                    'dojo/domReady!'
+                ],
+                function(
+                    doh,
+                    Required
+                ){
+
+                    doh.register("Sds/Test/Validator/TestRequired", [
+
+                        function StringTest(doh){
+                            var validator = new Required();
+
+                            doh.assertTrue(validator.isValid('string').result);
+                            doh.assertTrue(validator.isValid('@#$%^').result);
+                            doh.assertTrue(validator.isValid('\'').result);
+                            doh.assertTrue(validator.isValid('"').result);
+                            doh.assertTrue(validator.isValid('\\').result);
+                            doh.assertFalse(validator.isValid('').result);
+                            doh.assertFalse(validator.isValid(' ').result);
+                        },
+
+                        function IntTest(doh){
+                            var validator = new Required();
+
+                            doh.assertTrue(validator.isValid(1).result);
+                            doh.assertTrue(validator.isValid('1').result);
+                            doh.assertTrue(validator.isValid(0).result);
+                            doh.assertTrue(validator.isValid('0').result);
+                        },
+
+                        function FloatTest(doh){
+                            var validator = new Required();
+
+                            doh.assertTrue(validator.isValid(1).result);
+                            doh.assertTrue(validator.isValid('1').result);
+                            doh.assertTrue(validator.isValid(1.1).result);
+                            doh.assertTrue(validator.isValid('1.1').result);
+                            doh.assertTrue(validator.isValid(0).result);
+                            doh.assertTrue(validator.isValid('0').result);
+                            doh.assertTrue(validator.isValid(0.5).result);
+                            doh.assertTrue(validator.isValid('0.5').result);
+                            doh.assertTrue(validator.isValid(0.05).result);
+                            doh.assertTrue(validator.isValid('0.5').result);
+                            doh.assertTrue(validator.isValid(0.00).result);
+                            doh.assertTrue(validator.isValid('0.00').result);
+                        },
+
+                        function ObjectTest(doh){
+                            var obj1 = 0;
+                            var obj2 = 1;
+                            var obj3 = 1.50;
+                            var obj4 = 0.50;
+                            var obj5 = 0.00;
+                            var obj6 = 'string';
+                            var obj7 = '';
+                            var obj8;
+
+                            var validator = new Required();
+
+                            doh.assertTrue(validator.isValid(obj1).result);
+                            doh.assertTrue(validator.isValid(obj2).result);
+                            doh.assertTrue(validator.isValid(obj3).result);
+                            doh.assertTrue(validator.isValid(obj4).result);
+                            doh.assertTrue(validator.isValid(obj5).result);
+                            doh.assertTrue(validator.isValid(obj6).result);
+                            doh.assertFalse(validator.isValid(obj7).result);
+                            doh.assertFalse(validator.isValid(obj8).result);
+                            //doh.assertFalse(validator.isValid(obj9).result); this shouldn't trigger but it actually kills the test
+                        }
+
+                    ]);
+
+                    doh.runOnLoad();
+                }
+            );
+
+		</script>
+	</head>
+	<body>
+        <h1>Testing Sds/Validator/Required</h1>
+	</body>
+</html>

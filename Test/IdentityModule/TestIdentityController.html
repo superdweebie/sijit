@@ -18,6 +18,8 @@
                 'dojo/when',
                 'get!Sds/IdentityModule/IdentityController',
                 'get!Sds/IdentityModule/View/CreateIdentity',
+                'get!Sds/IdentityModule/View/ForgotCredentialCreateToken',
+                'get!Sds/IdentityModule/View/ForgotCredentialUpdateToken',
                 'get!Sds/Store/storeManager',
                 'dojo/domReady!'
             ],
@@ -26,24 +28,25 @@
                 when,
                 identityController,
                 mockCreateIdentityView,
+                mockForgotCredentialCreateTokenView,
+                mockForgotCredentialUpdateTokenView,
                 storeManager
             ){
 
-                //Modify the prototype for testing so the store doesn't send a real xhr request
-                var storeIdentity;
+                //Modify the identity store prototype for testing so the store doesn't send a real xhr request
+                var storeValue;
+                var get = function(id){
+                    return storeValue;
+                }
+                var put = function(data){
+                    storeValue = data;
+                }
+
                 var proto = storeManager.getStore('Identity').__proto__;
                 while (true){
                     if (proto.declaredClass == 'dojo.store.JsonRest'){
-                        proto.get = function(id){
-                            if (id == 'lucy'){
-                                return storeIdentity;
-                            } else {
-                                return;
-                            }
-                        }
-                        proto.put = function(data){
-                            storeIdentity = data;
-                        }
+                        proto.get = get;
+                        proto.put = put;
                         break;
                     }
                     proto = proto.__proto__
@@ -64,6 +67,7 @@
                             email: 'lucy@awesome.com'
                         };
 
+                        mockCreateIdentityView.state = '';
                         mockCreateIdentityView.value = identity;
 
                         when(identityController.register(), function(){
@@ -102,7 +106,81 @@
                         );
 
                         return testResult;
+                    },
+
+                    function testForgotCredentialCreateFromIdentityName(){
+
+                        var testResult = new doh.Deferred;
+
+                        mockForgotCredentialCreateTokenView.state = '';
+                        mockForgotCredentialCreateTokenView.value = {
+                            identityName: 'lucy'
+                        };
+
+                        when(
+                            identityController.forgotCredential(),
+                            function(){
+                                var tokenStore = storeManager.getStore('ForgotCredentialToken');
+
+                                var token = tokenStore.get();
+                                doh.assertEqual('lucy', token.identityName);
+                                testResult.callback(true);
+                            }
+                        );
+
+                        return testResult;
+                    },
+
+                    function testForgotCredentialCreateFromEmail(){
+
+                        var testResult = new doh.Deferred;
+
+                        mockForgotCredentialCreateTokenView.state = '';
+                        mockForgotCredentialCreateTokenView.value = {
+                            email: 'lucy@here.com'
+                        };
+
+                        when(
+                            identityController.forgotCredential(),
+                            function(){
+                                var tokenStore = storeManager.getStore('ForgotCredentialToken');
+
+                                var token = tokenStore.get();
+                                doh.assertEqual('lucy@here.com', token.email);
+                                testResult.callback(true);
+                            }
+                        );
+
+                        return testResult;
+                    },
+
+                    function testForgotCredentialUpdate(){
+
+                        var testResult = new doh.Deferred;
+
+                        mockForgotCredentialUpdateTokenView.state = '';
+                        mockForgotCredentialUpdateTokenView.value = {
+                            credential: [
+                                'password1',
+                                'password1'
+                            ]
+                        };
+
+                        when(
+                            identityController.forgotCredential('abc123'),
+                            function(){
+                                var tokenStore = storeManager.getStore('ForgotCredentialToken');
+
+                                var token = tokenStore.get();
+                                doh.assertEqual('abc123', token.code);
+                                doh.assertEqual('password1', token.credential);
+                                testResult.callback(true);
+                            }
+                        );
+
+                        return testResult;
                     }
+
                 ]);
 
                 // Kick off the test runner

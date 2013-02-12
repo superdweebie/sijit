@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/Form/Textareas Inputs</title>
+		<style type="text/css">
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
+            @import "../../../../bootstrap/assets/datepicker.css";
+		</style>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+        <script type="text/javascript" src="../../Built.js"></script>
+		<script type="text/javascript">
+			require([
+                'dojo/parser',
+                'Sds/Form/Textarea',
+                'Sds/Form/ValidationTextarea',
+                'Sds/Form/ExpandingTextarea',
+                'Sds/Form/ValidationExpandingTextarea',
+                'dojo/domReady!'
+            ],
+            function(
+                parser
+            ){
+                parser.parse();
+            })
+		</script>
+	</head>
+	<body>
+        <h1>Functional Testing Sds/Form/Textareas Inputs</h1>
+        <br />
+        <form class="form-horizontal">
+
+            <h3>Sds/Form/Textarea</h3>
+            <p>Default</p>
+            <textarea data-dojo-type="Sds/Form/Textarea"
+                data-dojo-props="
+                    label:'About'
+                "
+                id="textarea1"
+             >
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </textarea>
+
+            <p>15 rows</p>
+            <textarea data-dojo-type="Sds/Form/Textarea"
+                rows="15"
+                data-dojo-props="
+                    label:'About'
+                "
+                id="textarea2"
+             >
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </textarea>
+
+            <h3>Sds/Form/ValidationTextarea</h3>
+
+            <p>Valid</p>
+            <textarea data-dojo-type="Sds/Form/ValidationTextarea"
+                rows="10"
+                data-dojo-props="
+                    label:'About',
+                    validator: {base: 'Length', params: {min: 10, max: 1000}}
+                "
+                id="validationTextarea1"
+             >Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
+
+            <p>Invalid</p>
+            <textarea data-dojo-type="Sds/Form/ValidationTextarea"
+                rows="10"
+                data-dojo-props="
+                    label:'About',
+                    validator: {base: 'Length', params: {min: 10, max: 1000}}
+                "
+                id="validationTextarea2"
+             >12345</textarea>
+
+            <h3>Sds/Form/ExpandingTextarea</h3>
+            <p>Default (does auto resize)</p>
+            <textarea data-dojo-type="Sds/Form/ExpandingTextarea"
+                data-dojo-props="
+                    label:'About'
+                "
+                id="expandingTextarea1"
+             >
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </textarea>
+
+            <h3>Sds/Form/ValidationExpandingTextarea</h3>
+
+            <p>Valid</p>
+            <textarea data-dojo-type="Sds/Form/ValidationExpandingTextarea"
+                data-dojo-props="
+                    label:'About',
+                    validator: {base: 'Length', params: {min: 10, max: 1000}}
+                "
+                id="validationExpandingTextarea1"
+             >Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>
+
+            <p>Invalid</p>
+            <textarea data-dojo-type="Sds/Form/ValidationExpandingTextarea"
+                data-dojo-props="
+                    label:'About',
+                    validator: {base: 'Length', params: {min: 10, max: 1000}}
+                "
+                id="validationExpandingTextarea2"
+             >12345</textarea>
+
+        </form>
+	</body>
+</html>

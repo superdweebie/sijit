@@ -1,4 +1,4 @@
 define([
     'Sds/Test/Mvc/TestBaseModel',
-    'Sds/Test/Mvc/TestBaseModelJsonRestStore'
+    'Sds/Test/Mvc/TestJsonRest'
 ], 1);

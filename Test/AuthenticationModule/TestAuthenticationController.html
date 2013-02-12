@@ -15,6 +15,7 @@
 		<script type="text/javascript">
 			require([
                 'doh/main',
+                'dojo/Deferred',
                 'dojo/when',
                 'Sds/AuthenticationModule/Exception/LoginFailedException',
                 'get!Sds/AuthenticationModule/AuthenticationController',
@@ -23,6 +24,7 @@
             ],
             function(
                 doh,
+                Deferred,
                 when,
                 LoginFailedException,
                 authenticationController,
@@ -34,13 +36,13 @@
 
                     function testLogout1(){
 
-                        var testResult = new doh.Deferred;
+                        var testResult = new Deferred;
 
                         when(authenticationController.logout(), function(){
                             doh.assertFalse(authenticationController.get('loggedIn'));
                             when(authenticationController.get('identity'), function(identity){
                                 doh.assertFalse(identity);
-                                testResult.callback(true);
+                                testResult.resolve(true);
                             });
                         });
 
@@ -49,14 +51,16 @@
 
                     function testLoginFail(){
 
-                        var testResult = new doh.Deferred;
+                        var testResult = new Deferred;
 
-                        mockLoginView.value.identityName = 'toby';
-                        mockLoginView.value.credential = 'wrong';
+                            mockLoginView.value = {
+                                identityName: 'toby',
+                                credential: 'wrong'
+                            };
 
                         when(authenticationController.login(), null, function(exception){
                             doh.assertTrue(exception instanceof LoginFailedException);
-                            testResult.callback(true);
+                            testResult.resolve(true);
                         });
 
                         return testResult;
@@ -66,15 +70,17 @@
                         timeout: 2000,
                         runTest: function(){
 
-                            var testResult = new doh.Deferred;
+                            var testResult = new Deferred;
 
-                            mockLoginView.value.identityName = 'toby';
-                            mockLoginView.value.credential = 'password';
+                            mockLoginView.value = {
+                                identityName: 'toby',
+                                credential: 'password'
+                            };
 
                             when(authenticationController.login(), function(){
                                 doh.assertTrue(authenticationController.get('loggedIn'));
                                 doh.assertEqual('toby', authenticationController.get('identity').identityName);
-                                testResult.callback(true);
+                                testResult.resolve(true);
                             });
 
                             return testResult;
@@ -84,12 +90,14 @@
                         name: "testLogout2",
                         timeout: 2000,
                         runTest: function(){
-                            var testResult = new doh.Deferred;
+
+                            var testResult = new Deferred;
+
                             when(authenticationController.logout(), function(){
                                 doh.assertFalse(authenticationController.get('loggedIn'));
                                 when(authenticationController.get('identity'), function(identity){
                                     doh.assertFalse(identity);
-                                    testResult.callback(true);
+                                    testResult.resolve(true);
                                 });
                             });
 

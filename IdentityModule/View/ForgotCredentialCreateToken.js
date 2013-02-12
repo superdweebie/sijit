@@ -5,10 +5,13 @@ define([
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
     'Sds/Mvc/BaseView',
-    'dojo/text!../Template/ForgotCredentialCreateToken.html',
-    'Sds/Common/ValidationDialog',
+    'dojo/text!./Template/ForgotCredentialCreateToken.html',
+    'Sds/Common/Dialog',
+    'Sds/Form/ValidationControlGroup',
     'Sds/IdentityModule/DataModel/Identity/IdentityName/Input',
-    'Sds/IdentityModule/DataModel/Identity/Email/Input'
+    'Sds/IdentityModule/DataModel/Identity/Email/Input',
+    'Sds/IdentityModule/Validator/ForgotCredentialCreateToken',
+    'Sds/Validator/NotRequired'
 ],
 function(
     declare,
@@ -20,7 +23,6 @@ function(
     template
 ){
     return declare(
-        'Sds/IdentityModule/View/ForgotCredentialCreateToken',
         [
             Widget,
             TemplatedMixin,
@@ -59,7 +61,7 @@ function(
             },
 
             _getValueAttr: function(){
-                return this.dialogNode.get('value').value;
+                return this.dialogNode.get('value').value.identifier;
             }
         }
     );

@@ -3,9 +3,9 @@ define([
     'dojo/_base/lang',
     'dojo/when',
     'dojo/Deferred',
-    'Sds/Store/JsonRest',
     'Sds/Common/Status',
     'dojo/Stateful',
+    'get!Sds/Store/storeManager',
     'Sds/ExceptionModule/throwEx'
 ],
 function (
@@ -13,46 +13,36 @@ function (
     lang,
     when,
     Deferred,
-    JsonRest,
     Status,
     Stateful,
+    storeManager,
     throwEx
 ){
     return declare(
-        'Sds/AuthenticationModule/AuthenticationController',
         [Stateful],
         {
             // summary:
-            //		Controlls identity login and logout.
-
-            restUrl: undefined,
+            //		Controlls identity.
 
             //identity: object
-            //    The identity object returned after a successful login
-            identity: undefined,
+            //    The current identity object
+            //identity: undefined,
 
             //loggedIn: boolean
             //    Indicates if there is a logged in identity
-            loggedIn: undefined,
+            loggedIn: false,
 
             //status: Sds/Common/Status
             //    An object indicating the current status
-            status: undefined,
+            //status: undefined,
 
-            // loginView: Sds.View.BaseView
+            // loginView: Sds/Mvc/BaseView
             //     This form is shown to prompt login
-            loginView: undefined,
+            //loginView: undefined,
 
-            enableRememberMe: undefined,
+            //enableRememberMe: undefined,
 
-            store: undefined,
-
-            _storeGetter: function(){
-                if (! this.store){
-                    this.store = new JsonRest({target: this.restUrl});
-                }
-                return this.store;
-            },
+            storeName: 'AuthenticatedIdentity',
 
             login: function()
             {
@@ -82,11 +72,11 @@ function (
                         formValue.rememberMe = Boolean(formValue['rememberMe'].length);
                     }
 
-                    when(this.get('store').put(formValue),
+                    when(storeManager.getStore(this.storeName).put(formValue),
                         lang.hitch(this, '_loginComplete'),
                         lang.hitch(this, '_loginException')
                     );
-                    this.loginView.reset();
+                    this.loginView.set('value', null);
                 }));
 
                 return this._loginDeferred;
@@ -116,7 +106,7 @@ function (
                     this.set('status', new Status('logging out', Status.icon.SPINNER));
 
                     // Send message to server
-                    this.get('store').remove(this.identity.id).then(
+                    storeManager.getStore(this.storeName).remove(this.identity.id).then(
                         lang.hitch(this, '_logoutComplete'),
                         lang.hitch(this, '_logoutException')
                     );
@@ -129,7 +119,7 @@ function (
                 if (this.identity === undefined){
                     if (this._getIdentityDeferred == undefined || this._getIdentityDeferred.isResolved()){
                         this._getIdentityDeferred = new Deferred;
-                        when(this.get('store').get(''),
+                        when(storeManager.getStore(this.storeName).get(''),
                             lang.hitch(this, '_getIdentityComplete'),
                             lang.hitch(this, '_getIdentityException')
                         );

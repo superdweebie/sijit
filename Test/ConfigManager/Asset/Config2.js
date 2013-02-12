@@ -5,7 +5,7 @@ define(
             mergeConfigs: [
                 'Sds/Test/ConfigManager/Asset/Config3'
             ],
-            moduleManager: {
+            configTest: {
                 test1: {
                     params: {
                         value2: 22

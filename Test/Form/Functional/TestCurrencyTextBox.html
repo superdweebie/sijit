@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/Form/CurrencyTextBox</title>
+		<style type="text/css">
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
+		</style>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+        <script type="text/javascript" src="../../Built.js"></script>
+		<script type="text/javascript">
+			require([
+                'dojo/parser',
+                'dojo/dom',
+                'dijit/registry',
+                'Sds/Form/CurrencyTextBox',
+                'dojo/domReady!'
+            ],
+            function(
+                parser,
+                dom,
+                registry
+            ){
+                parser.parse().then(function(){
+
+                    dom.byId('currencyTextBox1Value').innerHTML = registry.byId('currencyTextBox1').get('value');
+                    registry.byId('currencyTextBox1').watch('value', function(p, o, newValue){
+                        dom.byId('currencyTextBox1Value').innerHTML = newValue;
+                    });
+
+                });
+            })
+		</script>
+	</head>
+	<body>
+        <h1>Functional Testing Sds/Form/CurrencyTextBox</h1>
+        <br />
+        <form class="form-horizontal">
+
+
+            <h3>Sds/Form/CurrencyTextBox</h3>
+
+            <p><bold>Single Currency Box</bold></p>
+            <input data-dojo-type="Sds/Form/CurrencyTextBox"
+                data-dojo-props="
+                    label:'Cost'
+                "
+                id="currencyTextBox1"
+            />
+            <p>Currency Box Value: <pre id="currencyTextBox1Value"></pre></p>
+
+            <p><bold>Multiple Currency Boxes</bold></p>
+            <input data-dojo-type="Sds/Form/CurrencyTextBox"
+                name="fullPrice"
+                data-dojo-props="
+                label:'Full price',
+                focusNodeClass: ['span2'],
+                validator: 'Required'"
+                id="fullPrice"
+            />
+            <input data-dojo-type="Sds/Form/CurrencyTextBox"
+                name="salePrice"
+                data-dojo-props="
+                label:'Sale price',
+                focusNodeClass: ['span2'],
+                validator: 'NotRequired'"
+                id="salePrice"
+            />
+            <input data-dojo-type="Sds/Form/CurrencyTextBox"
+                name="wholesalePrice"
+                data-dojo-props="
+                label:'Wholesale price',
+                focusNodeClass: ['span2'],
+                validator: 'NotRequired'"
+                id="wholesalePrice"
+            />
+        </form>
+	</body>
+</html>
