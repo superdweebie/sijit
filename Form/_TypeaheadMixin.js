@@ -26,7 +26,6 @@ function (
     //		Sds/Common/_TypeaheadMixin
 
     return declare(
-        'Sds/Form/Typeahead',
         [Evented],
         {
 

@@ -14,7 +14,6 @@ function (
     //		Sds/Common/ValidationTypeahead
 
     return declare(
-        'Sds/Form/ValidationTypeahead',
         [ValidationTextBox, TypeaheadMixin],
         {
             templateString: template

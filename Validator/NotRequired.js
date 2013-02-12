@@ -7,7 +7,6 @@ function(
     Base
 ){
     return declare(
-        'Sds/Validator/NotRequired',
         [Base],
         {
 

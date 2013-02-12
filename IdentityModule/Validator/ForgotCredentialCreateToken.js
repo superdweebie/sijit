@@ -9,7 +9,6 @@ function(
     Base
 ){
     return declare(
-        'Sds/IdentityModule/Validator/ForgotCredentialCreateToken',
         [Base],
         {
             _isValid: function(value){

@@ -11,7 +11,6 @@ function(
     xweb
 ){
     return declare(
-        'Sds/Validator/EmailAddress',
         [Base],
         {
             _isValid: function(value){
@@ -21,7 +20,7 @@ function(
 
                 if ( ! xweb.isEmailAddress(value)){
                     result = false;
-                    messages.push(validatorMessages.emailMessage);
+                    messages.push(validatorMessages.email);
                 }
 
                 return {result: result, messages: messages};

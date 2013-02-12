@@ -1,28 +1,18 @@
 define([
     'dojo/_base/declare',
-    'dijit/_Widget',
-	'dijit/_TemplatedMixin',
-    './_TextBoxMixin',
+    './TextBox',
     './_ValidationMixin',
-    './_AppendageMixin',
-    './_ValidationMessagesMixin',
-    'dojo/text!./Template/ValidationTextBox.html'
+    './_ValidationMessagesMixin'
 ],
 function (
     declare,
-    Widget,
-    TemplatedMixin,
-    TextBoxMixin,
+    TextBox,
     ValidationMixin,
-    AppendageMixin,
-    ValidationMessagesMixin,
-    template
+    ValidationMessagesMixin
 ){
     return declare(
-        'Sds/Form/ValidationTextBox',
-        [Widget, TemplatedMixin, TextBoxMixin, AppendageMixin, ValidationMixin, ValidationMessagesMixin],
+        [TextBox, ValidationMixin, ValidationMessagesMixin],
         {
-            templateString: template
         }
     );
 });

@@ -19,14 +19,13 @@ function (
     Datepicker
 ){
     return declare(
-        'Sds/Form/DateTextBox',
         [ValidationTextBox],
         {
             placeholder: {format: ''},
 
             formatLength: 'short',
 
-            _datepicker: undefined,
+            //_datepicker: undefined,
 
             // there is no typing for this input, so the delay timer can be removed
             // to make it feel more snappy

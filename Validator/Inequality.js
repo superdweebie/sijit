@@ -25,7 +25,6 @@ function(
     };
 
     var Inequality = declare(
-        'Sds/Validator/Inequality',
         [Base],
         {
 
@@ -43,7 +42,7 @@ function(
                         if ( ! (this.compareValue > value)){
                             result = false;
                             messages.push(string.substitute(
-                                validatorMessages.inequalityLessThanMessage,
+                                validatorMessages.inequalityLessThan,
                                 {compareValue: this.compareValue}
                             ));
                         }
@@ -52,7 +51,7 @@ function(
                         if ( ! (this.compareValue >= value)){
                             result = false;
                             messages.push(string.substitute(
-                                validatorMessages.inequalityLessThanOrEqualMessage,
+                                validatorMessages.inequalityLessThanOrEqual,
                                 {compareValue: this.compareValue}
                             ));
                         }
@@ -61,7 +60,7 @@ function(
                         if ( ! (this.compareValue < value)){
                             result = false;
                             messages.push(string.substitute(
-                                validatorMessages.inequalityGreaterThanMessage,
+                                validatorMessages.inequalityGreaterThan,
                                 {compareValue: this.compareValue}
                             ));
                         }
@@ -70,7 +69,7 @@ function(
                         if ( ! (this.compareValue <= value)){
                             result = false;
                             messages.push(string.substitute(
-                                validatorMessages.inequalityGreaterThanOrEqualMessage,
+                                validatorMessages.inequalityGreaterThanOrEqual,
                                 {compareValue: this.compareValue}
                             ));
                         }
@@ -79,7 +78,7 @@ function(
                         if ( ! (this.compareValue != value)){
                             result = false;
                             messages.push(string.substitute(
-                                validatorMessages.inequalityNotEqualMessage,
+                                validatorMessages.inequalityNotEqual,
                                 {compareValue: this.compareValue}
                             ));
                         }

@@ -25,7 +25,6 @@ function(
     template
 ){
     return declare(
-        'Sds/IdentityModule/View/CreateIdentity',
         [
             Widget,
             TemplatedMixin,

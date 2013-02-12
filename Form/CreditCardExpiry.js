@@ -14,7 +14,6 @@ function (
     template
 ){
     return declare(
-        'Sds/Form/CreditCardExpiry',
         [ValidationControlGroup, WidgetsInTemplateMixin],
         {
             templateString: template,

@@ -1,27 +1,29 @@
 define([
     'dojo/_base/declare',
     'dojo/i18n!Sds/nls/validatorMessages',
-    './Base',
-    'dojox/validate/creditCard'
+    './Base'
 ],
 function(
     declare,
     validatorMessages,
-    Base,
-    creditCard
+    Base
 ){
+    // module:
+    //		Sds/Validator/HexColor
+
     return declare(
         [Base],
         {
+            regEx: /^#[0-9A-F]{6,6}$/,
 
             _isValid: function(value){
 
                 var messages = [],
                     result = true;
 
-                if ( ! creditCard.isValidCreditCardNumber(value)){
+                if ( ! this.regEx.test(value)){
                     result = false;
-                    messages.push(validatorMessages.creditCard);
+                    messages.push(validatorMessages.hexColor);
                 }
 
                 return {result: result, messages: messages};

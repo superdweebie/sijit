@@ -11,7 +11,6 @@ function(
     creditCard
 ){
     return declare(
-        'Sds/Validator/Cvv',
         [Base],
         {
 
@@ -24,7 +23,7 @@ function(
 
                 if ( ! creditCard.isValidCvv(value, this.type)){
                     result = false;
-                    messages.push(validatorMessages.cvvMessage);
+                    messages.push(validatorMessages.cvv);
                 }
 
                 return {result: result, messages: messages};

@@ -12,7 +12,6 @@ function(
     //		Sds/Validator/Currency
 
     return declare(
-        'Sds/Validator/Currency',
         [Base],
         {
             // summary:
@@ -29,7 +28,7 @@ function(
 
                 if ( ! this.regEx.test(value)){
                     result = false;
-                    messages.push(validatorMessages.currencyMessage);
+                    messages.push(validatorMessages.currency);
                 }
 
                 return {result: result, messages: messages};

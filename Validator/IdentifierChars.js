@@ -9,7 +9,6 @@ function(
     Base
 ){
     return declare(
-        'Sds/Validator/IdentifierChars',
         [Base],
         {
             regEx: /^[a-zA-Z0-9_-]+$/,
@@ -21,7 +20,7 @@ function(
 
                 if ( ! this.regEx.test(value)){
                     result = false;
-                    messages.push(validatorMessages.identifierCharsMessage);
+                    messages.push(validatorMessages.identifierChars);
                 }
 
                 return {result: result, messages: messages};

@@ -38,7 +38,6 @@ function(
     });
 
     var Login = declare(
-        'Sds/AuthenticationModule/View/Login',
         [
             Widget,
             TemplatedMixin,

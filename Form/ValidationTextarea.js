@@ -1,33 +1,18 @@
 define([
     'dojo/_base/declare',
-    'dijit/_Widget',
-	'dijit/_TemplatedMixin',
-    './_TextBoxMixin',
-    'dijit/_WidgetsInTemplateMixin',
+    './Textarea',
     './_ValidationMixin',
-    './_ValidationMessagesMixin',
-    'dojo/text!./Template/ValidationTextarea.html'
+    './_ValidationMessagesMixin'
 ],
 function (
     declare,
-    Widget,
-    TemplatedMixin,
-    TextBoxMixin,
-    WidgetsInTemplateMixin,
+    Textarea,
     ValidationMixin,
-    ValidationMessagesMixin,
-    template
+    ValidationMessagesMixin
 ){
     return declare(
-        'Sds/Form/ValidationTextarea',
-        [Widget, TemplatedMixin, WidgetsInTemplateMixin, TextBoxMixin, ValidationMixin, ValidationMessagesMixin],
+        [Textarea, ValidationMixin, ValidationMessagesMixin],
         {
-            templateString: template,
-
-            postCreate: function(){
-                this.set('value', this.textbox.value);
-                this.inherited(arguments);
-            }
         }
     );
 });

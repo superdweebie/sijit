@@ -9,7 +9,6 @@ function (
     Textarea
 ){
     return declare(
-        'Sds/Form/ExpandingTextArea',
         [Textarea, ExpandingTextAreaMixin],
         {
         }

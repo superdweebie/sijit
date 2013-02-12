@@ -29,7 +29,6 @@ function(
     };
 
     var DateInequality = declare(
-        'Sds/Validator/DateInequality',
         [Base],
         {
 
@@ -51,7 +50,7 @@ function(
                         if ( ! (date.compare(this.compareValue, value, this.portion) > 0)){
                             result = false;
                             messages.push(string.substitute(
-                                validatorMessages.inequalityLessThanMessage,
+                                validatorMessages.inequalityLessThan,
                                 {compareValue: dateLocale.format(this.compareValue, {selector: 'date', formatLength: this.formatLength})}
                             ));
                         }
@@ -60,7 +59,7 @@ function(
                         if ( ! (date.compare(this.compareValue, value, this.portion) >= 0)){
                             result = false;
                             messages.push(string.substitute(
-                                validatorMessages.inequalityLessThanOrEqualMessage,
+                                validatorMessages.inequalityLessThanOrEqual,
                                 {compareValue: dateLocale.format(this.compareValue, {selector: 'date', formatLength: this.formatLength})}
                             ));
                         }
@@ -69,7 +68,7 @@ function(
                         if ( ! (date.compare(this.compareValue, value, this.portion) < 0)){
                             result = false;
                             messages.push(string.substitute(
-                                validatorMessages.inequalityGreaterThanMessage,
+                                validatorMessages.inequalityGreaterThan,
                                 {compareValue: dateLocale.format(this.compareValue, {selector: 'date', formatLength: this.formatLength})}
                             ));
                         }
@@ -78,7 +77,7 @@ function(
                         if ( ! (date.compare(this.compareValue, value, this.portion) <= 0)){
                             result = false;
                             messages.push(string.substitute(
-                                validatorMessages.inequalityGreaterThanOrEqualMessage,
+                                validatorMessages.inequalityGreaterThanOrEqual,
                                 {compareValue: dateLocale.format(this.compareValue, {selector: 'date', formatLength: this.formatLength})}
                             ));
                         }
@@ -87,7 +86,7 @@ function(
                         if ( ! (date.compare(this.compareValue, value, this.portion) != 0)){
                             result = false;
                             messages.push(string.substitute(
-                                validatorMessages.inequalityNotEqualMessage,
+                                validatorMessages.inequalityNotEqual,
                                 {compareValue: dateLocale.format(this.compareValue, {selector: 'date', formatLength: this.formatLength})}
                             ));
                         }

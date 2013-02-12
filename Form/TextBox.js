@@ -15,7 +15,6 @@ function (
     template
 ){
     return declare(
-        'Sds/Form/TextBox',
         [Widget, TemplatedMixin, TextBoxMixin, AppendageMixin],
         {
             templateString: template

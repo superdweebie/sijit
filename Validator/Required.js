@@ -9,7 +9,6 @@ function(
     Base
 ){
     return declare(
-        'Sds/Validator/Required',
         [Base],
         {
 
@@ -24,7 +23,7 @@ function(
 
                 if (value === undefined || value === null || value === '' || this.regEx.test(value)){
                     result = false;
-                    messages.push(validatorMessages.requiredMessage);
+                    messages.push(validatorMessages.required);
                 }
 
                 return {result: result, messages: messages};

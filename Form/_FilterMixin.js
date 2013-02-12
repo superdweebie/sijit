@@ -14,7 +14,6 @@ function (
 ){
 
     return declare(
-        'Sds/Form/_FilterMixin',
         [],
         {
             //_filterSet: false,

@@ -9,7 +9,6 @@ function (
     ValidationTextarea
 ){
     return declare(
-        'Sds/Form/ValidationExpandingTextarea',
         [ValidationTextarea, ExpandingTextAreaMixin],
         {
         }

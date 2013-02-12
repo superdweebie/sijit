@@ -9,14 +9,13 @@ function (
     MessagesMixin
 ){
     return declare(
-        'Sds/Form/_HelpMessagesMixin',
         [MessagesMixin],
         {
             // Adds a help messages to form inputs
             //
 
             // _helpMessageObjects: string
-            _helpMessageObjects: undefined,
+            //_helpMessageObjects: undefined,
 
             _setHelpMessagesAttr: function(messages) {
 

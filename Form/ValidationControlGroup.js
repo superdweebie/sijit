@@ -4,8 +4,7 @@ define([
     'dijit/_TemplatedMixin',
     './_FormMixin',
     './_ValidationMixin',
-    './_ValidationMessagesMixin',
-    'dojo/text!./Template/ValidationControlGroup.html'
+    './_ValidationMessagesMixin'
 ],
 function (
     declare,
@@ -13,14 +12,12 @@ function (
     TemplatedMixin,
     FormMixin,
     ValidationMixin,
-    ValidationMessagesMixin,
-    template
+    ValidationMessagesMixin
 ){
     return declare(
-        'Sds/Form/ValidationControlGroup',
         [Widget, TemplatedMixin, FormMixin, ValidationMixin, ValidationMessagesMixin],
         {
-            templateString: template,
+            templateString: '<div data-dojo-attach-point="containerNode" class="control-group"></div>',
 
             postCreate: function(){
                 this.watch('value', function(){

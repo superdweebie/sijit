@@ -11,7 +11,6 @@ function(
 
     return declare
     (
-        'Sds/Form/_ValidationMessagesMixin',
         [MessagesMixin],
         {
 
@@ -19,7 +18,8 @@ function(
             //
 
             // _helpMessageObjects: string
-            _validationMessageObjects: undefined,
+            //
+            //_validationMessageObjects: undefined,
 
             _setValidationMessagesAttr: function(messages) {
 

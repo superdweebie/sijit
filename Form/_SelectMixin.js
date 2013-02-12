@@ -23,7 +23,6 @@ function (
     storeManager
 ){
     return declare(
-        'Sds/Form/_SelectMixin',
         [LabelMixin, HelpMessagesMixin, FormValueMixin],
         {
             // store: dojo/store/api/Store

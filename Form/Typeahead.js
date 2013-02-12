@@ -14,7 +14,6 @@ function (
     //		Sds/Common/Typeahead
 
     return declare(
-        'Sds/Form/Typeahead',
         [TextBox, TypeaheadMixin],
         {
             templateString: template

@@ -13,7 +13,6 @@ function (
     domClass
 ){
     return declare(
-        'Sds/Form/_AppendageMixin',
         [],
         {
 

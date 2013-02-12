@@ -6,7 +6,6 @@ define([
     'Sds/Common/Status',
     'dojo/Stateful',
     'get!Sds/Store/storeManager',
-    './DataModel/Identity',
     './DataModel/Identity/ModelValidator',
     './Exception/InvalidArgumentException',
     'proxy!Sds/IdentityModule/View/ForgotCredentialCreateToken',
@@ -22,7 +21,6 @@ function(
     Status,
     Stateful,
     storeManager,
-    Identity,
     IdentityValidator,
     InvalidArgumentException,
     forgotCredentialCreateTokenView,
@@ -32,7 +30,6 @@ function(
 ){
     return declare
     (
-        'Sds/IdentityModule/IdentityController',
         [Stateful],
         {
             // summary:

@@ -28,7 +28,6 @@ function(
     };
 
     var validator = declare(
-        'Sds/Validator/Datatype',
         [Base],
         {
             requiredType: datatypes.STRING,
@@ -62,7 +61,7 @@ function(
 
                 if ( ! result){
                     messages.push(string.substitute(
-                        validatorMessages.dataTypeMessage,
+                        validatorMessages.dataType,
                         {requiredType: this.requiredType}
                     ))
                 }

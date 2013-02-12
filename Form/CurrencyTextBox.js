@@ -17,7 +17,6 @@ function (
     PadCurrencyFilter
 ){
     return declare(
-        'Sds/Form/CurrencyTextBox',
         [ValidationTextBox, NumberTextBoxMixin],
         {
             currency: 'USD', //US Dollars default currency

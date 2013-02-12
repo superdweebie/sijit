@@ -19,7 +19,6 @@ function (
     throwEx
 ){
     return declare(
-        'Sds/AuthenticationModule/AuthenticationController',
         [Stateful],
         {
             // summary:

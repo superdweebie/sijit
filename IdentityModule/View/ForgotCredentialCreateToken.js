@@ -23,7 +23,6 @@ function(
     template
 ){
     return declare(
-        'Sds/IdentityModule/View/ForgotCredentialCreateToken',
         [
             Widget,
             TemplatedMixin,

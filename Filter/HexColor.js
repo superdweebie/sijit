@@ -10,12 +10,14 @@ function(
     //		Sds/Filter/HexColor
 
     return declare(
-        'Sds/Filter/HexColor',
         [Base],
         {
 
             filter: function(value){
-                return '#' + value;
+                if (value[0] != '#'){
+                    value = '#' + value;
+                }
+                return value.toUpperCase();
             }
         }
     );

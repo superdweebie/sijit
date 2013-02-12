@@ -10,7 +10,6 @@ function(
     //		Sds/Filter/Base
 
     var Base = declare(
-        'Sds/Filter/Base',
         [Stateful],
         {
         }

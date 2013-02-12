@@ -13,7 +13,6 @@ function(
 
     return declare
     (
-        'Sds/Form/RadioButton',
         [RadioButton],
         {
             // summary:

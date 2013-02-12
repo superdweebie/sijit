@@ -13,7 +13,6 @@ function(
 
     return declare
     (
-        'Sds/Form/CheckBox',
         [CheckBox],
         {
             // summary:

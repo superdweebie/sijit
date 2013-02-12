@@ -9,7 +9,6 @@ function (
     NumberTextBoxMixin
 ){
     return declare(
-        'Sds/Form/NumberTextBox',
         [TextBox, NumberTextBoxMixin],
         {
         }

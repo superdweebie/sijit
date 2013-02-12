@@ -13,7 +13,6 @@ function(
     Base
 ){
     return declare(
-        'Sds/Filter/Group',
         [Base],
         {
             filters: [],

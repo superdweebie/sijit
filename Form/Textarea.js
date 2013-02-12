@@ -13,7 +13,6 @@ function (
     template
 ){
     return declare(
-        'Sds/Form/Textarea',
         [Widget, TemplatedMixin, TextBoxMixin],
         {
             templateString: template,

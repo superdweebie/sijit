@@ -9,7 +9,6 @@ function (
     FormMixin
 ){
     return declare(
-        'Sds/Form/_FormMixin',
         [FormMixin],
         {
             // Extends the standard dijit/form/_FormMixin

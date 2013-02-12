@@ -11,7 +11,6 @@ function(
 ){
 
     return declare(
-        'Sds/Mvc/JsonRest',
         [JsonRest],
         {
 

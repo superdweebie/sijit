@@ -9,7 +9,6 @@ function(
     Base
 ){
     return declare(
-        'Sds/Validator/CreditCardExpiry',
         [Base],
         {
 
@@ -21,7 +20,7 @@ function(
                 // Check fomat
                 if ( ! /^\d{1,2}$/.test(value.month) ||  ! /^\d\d\d\d$/.test(value.year)){
                     result = false;
-                    messages.push(validatorMessages.creditCardExpiryMessage);
+                    messages.push(validatorMessages.creditCardExpiry);
                 }
 
                 var month = parseInt(value.month),

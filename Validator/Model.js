@@ -10,7 +10,6 @@ function(
     //		Sds/Validator/Model
 
     return declare(
-        'Sds/Validator/Model',
         [Group],
         {
             // summary:

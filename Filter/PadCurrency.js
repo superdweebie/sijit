@@ -14,7 +14,6 @@ function(
     //		Sds/Filter/PadCurrency
 
     return declare(
-        'Sds/Filter/PadCurrency',
         [Base],
         {
 

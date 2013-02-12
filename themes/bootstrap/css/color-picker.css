@@ -9,10 +9,24 @@
     width: 35px;
 }
 
-.color-picker-underlay {
-    background-image: url("../img/colorpicker/underlay.png");
+.color-picker .row-fluid {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.color-picker-box {
+    background-image: url("../img/colorpicker/box.png");
     width: 150px;
     height: 150px;
+}
+
+.color-picker-box-handle {
+    background-image: url("../img/colorpicker/boxHandle.png");
+    height: 10px;
+    width: 10px;
+    position: absolute;
+    border-radius: 3px;
+    box-shadow: 1px 1px 2px;
 }
 
 .color-picker-hue {
@@ -21,6 +35,17 @@
     width: 10px;
 }
 
-.color-picker-hex .controls {
-    margin-left: 0px;
+.color-picker-hue-handle {
+    background-image: url("../img/colorpicker/hueHandle.png");
+    height: 8px;
+    width: 20px;
+    position: absolute;
+}
+
+.color-picker .control-group {
+    margin: 0px;
+}
+
+.color-picker .controls {
+    margin: 0px;
 }

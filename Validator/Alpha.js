@@ -12,7 +12,6 @@ function(
     //		Sds/Validator/Alpha
 
     return declare(
-        'Sds/Validator/Alpha',
         [Base],
         {
             // summary:
@@ -28,7 +27,7 @@ function(
 
                 if ( ! this.regEx.test(value)){
                     result = false;
-                    messages.push(validatorMessages.alphaMessage);
+                    messages.push(validatorMessages.alpha);
                 }
 
                 return {result: result, messages: messages};

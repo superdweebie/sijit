@@ -9,7 +9,6 @@ function (
     template
 ){
     return declare(
-        'Sds/Form/PasswordTextBox',
         [ValidationTextBox],
         {
             templateString: template

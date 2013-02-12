@@ -7,14 +7,13 @@ function (
     domConstruct
 ){
     return declare(
-        'Sds/Form/_LabelMixin',
         [],
         {
             // Adds a label to form inputs
             //
 
             // label: string
-            label: undefined,
+            //label: undefined,
 
             _setLabelAttr: function(value) {
                 this.label = value;

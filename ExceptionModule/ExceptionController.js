@@ -19,7 +19,6 @@ function(
     ServerLogFailedException
 ){
     return declare (
-        'Sds/ExceptionModule/ExceptionController',
         [],
         {
             // summary:

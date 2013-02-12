@@ -11,7 +11,6 @@ function (
     template
 ){
     return declare(
-        'Sds/Form/Captcha',
         [ValidationTextBox],
         {
             templateString: template,

@@ -22,7 +22,6 @@ function (
     FormValueMixin
 ){
     return declare(
-        'Sds/Form/_TextBoxMixin',
         [LabelMixin, FilterMixin, HelpMessagesMixin, FormValueMixin],
         {
             // Some of this code is copied across from dijit/form/_TextBoxMixin

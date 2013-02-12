@@ -8,8 +8,7 @@ define ([
         //		Sds/ModuleManager/ModuleManagerAwareMixin
 
         return declare (
-            'Sds/ModuleManager/ModuleManagerAwareMixin',
-            null,
+            [],
             {
                 // summary:
                 //		Can be mixed into objects that need to be explicitly aware

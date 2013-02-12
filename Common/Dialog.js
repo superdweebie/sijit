@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/keys',    
+    'dojo/keys',
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
     'Sds/Common/_DialogMixin',
@@ -33,7 +33,6 @@ function (
     });
 
     var Dialog = declare(
-        'Sds/Common/Dialog',
         [Widget, TemplatedMixin, DialogMixin],
         {
             // templateString: string

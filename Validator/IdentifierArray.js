@@ -13,7 +13,6 @@ function(
     Base
 ){
     return declare(
-        'Sds/Validator/IdentifierArray',
         [Base],
         {
             _isValid: function(value){
@@ -32,7 +31,7 @@ function(
                         var identifierMessages = resultObject.messages;
                         for (var messageIndex in identifierMessages){
                             messages.push(string.substitute(
-                                validatorMessages.identifierArrayMessage,
+                                validatorMessages.identifierArray,
                                 {name: name, message: identifierMessages[messageIndex]}
                             ));
                         }

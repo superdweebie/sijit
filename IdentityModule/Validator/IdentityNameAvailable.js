@@ -15,7 +15,6 @@ function(
     storeManager
 ){
     return declare(
-        'Sds/IdentityModule/Validator/IdentityNameAvailable',
         [Base],
         {
 

@@ -11,7 +11,6 @@ function(
     Base
 ){
     return declare(
-        'Sds/Validator/Length',
         [Base],
         {
             min: 0,
@@ -27,7 +26,7 @@ function(
                 if ( ! regEx.test(value)){
                     result = false;
                     messages.push(string.substitute(
-                        validatorMessages.lengthMessage,
+                        validatorMessages.length,
                         {min: this.min, max: this.max}
                     ));
                 }

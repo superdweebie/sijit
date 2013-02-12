@@ -11,7 +11,6 @@ function(
     IdentifierChars
 ){
     return declare(
-        'Sds/Validator/Identifier',
         [Group],
         {
             constructor: function(){

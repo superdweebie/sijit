@@ -17,7 +17,6 @@ function(
 
     return declare
     (
-        'Sds/Common/Button',
         [Widget, TemplatedMixin, OnDijitClickMixin],
         {
             // summary:

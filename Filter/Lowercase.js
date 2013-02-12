@@ -10,7 +10,6 @@ function(
     //		Sds/Filter/Lowercase
 
     return declare(
-        'Sds/Filter/Lowercase',
         [Base],
         {
 

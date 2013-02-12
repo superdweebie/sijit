@@ -41,7 +41,6 @@ function (
     };
 
     var dialog = declare(
-        'Sds/Common/_DialogMixin',
         [FormMixin, OnDijitClickMixin],
         {
             // summary:

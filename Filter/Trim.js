@@ -12,7 +12,6 @@ function(
     //		Sds/Filter/Trim
 
     return declare(
-        'Sds/Filter/Trim',
         [Base],
         {
             // summary:

@@ -23,8 +23,7 @@ define([
 
         return declare
         (
-            'Sds/ModuleManager/ModuleManager',
-            null,
+            [],
             {
                 // summary:
                 //		An object used for dependency injection.

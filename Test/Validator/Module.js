@@ -9,6 +9,7 @@ define([
     'Sds/Test/Validator/TestDatatype',
     'Sds/Test/Validator/TestDateInequality',
     'Sds/Test/Validator/TestEmailAddress',
+    'Sds/Test/Validator/TestHexColor',
     'Sds/Test/Validator/TestLength',
     'Sds/Test/Validator/TestModel',
     'Sds/Test/Validator/TestIdentifierArray',

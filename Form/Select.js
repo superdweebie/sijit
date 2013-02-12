@@ -13,7 +13,6 @@ function (
     template
 ){
     return declare(
-        'Sds/Form/Select',
         [Widget, TemplatedMixin, SelectMixin],
         {
             templateString: template

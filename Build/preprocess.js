@@ -143,9 +143,30 @@ function(
         if (profile.timestampLayers){
             var newLayers = {};
             var newName;
+            var changes = [];
             var timestamp = new Date().getTime().toString();
+
+            //create new layer names
             for (var name in profile.layers){
-                newLayers[name + timestamp] = profile.layers[name];
+                if (profile.layers[name].boot){
+                    newLayers[name] = profile.layers[name];
+                } else {
+                    newName = name + '-' + timestamp;
+                    newLayers[newName] = profile.layers[name];
+                    changes.push([name, newName]);
+                    profile.defaultConfig.aliases.push([name, newName]);
+                }
+            }
+
+            //rewrite layer excludes with new names
+            for (name in newLayers){
+                for (var i in newLayers[name].exclude){
+                    for (var k in changes){
+                        if (changes[k][0] == newLayers[name].exclude[i]){
+                            newLayers[name].exclude[i] = changes[k][1];
+                        }
+                    }
+                }
             }
             profile.layers = newLayers;
         }

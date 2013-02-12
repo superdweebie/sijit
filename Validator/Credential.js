@@ -9,7 +9,6 @@ function(
     Base
 ){
     return declare(
-        'Sds/Validator/Credential',
         [Base],
         {
             lengthRegEx: /^.{6,40}$/,
@@ -25,17 +24,17 @@ function(
 
                 if ( ! this.lengthRegEx.test(value)){
                     result = false;
-                    messages.push(validatorMessages.credentialLengthMessage);
+                    messages.push(validatorMessages.credentialLength);
                 }
 
                 if ( ! this.containAlphaRegEx.test(value)){
                     result = false;
-                    messages.push(validatorMessages.credentialAlphaMessage);
+                    messages.push(validatorMessages.credentialAlpha);
                 }
 
                 if ( ! this.containNumRegEx.test(value)){
                     result = false;
-                    messages.push(validatorMessages.credentialNumMessage);
+                    messages.push(validatorMessages.credentialNum);
                 }
 
                 return {result: result, messages: messages};

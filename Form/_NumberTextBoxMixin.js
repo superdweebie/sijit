@@ -7,7 +7,6 @@ function (
     number
 ){
     return declare(
-        'Sds/Form/_NumberTextBoxMixin',
         [],
         {
     		_formatter: number.format,

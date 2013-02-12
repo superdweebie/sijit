@@ -16,7 +16,6 @@ function(
     //		Sds/Validator/Base
 
     var Base = declare(
-        'Sds/Validator/Base',
         [Stateful],
         {
             // summary:

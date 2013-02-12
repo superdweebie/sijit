@@ -30,7 +30,7 @@ var profile = {
             'Sds/AuthenticationModule/config'
         ]
     },
-    timestampLayers: false,
+    timestampLayers: true,
     "packages":[
     {
         "name":"dojo",
@@ -57,6 +57,19 @@ var profile = {
         "dojo/dojo":{
             "custombase":true,
             "boot":true
+        },
+        "abc/exe":{
+            include: [
+                'Sds/Router/config'
+            ]
+        },
+        "adf":{
+            include: [
+                'Sds/Store/config'
+            ],
+            exclude: [
+                "abc/exe"
+            ]
         }
     }
 }

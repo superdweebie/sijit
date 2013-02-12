@@ -22,11 +22,10 @@ function (
 ){
 
     return declare(
-        'Sds/Form/_ValidationMixin',
         [FocusMixin],
         {
             // state: [readonly] String
-            //		Shows current state (ie, validation result) of input (""=Normal, Incomplete, or Error)
+            //		Shows current state (ie, validation result) of input (""=Normal, Incomplete, Error, Validating)
             state: '',
 
             // suppressMessages: boolean
@@ -110,6 +109,7 @@ function (
                 // summary:
                 //		Hook so set('value', ...) works.
                 this._setValueTimestamp = new Date().getTime();
+                this.set('state', 'Validating');
                 this.inherited(arguments);
                 this._startValidateTimer();
             },
@@ -188,7 +188,7 @@ function (
                     return;
                 }
 
-                //Put in delay timer. Don't validate every single value change
+                //Delay timer. Don't validate every single value change
                 clearTimeout(this._delayTimer);
                 this._delayTimer = setTimeout(lang.hitch(this, function(){
                     this._validate();
@@ -231,7 +231,7 @@ function (
                             result.then(function(resultObject){
                                 processResult(resultObject, timestamp);
                             });
-                            state = 'validating';
+                            state = 'Validating';
                             break;
                     }
 

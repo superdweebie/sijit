@@ -15,7 +15,6 @@ function (
     utils
 ){
     return declare(
-        'Sds/Form/_MessagesMixin',
         [],
         {
             // Adds as messages to form inputs
@@ -31,7 +30,7 @@ function (
             // messageObjects: array
             messageObjects: [],
 
-            messagesNode: undefined,
+            //messagesNode: undefined,
 
             maxMessageId: 0,
 

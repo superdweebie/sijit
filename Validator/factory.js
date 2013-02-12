@@ -20,6 +20,7 @@ function(
             'Datatype',
             'DateInequality',
             'EmailAddress',
+            'HexColor',
             'IdentifierArray',
             'Identifier',
             'Indequality',
@@ -37,7 +38,7 @@ function(
             }
             return base;
         },
-		
+
         create: function(config){
 
             switch (true){

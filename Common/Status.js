@@ -10,7 +10,6 @@ function(
 ){
     var status = declare
     (
-        'Sds.Common.Status',
         [Stateful],
         {
             expired: undefined,

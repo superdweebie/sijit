@@ -20,7 +20,6 @@ function(
     //		it does add some helpful convenience, particularly the toJSON function
 
     return declare(
-        'Sds/Mvc/BaseModel',
         [Stateful],
         {
 
