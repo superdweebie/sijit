@@ -2,16 +2,18 @@ define([
     'dojo/_base/declare',
     './TextBox',
     './_ValidationMixin',
-    './_ValidationMessagesMixin'
+    './_ValidationMessagesMixin',
+    './_RequiredAppendageMixin'
 ],
 function (
     declare,
     TextBox,
     ValidationMixin,
-    ValidationMessagesMixin
+    ValidationMessagesMixin,
+    RequiredAppendageMixin
 ){
     return declare(
-        [TextBox, ValidationMixin, ValidationMessagesMixin],
+        [TextBox, ValidationMixin, ValidationMessagesMixin, RequiredAppendageMixin],
         {
         }
     );

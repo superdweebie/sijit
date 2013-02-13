@@ -2,7 +2,7 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'Sds/Store/JsonRest'
+    '../Store/JsonRest'
 ],
 function(
     declare,

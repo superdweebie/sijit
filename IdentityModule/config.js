@@ -3,10 +3,18 @@ function(){
     return {
         moduleManager: {
             'Sds/Store/storeManager': {
-                gets: {
+                proxies: {
                     stores: [
-                        'Sds/IdentityModule/DataModel/Identity/JsonRest',
-                        'Sds/IdentityModule/DataModel/ForgotCredentialToken/JsonRest'
+                        {
+                            base: 'Sds/IdentityModule/DataModel/Identity/JsonRest',
+                            proxyMethods: ['get', 'put', 'add', 'remove', 'query'],
+                            params: {name: 'Identity'}
+                        },
+                        {
+                            base: 'Sds/IdentityModule/DataModel/ForgotCredentialToken/JsonRest',
+                            proxyMethods: ['get', 'put', 'add', 'remove', 'query'],
+                            params: {name: 'ForgotCredentialToken'}
+                        }
                     ]
                 }
             },

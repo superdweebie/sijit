@@ -1,6 +1,6 @@
 define([
-        'Sds/ModuleManager/ModuleManager',
-        'Sds/ConfigManager/configReady!'
+        '../ModuleManager',
+        '../../ConfigManager/configReady!'
     ],
     function(
         ModuleManager

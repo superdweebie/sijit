@@ -4,14 +4,14 @@ define([
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
-    'Sds/Mvc/BaseView',
+    '../Mvc/BaseView',
     'dojo/text!./Template/ForgotCredentialCreateToken.html',
-    'Sds/Common/Dialog',
-    'Sds/Form/ValidationControlGroup',
-    'Sds/IdentityModule/DataModel/Identity/IdentityName/Input',
-    'Sds/IdentityModule/DataModel/Identity/Email/Input',
-    'Sds/IdentityModule/Validator/ForgotCredentialCreateToken',
-    'Sds/Validator/NotRequired'
+    '../Common/Dialog',
+    '../Form/ValidationControlGroup',
+    '../IdentityModule/DataModel/Identity/IdentityName/Input',
+    '../IdentityModule/DataModel/Identity/Email/Input',
+    '../IdentityModule/Validator/ForgotCredentialCreateToken',
+    '../Validator/NotRequired'
 ],
 function(
     declare,

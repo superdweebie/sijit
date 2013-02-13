@@ -2,7 +2,7 @@ define([
     'dojo/_base/lang',
     'dojo/Deferred',
     'dojo/errors/create',
-    'Sds/ExceptionModule/severity'
+    './severity'
 ],
 function(
     lang,

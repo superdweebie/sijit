@@ -4,11 +4,11 @@ define([
     'dojo/on',
     'dojo/when',
     'dojo/string',
-    'dojo/i18n!Sds/nls/routerMessages',
+    'dojo/i18n!../nls/routerMessages',
     'dojo/query',
-    'Sds/Common/utils',
-    'Sds/ExceptionModule/throwEx',
-    'Sds/Router/Exception/RouteNotFoundException',
+    '../Common/utils',
+    '../ExceptionModule/throwEx',
+    '../Router/Exception/RouteNotFoundException',
     'dojox/NodeList/delegate'
 ],
 function (

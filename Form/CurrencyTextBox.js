@@ -4,8 +4,8 @@ define([
     'dojo/currency',
     './ValidationTextBox',
     './_NumberTextBoxMixin',
-    'Sds/Validator/Currency',
-    'Sds/Filter/PadCurrency'
+    '../Validator/Currency',
+    '../Filter/PadCurrency'
 ],
 function (
     declare,

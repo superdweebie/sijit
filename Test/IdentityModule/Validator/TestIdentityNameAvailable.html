@@ -15,68 +15,72 @@
 		<script type="text/javascript">
 			require([
                 'doh/main',
+                'dojo/when',
                 'Sds/IdentityModule/Validator/IdentityNameAvailable',
                 'get!Sds/Store/storeManager',
                 'dojo/domReady!'
             ],
             function(
                 doh,
+                when,
                 IdentityNameAvailable,
                 storeManager
             ){
 
-                //Modify the prototype for testing so the store doesn't send a real xhr request
-                var proto = storeManager.getStore('Identity').__proto__;
-                while (true){
-                    if (proto.declaredClass == 'dojo.store.JsonRest'){
-                        proto.get = function(id){
-                            if (id == 'toby'){
-                                return {
-                                    identityName: 'toby',
-                                    firstname: 'Toby'
+                when(storeManager.getStore('Identity').moduleManagerGet(), function(store){
+                    //Modify the identity store prototype for testing so the store doesn't send a real xhr request
+                    var proto = store.__proto__;
+                    while (true){
+                        if (proto.declaredClass == 'dojo.store.JsonRest'){
+                            proto.get = function(id){
+                                if (id == 'toby'){
+                                    return {
+                                        identityName: 'toby',
+                                        firstname: 'Toby'
+                                    }
+                                } else {
+                                    return;
                                 }
-                            } else {
-                                return;
                             }
+                            break;
                         }
-                        break;
+                        proto = proto.__proto__
                     }
-                    proto = proto.__proto__
-                }
 
-                // Define and register the tests
+                    // Define and register the tests
 
-                // Values for the identity store a defined in the test config
-                // lucy is available
-                // toby is not available
-                doh.register([
+                    // Values for the identity store a defined in the test config
+                    // lucy is available
+                    // toby is not available
+                    doh.register([
 
-                    function PositiveTest(doh){
+                        function PositiveTest(doh){
 
-                        var testResult = new doh.Deferred;
-                        var validator = new IdentityNameAvailable;
+                            var testResult = new doh.Deferred;
+                            var validator = new IdentityNameAvailable;
 
-                        validator.isValid('lucy').result.then(function(resultObject){
-                            doh.assertTrue(resultObject.result);
-                            testResult.callback(true);
-                        });
+                            validator.isValid('lucy').result.then(function(resultObject){
+                                doh.assertTrue(resultObject.result);
+                                testResult.callback(true);
+                            });
 
-                        return testResult;
-                    },
+                            return testResult;
+                        },
 
-                    function NegativeTest(doh){
+                        function NegativeTest(doh){
 
-                        var testResult = new doh.Deferred;
-                        var validator = new IdentityNameAvailable;
+                            var testResult = new doh.Deferred;
+                            var validator = new IdentityNameAvailable;
 
-                        validator.isValid('toby').result.then(function(resultObject){
-                            doh.assertFalse(resultObject.result);
-                            testResult.callback(true);
-                        });
+                            validator.isValid('toby').result.then(function(resultObject){
+                                doh.assertFalse(resultObject.result);
+                                testResult.callback(true);
+                            });
 
-                        return testResult;
-                    }
-                ]);
+                            return testResult;
+                        }
+                    ]);
+                });
 
                 // Kick off the test runner
                 doh.runOnLoad();

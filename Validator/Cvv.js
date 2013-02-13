@@ -1,6 +1,6 @@
 define([
     'dojo/_base/declare',
-    'dojo/i18n!Sds/nls/validatorMessages',
+    'dojo/i18n!../nls/validatorMessages',
     './Base',
     'dojox/validate/creditCard'
 ],

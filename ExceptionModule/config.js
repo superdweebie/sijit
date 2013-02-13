@@ -16,17 +16,17 @@ define(
                         registeredExceptions: {}
                     },
                     proxies: {
-                        exceptionView: 'Sds/ExceptionModule/View/Exception'
+                        exceptionView: {
+                            base: 'Sds/ExceptionModule/View',
+                            proxyMethods: [
+                                'activate',
+                                'reset',
+                                'get',
+                                'set',
+                                'watch'
+                            ]
+                        }
                     }
-                },
-                'Sds/ExceptionModule/View/Exception': {
-                    proxyMethods: [
-                        'activate',
-                        'reset',
-                        'get',
-                        'set',
-                        'watch'
-                    ]
                 }
             }
         }

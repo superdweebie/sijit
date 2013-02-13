@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojox/encoding/base64',
-    'Sds/Store/JsonRest'
+    '../Store/JsonRest'
 ],
 function(
     declare,
@@ -9,7 +9,6 @@ function(
     JsonRest
 ){
     return declare (
-        'Sds/AuthenticationModule/Store/PerRequestJsonRest',
         [JsonRest],
         {
 

@@ -3,7 +3,7 @@ define([
     'dojo/_base/lang',
     'dojo/_base/array',
     'dojo/query',
-    'Sds/Dnd/Moveable',
+    '../Dnd/Moveable',
     'dojo/dom-construct',
     'dojo/dom-attr',
     'dojo/dom-class',

@@ -22,7 +22,7 @@ function(
         // returns:
         //     boolean
 
-        if (filter.isInstanceOf && filter.isInstanceOf(Base)){
+        if (filter && filter.isInstanceOf && filter.isInstanceOf(Base)){
             return true;
         }
         return false;

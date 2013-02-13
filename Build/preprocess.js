@@ -81,8 +81,6 @@ function(
 
     var testLayer = {
         "Sds/Test/Built":{
-            "custombase":false,
-            "boot":false,
             "include":[
                 //"Sds/Form/Captcha",
                 //"Sds/Form/CheckBox",

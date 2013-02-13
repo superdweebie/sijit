@@ -33,7 +33,8 @@
                 value="Toby"
                 data-dojo-props="
                     label:'Name',
-                    validator: 'PersonalName'
+                    validator: 'Required',
+                    append: 'yeah!'
                 "
                 id="validationTextBox1"
              />
@@ -86,7 +87,7 @@
                 data-dojo-props="
                     label:'Name',
                     validator: [
-                        'NotRequired',
+                        'Required',
                         'PersonalName'
                     ]
                 "
@@ -109,7 +110,7 @@
                         'Sds/Test/Validator/Asset/DeferredValidator',
                         {base: 'Length', params: {min: 5, max: 8}},
                     ],
-                    suppressMessages: false
+                    suppressValidationMessages: false
                 "
                 id="validationTextBox9"
              />

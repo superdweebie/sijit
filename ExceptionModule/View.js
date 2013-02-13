@@ -4,10 +4,10 @@ define([
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
-    'Sds/ExceptionModule/Exception/BaseException',
-    'Sds/Mvc/BaseView',
-    'dojo/text!../Template/Exception.html',
-    'Sds/Common/Dialog'
+    '../ExceptionModule/Base',
+    '../Mvc/BaseView',
+    'dojo/text!./Template/Exception.html',
+    '../Common/Dialog'
 ],
 function(
     declare,
@@ -20,7 +20,6 @@ function(
     template
 ){
     return declare(
-        'Sds/ExceptionModule/Exception',
         [
             Widget,
             TemplatedMixin,

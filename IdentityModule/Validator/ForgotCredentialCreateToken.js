@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
-    'dojo/i18n!Sds/nls/identityModule',
-    'Sds/Validator/Base'
+    'dojo/i18n!../../nls/identityModule',
+    '../../Validator/Base'
 ],
 function(
     declare,

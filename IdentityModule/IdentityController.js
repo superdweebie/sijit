@@ -3,15 +3,15 @@ define([
     'dojo/_base/lang',
     'dojo/Deferred',
     'dojo/when',
-    'Sds/Common/Status',
+    '../Common/Status',
     'dojo/Stateful',
-    'get!Sds/Store/storeManager',
+    'get!../Store/storeManager',
     './DataModel/Identity/ModelValidator',
-    './Exception/InvalidArgumentException',
-    'proxy!Sds/IdentityModule/View/ForgotCredentialCreateToken',
-    'proxy!Sds/IdentityModule/View/ForgotCredentialUpdateToken',
-    'proxy!Sds/IdentityModule/View/CreateIdentity',
-    'Sds/ExceptionModule/throwEx'
+    './Exception/InvalidArgument',
+    'proxy!./View/ForgotCredentialCreateToken',
+    'proxy!./View/ForgotCredentialUpdateToken',
+    'proxy!./View/CreateIdentity',
+    '../ExceptionModule/throwEx'
 ],
 function(
     declare,

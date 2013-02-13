@@ -4,9 +4,9 @@ define([
     'dojo/_base/lang',
     'dojo/json',
     'dojo/request/script',
-    'Sds/ExceptionModule/Exception/BaseException',
-    'Sds/ExceptionModule/Exception/InvalidTypeException',
-    'Sds/ExceptionModule/Exception/ServerLogFailedException'
+    './Base',
+    './InvalidType',
+    './ServerLogFailed'
 ],
 function(
     declare,

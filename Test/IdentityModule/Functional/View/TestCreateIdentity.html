@@ -18,9 +18,12 @@
                 return {
                     moduleManager: {
                         'Sds/Store/storeManager': {
-                            gets: {
+                            proxies: {
                                 stores: [
-                                    'Sds/Test/IdentityModule/Functional/View/Asset/MockIdentityStore'
+                                    {
+                                        base: 'Sds/Test/IdentityModule/Functional/View/Asset/MockIdentityStore',
+                                        proxyMethods: ['get', 'put', 'add', 'remove', 'query']
+                                    }
                                 ]
                             }
                         }

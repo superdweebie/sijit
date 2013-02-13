@@ -8,7 +8,7 @@ define([
     './_FilterMixin',
     './_HelpMessagesMixin',
     'dijit/form/_FormValueMixin',
-    'Sds/Filter/Trim'
+    '../Filter/Trim'
 ],
 function (
     declare,

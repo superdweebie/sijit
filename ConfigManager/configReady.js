@@ -1,6 +1,6 @@
 define([
     'dojo/when',
-    'Sds/ConfigManager/configManager'
+    '../ConfigManager/configManager'
 ],
 function(
     when,

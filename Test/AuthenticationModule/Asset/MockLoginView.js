@@ -9,7 +9,6 @@ function(
     BaseView
 ){
     return declare(
-        'Sds/Test/AuthenticationModule/Test/Asset/MockLoginView',
         [BaseView],
         {
             state: '',

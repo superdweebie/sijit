@@ -273,6 +273,9 @@ define(
 
                 'tigerWithProxyMethods': {
                     base: 'Sds/Test/ModuleManager/Asset/Tiger',
+                    params: {
+                        name: 'Josh'
+                    },
                     proxyMethods: [
                         'makeSound'
                     ]
@@ -288,7 +291,16 @@ define(
                         name: 'Zoo with proxies'
                     },
                     proxies: {
-                        tiger: 'tigerWithProxyMethods'
+                        tiger: 'tigerWithProxyMethods',
+                        cage: [
+                            'lion2',
+                            {
+                                base: 'Sds/Test/ModuleManager/Asset/Lion',
+                                params: {
+                                    name: 'emma'
+                                }
+                            }
+                        ]
                     }
                 }
             }

@@ -13,52 +13,25 @@ define([], function(){
         get: function(ref){
             // Will return an object based on the ref given
 
-            var index = ref.lastIndexOf('/');
-            var id = ref.substring(index + 1);
-            var hint = ref.substring(0, index + 1);
+            var index = ref.lastIndexOf('/'),
+                id = ref.substring(index + 1),
+                name = ref.substring(0, index);
 
-            return this.getStore(hint).get(id);
+            return this.getStore(name).get(id);
         },
 
-        getStore: function(hint){
-            // Function will return a store based on the hint.
-            // Hint may be one of three things, searched in order:
-            //
-            // 1. string matchin store.name
-            // 2. object matching store.model
-            // 3. string matching store.target
+        getStore: function(name){
+            // Function will return a store based on the store name.
 
             if ( ! this.stores){
-                return null;
+                return;
             }
 
-            var index;
-
-            if (typeof hint == 'string'){
-                for(index in this.stores){
-                    if (this.stores[index].name == hint){
-                        return this.stores[index];
-                    }
+            for(var index in this.stores){
+                if (this.stores[index].name == name){
+                    return this.stores[index];
                 }
             }
-
-            if (typeof hint == 'function'){
-                for(index in this.stores){
-                    if (this.stores[index].model == hint){
-                        return this.stores[index];
-                    }
-                }
-            }
-
-            if (typeof hint == 'string'){
-                for(index in this.stores){
-                    if (this.stores[index].target == hint){
-                        return this.stores[index];
-                    }
-                }
-            }
-
-            return null;
         }
     }
 });

@@ -2,9 +2,9 @@ define([
     'dojo/_base/declare',
     'dojo/Deferred',
     'dojo/when',
-    'dojo/i18n!Sds/nls/identityModule',
-    'Sds/Validator/Base',
-    'get!Sds/Store/storeManager'
+    'dojo/i18n!../../nls/identityModule',
+    '../../Validator/Base',
+    'get!../../Store/storeManager'
 ],
 function(
     declare,

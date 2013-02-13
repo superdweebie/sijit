@@ -4,7 +4,7 @@ define([
     'dojo/string',
     'dojo/date',
     'dojo/date/locale',
-    'dojo/i18n!Sds/nls/validatorMessages',
+    'dojo/i18n!../nls/validatorMessages',
     './Base'
 ],
 function(

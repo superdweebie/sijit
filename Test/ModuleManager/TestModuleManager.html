@@ -8,6 +8,7 @@
 		<script type="text/javascript">
 			require([
                 'doh/main',
+                'dojo/_base/lang',
                 'dojo/when',
                 'Sds/ModuleManager/ModuleManager',
                 'Sds/ModuleManager/Proxy',
@@ -16,6 +17,7 @@
             ],
             function(
                 doh,
+                lang,
                 when,
                 ModuleManager,
                 Proxy,
@@ -403,6 +405,7 @@
 
                         when(moduleManager.proxy('zooWithProxyMethods'), function(zooProxy){
                             doh.assertTrue(zooProxy.isInstanceOf(Proxy));
+                            doh.assertEqual('Zoo with proxy', zooProxy.name);
                             zooProxy.listAnimals().then(function(names){
                                 doh.assertEqual(['lucy', 'liz', 'toby'], names);
                                 deferredTest.callback(true);
@@ -418,7 +421,17 @@
                         var deferredTest = new doh.Deferred;
 
                         when(moduleManager.get('zooWithProxies'), function(zoo){
+
+                            doh.assertTrue(lang.isArray(zoo.cage));
+
+                            doh.assertTrue(zoo.cage[0].isInstanceOf(Proxy));
+                            doh.assertEqual('liz', zoo.cage[0].name);
+
+                            doh.assertTrue(zoo.cage[1].isInstanceOf(Proxy));
+                            doh.assertEqual('emma', zoo.cage[1].name);
+
                             doh.assertTrue(zoo.tiger.isInstanceOf(Proxy));
+                            doh.assertEqual('Josh', zoo.tiger.name);
                             zoo.tiger.makeSound().then(function(sound){
                                 doh.assertEqual('roar', sound);
                                 deferredTest.callback(true);

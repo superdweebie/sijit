@@ -5,13 +5,13 @@ define([
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
-    'Sds/Mvc/BaseView',
+    '../Mvc/BaseView',
     'dojo/text!../Template/Login.html',
-    'Sds/Router/baseUrl!',
-    'Sds/Common/Dialog',
-    'Sds/IdentityModule/DataModel/Identity/IdentityName/Input',
-    'Sds/IdentityModule/DataModel/Identity/Credential/Input',
-    'Sds/Form/CheckBox'
+    '../Router/baseUrl!',
+    '../Common/Dialog',
+    '../IdentityModule/DataModel/Identity/IdentityName/Input',
+    '../IdentityModule/DataModel/Identity/Credential/Input',
+    '../Form/CheckBox'
 ],
 function(
     declare,

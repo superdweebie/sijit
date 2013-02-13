@@ -1,8 +1,8 @@
 define([
     'dojo/Deferred',
     'dojo/when',
-    'proxy!Sds/ExceptionModule/ExceptionController',
-    'Sds/ConfigManager/configReady!'
+    'proxy!./ExceptionController',
+    '../ConfigManager/configReady!'
 ],
 function(Deferred, when, exceptionControllerProxy){
 	return function(exception){

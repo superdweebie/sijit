@@ -93,7 +93,7 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor 
             <textarea data-dojo-type="Sds/Form/ValidationExpandingTextarea"
                 data-dojo-props="
                     label:'About',
-                    validator: {base: 'Length', params: {min: 10, max: 1000}}
+                    validator: ['Required', {base: 'Length', params: {min: 10, max: 1000}}]
                 "
                 id="validationExpandingTextarea1"
              >Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</textarea>

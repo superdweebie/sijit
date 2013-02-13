@@ -1,5 +1,5 @@
 define([
-    'get!Sds/Router/startedRouter!'
+    'get!./startedRouter!'
 ],
 function(
     router

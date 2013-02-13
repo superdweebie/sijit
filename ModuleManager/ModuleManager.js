@@ -5,8 +5,8 @@ define([
         'dojo/DeferredList',
         'dojo/when',
         'dojo/_base/lang',
-        'Sds/ModuleManager/Proxy',
-        'Sds/Common/utils'
+        './Proxy',
+        '../Common/utils'
     ],
     function (
         declare,
@@ -38,11 +38,11 @@ define([
                 // _cache: array
                 //      An array of all objects created through the ModuleManager. If an object is requested
                 //      more than once, it is retrieved from this array
-                _cache: [],
+                //_cache: [],
 
                 // _config: Object
                 //      The configuration object. Defines what to inject into objects
-                _config: {},
+                //_config: {},
 
                 constructor: function(/*object*/ config){
 
@@ -62,14 +62,14 @@ define([
                     // tags:
                     //     protected
 
-                    var config;
-                    var base;
-                    var defaultDirectives = {
-                        declare: false,
-                        define: false,
-                        cache: true,
-                        clone: false
-                    };
+                    var config,
+                        base,
+                        defaultDirectives = {
+                            declare: false,
+                            define: false,
+                            cache: true,
+                            clone: false
+                        };
 
                     switch (true){
                         case typeof(identifier) == 'string':
@@ -138,8 +138,8 @@ define([
                     }
 
                     //Create object
-                    var deferredObject = new Deferred();
-                    var index = this._cache.length;
+                    var deferredObject = new Deferred(),
+                        index = this._cache.length;
 
                     if (config.directives.cache){
                         this._cache[index] = {identifier: identifier, object: deferredObject};
@@ -147,17 +147,16 @@ define([
 
                     baseObjectDeferred.then(lang.hitch(this, function(baseObject){
 
-                        var object;
-
-                        var resolveObject = lang.hitch(this, function(object){
-                            if (config.directives.cache){
-                                this._cache[index].object = object;
-                            }
-                            if (config.directives.define){
-                                define(identifier, [], function(){return object});
-                            }
-                            deferredObject.resolve(object);
-                        });
+                        var object,
+                            resolveObject = lang.hitch(this, function(object){
+                                if (config.directives.cache){
+                                    this._cache[index].object = object;
+                                }
+                                if (config.directives.define){
+                                    define(identifier, [], function(){return object});
+                                }
+                                deferredObject.resolve(object);
+                            });
 
                         if (baseObject.prototype){ //check if we can create an instnace
                             if (config.directives.declare){
@@ -211,18 +210,17 @@ define([
                         case lang.isArray(identifier):
                             //If identifier is array, then get each identifier in the array, and
                             //return the array
-                            var resultArray = lang.clone(identifier);
+                            var resultArray = lang.clone(identifier),
+                                getArrayItem = lang.hitch(this, function(index){
+                                    var objectDeferred = new Deferred;
+                                    when(this._get(identifier[index]), function(object){
+                                        resultArray[index] = object;
+                                        objectDeferred.resolve();
+                                    });
+                                    return objectDeferred;
+                                }),
+                                objectDeferreds = [];
 
-                            var getArrayItem = lang.hitch(this, function(index){
-                                var objectDeferred = new Deferred;
-                                when(this._get(identifier[index]), function(object){
-                                    resultArray[index] = object;
-                                    objectDeferred.resolve();
-                                });
-                                return objectDeferred;
-                            });
-
-                            var objectDeferreds = [];
                             for (var index in identifier){
                                 objectDeferreds.push(getArrayItem(index));
                             }
@@ -254,18 +252,56 @@ define([
                     // tags:
                     //     protected
 
+                    var result;
+
+                    switch (true){
+                        case typeof(identifier) == 'string' || Boolean(identifier.base):
+                            result = this._createProxy(identifier);
+                            break;
+                        case lang.isArray(identifier):
+                            result = []
+                            for (var item in identifier){
+                                result.push(this._proxy(identifier[item]));
+                            }
+                            break;
+                        default:
+                            //Don't know what to do with it, so just pass it back
+                            result = identifier;
+                    }
+
+                    return result;
+                },
+
+                _createProxy: function(identifier){
+
+                    //check to see if the object alredy exists in cache
                     var object = this._getCached(identifier);
                     if (object && ! utils.isDeferred(object)){
                         return object;
                     }
 
-                    var config = this.getIdentifierConfig(identifier);
-                    var proxy = new Proxy(identifier, this);
-                    var method;
-                    var index;
-                    for (index in config.proxyMethods){
-                        method = config.proxyMethods[index];
-                        proxy[method] = this._proxyMethod(method);
+                    var config;
+                    if (identifier.base){
+                        config = identifier;
+                        identifier = identifier.base;
+                    } else {
+                        config = this.getIdentifierConfig(identifier);
+                    }
+
+                    var proxy = new Proxy(identifier, this),
+                        method;
+
+                    if (config.params){
+                        //mixin any params
+                        lang.mixin(proxy, config.params);
+                    }
+
+                    if (config.proxyMethods){
+                        //hook up proxy methods
+                        for (var index in config.proxyMethods){
+                            method = config.proxyMethods[index];
+                            proxy[method] = this._proxyMethod(method);
+                        }
                     }
 
                     return proxy;
@@ -273,8 +309,9 @@ define([
 
                 _proxyMethod: function(/*string*/ method){
                     return function(){
-                        var proxyArguments = arguments;
-                        var resultDeferred = new Deferred;
+                        var proxyArguments = arguments,
+                            resultDeferred = new Deferred;
+
                         when(this._moduleManager.get(this._identity), function(object){
                             when(object[method].apply(object, proxyArguments), function(result){
                                 resultDeferred.resolve(result);
@@ -346,8 +383,10 @@ define([
                     }
 
                     if (getsDeferreds.length > 0){
-                        var deferredObject = new Deferred();
-                        var getsDeferredsList = new DeferredList(getsDeferreds);
+
+                        var deferredObject = new Deferred(),
+                            getsDeferredsList = new DeferredList(getsDeferreds);
+
                         getsDeferredsList.then(function(){
                             deferredObject.resolve(object);
                         })

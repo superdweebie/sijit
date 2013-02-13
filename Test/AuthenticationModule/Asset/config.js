@@ -9,7 +9,7 @@ define([], function(){
                     storeName: 'mockAuthStore'
                 }
             },
-            MockLoginView: {
+            'MockLoginView': {
                 base: 'Sds/Test/AuthenticationModule/Asset/MockLoginView',
                 proxyMethods: [
                     'activate',
@@ -26,9 +26,15 @@ define([], function(){
                 }
             },
             'Sds/Store/storeManager': {
-                gets: {
+                proxies: {
                     stores: [
-                        'Sds/Test/AuthenticationModule/Asset/MockAuthenticationStore'
+                        {
+                            base: 'Sds/Test/AuthenticationModule/Asset/MockAuthenticationStore',
+                            proxyMethods: ['get', 'put', 'add', 'remove', 'query'],
+                            params: {
+                                name: 'mockAuthStore'
+                            }
+                        }
                     ]
                 }
             },

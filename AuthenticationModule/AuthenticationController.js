@@ -3,10 +3,10 @@ define([
     'dojo/_base/lang',
     'dojo/when',
     'dojo/Deferred',
-    'Sds/Common/Status',
+    '../Common/Status',
     'dojo/Stateful',
-    'get!Sds/Store/storeManager',
-    'Sds/ExceptionModule/throwEx'
+    'get!../Store/storeManager',
+    '../ExceptionModule/throwEx'
 ],
 function (
     declare,

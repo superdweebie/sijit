@@ -2,7 +2,7 @@ define([
     'dojo/_base/declare',
     './ValidationControlGroup',
     'dijit/_WidgetsInTemplateMixin',
-    'Sds/Validator/CreditCardExpiry',
+    '../Validator/CreditCardExpiry',
     'dojo/text!./Template/CreditCardExpiry.html',
     './Select'
 ],

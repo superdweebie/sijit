@@ -1,8 +1,10 @@
 define([
-    'dojo/_base/declare'
+    'dojo/_base/declare',
+    'dojo/_base/lang'
 ],
 function (
-    declare
+    declare,
+    lang
 ){
     // module:
     //		Sds/ModuleManager/Proxy
@@ -24,7 +26,9 @@ function (
             },
 
             moduleManagerGet: function(){
-                return this._moduleManager.get(this._identity);
+                var object = this._moduleManager.get(this._identity);
+                lang.mixin(this, object);
+                return object;
             }
         }
     )

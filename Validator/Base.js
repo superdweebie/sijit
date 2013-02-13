@@ -2,7 +2,7 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/json',
-    'Sds/Common/utils',
+    '../Common/utils',
     'dojo/Stateful'
 ],
 function(
@@ -113,7 +113,7 @@ function(
         // returns:
         //     boolean
 
-        if (validator.isInstanceOf && validator.isInstanceOf(Base)){
+        if (validator && validator.isInstanceOf && validator.isInstanceOf(Base)){
             return true;
         }
         return false;

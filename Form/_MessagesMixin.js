@@ -4,7 +4,7 @@ define([
     'dojo/_base/array',
     'dojo/dom-class',
     'dojo/dom-construct',
-    'Sds/Common/utils'
+    '../Common/utils'
 ],
 function (
     declare,
@@ -24,7 +24,7 @@ function (
             //      Possible values are:
             //      auto: if the message is one line, display inline. If it is multiline, display block
             //      inline: always display message inline. If the message is more than one line, only the first will be shown.
-            //      block: alwyas display message as block, even when there is only one line.
+            //      block: always display message as block, even when there is only one line.
             messagePosition: 'auto',
 
             // messageObjects: array
@@ -38,9 +38,17 @@ function (
 
                 this.messageObjects = utils.arraySubtract(this.messageObjects, messageObjectsToRemove);
 
-                if (typeof messagesToAdd == 'string'){
+                if ( typeof messagesToAdd == 'string'){
                     messagesToAdd = [messagesToAdd];
                 }
+
+                //filter out any blanks
+                messagesToAdd = array.filter(messagesToAdd, function(item){
+                    if (item == null || item == undefined) {
+                        return false
+                    }
+                    return true;
+                });
 
                 if ( ! messagesToAdd || messagesToAdd.length == 0){
                     this._renderMessages();
@@ -52,15 +60,14 @@ function (
                     this.messagesNode = domConstruct.create(
                         'span',
                         {},
-                        this.focusNode ? this.focusNode : this.domNode,
-                        this.focusNode ? 'after' : 'last'
+                        this.focusNode ? this.focusNode.parentNode : this.domNode,
+                        'last'
                     )
                 }
 
                 var messageObjects = array.map(messagesToAdd, lang.hitch(this, function(message){
                     ++this.maxMessageId;
-                    var messageObject = {id: this.maxMessageId, message: message};
-                    return messageObject;
+                    return {id: this.maxMessageId, message: message};
                 }));
 
                 this.messageObjects = messageObjects.concat(this.messageObjects);
@@ -84,7 +91,7 @@ function (
                             return '<small>' + messageObject.message + '</small>';
                         }).join('<br />');
                         break;
-                    case this.messageObjects.length == 1:
+                    case (this.messagePosition == 'inline' && this.messageObjects.length > 1) || this.messageObjects.length == 1:
                         domClass.remove(this.messagesNode, 'help-block hide');
                         domClass.add(this.messagesNode, 'help-inline');
                         this.messagesNode.innerHTML = '<small>' + this.messageObjects[0].message + '</small>';

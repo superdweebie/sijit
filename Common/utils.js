@@ -114,7 +114,7 @@ function (lang, config, array, Deferred) {
             if (object instanceof Deferred){
                 return true;
             }
-            if (object.isInstanceOf && object.isInstanceOf(Deferred)){
+            if (object && object.isInstanceOf && object.isInstanceOf(Deferred)){
                 return true;
             }
             return false;

@@ -2,8 +2,8 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/string',
-    'dojo/i18n!Sds/nls/validatorMessages',
-    'Sds/Common/utils',
+    'dojo/i18n!../nls/validatorMessages',
+    '../Common/utils',
     './Base'
 ],
 function(

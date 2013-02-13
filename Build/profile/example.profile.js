@@ -57,19 +57,6 @@ var profile = {
         "dojo/dojo":{
             "custombase":true,
             "boot":true
-        },
-        "abc/exe":{
-            include: [
-                'Sds/Router/config'
-            ]
-        },
-        "adf":{
-            include: [
-                'Sds/Store/config'
-            ],
-            exclude: [
-                "abc/exe"
-            ]
         }
     }
 }

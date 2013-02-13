@@ -1,7 +1,7 @@
 define([
     'dojo/_base/lang',
     'dojo/errors/create',
-    'Sds/ExceptionModule/Exception/BaseException'
+    '../../ExceptionModule/Base'
 ],
 function(
     lang,
@@ -9,12 +9,12 @@ function(
     BaseException
 ){
 	return create(
-        "ServerLogFailedException",
+        "InvalidArgumentException",
         function(message, options){
 
             this.display = true;
 
-            this.log = false; //Make sure this stays false, or you'll start an endless loop
+            this.log = false;
 
             lang.mixin(this, options);
         },

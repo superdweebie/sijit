@@ -4,7 +4,7 @@ define([
     'dojo/keys',
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
-    'Sds/Common/_DialogMixin',
+    '../Common/_DialogMixin',
     'dojo/text!./Template/Dialog.html'
 ],
 function (

@@ -8,9 +8,9 @@ define([
     'dojo/dom-style',
     'dojo/dom-class',
     'dojo/dom-geometry',
-    'bootstrap/popover',
+    'bootstrap/Popover',
     'dijit/focus',
-    'Sds/Dnd/Moveable',
+    '../Dnd/Moveable',
     'dojox/color/_base',
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
@@ -19,7 +19,7 @@ define([
     './_HelpMessagesMixin',
     'dojo/text!./Template/ColorPicker.html',
     'dojo/text!./Template/ColorPickerPopover.html',
-    'Sds/Form/HexColor'
+    '../Form/HexColor'
 ],
 function (
     declare,

@@ -43,7 +43,7 @@ function(
         },
 
         _loginFailed: function(){
-            return new RequestError('Unable to load Mock Loign', {text: '{"message":"Supplied credential is invalid.","type":"Sds\\\\AuthenticationModule\\\\Exception\\\\LoginFailedException"}'});
+            return new RequestError('Simulated error for testing: Mock login, supplied credential is invalid', {text: '{"message":"Supplied credential is invalid.","type":"Sds\\\\AuthenticationModule\\\\Exception\\\\LoginFailedException"}'});
         }
     }
 });

@@ -1,6 +1,6 @@
 define([
         'dojo/when',
-        'Sds/ModuleManager/Shared/getModuleManager!'
+        './getModuleManager!'
     ],
     function(
         when,

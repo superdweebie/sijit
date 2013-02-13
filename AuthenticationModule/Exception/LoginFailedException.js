@@ -1,8 +1,8 @@
 define([
     'dojo/_base/lang',
     'dojo/errors/create',
-    'Sds/ExceptionModule/Exception/BaseException',
-    'Sds/ExceptionModule/severity'
+    '../../ExceptionModule/Base',
+    '../../ExceptionModule/severity'
 ],
 function(
     lang,

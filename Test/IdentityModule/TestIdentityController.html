@@ -33,7 +33,6 @@
                 storeManager
             ){
 
-                //Modify the identity store prototype for testing so the store doesn't send a real xhr request
                 var storeValue;
                 var get = function(id){
                     return storeValue;
@@ -42,147 +41,153 @@
                     storeValue = data;
                 }
 
-                var proto = storeManager.getStore('Identity').__proto__;
-                while (true){
-                    if (proto.declaredClass == 'dojo.store.JsonRest'){
-                        proto.get = get;
-                        proto.put = put;
-                        break;
-                    }
-                    proto = proto.__proto__
-                }
-
-                // Define and register the tests
-                doh.register([
-
-                    function testRegisterSucceed(){
-
-                        var testResult = new doh.Deferred;
-
-                        var identity = {
-                            identityName: 'lucy',
-                            credential: 'password1',
-                            firstname: 'Lucy',
-                            lastname: 'R',
-                            email: 'lucy@awesome.com'
-                        };
-
-                        mockCreateIdentityView.state = '';
-                        mockCreateIdentityView.value = identity;
-
-                        when(identityController.register(), function(){
-                            var identityStore = storeManager.getStore('Identity');
-
-                            var registeredIdentity = identityStore.get('lucy');
-                            doh.assertEqual(identity.firstname, registeredIdentity.firstname);
-                            doh.assertEqual(identity.lastname, registeredIdentity.lastname);
-                            testResult.callback(true);
-                        });
-
-                        return testResult;
-                    },
-
-                    function testRegisterFail(){
-
-                        var testResult = new doh.Deferred;
-
-                        var identity = {
-                            identityName: 'lucy',
-                            credential: 'password1',
-                            firstname: 'Lucy',
-                            lastname: 'R',
-                            email: 'badly formed email'
-                        };
-
-                        mockCreateIdentityView.value = identity;
-
-                        when(
-                            identityController.register(),
-                            null,
-                            function (exception){
-                                doh.assertEqual('InvalidArgumentException', exception.name);
-                                testResult.callback(true);
-                            }
-                        );
-
-                        return testResult;
-                    },
-
-                    function testForgotCredentialCreateFromIdentityName(){
-
-                        var testResult = new doh.Deferred;
-
-                        mockForgotCredentialCreateTokenView.state = '';
-                        mockForgotCredentialCreateTokenView.value = {
-                            identityName: 'lucy'
-                        };
-
-                        when(
-                            identityController.forgotCredential(),
-                            function(){
-                                var tokenStore = storeManager.getStore('ForgotCredentialToken');
-
-                                var token = tokenStore.get();
-                                doh.assertEqual('lucy', token.identityName);
-                                testResult.callback(true);
-                            }
-                        );
-
-                        return testResult;
-                    },
-
-                    function testForgotCredentialCreateFromEmail(){
-
-                        var testResult = new doh.Deferred;
-
-                        mockForgotCredentialCreateTokenView.state = '';
-                        mockForgotCredentialCreateTokenView.value = {
-                            email: 'lucy@here.com'
-                        };
-
-                        when(
-                            identityController.forgotCredential(),
-                            function(){
-                                var tokenStore = storeManager.getStore('ForgotCredentialToken');
-
-                                var token = tokenStore.get();
-                                doh.assertEqual('lucy@here.com', token.email);
-                                testResult.callback(true);
-                            }
-                        );
-
-                        return testResult;
-                    },
-
-                    function testForgotCredentialUpdate(){
-
-                        var testResult = new doh.Deferred;
-
-                        mockForgotCredentialUpdateTokenView.state = '';
-                        mockForgotCredentialUpdateTokenView.value = {
-                            credential: [
-                                'password1',
-                                'password1'
-                            ]
-                        };
-
-                        when(
-                            identityController.forgotCredential('abc123'),
-                            function(){
-                                var tokenStore = storeManager.getStore('ForgotCredentialToken');
-
-                                var token = tokenStore.get();
-                                doh.assertEqual('abc123', token.code);
-                                doh.assertEqual('password1', token.credential);
-                                testResult.callback(true);
-                            }
-                        );
-
-                        return testResult;
+                when(storeManager.getStore('Identity').moduleManagerGet(), function(store){
+                    //Modify the identity store prototype for testing so the store doesn't send a real xhr request
+                    var proto = store.__proto__;
+                    while (true){
+                        if (proto.declaredClass == 'dojo.store.JsonRest'){
+                            proto.get = get;
+                            proto.put = put;
+                            break;
+                        }
+                        proto = proto.__proto__
                     }
 
-                ]);
 
+                    // Define and register the tests
+                    doh.register([
+
+                        function testRegisterSucceed(){
+
+                            var testResult = new doh.Deferred;
+
+                            var identity = {
+                                identityName: 'lucy',
+                                credential: 'password1',
+                                firstname: 'Lucy',
+                                lastname: 'R',
+                                email: 'lucy@awesome.com'
+                            };
+
+                            mockCreateIdentityView.state = '';
+                            mockCreateIdentityView.value = identity;
+
+                            when(identityController.register(), function(){
+                                var identityStore = storeManager.getStore('Identity');
+
+                                when(identityStore.get('lucy'), function(registeredIdentity){
+                                    doh.assertEqual(identity.firstname, registeredIdentity.firstname);
+                                    doh.assertEqual(identity.lastname, registeredIdentity.lastname);
+                                    testResult.callback(true);
+                                });
+                            });
+
+                            return testResult;
+                        },
+
+                        function testRegisterFail(){
+
+                            var testResult = new doh.Deferred;
+
+                            var identity = {
+                                identityName: 'lucy',
+                                credential: 'password1',
+                                firstname: 'Lucy',
+                                lastname: 'R',
+                                email: 'badly formed email'
+                            };
+
+                            mockCreateIdentityView.value = identity;
+
+                            when(
+                                identityController.register(),
+                                null,
+                                function (exception){
+                                    doh.assertEqual('InvalidArgumentException', exception.name);
+                                    testResult.callback(true);
+                                }
+                            );
+
+                            return testResult;
+                        },
+
+                        function testForgotCredentialCreateFromIdentityName(){
+
+                            var testResult = new doh.Deferred;
+
+                            mockForgotCredentialCreateTokenView.state = '';
+                            mockForgotCredentialCreateTokenView.value = {
+                                identityName: 'lucy'
+                            };
+
+                            when(
+                                identityController.forgotCredential(),
+                                function(){
+                                    var tokenStore = storeManager.getStore('ForgotCredentialToken');
+
+                                    when(tokenStore.get(), function(token){
+                                        doh.assertEqual('lucy', token.identityName);
+                                        testResult.callback(true);
+                                    })
+                                }
+                            );
+
+                            return testResult;
+                        },
+
+                        function testForgotCredentialCreateFromEmail(){
+
+                            var testResult = new doh.Deferred;
+
+                            mockForgotCredentialCreateTokenView.state = '';
+                            mockForgotCredentialCreateTokenView.value = {
+                                email: 'lucy@here.com'
+                            };
+
+                            when(
+                                identityController.forgotCredential(),
+                                function(){
+                                    var tokenStore = storeManager.getStore('ForgotCredentialToken');
+
+                                    when(tokenStore.get(), function(token){
+                                        doh.assertEqual('lucy@here.com', token.email);
+                                        testResult.callback(true);
+                                    })
+                                }
+                            );
+
+                            return testResult;
+                        },
+
+                        function testForgotCredentialUpdate(){
+
+                            var testResult = new doh.Deferred;
+
+                            mockForgotCredentialUpdateTokenView.state = '';
+                            mockForgotCredentialUpdateTokenView.value = {
+                                credential: [
+                                    'password1',
+                                    'password1'
+                                ]
+                            };
+
+                            when(
+                                identityController.forgotCredential('abc123'),
+                                function(){
+                                    var tokenStore = storeManager.getStore('ForgotCredentialToken');
+
+                                    when(tokenStore.get(), function(token){
+                                        doh.assertEqual('abc123', token.code);
+                                        doh.assertEqual('password1', token.credential);
+                                        testResult.callback(true);
+                                    })
+                                }
+                            );
+
+                            return testResult;
+                        }
+                    ]);
+                });
                 // Kick off the test runner
                 doh.runOnLoad();
             })

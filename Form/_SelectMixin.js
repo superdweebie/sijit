@@ -8,7 +8,7 @@ define([
     './_LabelMixin',
     './_HelpMessagesMixin',
     'dijit/form/_FormValueMixin',
-    'get!Sds/Store/storeManager'
+    'get!../Store/storeManager'
 ],
 function (
     declare,

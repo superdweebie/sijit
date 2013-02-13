@@ -42,6 +42,26 @@ function (
                 this._appendageNodes = [];
             },
 
+            addPrependage: function(value){
+                if ( ! lang.isArray(value)){
+                    value = [value];
+                }
+                if (this.append){
+                    value = this.prepend.concat(value);
+                }
+                this.set('prepend', value);
+            },
+
+            addAppendage: function(value){
+                if ( ! lang.isArray(value)){
+                    value = [value];
+                }
+                if (this.append){
+                    value = this.append.concat(value);
+                }
+                this.set('append', value);
+            },
+
             _setPrependAttr: function(value){
 
                 if ( ! lang.isArray(value)){

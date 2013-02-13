@@ -10,11 +10,11 @@
         <script type="text/javascript" src="../../../dojo/dojo.js"></script>
         <script type="text/javascript">
 
-            define('TestStore/config', ['dojo/store/Memory', 'Sds/Test/Store/Asset/Simple'], function(Memory, Simple){
+            define('TestStore/config', ['dojo/store/Memory'], function(Memory){
                 return {
                     moduleManager: {
                         'Sds/Store/storeManager': {
-                            gets: {
+                            proxies: {
                                 stores: [
                                     new Memory({
                                         idProperty: 'ref',
@@ -25,9 +25,7 @@
                                             {ref: 'FL', name: 'Florida'},
                                             {ref: 'CA', name: 'California'}
                                         ],
-                                        target: 'TestTarget/',
-                                        name: 'statesStore',
-                                        model: Simple
+                                        name: 'statesStore'
                                     })
                                 ]
                             }
@@ -38,13 +36,11 @@
 
             require([
                 'doh/main',
-                'Sds/Test/Store/Asset/Simple',
                 'get!Sds/Store/storeManager',
                 'dojo/domReady!'
             ],
             function(
                 doh,
-                Simple,
                 storeManager
             ){
                 doh.register("Sds/Test/Store/TestStoreManager", [
@@ -52,23 +48,6 @@
                     function getStoreFromName(doh){
 
                         var store = storeManager.getStore('statesStore');
-
-                        doh.assertTrue(store);
-                        doh.assertEqual('Tennessee', store.get('TN').name);
-                    },
-
-                    function getStoreFromModel(doh){
-
-                        var store = storeManager.getStore(Simple);
-
-                        doh.assertTrue(store);
-                        doh.assertEqual('Tennessee', store.get('TN').name);
-                    },
-
-
-                    function getStoreFromTarget(doh){
-
-                        var store = storeManager.getStore('TestTarget/');
 
                         doh.assertTrue(store);
                         doh.assertEqual('Tennessee', store.get('TN').name);
@@ -83,7 +62,7 @@
 
                     function getObject(doh){
 
-                        var state = storeManager.get('TestTarget/TN');
+                        var state = storeManager.get('statesStore/TN');
 
                         doh.assertTrue(state);
                         doh.assertEqual('Tennessee', state.name);

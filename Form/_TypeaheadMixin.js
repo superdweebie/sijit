@@ -7,7 +7,7 @@ define([
     'dojo/when',
     'dojo/store/Memory',
     'bootstrap/Typeahead',
-    'get!Sds/Store/storeManager',
+    'get!../Store/storeManager',
     'dojo/Evented'
 ],
 function (

@@ -8,8 +8,8 @@ define([
     'dojo/dom-prop',
     'dojo/dom-class',
     'dojo/dom-construct',
-    'Sds/Common/utils',
-    'Sds/Form/_FormMixin',
+    '../Common/utils',
+    '../Form/_FormMixin',
     'dijit/_OnDijitClickMixin',
     'bootstrap/Modal'
 ],
