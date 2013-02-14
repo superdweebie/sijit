@@ -6,7 +6,7 @@ define ([
 ],
 function (lang, config, array, Deferred) {
     // module:
-    //		Sds/Common/utils
+    //		Sds/utils
 
     function mixinDeep(dest, source) {
         // summary:

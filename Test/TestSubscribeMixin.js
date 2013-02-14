@@ -2,7 +2,7 @@ define([
         'doh/main',
         'dojo/_base/lang',
         'dojo/topic',
-        'Sds/Test/Common/Asset/MockSubscribeObject'
+        'Sds/Test/Asset/MockSubscribeObject'
     ],
     function(
         doh,
@@ -11,7 +11,7 @@ define([
         MockSubscribeObject
     ){
 
-        doh.register("Sds/Test/Common/TestSubscribeMixin", [
+        doh.register("Sds/Test/TestSubscribeMixin", [
             function subscribeTest(doh){
 
                 var object = new MockSubscribeObject;

@@ -1,14 +1,14 @@
 define([
         'doh/main',
         'dojo/_base/config',
-        'Sds/Common/utils'
+        'Sds/utils'
     ],
     function(
         doh,
         config,
         utils
     ){
-        doh.register("Sds/Test/Common/TestUtils", [
+        doh.register("Sds/Test/TestUtils", [
 
             function ucFirstTest(doh){
                 doh.assertEqual('Test', utils.ucFirst('test'));

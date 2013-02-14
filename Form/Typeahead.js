@@ -11,7 +11,7 @@ function (
     template
 ){
     // module:
-    //		Sds/Common/Typeahead
+    //		Sds/Form/Typeahead
 
     return declare(
         [TextBox, TypeaheadMixin],

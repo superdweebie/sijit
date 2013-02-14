@@ -4,7 +4,7 @@ define([
     'dojo/json',
     'util/build/fs',
     'Sds/ConfigManager/configManager',
-    'Sds/Common/utils'
+    'Sds/utils'
 ],
 function(
     require,

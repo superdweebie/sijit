@@ -7,11 +7,11 @@ define([
     'dijit/_WidgetsInTemplateMixin',
     '../Mvc/BaseView',
     'dojo/text!../Template/Login.html',
-    '../Router/baseUrl!',
-    '../Common/Dialog',
-    '../IdentityModule/DataModel/Identity/IdentityName/Input',
-    '../IdentityModule/DataModel/Identity/Credential/Input',
-    '../Form/CheckBox'
+    '../../Router/baseUrl!',
+    '../../Widget/Dialog',
+    '../../IdentityModule/DataModel/Identity/IdentityName/Input',
+    '../../IdentityModule/DataModel/Identity/Credential/Input',
+    '../../Form/CheckBox'
 ],
 function(
     declare,

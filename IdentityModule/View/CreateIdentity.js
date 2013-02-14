@@ -6,14 +6,14 @@ define([
     'dijit/_WidgetsInTemplateMixin',
     '../Mvc/BaseView',
     'dojo/text!./Template/CreateIdentity.html',
-    '../Common/Dialog',
-    '../Form/ValidationControlGroup',
-    '../IdentityModule/DataModel/Identity/IdentityName/Input',
-    '../IdentityModule/DataModel/Identity/Credential/Input',
-    '../IdentityModule/DataModel/Identity/Firstname/Input',
-    '../IdentityModule/DataModel/Identity/Lastname/Input',
-    '../IdentityModule/DataModel/Identity/Email/Input',
-    '../Form/Captcha'
+    '../../Widget/Dialog',
+    '../../Form/ValidationControlGroup',
+    '../DataModel/Identity/IdentityName/Input',
+    '../DataModel/Identity/Credential/Input',
+    '../DataModel/Identity/Firstname/Input',
+    '../DataModel/Identity/Lastname/Input',
+    '../DataModel/Identity/Email/Input',
+    '../../Form/Captcha'
 ],
 function(
     declare,

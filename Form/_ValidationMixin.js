@@ -5,7 +5,7 @@ define([
     'dojo/when',
     'dojo/Deferred',
     'dojo/dom-class',
-    '../Common/utils',
+    '../utils',
     '../Validator/Base',
     'get!ValidatorFactory',
     'dijit/_FocusMixin'

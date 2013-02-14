@@ -8,7 +8,7 @@ define([
     'dojo/dom-prop',
     'dojo/dom-class',
     'dojo/dom-construct',
-    '../Common/utils',
+    '../utils',
     '../Form/_FormMixin',
     'dijit/_OnDijitClickMixin',
     'bootstrap/Modal'
@@ -29,7 +29,7 @@ function (
     Modal
 ){
     // module:
-    //		Sds/Common/_DialogMixin
+    //		Sds/Widget/_DialogMixin
 
     var buttons = {
         // summary:

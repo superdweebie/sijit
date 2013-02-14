@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojox/encoding/base64',
-    '../Store/JsonRest'
+    '../../Store/JsonRest'
 ],
 function(
     declare,

@@ -6,12 +6,12 @@ define([
     'dijit/_WidgetsInTemplateMixin',
     '../Mvc/BaseView',
     'dojo/text!./Template/ForgotCredentialCreateToken.html',
-    '../Common/Dialog',
-    '../Form/ValidationControlGroup',
-    '../IdentityModule/DataModel/Identity/IdentityName/Input',
-    '../IdentityModule/DataModel/Identity/Email/Input',
-    '../IdentityModule/Validator/ForgotCredentialCreateToken',
-    '../Validator/NotRequired'
+    '../../Widget/Dialog',
+    '../../Form/ValidationControlGroup',
+    '../DataModel/Identity/IdentityName/Input',
+    '../DataModel/Identity/Email/Input',
+    '../Validator/ForgotCredentialCreateToken',
+    '../../Validator/NotRequired'
 ],
 function(
     declare,

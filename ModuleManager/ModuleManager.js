@@ -6,7 +6,7 @@ define([
         'dojo/when',
         'dojo/_base/lang',
         './Proxy',
-        '../Common/utils'
+        '../utils'
     ],
     function (
         declare,

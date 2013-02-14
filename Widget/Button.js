@@ -13,7 +13,7 @@ function(
     template
 ){
     // module:
-    //		Sds/Common/Button
+    //		Sds/Widget/Button
 
     return declare
     (

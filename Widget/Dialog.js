@@ -4,7 +4,7 @@ define([
     'dojo/keys',
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
-    '../Common/_DialogMixin',
+    './_DialogMixin',
     'dojo/text!./Template/Dialog.html'
 ],
 function (
@@ -17,7 +17,7 @@ function (
     template
 ){
     // module:
-    //		Sds/Common/Dialog
+    //		Sds/Widget/Dialog
 
     var buttons = lang.mixin(DialogMixin.Buttons, {
         // summary:

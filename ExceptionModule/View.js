@@ -7,7 +7,7 @@ define([
     '../ExceptionModule/Base',
     '../Mvc/BaseView',
     'dojo/text!./Template/Exception.html',
-    '../Common/Dialog'
+    '../Widget/Dialog'
 ],
 function(
     declare,

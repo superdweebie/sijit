@@ -6,7 +6,7 @@ define([
     'dijit/_WidgetsInTemplateMixin',
     '../Mvc/BaseView',
     'dojo/text!./Template/ForgotCredentialUpdateToken.html',
-    '../Common/Dialog',
+    '../Widget/Dialog',
     '../Form/ValidationControlGroup',
     '../IdentityModule/DataModel/Identity/Credential/Input',
     '../IdentityModule/Validator/CredentialMatch'

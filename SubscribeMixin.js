@@ -11,7 +11,7 @@ define ([
         topic
     ){
         // module:
-        //		Sds/Common/SubscribeMixin
+        //		Sds/SubscribeMixin
 
         return declare (
             [],

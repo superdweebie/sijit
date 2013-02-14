@@ -3,7 +3,7 @@ define ([
         'dojo/_base/array',
         'dojo/Deferred',
         'dojo/DeferredList',
-        '../Common/utils'
+        '../utils'
     ],
     function (
         dojoConfig,

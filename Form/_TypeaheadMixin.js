@@ -23,7 +23,7 @@ function (
     Evented
 ){
     // module:
-    //		Sds/Common/_TypeaheadMixin
+    //		Sds/Form/_TypeaheadMixin
 
     return declare(
         [Evented],

@@ -1,7 +1,7 @@
 define([
     'dojo/_base/lang',
     'dojo/errors/create',
-    '../ExceptionModule/Base'
+    '../../ExceptionModule/Base'
 ],
 function(
     lang,

@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<title>Functional Testing Sds/Common/Dialog</title>
+		<title>Functional Testing Sds/Widget/Dialog</title>
 		<style type="text/css">
             @import "../../../themes/bootstrap/css/bootstrap.css";
             @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
@@ -18,7 +18,7 @@
                 'dojo/json',
                 'dojo/parser',
                 'dijit/registry',
-                'Sds/Common/Dialog',
+                'Sds/Widget/Dialog',
                 'Sds/Form/TextBox',
                 'Sds/Form/DateTextBox',
                 'dojo/domReady!'
@@ -55,7 +55,7 @@
 		</script>
 	</head>
 	<body>
-        <h1>Functional Testing Sds/Common/Dialog</h1>
+        <h1>Functional Testing Sds/Widget/Dialog</h1>
         <br />
         <button class="btn btn-primary btn-large" id="showDialog">Show Dialog</button>
 
@@ -65,7 +65,7 @@
         <h3>State</h3>
         <p><pre id="State"></pre></p>
 
-        <div id="testDialog" data-dojo-type="Sds/Common/Dialog" title="Test Dialog">
+        <div id="testDialog" data-dojo-type="Sds/Widget/Dialog" title="Test Dialog">
             <div>This is a dialog test message.</div>
             <p>
                 <button id="validState" class="btn">set valid state</button>

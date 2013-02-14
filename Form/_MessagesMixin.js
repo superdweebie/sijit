@@ -4,7 +4,7 @@ define([
     'dojo/_base/array',
     'dojo/dom-class',
     'dojo/dom-construct',
-    '../Common/utils'
+    '../utils'
 ],
 function (
     declare,

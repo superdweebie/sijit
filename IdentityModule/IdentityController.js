@@ -3,7 +3,7 @@ define([
     'dojo/_base/lang',
     'dojo/Deferred',
     'dojo/when',
-    '../Common/Status',
+    '../Status',
     'dojo/Stateful',
     'get!../Store/storeManager',
     './DataModel/Identity/ModelValidator',
@@ -35,7 +35,7 @@ function(
             // summary:
             //    Handles Identity CRUD, registration and password recovery
 
-            //status: Sds/Common/Status
+            //status: Sds/Status
             //    An object indicating the current status
             //status: undefined,
 

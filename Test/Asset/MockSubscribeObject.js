@@ -1,13 +1,12 @@
 define([
     'dojo/_base/declare',
-    'Sds/Common/SubscribeMixin'
+    'Sds/SubscribeMixin'
 ],
 function(
     declare,
     SubscribeMixin
 ){
     return declare(
-        'Sds.Test.Common.Asset.MockSubscribeObject',
         [SubscribeMixin],
         {
             message: undefined,

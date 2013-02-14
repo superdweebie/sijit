@@ -1,6 +1,6 @@
 <?php
 
-namespace Sds\Test\Common;
+namespace Sds\Test\Widget;
 
 use Sds\Test\AbstractWebDriverTest;
 

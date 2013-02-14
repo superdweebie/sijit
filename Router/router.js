@@ -6,7 +6,7 @@ define([
     'dojo/string',
     'dojo/i18n!../nls/routerMessages',
     'dojo/query',
-    '../Common/utils',
+    '../utils',
     '../ExceptionModule/throwEx',
     '../Router/Exception/RouteNotFoundException',
     'dojox/NodeList/delegate'

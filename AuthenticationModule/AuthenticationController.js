@@ -3,7 +3,7 @@ define([
     'dojo/_base/lang',
     'dojo/when',
     'dojo/Deferred',
-    '../Common/Status',
+    '../Status',
     'dojo/Stateful',
     'get!../Store/storeManager',
     '../ExceptionModule/throwEx'
@@ -32,7 +32,7 @@ function (
             //    Indicates if there is a logged in identity
             loggedIn: false,
 
-            //status: Sds/Common/Status
+            //status: Sds/Status
             //    An object indicating the current status
             //status: undefined,
 

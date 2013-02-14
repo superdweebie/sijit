@@ -2,7 +2,7 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/json',
-    '../Common/utils',
+    '../utils',
     'dojo/Stateful'
 ],
 function(

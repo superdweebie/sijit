@@ -11,7 +11,7 @@ function (
     template
 ){
     // module:
-    //		Sds/Common/ValidationTypeahead
+    //		Sds/Form/ValidationTypeahead
 
     return declare(
         [ValidationTextBox, TypeaheadMixin],
