@@ -12,7 +12,7 @@ abstract class AbstractDOHTest extends AbstractWebDriverTest {
 
         $this->open($this->testPageUrl);
 
-        $timeout = 15;
+        $timeout = 100;
         $time = 0;
 
         while ($time < $timeout && ! $session->execute(array(
