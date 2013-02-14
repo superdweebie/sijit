@@ -2,7 +2,7 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/event',
-    'dojox/mobile/parser',
+    'dojo/parser',
     'dojo/keys',
     'dojo/dom-construct',
     'dojo/dom-style',
