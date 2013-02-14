@@ -4,7 +4,7 @@ define([
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
-    '../Mvc/BaseView',
+    '../../Mvc/BaseView',
     'dojo/text!./Template/ForgotCredentialCreateToken.html',
     '../../Widget/Dialog',
     '../../Form/ValidationControlGroup',

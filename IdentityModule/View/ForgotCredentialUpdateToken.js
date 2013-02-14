@@ -4,12 +4,12 @@ define([
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
-    '../Mvc/BaseView',
+    '../../Mvc/BaseView',
     'dojo/text!./Template/ForgotCredentialUpdateToken.html',
-    '../Widget/Dialog',
-    '../Form/ValidationControlGroup',
-    '../IdentityModule/DataModel/Identity/Credential/Input',
-    '../IdentityModule/Validator/CredentialMatch'
+    '../../Widget/Dialog',
+    '../../Form/ValidationControlGroup',
+    '../DataModel/Identity/Credential/Input',
+    '../Validator/CredentialMatch'
 ],
 function(
     declare,

@@ -5,7 +5,7 @@ define([
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_WidgetsInTemplateMixin',
-    '../Mvc/BaseView',
+    '../../Mvc/BaseView',
     'dojo/text!../Template/Login.html',
     '../../Router/baseUrl!',
     '../../Widget/Dialog',
