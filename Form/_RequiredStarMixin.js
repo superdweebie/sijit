@@ -21,20 +21,22 @@ function (
         {
 
             //Adds the supplied string as an appendage if validator is the same as the requiredValidatorDef
-            requiredAppendage: '<span class="text-warning"> *</span>',
+            //requiredStar: false,
+            
+            requiredStarTemplate: '<span class="text-warning"> *</span>',
 
             requiredValidatorDef: Required,
 
             groupValidatorDef: Group,
 
-            //requiredAppendageNode: undefined,
+            //requiredStarNode: undefined,
 
             startup: function(){
 
                 this.inherited(arguments);
 
-                var applyAppendage = lang.hitch(this, function(validator){
-                    var add;
+                var applyStar = lang.hitch(this, function(validator){
+                    var add = this.requiredStar;
                     if (validator && validator.isInstanceOf){
                         if (validator.isInstanceOf(this.requiredValidatorDef)){
                             add = true;
@@ -47,25 +49,29 @@ function (
                         }
                     }
                     if (add){
-                        if ( ! this.requiredAppendageNode){
-                            this.requiredAppendageNode = domConstruct.create(
+                        if ( ! this.requiredStarNode){
+                            this.requiredStarNode = domConstruct.create(
                                 'span',
                                 {},
                                 this.focusNode ? this.focusNode : this.domNode,
                                 this.focusNode ? 'after' : 'last'
                             )
                         }
-                        this.requiredAppendageNode.innerHTML = this.requiredAppendage;
-                        domClass.remove(this.requiredAppendageNode, 'hide');
-                    } else if (this.requiredAppendageNode){
-                        domClass.add(this.requiredAppendageNode, 'hide');
+                        this.requiredStarNode.innerHTML = this.requiredStarTemplate;
+                        domClass.remove(this.requiredStarNode, 'hide');
+                    } else if (this.requiredStarNode){
+                        domClass.add(this.requiredStarNode, 'hide');
                     }
+                    this.requiredStar = add;
                 });
 
                 this.watch('validator', lang.hitch(this, function(prop, oldValue, newValue){
-                    applyAppendage(newValue)
+                    applyStar(newValue)
                 }));
-                applyAppendage(this.validator);
+                
+                this.watch('requiredStar', lang.hitch(this, applyStar()));
+                
+                applyStar(this.validator);
             }
         }
     );

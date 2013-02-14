@@ -3,6 +3,7 @@ define([
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
     './_SelectMixin',
+    './_RequiredStarMixin',   
     'dojo/text!./Template/Select.html'
 ],
 function (
@@ -10,10 +11,11 @@ function (
     Widget,
     TemplatedMixin,
     SelectMixin,
+    RequiredStarMixin,
     template
 ){
     return declare(
-        [Widget, TemplatedMixin, SelectMixin],
+        [Widget, TemplatedMixin, SelectMixin, RequiredStarMixin],
         {
             templateString: template
         }

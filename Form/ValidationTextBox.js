@@ -3,17 +3,17 @@ define([
     './TextBox',
     './_ValidationMixin',
     './_ValidationMessagesMixin',
-    './_RequiredAppendageMixin'
+    './_RequiredStarMixin'
 ],
 function (
     declare,
     TextBox,
     ValidationMixin,
     ValidationMessagesMixin,
-    RequiredAppendageMixin
+    RequiredStarMixin
 ){
     return declare(
-        [TextBox, ValidationMixin, ValidationMessagesMixin, RequiredAppendageMixin],
+        [TextBox, ValidationMixin, ValidationMessagesMixin, RequiredStarMixin],
         {
         }
     );
