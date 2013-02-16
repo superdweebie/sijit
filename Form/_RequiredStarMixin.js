@@ -40,12 +40,8 @@ function (
                     if (validator && validator.isInstanceOf){
                         if (validator.isInstanceOf(this.requiredValidatorDef)){
                             add = true;
-                        } else if (validator.isInstanceOf(this.groupValidatorDef)){
-                            array.forEach(validator.validators, lang.hitch(this, function(item){
-                                if (item.isInstanceOf(Required)){
-                                    add = true;
-                                }
-                            }));
+                        } else if (validator.isInstanceOf(this.groupValidatorDef) && validator.hasInstanceOf(this.requiredValidatorDef)){
+                            add = true;
                         }
                     }
                     if (add){

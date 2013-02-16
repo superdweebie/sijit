@@ -17,6 +17,14 @@ function(
         {
             validators: [],
 
+            hasInstanceOf: function(Constructor){
+                for (var item in this.validators){
+                    if (this.validators[item].isInstanceOf(Constructor)){
+                        return true;
+                    }
+                }
+            },
+            
             _isValid: function(value){
                 return this._concatResultObjectList(this._loop(value, 0, []));
             },

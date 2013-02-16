@@ -44,7 +44,7 @@ function(
             switch (true){
                 case lang.isArray(config):
                     config = array.map(config, lang.hitch(this, function(item){
-                        if (typeof item == 'object') {
+                        if (typeof item == 'object' && item.base) {
                             item.base = this.expand(item.base);
                             return item;
                         }

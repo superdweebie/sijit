@@ -4,7 +4,9 @@ define([
     'dojo/currency',
     './ValidationTextBox',
     './_NumberTextBoxMixin',
+    '../Validator/Base',
     '../Validator/Currency',
+    '../Validator/Group',
     '../Filter/PadCurrency'
 ],
 function (
@@ -13,7 +15,9 @@ function (
     currency,
     ValidationTextBox,
     NumberTextBoxMixin,
+    BaseValidator,
     CurrencyValidator,
+    GroupValidator,
     PadCurrencyFilter
 ){
     return declare(
@@ -67,10 +71,28 @@ function (
 
             _setValidatorAttr: function(value){
 
+                if (BaseValidator.isValidator(value) && (value.isInstanceOf(CurrencyValidator) ||
+                            value.isInstanceOf(GroupValidator) && value.hasInstanceOf(CurrencyValidator))
+                ) {
+                    this.inherited(arguments);                              
+                    return;
+                }
+                      
                 if ( ! lang.isArray(value)){
                     value = [value];
                 }
-                value.push(new CurrencyValidator);
+                
+                for (var index in value){
+                    if (value[index].isInstanceOf && value[index].isInstanceOf(CurrencyValidator)){
+                        var has = true;
+                        break;
+                    }
+                }
+                
+                if ( ! has){
+                    value.push(new CurrencyValidator);
+                }
+
                 this.inherited(arguments, [value]);
             },
 
