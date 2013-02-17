@@ -8,6 +8,7 @@ define([
     './_LabelMixin',
     './_HelpMessagesMixin',
     'dijit/form/_FormValueMixin',
+    './_RequiredStarMixin',       
     'get!../Store/storeManager'
 ],
 function (
@@ -20,10 +21,11 @@ function (
     LabelMixin,
     HelpMessagesMixin,
     FormValueMixin,
+    RequiredStarMixin,
     storeManager
 ){
     return declare(
-        [LabelMixin, HelpMessagesMixin, FormValueMixin],
+        [LabelMixin, HelpMessagesMixin, FormValueMixin, RequiredStarMixin],
         {
             // store: dojo/store/api/Store
             //		A store to use for getting our list of options - rather than reading them

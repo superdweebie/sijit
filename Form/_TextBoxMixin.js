@@ -8,6 +8,7 @@ define([
     './_FilterMixin',
     './_HelpMessagesMixin',
     'dijit/form/_FormValueMixin',
+    './_RequiredStarMixin',
     '../Filter/Trim'
 ],
 function (
@@ -19,10 +20,11 @@ function (
     LabelMixin,
     FilterMixin,
     HelpMessagesMixin,
-    FormValueMixin
+    FormValueMixin,
+    RequiredStarMixin
 ){
     return declare(
-        [LabelMixin, FilterMixin, HelpMessagesMixin, FormValueMixin],
+        [LabelMixin, FilterMixin, HelpMessagesMixin, FormValueMixin, RequiredStarMixin],
         {
             // Some of this code is copied across from dijit/form/_TextBoxMixin
             // Some of it is simplified. Some of it is massaged to work with

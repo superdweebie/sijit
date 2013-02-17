@@ -1,18 +1,12 @@
 define([
     'dojo/_base/declare',
-    'dojo/_base/array',
     'dojo/_base/lang',
-    'dojo/dom-class',
-    'dojo/dom-construct',
     '../Validator/Required',
     '../Validator/Group'
 ],
 function (
     declare,
-    array,
     lang,
-    domClass,
-    domConstruct,
     Required,
     Group
 ){
@@ -20,23 +14,25 @@ function (
         [],
         {
 
-            //Adds the supplied string as an appendage if validator is the same as the requiredValidatorDef
-            //requiredStar: false,
+            //Adds the supplied string as an appendage to the label if validator is the same as the requiredValidatorDef
+            
+            //When should the star be shown? Possible values:
+            //    false: never show
+            //    true: always show
+            //    auto: only show if a required validator is set
+            requiredStar: 'auto',
             
             requiredStarTemplate: '<span class="text-warning"> *</span>',
 
             requiredValidatorDef: Required,
 
-            groupValidatorDef: Group,
+            groupValidatorDef: Group,           
 
-            //requiredStarNode: undefined,
+            _setLabelAttr: function(value) {
 
-            startup: function(){
-
-                this.inherited(arguments);
-
-                var applyStar = lang.hitch(this, function(validator){
-                    var add = this.requiredStar;
+                var add;
+                if (this.requiredStar == 'auto'){
+                    var validator = this.validator;
                     if (validator && validator.isInstanceOf){
                         if (validator.isInstanceOf(this.requiredValidatorDef)){
                             add = true;
@@ -44,30 +40,27 @@ function (
                             add = true;
                         }
                     }
-                    if (add){
-                        if ( ! this.requiredStarNode){
-                            this.requiredStarNode = domConstruct.create(
-                                'span',
-                                {},
-                                this.focusNode ? this.focusNode : this.domNode,
-                                this.focusNode ? 'after' : 'last'
-                            )
-                        }
-                        this.requiredStarNode.innerHTML = this.requiredStarTemplate;
-                        domClass.remove(this.requiredStarNode, 'hide');
-                    } else if (this.requiredStarNode){
-                        domClass.add(this.requiredStarNode, 'hide');
-                    }
-                    this.requiredStar = add;
-                });
+                } else if (this.requiredStar){
+                    add = true;
+                }
+
+                value = value.replace(this.requiredStarTemplate, '');
+                if (add){
+                    value = value + this.requiredStarTemplate                        
+                }
+                    
+                this.inherited(arguments, [value]);
+            },
+            
+            startup: function(){
+
+                this.inherited(arguments);
 
                 this.watch('validator', lang.hitch(this, function(prop, oldValue, newValue){
-                    applyStar(newValue)
+                    this.set('label', this.label);
                 }));
                 
-                this.watch('requiredStar', lang.hitch(this, applyStar()));
-                
-                applyStar(this.validator);
+                this.watch('requiredStar', lang.hitch(this, this.set('label', this.label)));
             }
         }
     );
