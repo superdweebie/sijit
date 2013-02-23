@@ -23,7 +23,7 @@ function(
             'HexColor',
             'IdentifierArray',
             'Identifier',
-            'Indequality',
+            'Inequality',
             'Length',
             'Model',
             'NotRequired',
