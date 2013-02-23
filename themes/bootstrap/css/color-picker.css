@@ -2,11 +2,15 @@
     Css for Sds/Form/ColorPicker
 */
 
+.btn-color-picker {
+    padding: 4px;
+}
+
 .color-picker-swatch {
     border-radius: 3px;
     display: block;
     height: 20px;
-    width: 35px;
+    width: 20px;
 }
 
 .color-picker .row-fluid {

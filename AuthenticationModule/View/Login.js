@@ -4,7 +4,7 @@ define([
     'dojo/dom-class',
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
-    'dijit/_WidgetsInTemplateMixin',
+    '../../Widget/_WidgetsInTemplateMixin',
     '../../Mvc/BaseView',
     'dojo/text!../Template/Login.html',
     '../../Router/baseUrl!',

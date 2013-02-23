@@ -12,6 +12,9 @@ define([
                 var validator = new Currency;
 
                 var testArray = [
+                    [true, ''],                    
+                    [true, undefined],                    
+                    [true, null],                    
                     [true, 0],
                     [true, 0.1],
                     [true, 0.11],

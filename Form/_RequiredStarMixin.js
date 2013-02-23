@@ -44,12 +44,17 @@ function (
                     add = true;
                 }
 
-                value = value.replace(this.requiredStarTemplate, '');
+                if (value){
+                    value = value.replace(this.requiredStarTemplate, '');
+                }
+                               
                 if (add){
                     value = value + this.requiredStarTemplate                        
                 }
-                    
-                this.inherited(arguments, [value]);
+                
+                if (value){
+                    this.inherited(arguments, [value]);
+                }
             },
             
             startup: function(){

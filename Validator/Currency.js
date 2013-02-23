@@ -26,7 +26,7 @@ function(
                 var messages = [],
                     result = true;
 
-                if ( ! this.regEx.test(value)){
+                if (value != null && value != undefined && value != '' && ! this.regEx.test(value)){
                     result = false;
                     messages.push(validatorMessages.currency);
                 }
