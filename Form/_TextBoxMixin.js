@@ -48,7 +48,7 @@ function (
                 if(this.placeholder) {
                     domProp.set(this.textbox, 'placeholder', this.placeholder);
                 } else if (this.label){
-                    domProp.set(this.textbox, 'placeholder', this.label);
+                    domProp.set(this.textbox, 'placeholder', this.get('label'));
                 }
             },
 
@@ -56,7 +56,7 @@ function (
                 this.inherited(arguments);
 
                 if (!this.placeholder){
-                    domProp.set(this.textbox, 'placeholder', this.label);
+                    domProp.set(this.textbox, 'placeholder', this.get('label'));
                 }
             },
 
