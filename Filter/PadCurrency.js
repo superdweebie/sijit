@@ -21,6 +21,11 @@ function(
 
             filter: function(value){
 
+                //don't do anyting for null, undefined, etc
+                if (!value){
+                    return value
+                }
+                
                 var places = monetary.getData(this.currency).places;
 
                 var pieces = value.split(number.decimal);

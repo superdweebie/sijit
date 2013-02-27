@@ -9,7 +9,7 @@ function (
     return declare(
         [],
         {
-    		_formatter: number.format,
+            _formatter: number.format,
 
             blurFormat: function(/*Number*/ value, /*number.__FormatOptions*/ constraints){
                 // summary:
