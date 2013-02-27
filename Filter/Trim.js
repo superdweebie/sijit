@@ -18,7 +18,10 @@ function(
             //		Filter that will remove leading and trailing whitespace
 
             filter: function(value){
-                return lang.trim(value);
+                if (typeof value == 'string'){
+                    return lang.trim(value);
+                }
+                return value;
             }
         }
     );

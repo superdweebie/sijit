@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/Form/Toggle</title>
+		<style type="text/css">
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
+		</style>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript">
+            dojoConfig.mergeConfigs.push('TestToggle/config');
+        </script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+	<script type="text/javascript">
+            define('TestToggle/config', ['dojo/store/Memory'], function(Memory){
+                return {
+                    moduleManager: {
+                        'Sds/Store/storeManager': {
+                            proxies: {
+                                stores: [
+                                    new Memory({
+                                        idProperty: 'ref',
+                                        data: [
+                                            {ref: 'TN', name: 'Tennessee'},
+                                            {ref: 'VA', name: 'Virginia'},
+                                            {ref: 'WA', name: 'Washington'},
+                                            {ref: 'FL', name: 'Florida'},
+                                            {ref: 'CA', name: 'California'}
+                                        ],
+                                        name: 'statesStore'
+                                    })
+                                ]
+                            }
+                        }
+                    }
+                }
+            });
+
+			require([
+                'dojo/parser',
+                'dojo/dom',
+                'dijit/registry',
+                'dojo/store/Memory',
+                'Sds/Form/Toggle',
+                'dojo/domReady!'
+            ],
+            function(
+                parser,
+                dom,
+                registry,
+                MemoryStore
+            ){
+                parser.parse().then(function(){
+
+                    dom.byId('toggle1Value').innerHTML = registry.byId('toggle1').get('value');
+                    registry.byId('toggle1').watch('value', function(p, o, newValue){
+                        dom.byId('toggle1Value').innerHTML = newValue;
+                    });
+
+                    var data = [
+                        {ref: 'TN', name: 'Tennessee'},
+                        {ref: 'VA', name: 'Virginia'},
+                        {ref: 'WA', name: 'Washington'},
+                        {ref: 'FL', name: 'Florida'},
+                        {ref: 'CA', name: 'California'}
+                    ];
+
+                    var stateStore = new MemoryStore({
+                        idProperty: 'ref',
+                        data: data
+                    });
+
+                    var widget;
+
+                    widget = registry.byId('toggle6');
+                    widget.set('storeLabel', 'name');
+                    widget.set('store', stateStore);
+
+                    widget = registry.byId('toggle7');
+                    widget.set('storeLabel', 'name');
+                    widget.set('query', {name: /^.*i.*$/});
+                    widget.set('store', stateStore);
+
+                    widget = registry.byId('toggle8');
+                    widget.set('storeLabel', 'name');
+                    widget.set('query', {name: /^.*i.*$/});
+                    widget.set('store', stateStore);
+                    widget.set('query', {name: /^.*g.*$/});
+                });
+            })
+		</script>
+	</head>
+	<body>
+        <h1>Functional Testing Sds/Form/Toggle</h1>
+        <br />
+        <form class="form-horizontal">
+
+            <p>Toggle, no explicit default</p>
+            <div id="toggle1" data-dojo-type="Sds/Form/Toggle" data-dojo-props="label: 'State'">
+                <option value="TN">Tennessee</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="FL">Florida</option>
+                <option value="CA">California</option>
+            </div>
+
+            <p>Toggle Value: <pre id="toggle1Value"></pre></p>
+
+
+            <p>Toggle, with default and help message</p>
+            <div id="toggle2" data-dojo-type="Sds/Form/Toggle" data-dojo-props="label: 'State', helpMessages: 'Please select a state'">
+                <option value="TN">Tennessee</option>
+                <option value="VA" selected="selected">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="FL">Florida</option>
+                <option value="CA">California</option>
+            </div>
+
+            <p>Toggle, programatic options</p>
+            <div id="toggle3" data-dojo-type="Sds/Form/Toggle" data-dojo-props="
+                options: {
+                    TN: 'Tennessee',
+                    VA: 'Virginia',
+                    WA: 'Washington',
+                    FL: 'Florida',
+                    CA: 'California'
+                },
+                value: 'CA',
+                label: 'State'
+            ">
+            </div>
+
+            <p>Toggle, using data store</p>
+            <div
+                id="toggle6"
+                data-dojo-type="Sds/Form/Toggle"
+                data-dojo-props="label: 'State'"
+            >
+            </div>
+
+            <p>Toggle, using data store with query (any name with an 'i')</p>
+            <div
+                id="toggle7"
+                data-dojo-type="Sds/Form/Toggle"
+                data-dojo-props="label: 'State'"
+            >
+            </div>
+
+            <p>Single line toggle, using data store with query change (any name with a 'g')</p>
+            <div
+                id="toggle8"
+                data-dojo-type="Sds/Form/Toggle"
+                data-dojo-props="label: 'State'"
+            >
+            </div>
+
+            <p>Toggle, using data from storeManager</p>
+            <div
+                id="toggle10"
+                data-dojo-type="Sds/Form/Toggle"
+                data-dojo-props="
+                    label: 'State',
+                    store: 'statesStore',
+                    storeLabel: 'name'"
+            >
+            </div>
+        </form>
+	</body>
+</html>

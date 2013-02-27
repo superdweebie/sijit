@@ -49,12 +49,24 @@ function (
                 }
                                
                 if (add){
-                    value = value + this.requiredStarTemplate                        
+                    if (value){
+                        value = value + this.requiredStarTemplate                        
+                    } else {
+                        value = this.requiredStarTemplate
+                    }
                 }
                 
                 if (value){
                     this.inherited(arguments, [value]);
                 }
+            },
+            
+            _getLabelAttr: function(){
+                var value = this.label;
+                if (value){
+                    value = value.replace(this.requiredStarTemplate, '');
+                }
+                return value;
             },
             
             startup: function(){

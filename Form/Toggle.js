@@ -2,18 +2,18 @@ define([
     'dojo/_base/declare',
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
-    './_SelectMixin',
-    'dojo/text!./Template/Select.html'
+    './_ToggleMixin',
+    'dojo/text!./Template/Toggle.html'
 ],
 function (
     declare,
     Widget,
     TemplatedMixin,
-    SelectMixin,
+    ToggleMixin,
     template
 ){
     return declare(
-        [Widget, TemplatedMixin, SelectMixin],
+        [Widget, TemplatedMixin, ToggleMixin],
         {
             templateString: template
         }
