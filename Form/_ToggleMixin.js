@@ -2,9 +2,11 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
+    'dojo/_base/event',    
     'dojo/on',
     'dojo/when',
     'dojo/dom-construct',
+    'dojo/dom-class',
     './_LabelMixin',
     './_HelpMessagesMixin',
     'dijit/form/_FormValueMixin',      
@@ -14,9 +16,11 @@ function (
     declare,
     lang,
     array,
+    event,
     on,
     when,
     domConstruct,
+    domClass,
     LabelMixin,
     HelpMessagesMixin,
     FormValueMixin,
@@ -45,7 +49,8 @@ function (
             buildRendering: function(){
                 this.inherited(arguments);
 
-                var source = this.srcNodeRef;
+                var source = this.srcNodeRef,
+                    value;
 
                 // Add options tags if not using store
                 if (this.get('store')){
@@ -54,25 +59,14 @@ function (
                     if(source){
                         array.forEach(source.childNodes, lang.hitch(this, function(node){ 
                             if (node.tagName && node.tagName == 'OPTION'){
-                                this.addOption(node.value, node.text)
+                                this.addOption(node.value, node.text);
+                                if (node.selected){
+                                    this.set('value', node.value);
+                                }
                             }
                         }))
                     }
                 }
-            },
-
-            startup: function(){
-                this.inherited(arguments);
-                array.forEach(this.toggle.childNodes, lang.hitch(this, function(node){
-                    if (node.tagName && node.tagName == 'BUTTON'){
-                        on(node, 'click', lang.hitch(this, function(e){
-                            console.debug(e);
-                        }))
-                    }                    
-                }));                
-//                on(this.select, 'change', lang.hitch(this, function(e){
-//                    this.set('value', e.target.value);
-//                }));
             },
 
             _setStoreLabelAttr: function(storeLabel){
@@ -133,22 +127,29 @@ function (
             },
 
             addOption: function(value, label){
-                var existingOptions = this.get('options');
+                var existingOptions = this.get('options'),
+                    node;
+                    
                 if ( ! existingOptions[value]){
                     if (this.sortByLabel){
                         var created = false;
                         array.forEach(this.toggle.childNodes, lang.hitch(this, function(node){                           
                             if (node.tagName && node.tagName == 'BUTTON' && !created && node.text > label){
-                                domConstruct.create('button',{'class': 'btn', value: value, innerHTML: label}, node, 'before');
+                                node = domConstruct.create('button',{'class': 'btn', value: value, innerHTML: label}, node, 'before');
                                 created = true;
                             }
                         }));
                         if ( ! created){
-                            domConstruct.create('button',{'class': 'btn', value: value, innerHTML: label}, this.toggle, 'last');
+                            node = domConstruct.create('button',{'class': 'btn', value: value, innerHTML: label}, this.toggle, 'last');
                         }
                     } else {                       
-                        domConstruct.create('button',{'class': 'btn', value: value, innerHTML: label}, this.toggle, 'last');
+                        node = domConstruct.create('button',{'class': 'btn', value: value, innerHTML: label}, this.toggle, 'last');
                     }
+                    
+                    on(node, 'click', lang.hitch(this, function(e){
+                        event.stop(e);
+                        this.set('value', e.target.value);                      
+                    }))                    
                 }
             },
 
@@ -176,6 +177,19 @@ function (
                 return options;
             },
 
+            _setValueAttr: function(value){
+                this.inherited(arguments);                
+                array.forEach(this.toggle.childNodes, function(node){
+                    if (node && node.tagName && node.tagName == 'BUTTON'){
+                        if (node.value == value){
+                            domClass.add(node, 'active');
+                        } else {
+                            domClass.remove(node, 'active');
+                        }
+                    }
+                })                
+            },
+            
             _setFocusNodeClassAttr: { node: "focusNode", type: "class" }
         }
     )
