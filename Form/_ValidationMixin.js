@@ -32,7 +32,7 @@ function (
 
             //postActivity: undefined,
 
-            style: {
+            validationStyle: {
                 preActivity: {
                     //valid: [], //A list of classes to apply when valid
                     //invalid: [] //apply when invalid
@@ -131,7 +131,7 @@ function (
                 });
             },
 
-            _setStyleAttr: function(value){
+            _setValidationStyleAttr: function(value){
                 if (this._started){
 
                     var styleNode = this.styleNode ?
@@ -159,7 +159,7 @@ function (
                     }, this);
                     this._appliedStyle = apply;
                 }
-                this.style = value;
+                this.inherited(arguments);
             },
 
             onFocus: function(){
@@ -221,7 +221,7 @@ function (
 
                     this.set('state', state);
                     this.set('lastResult', resultObject);
-                    this.set('style', this.style);
+                    this.set('validationStyle', this.validationStyle);
                     return null;
                 });
 
