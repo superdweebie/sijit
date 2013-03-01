@@ -1,0 +1,16 @@
+{
+    "name": "superdweebie/sijit",
+    "description": "Extensions for the dojo js lib",
+    "type": "zend-dojo",
+    "keywords": ['dojo', 'sds'],
+    "homepage": "http://github.com/superdweebie/sijit",
+    "authors": [
+        {
+            "name": "Tim Roediger",
+            "email": "superdweebie@gmail.com"
+        }
+    ],
+    "require": {
+        "composer/installers": "~1.0"
+    }
+}
