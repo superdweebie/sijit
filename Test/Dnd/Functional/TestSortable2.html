@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <title>Functional Testing Sds/Dnd/Sortable</title>
+        <style type="text/css">
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
+        </style>
+        <style>
+            .dojoDndItem{
+                background-color: cyan;
+                width: 250px;
+                margin: 1px;
+                list-style-type: none;
+            }
+            .dojoDndMoveItem{
+                z-index: 1999;
+                opacity: 0.4;
+            }
+            .dojoDndItemOver{
+                background-color: red;
+            }
+            .dojoDndItemHandle,
+            .icon-sort{
+                background-color: #000;
+                cursor: pointer;
+                float: right;
+            }
+            .dojoDndDummyItem{
+                opacity: 0.3;
+            }
+
+            #sortableContainer {
+                position: absolute;
+                top: 100px;
+            }
+        </style>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+        <script type="text/javascript">
+            require([
+                'dojo/parser',
+                'dojo/dom',
+                'dojo/dom-construct',
+                'Sds/Dnd/Sortable',
+                'dojo/domReady!'
+            ],
+                    function(
+                            parser,
+                            dom,
+                            domConstruct,
+                            Sortable
+                            ) {
+                        parser.parse().then(function() {
+
+                            //programatic
+                            var sortable = new Sortable;
+                            sortable.placeAt(dom.byId('sortable'), 'replace');
+
+                            sortable.addChild(domConstruct.create('div', {innerHTML: 'item 1'}));
+                            sortable.addChild(domConstruct.create('div', {innerHTML: 'item 2'}));
+                            sortable.addChild(domConstruct.create('div', {innerHTML: 'item 3'}));
+                            sortable.addChild(domConstruct.create('div', {innerHTML: 'item 4'}));
+                            sortable.addChild(domConstruct.create('div', {innerHTML: 'item 8'}));
+//                            sortable.addChild(domConstruct.create('div', {innerHTML: 'item 7'}), 4);
+//                            sortable.addChild(domConstruct.create('div', {innerHTML: 'item 6'}), 4);
+//                            sortable.addChild(domConstruct.create('div', {innerHTML: 'item 5'}), 4);
+                        });
+                    })
+        </script>
+    </head>
+    <body>
+        <p>Programatic</p>
+        <div id="sortableContainer">
+            <div id="sortable"></div>
+        </div>
+    </body>
+</html>
