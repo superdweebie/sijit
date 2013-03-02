@@ -79,7 +79,7 @@ function (
 
                 if (this.postActivity != value){
                     this.postActivity = value;
-                    this.set('style', this.style);
+                    this.set('validationStyle', this.validationStyle);
                     this.set('lastResult', this.lastResult);
                 }
             },

@@ -23,17 +23,10 @@ function (
                     return;
                 }
                 
-                var refNode;
-                if (this.containerNode) {
-                    refNode = this.containerNode;
-                } else {
-                    refNode = this.domNode;
-                }
-
                 this.labelNode = domConstruct.create(
                     'label',
                     {innerHTML: value, 'class': 'control-label', 'for': this.id},
-                    refNode,
+                    this.domNode,
                     'first'
                 );
             }
