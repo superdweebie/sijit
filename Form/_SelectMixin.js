@@ -48,7 +48,7 @@ function (
                 this.inherited(arguments);
 
                 var source = this.srcNodeRef;
-
+                
                 // Add options tags if not using store
                 if (this.get('store')){
                     this._updateOptionsFromStore();
@@ -56,10 +56,9 @@ function (
                     if(source && source.options){
                         array.forEach(source.options, lang.hitch(this, function(option){
                             this.addOption(option.value, option.text);
-                        }))
+                        }));
                     }
                 }
-
                 if (this.source){
                     this.set('value', source.value);
                 }
@@ -83,7 +82,6 @@ function (
             },
 
             _getStoreAttr: function(){
-
                 if (this.store && typeof this.store == 'string'){
                     //get store from storeManager
                     this.store = storeManager.getStore(this.store);
@@ -125,6 +123,8 @@ function (
                         array.forEach(addOptions, lang.hitch(this, function(option){
                             this.addOption(option[idProperty], option[this.storeLabel]);
                         }));
+                        //reset value once items have been added. This allows Ajax values to be returned before setting the select value
+                        this.select.value = this.value;
                     }));
                 }
             },
@@ -154,7 +154,7 @@ function (
                     if (option && option.value == value){
                         domConstruct.destroy(option);
                     }
-                })
+                });
             },
 
             _setValueAttr: function(value){
