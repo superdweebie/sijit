@@ -124,7 +124,7 @@ function (
                             this.addOption(option[idProperty], option[this.storeLabel]);
                         }));
                         //reset value once items have been added. This allows Ajax values to be returned before setting the select value
-                        this.select.value = this.value;
+                        this.set('value', this.value);
                     }));
                 }
             },
