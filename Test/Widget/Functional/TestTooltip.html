@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <title>Testing Sds/Widget/Tooltip</title>
+       	<style type="text/css">
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
+            @import "../../../themes/bootstrap/css/dialog.css";
+
+            .tooltip.inverse .tooltip-inner {
+                background: #0088CC;
+                color: #fff;
+            }
+            .tooltip.inverse .tooltip-arrow {
+                border-top-color: #0088CC;
+            }
+        </style>
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.min.css" rel="stylesheet" type="text/css">   
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+        <script type="text/javascript">
+            require([
+                'dojo/dom',
+                'dojo/parser',
+                'dojo/query',
+                'dojo/dom-construct',
+                'dojo/on',
+                'Sds/Widget/Tooltip',
+                'dojo/domReady!'
+            ],
+                    function(
+                            dom,
+                            parser,
+                            query,
+                            domConstruct,
+                            on,
+                            Tooltip
+                            ) {
+                        parser.parse();
+                        var t1 = new Tooltip();
+                        var t2 = new Tooltip({selector: 'a[rel=tooltip-inverse]', nodeClass: 'inverse'});
+                        var t2 = new Tooltip({selector: 'a[rel=tooltip-click]', eventShow: 'click'});
+
+                        on(dom.byId('add'), 'click', function() {
+                            var p = domConstruct.create('p', {
+                                innerHTML: 'Something '
+                            });
+                            var a = domConstruct.create('a', {
+                                rel: 'tooltip',
+                                title: 'second tooltip',
+                                href: '#',
+                                innerHTML: '<i class="icon-small icon-minus-sign"></i>'
+                            });
+                            p.appendChild(a);
+                            dom.byId('container').appendChild(p);
+                        });
+                    });
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="jumbotron">
+                <h1>Testing Sds/Widget/Tooltip</h1>
+            </div>
+            <div class="row">
+                <div class="well">
+                    <p>Default tooltip with delegated events</p>
+                    <p>Something <a href="#" rel="tooltip" title="first tooltip"><i class="icon-small icon-minus-sign"></i></a></p>
+                    <div id="container"></div>
+                    <button id="add">Add new tooltip</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="well">
+                    <p>Tooltip with user defined class</p>
+                    <p>Something <a href="#" rel="tooltip-inverse" title="inverse tooltip"><i class="icon-small icon-plus-sign"></i></a></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="well">
+                    <p>Tooltip with user defined event</p>
+                    <p>Something <a href="#" rel="tooltip-click" title="inverse tooltip"><i class="icon-small icon-plus-sign"></i></a></p>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
