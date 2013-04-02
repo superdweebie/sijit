@@ -37,9 +37,14 @@ function (
                 //     will be set to the returned instance of BaseValdiator
                 //
 
+                if ( ! value){
+                    this._set('filter', value);
+                    return;
+                }
+                
                 var filterDeferred = new Deferred;
                 filterDeferred.then(lang.hitch(this, function(filter){
-                    this.filter = filter;
+                    this._set('filter', filter);
                     this._filterSet = true;
                 }));
 
