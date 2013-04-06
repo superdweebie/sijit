@@ -4,7 +4,8 @@ define([
     'dojo/_base/array',
     'dojo/dom-class',
     'dojo/dom-construct',
-    '../utils'
+    '../utils',
+    'dojo/Evented'
 ],
 function (
     declare,
@@ -12,10 +13,11 @@ function (
     array,
     domClass,
     domConstruct,
-    utils
+    utils,
+    Evented
 ){
     return declare(
-        [],
+        [Evented],
         {
             // Adds as messages to form inputs
             //
@@ -33,7 +35,7 @@ function (
             //messagesNode: undefined,
 
             maxMessageId: 0,
-
+                       
             updateMessages: function(messagesToAdd, messageObjectsToRemove){
 
                 this.messageObjects = utils.arraySubtract(this.messageObjects, messageObjectsToRemove);
@@ -50,30 +52,30 @@ function (
                     return true;
                 });
 
+                var messageObjects;
                 if ( ! messagesToAdd || messagesToAdd.length == 0){
-                    this._renderMessages();
-                    return [];
+                    messageObjects =  [];
+                } else {
+                    //create the message node if it doesn't already exist'
+                    if ( ! this.messagesNode){
+                        this.messagesNode = domConstruct.create(
+                            'span',
+                            {},
+                            this.focusNode ? this.focusNode.parentNode : this.domNode,
+                            'last'
+                        )
+                    }
+
+                    messageObjects = array.map(messagesToAdd, lang.hitch(this, function(message){
+                        ++this.maxMessageId;
+                        return {id: this.maxMessageId, message: message};
+                    }));
+
+                    this.messageObjects = messageObjects.concat(this.messageObjects);                    
                 }
-
-                //create the message node if it doesn't already exist'
-                if ( ! this.messagesNode){
-                    this.messagesNode = domConstruct.create(
-                        'span',
-                        {},
-                        this.focusNode ? this.focusNode.parentNode : this.domNode,
-                        'last'
-                    )
-                }
-
-                var messageObjects = array.map(messagesToAdd, lang.hitch(this, function(message){
-                    ++this.maxMessageId;
-                    return {id: this.maxMessageId, message: message};
-                }));
-
-                this.messageObjects = messageObjects.concat(this.messageObjects);
 
                 this._renderMessages();
-
+                this.emit('messages-updated', {objects: this.messageObjects, node: this.messagesNode});                
                 return messageObjects;
             },
 

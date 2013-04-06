@@ -36,7 +36,11 @@
                 on(dom.byId('dontSuppress'), 'click', function(e){
                     event.stop(e);
                     registry.byId('validationTextBox12').set('suppressValidation', false);
-                });                
+                });   
+                on(registry.byId('validationTextBox12'), 'messages-updated', function(e){
+                    console.debug(e.node);
+                    console.debug(e.objects);                    
+                });
             })
 		</script>
 	</head>
