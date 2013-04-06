@@ -42,21 +42,20 @@ function (
 
             buildRendering: function(){
                 this.inherited(arguments);
-
-                var source = this.srcNodeRef;
-                
+                              
                 // Add options tags if not using store
                 if (this.get('store')){
                     this._updateOptionsFromStore();
                 } else {
+                    var source = this.srcNodeRef;                    
                     if(source && source.options){
                         array.forEach(source.options, lang.hitch(this, function(option){
                             this.addOption(option.value, option.text);
                         }));
+                        if ( !this.value){
+                            this.set('value', source.value);                        
+                        }
                     }
-                }
-                if (this.source){
-                    this.set('value', source.value);
                 }
             },
 

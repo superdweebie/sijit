@@ -56,6 +56,11 @@ function (
                 }                
             },
 
+            _setValueAttr: function(value){
+                this.inherited(arguments);
+                this.select.value = value;
+            },
+            
             _getOptionsAttr: function(){
                 var options = {};
                 array.forEach(this.select.options, lang.hitch(this, function(option){
