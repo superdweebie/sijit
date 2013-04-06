@@ -4,8 +4,7 @@ define([
     'dojo/_base/array',
     'dojo/dom-class',
     'dojo/dom-construct',
-    '../utils',
-    'dojo/Evented'
+    '../utils'
 ],
 function (
     declare,
@@ -13,11 +12,10 @@ function (
     array,
     domClass,
     domConstruct,
-    utils,
-    Evented
+    utils
 ){
     return declare(
-        [Evented],
+        [],
         {
             // Adds as messages to form inputs
             //

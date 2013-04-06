@@ -35,9 +35,6 @@ function (
             startup: function(){
                 this.inherited(arguments);
                 this.set('placeholder');
-//                on(this.select, 'change', lang.hitch(this, function(e){
-//                    this.set('value', e.target.value);
-//                }));
             },
             
             toggle: function(e){
@@ -129,33 +126,6 @@ function (
                     this.hide();
                     event.stop(e);
                 }));
-//                    array.forEach(this.optionsList.childNodes, lang.hitch(this, function(option){
-//                        if (! created && option.nodeName == 'LI' && option.innerHTML > label){
-//                            domConstruct.create(
-//                                'LI',
-//                                {innerHTML: '<a href="' + value + '">' + label + '</a>'}, 
-//                                option, 
-//                                'before'
-//                            );
-//                            created = true;
-//                        }
-//                    }));
-//                    if ( ! created){
-//                        domConstruct.create(
-//                            'LI',
-//                            {innerHTML: '<a href="' + value + '">' + label + '</a>'}, 
-//                            this.optionsList, 
-//                            'last'
-//                        );
-//                    }
-//                } else {
-//                    domConstruct.create(
-//                        'LI',
-//                        {innerHTML: '<a href="' + value + '">' + label + '</a>'}, 
-//                        this.optionsList, 
-//                        'last'
-//                    );
-//                }
             },
 
             removeOption: function(value){
