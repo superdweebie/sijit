@@ -54,6 +54,9 @@ function (
 
             //_delayTimer: undefined,
 
+            //Set to true to stop all validation. Set to falsey to allow validation
+            //suppressValidation: undefined,
+            
             delayTimeout: 350,
 
             _setValueTimestamp: 0,
@@ -75,6 +78,16 @@ function (
                 this._startValidateTimer();
             },
 
+            _setSuppressValidationAttr: function(value){
+                if (this.suppressValidation && !value){
+                    var doValidation = true;
+                }                
+                this._set('suppressValidation', value);
+                if (doValidation){
+                    this._validateNow();
+                }
+            },
+            
             _setPostActivityAttr: function(value){
 
                 if (this.postActivity != value){
@@ -194,6 +207,10 @@ function (
 
             _validate: function(){
 
+                if (this.suppressValidation){
+                    return;
+                }
+                
                 var processResult = lang.hitch(this, function(resultObject, timestamp){
 
                     if (this._setValueTimestamp > timestamp){

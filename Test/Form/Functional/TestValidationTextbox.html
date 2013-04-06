@@ -13,13 +13,30 @@
 		<script type="text/javascript">
 			require([
                 'dojo/parser',
+                'dojo/_base/event',
+                'dojo/dom',
+                'dojo/on',
+                'dijit/registry',
                 'Sds/Form/ValidationTextBox',
                 'dojo/domReady!'
             ],
             function(
-                parser
+                parser,
+                event,
+                dom,
+                on,
+                registry
             ){
                 parser.parse();
+                
+                on(dom.byId('doSuppress'), 'click', function(e){
+                    event.stop(e);
+                    registry.byId('validationTextBox12').set('suppressValidation', true);
+                });
+                on(dom.byId('dontSuppress'), 'click', function(e){
+                    event.stop(e);
+                    registry.byId('validationTextBox12').set('suppressValidation', false);
+                });                
             })
 		</script>
 	</head>
@@ -142,6 +159,19 @@
                 "
                 id="validationTextBox11"
              />
+            
+            <p>Validation suppression</p>
+            <input data-dojo-type="Sds/Form/ValidationTextBox"
+                value=""
+                data-dojo-props="
+                    label:'Name',
+                    validator: 'PersonalName',
+                    helpMessages: 'Please enter your name'
+                "
+                id="validationTextBox12"
+             />   
+            <button class="btn" id="doSuppress">do suppress validation</button>            
+            <button class="btn" id="dontSuppress">don't suppress validation</button>              
         </form>
 	</body>
 </html>
