@@ -1,0 +1,15 @@
+<div class="control-group">
+    <div class="controls" data-dojo-attach-point="dropdownContainer">
+        <button id="${id}" 
+            class="btn btn-mini dropdown-toggle" 
+            data-dojo-attach-point="dropdownToggle, focusNode"
+            data-dojo-attach-event="ondijitclick: toggle"
+        >
+            <span class="muted" data-dojo-attach-point="placeholderNode"></span>
+            <span data-dojo-attach-point="selectedValue"></span>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" data-dojo-attach-point="optionsList">
+        </ul>        
+    </div>
+</div>

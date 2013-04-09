@@ -2,7 +2,7 @@
 	"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<title>Functional Testing Sds/Form/Select</title>
+		<title>Functional Testing Sds/Form/Dropdown</title>
 		<style type="text/css">
             @import "../../../themes/bootstrap/css/bootstrap.css";
             @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
@@ -43,7 +43,7 @@
                 'dojo/dom',
                 'dijit/registry',
                 'dojo/store/Memory',
-                'Sds/Form/Select',
+                'Sds/Form/Dropdown',
                 'dojo/domReady!'
             ],
             function(
@@ -54,9 +54,9 @@
             ){
                 parser.parse().then(function(){
 
-                    dom.byId('select1Value').innerHTML = registry.byId('select1').get('value');
-                    registry.byId('select1').watch('value', function(p, o, newValue){
-                        dom.byId('select1Value').innerHTML = newValue;
+                    dom.byId('dropdown1Value').innerHTML = registry.byId('dropdown1').get('value');
+                    registry.byId('dropdown1').watch('value', function(p, o, newValue){
+                        dom.byId('dropdown1Value').innerHTML = newValue;
                     });
 
                     var data = [
@@ -72,33 +72,33 @@
                         data: data
                     });
 
-                    var select;
+                    var input;
 
-                    select = registry.byId('select6');
-                    select.set('storeLabel', 'name');
-                    select.set('store', stateStore);
+                    input = registry.byId('dropdown6');
+                    input.set('storeLabel', 'name');
+                    input.set('store', stateStore);
 
-                    select = registry.byId('select7');
-                    select.set('storeLabel', 'name');
-                    select.set('query', {name: /^.*i.*$/});
-                    select.set('store', stateStore);
+                    input = registry.byId('dropdown7');
+                    input.set('storeLabel', 'name');
+                    input.set('query', {name: /^.*i.*$/});
+                    input.set('store', stateStore);
 
-                    select = registry.byId('select8');
-                    select.set('storeLabel', 'name');
-                    select.set('query', {name: /^.*i.*$/});
-                    select.set('store', stateStore);
-                    select.set('query', {name: /^.*g.*$/});
+                    input = registry.byId('dropdown8');
+                    input.set('storeLabel', 'name');
+                    input.set('query', {name: /^.*i.*$/});
+                    input.set('store', stateStore);
+                    input.set('query', {name: /^.*g.*$/});
                 });
             })
 		</script>
 	</head>
 	<body>
-        <h1>Functional Testing Sds/Form/Select</h1>
+        <h1>Functional Testing Sds/Form/Dropdown</h1>
         <br />
         <form class="form-horizontal">
 
-            <p>Single line select, no explicit selection</p>
-            <select id="select1" data-dojo-type="Sds/Form/Select" data-dojo-props="label: 'State'">
+            <p>Dropdown, no explicit selection</p>
+            <select id="dropdown1" data-dojo-type="Sds/Form/Dropdown" data-dojo-props="label: 'State'">
                 <option value="TN">Tennessee</option>
                 <option value="VA">Virginia</option>
                 <option value="WA">Washington</option>
@@ -106,10 +106,11 @@
                 <option value="CA">California</option>
             </select>
 
-            <p>Select Value: <pre id="select1Value"></pre></p>
+            <p>Dropdown value: <pre id="dropdown1Value"></pre></p>
 
-            <p>Single line select, with selection and help message. Should default to 'Virginia'.</p>
-            <select id="select2" data-dojo-type="Sds/Form/Select" data-dojo-props="label: 'State', helpMessages: 'Please select a state'">
+
+            <p>Dropdown, with selection and help message. Should default to 'Virginia'.</p>
+            <select id="dropdown2" data-dojo-type="Sds/Form/Dropdown" data-dojo-props="label: 'State', helpMessages: 'Please select a state'">
                 <option value="TN">Tennessee</option>
                 <option value="VA" selected="selected">Virginia</option>
                 <option value="WA">Washington</option>
@@ -117,8 +118,8 @@
                 <option value="CA">California</option>
             </select>
 
-            <p>Single line select, programatic options. Should default to 'California'.</p>
-            <select id="select3" data-dojo-type="Sds/Form/Select" data-dojo-props="
+            <p>Dropdown, programatic options. Should default to 'California'.</p>
+            <select id="dropdown3" data-dojo-type="Sds/Form/Dropdown" data-dojo-props="
                 options: {
                     TN: 'Tennessee',
                     VA: 'Virginia',
@@ -131,8 +132,8 @@
             ">
             </select>
 
-            <p>Single line select, with css class</p>
-            <select id="select4" data-dojo-type="Sds/Form/Select" data-dojo-props="label: 'State', focusNodeClass: 'span2'">
+            <p>Dropdown, with css class</p>
+            <select id="dropdown4" data-dojo-type="Sds/Form/Dropdown" data-dojo-props="label: 'State', focusNodeClass: 'span2'">
                 <option value="TN">Tennessee</option>
                 <option value="VA">Virginia</option>
                 <option value="WA">Washington</option>
@@ -140,8 +141,8 @@
                 <option value="CA">California</option>
             </select>
 
-            <p>Single line select, unsorted</p>
-            <select id="select5" data-dojo-type="Sds/Form/Select" data-dojo-props="label: 'State', sortByLabel: false">
+            <p>Dropdown, unsorted</p>
+            <select id="dropdown5" data-dojo-type="Sds/Form/Dropdown" data-dojo-props="label: 'State', sortByLabel: false">
                 <option value="TN">Tennessee</option>
                 <option value="VA">Virginia</option>
                 <option value="WA">Washington</option>
@@ -149,43 +150,34 @@
                 <option value="CA">California</option>
             </select>
 
-            <p>Single line select, using data store</p>
+            <p>Dropdown, using data store</p>
             <select
-                id="select6"
-                data-dojo-type="Sds/Form/Select"
+                id="dropdown6"
+                data-dojo-type="Sds/Form/Dropdown"
                 data-dojo-props="label: 'State'"
             >
             </select>
 
-            <p>Single line select, using data store with query (any name with an 'i')</p>
+            <p>Dropdown, using data store with query (any name with an 'i')</p>
             <select
-                id="select7"
-                data-dojo-type="Sds/Form/Select"
+                id="dropdown7"
+                data-dojo-type="Sds/Form/Dropdown"
                 data-dojo-props="label: 'State'"
             >
             </select>
 
-            <p>Single line select, using data store with query change (any name with a 'g')</p>
+            <p>Dropdown, using data store with query change (any name with a 'g')</p>
             <select
-                id="select8"
-                data-dojo-type="Sds/Form/Select"
+                id="dropdown8"
+                data-dojo-type="Sds/Form/Dropdown"
                 data-dojo-props="label: 'State'"
             >
             </select>
 
-            <p>Multiple select</p>
-            <select id="select9" data-dojo-type="Sds/Form/Select" multiple="multiple" data-dojo-props="label: 'State'">
-                <option value="TN">Tennessee</option>
-                <option value="VA">Virginia</option>
-                <option value="WA">Washington</option>
-                <option value="FL">Florida</option>
-                <option value="CA">California</option>
-            </select>
-
-            <p>Single line select, using data from storeManager</p>
+            <p>Dropdown, using data from storeManager</p>
             <select
-                id="select10"
-                data-dojo-type="Sds/Form/Select"
+                id="dropdown9"
+                data-dojo-type="Sds/Form/Dropdown"
                 data-dojo-props="
                     label: 'State',
                     store: 'statesStore',

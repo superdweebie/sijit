@@ -284,8 +284,8 @@ function (
                     value = color.fromHsv(value).toHex().toUpperCase();
                 }
                 this.color = hsv;
-                this.value = value;
-
+                this._set('value', value);
+                
                 //update the swatch
                 domStyle.set(this.swatch, 'backgroundColor', value);
 
@@ -326,7 +326,9 @@ function (
                         (boxPosition.minTop + boxPosition.h * (1 - hsv.v / 100)) + 'px'
                     );
                 }
-            }
+            },
+            
+            _setFocusNodeClassAttr: { node: "focusNode", type: "class" }            
         }
     );
 });
