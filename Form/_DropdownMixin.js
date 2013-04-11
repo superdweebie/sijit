@@ -9,8 +9,7 @@ define([
     'dojo/dom-class',    
     'dojo/dom-style',
     './_OptionsMixin', 
-    'dijit/_FocusMixin',    
-    'get!../Store/storeManager'
+    'dijit/_FocusMixin'    
 ],
 function (
     declare,
@@ -36,42 +35,7 @@ function (
                 this.inherited(arguments);
                 this.set('placeholder');
             },
-            
-            toggle: function(e){
-                if (domClass.contains(this.dropdownToggle, "disabled") || domAttr.get(this.dropdownToggle, "disabled")) {
-                    return false;
-                }
-                var targetNode = this.dropdownContainer;
-                if (targetNode) {
-                    if (domClass.contains(targetNode, 'open')) {
-                        domClass.remove(targetNode, 'open');                        
-                    } else {
-                        this.positionOptionsList();
-                        domClass.add(targetNode, 'open');
-                    }
-                }
-
-                if(e){
-                    event.stop(e);
-                }
-                return false;                              
-            },
-            
-            hide: function(){
-                if (domClass.contains(this.dropdownContainer, 'open')) {
-                    domClass.remove(this.dropdownContainer, 'open');                        
-                }                
-            },
-            
-            onBlur: function(){
-                this.hide();  
-            },
-            
-            positionOptionsList: function() {
-                domStyle.set(this.optionsList, 'top', (this.dropdownToggle.offsetTop + this.dropdownToggle.offsetHeight) + 'px');
-                domStyle.set(this.optionsList, 'left', this.dropdownToggle.offsetLeft + 'px');
-            },
-            
+                       
             _setPlaceholderAttr: function(value) {
                 this.placeholder = value;
 
@@ -122,9 +86,9 @@ function (
                 
                 domConstruct.place(newA, newLI, 'only');
                 on(newA, 'click', lang.hitch(this, function(e){
+                    event.stop(e);                    
                     this.set('value', value);
-                    this.hide();
-                    event.stop(e);
+                    this.dropdown.set('hidden', true);
                 }));
             },
 

@@ -18,7 +18,8 @@ define([
     './_LabelMixin',
     './_HelpMessagesMixin',
     'dojo/text!./Template/ColorPicker.html',
-    '../Form/HexColor'
+    './HexColor',
+    '../Widget/Dropdown'
 ],
 function (
     declare,
@@ -78,108 +79,174 @@ function (
                 }));
                 this.hex.on('blur', function(){
                     hexWatch.unwatch();
-                });                
-            },
-            
-            toggle: function(e){
-                this.set('hidden', ! this.get('hidden'));
-
-                if(e){
-                    event.stop(e);
-                }
-                return false;                              
-            },
-                                  
-            _setHiddenAttr: function(value){
-                if (value){
-                    domClass.remove(this.dropdownContainer, 'open');                                                               
-                    this._set('hidden', value);   
-                    return;
-                }
+                });
                 
-                if (domClass.contains(this.dropdownToggle, "disabled") || domAttr.get(this.dropdownToggle, "disabled")) {
-                    return;
-                }
+                this.dropdown.on('cancel', lang.hitch(this, function(){
+console.debug(2);                    
+                }));
                 
-                domClass.add(this.dropdownContainer, 'open'); 
-                this.positionPickerContainer();
-                this._set('hidden', value);                     
+                this.dropdown.watch('hidden', lang.hitch(this, function(p, o, n){
+                    if (n == true){
+                        return;
+                    }
+                    
+                    var huePosition = this.get('huePosition'),
+                        boxPosition = this.get('boxPosition'),
+                        dndHueHandle = new Moveable(this.hueHandle),
+                        dndBoxHandle = new Moveable(this.boxHandle);
 
-                var huePosition = this.get('huePosition'),
-                    boxPosition = this.get('boxPosition'),
-                    dndHueHandle = new Moveable(this.hueHandle),
-                    dndBoxHandle = new Moveable(this.boxHandle);
-
-                dndHueHandle.on('moveStop', lang.hitch(this, function(mover){
-                    //change value after hue drag
-                    this.set(
-                        'value',
-                        {
-                            h: 359 * (1 - (mover.node.offsetTop - huePosition.min) / (huePosition.h)),
-                            s: this.color.s,
-                            v: this.color.v
+                    dndHueHandle.on('moveStop', lang.hitch(this, function(mover){
+                        //change value after hue drag
+                        this.set(
+                            'value',
+                            {
+                                h: 359 * (1 - (mover.node.offsetTop - huePosition.min) / (huePosition.h)),
+                                s: this.color.s,
+                                v: this.color.v
+                            }
+                        );
+                    }));
+                    dndHueHandle.onMove = function(mover, leftTop){
+                        //enforce hue drag boundaries
+                        if (leftTop.t < huePosition.min){
+                            leftTop.t = huePosition.min;
+                        } else if (leftTop.t > huePosition.max){
+                            leftTop.t = huePosition.max;
                         }
-                    );
-                }));
-                dndHueHandle.onMove = function(mover, leftTop){
-                    //enforce hue drag boundaries
-                    if (leftTop.t < huePosition.min){
-                        leftTop.t = huePosition.min;
-                    } else if (leftTop.t > huePosition.max){
-                        leftTop.t = huePosition.max;
+                        this.inherited('onMove', [mover, {l: huePosition.left, t: leftTop.t}]);
                     }
-                    this.inherited('onMove', [mover, {l: huePosition.left, t: leftTop.t}]);
-                }
 
-                //create dnd pointer handle
-                dndBoxHandle.on('moveStop', lang.hitch(this, function(mover){
-                    //change value after pointer drag
-                    this.set(
-                        'value',
-                        {
-                            h: this.color.h,
-                            s: 100 * ((mover.node.offsetLeft - boxPosition.minLeft) / boxPosition.w),
-                            v: 100 * (1 - (mover.node.offsetTop - boxPosition.minTop) / boxPosition.h)
+                    //create dnd pointer handle
+                    dndBoxHandle.on('moveStop', lang.hitch(this, function(mover){
+                        //change value after pointer drag
+                        this.set(
+                            'value',
+                            {
+                                h: this.color.h,
+                                s: 100 * ((mover.node.offsetLeft - boxPosition.minLeft) / boxPosition.w),
+                                v: 100 * (1 - (mover.node.offsetTop - boxPosition.minTop) / boxPosition.h)
+                            }
+                        );
+                    }));
+                    dndBoxHandle.onMove = function(mover, leftTop){
+                        //enforce pointer drag boundaries
+                        if (leftTop.t < boxPosition.minTop){
+                            leftTop.t = boxPosition.minTop;
+                        } else if (leftTop.t > boxPosition.maxTop){
+                            leftTop.t = boxPosition.maxTop;
                         }
-                    );
+                        if (leftTop.l < boxPosition.minLeft){
+                            leftTop.l = boxPosition.minLeft;
+                        } else if (leftTop.l > boxPosition.maxLeft){
+                            leftTop.l = boxPosition.maxLeft;
+                        }
+                        this.inherited('onMove', [mover, leftTop]);
+                    }
+                    this.preEditValue = this.value;                
+                    this.set('value', this.value); 
+                    focus.focus(this.boxHandle);                         
                 }));
-                dndBoxHandle.onMove = function(mover, leftTop){
-                    //enforce pointer drag boundaries
-                    if (leftTop.t < boxPosition.minTop){
-                        leftTop.t = boxPosition.minTop;
-                    } else if (leftTop.t > boxPosition.maxTop){
-                        leftTop.t = boxPosition.maxTop;
-                    }
-                    if (leftTop.l < boxPosition.minLeft){
-                        leftTop.l = boxPosition.minLeft;
-                    } else if (leftTop.l > boxPosition.maxLeft){
-                        leftTop.l = boxPosition.maxLeft;
-                    }
-                    this.inherited('onMove', [mover, leftTop]);
-                }
-                this.preEditValue = this.value;                
-                this.set('value', this.value); 
-                focus.focus(this.boxHandle);                
             },
             
-            positionPickerContainer: function() {
-                domStyle.set(this.pickerContainer, 'top', (this.dropdownToggle.offsetTop + this.dropdownToggle.offsetHeight) + 'px');
-                domStyle.set(this.pickerContainer, 'left', this.dropdownToggle.offsetLeft + 'px');
-            },
-            
-            onBlur: function(){
-                this.set('hidden', true);  
-            },
-            
-            onPickerKey: function(e){
-                switch(e.keyCode){
-                    case keys.ESCAPE:
-                        this.set('value', this.preEditValue);
-                    case keys.ENTER:
-                        event.stop(e);
-                        this.set('hidden', true);
-                }
-            },
+//            toggle: function(e){
+//                this.set('hidden', ! this.get('hidden'));
+//
+//                if(e){
+//                    event.stop(e);
+//                }
+//                return false;                              
+//            },
+//                                  
+//            _setHiddenAttr: function(value){
+//                if (value){
+//                    domClass.remove(this.dropdownContainer, 'open');                                                               
+//                    this._set('hidden', value);   
+//                    return;
+//                }
+//                
+//                if (domClass.contains(this.dropdownToggle, "disabled") || domAttr.get(this.dropdownToggle, "disabled")) {
+//                    return;
+//                }
+//                
+//                domClass.add(this.dropdownContainer, 'open'); 
+//                this.positionPickerContainer();
+//                this._set('hidden', value);                     
+//
+//                var huePosition = this.get('huePosition'),
+//                    boxPosition = this.get('boxPosition'),
+//                    dndHueHandle = new Moveable(this.hueHandle),
+//                    dndBoxHandle = new Moveable(this.boxHandle);
+//
+//                dndHueHandle.on('moveStop', lang.hitch(this, function(mover){
+//                    //change value after hue drag
+//                    this.set(
+//                        'value',
+//                        {
+//                            h: 359 * (1 - (mover.node.offsetTop - huePosition.min) / (huePosition.h)),
+//                            s: this.color.s,
+//                            v: this.color.v
+//                        }
+//                    );
+//                }));
+//                dndHueHandle.onMove = function(mover, leftTop){
+//                    //enforce hue drag boundaries
+//                    if (leftTop.t < huePosition.min){
+//                        leftTop.t = huePosition.min;
+//                    } else if (leftTop.t > huePosition.max){
+//                        leftTop.t = huePosition.max;
+//                    }
+//                    this.inherited('onMove', [mover, {l: huePosition.left, t: leftTop.t}]);
+//                }
+//
+//                //create dnd pointer handle
+//                dndBoxHandle.on('moveStop', lang.hitch(this, function(mover){
+//                    //change value after pointer drag
+//                    this.set(
+//                        'value',
+//                        {
+//                            h: this.color.h,
+//                            s: 100 * ((mover.node.offsetLeft - boxPosition.minLeft) / boxPosition.w),
+//                            v: 100 * (1 - (mover.node.offsetTop - boxPosition.minTop) / boxPosition.h)
+//                        }
+//                    );
+//                }));
+//                dndBoxHandle.onMove = function(mover, leftTop){
+//                    //enforce pointer drag boundaries
+//                    if (leftTop.t < boxPosition.minTop){
+//                        leftTop.t = boxPosition.minTop;
+//                    } else if (leftTop.t > boxPosition.maxTop){
+//                        leftTop.t = boxPosition.maxTop;
+//                    }
+//                    if (leftTop.l < boxPosition.minLeft){
+//                        leftTop.l = boxPosition.minLeft;
+//                    } else if (leftTop.l > boxPosition.maxLeft){
+//                        leftTop.l = boxPosition.maxLeft;
+//                    }
+//                    this.inherited('onMove', [mover, leftTop]);
+//                }
+//                this.preEditValue = this.value;                
+//                this.set('value', this.value); 
+//                focus.focus(this.boxHandle);                
+//            },
+//            
+//            positionPickerContainer: function() {
+//                domStyle.set(this.pickerContainer, 'top', (this.dropdownToggle.offsetTop + this.dropdownToggle.offsetHeight) + 'px');
+//                domStyle.set(this.pickerContainer, 'left', this.dropdownToggle.offsetLeft + 'px');
+//            },
+//            
+//            onBlur: function(){
+//                this.set('hidden', true);  
+//            },
+//            
+//            onPickerKey: function(e){
+//                switch(e.keyCode){
+//                    case keys.ESCAPE:
+//                        this.set('value', this.preEditValue);
+//                    case keys.ENTER:
+//                        event.stop(e);
+//                        this.set('hidden', true);
+//                }
+//            },
 
             onHueHandleClick: function(){
                 focus.focus(this.hueHandle);
@@ -283,7 +350,7 @@ function (
                 //update the swatch
                 domStyle.set(this.swatch, 'backgroundColor', value);
 
-                if (this.get('hidden')){
+                if (this.dropdown.get('hidden')){
                     return;
                 }
                 
