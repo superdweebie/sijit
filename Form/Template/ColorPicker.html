@@ -1,62 +1,63 @@
 <div class="control-group">
-    <div class="controls" data-dojo-attach-point="dropdownContainer">
+    <div class="controls">
         <button id="${id}" 
             class="btn btn-mini btn-color-picker dropdown-toggle" 
-            data-dojo-attach-point="dropdownToggle, focusNode"
-            data-dojo-attach-event="ondijitclick: toggle"
+            data-dojo-attach-point="focusNode"
         >
             <span
                 class="color-picker-swatch"
                 data-dojo-attach-point="swatch"
             ></span>
         </button>
-        <div class="dropdown-menu color-picker" data-dojo-attach-point="pickerContainer" data-dojo-attach-event="keypress: onPickerKey">
-            <div class="container-fluid">
-                <div class="row-fluid">
-                    <div class="span10">
-                        <div
-                            class="color-picker-box"
-                            data-dojo-attach-point="box"
-                            data-dojo-attach-event="ondijitclick: onBoxClick"
-                        ></div>
-                        <div
-                            data-dojo-attach-point="boxHandle"
-                            data-dojo-attach-event="
-                                ondijitclick: onBoxHandleClick,
-                                keypress: onBoxHandleKey
-                            "
-                            class="color-picker-box-handle"
-                            tabindex=1
-                        ></div>
+        <div data-dojo-type="Sds/Widget/Dropdown" data-dojo-attach-point="dropdown">
+            <div class="color-picker" data-dojo-attach-point="pickerContainer">
+                <div class="container-fluid">
+                    <div class="row-fluid">
+                        <div class="span10">
+                            <div
+                                class="color-picker-box"
+                                data-dojo-attach-point="box"
+                                data-dojo-attach-event="ondijitclick: onBoxClick"
+                            ></div>
+                            <div
+                                data-dojo-attach-point="boxHandle"
+                                data-dojo-attach-event="
+                                    ondijitclick: onBoxHandleClick,
+                                    keypress: onBoxHandleKey
+                                "
+                                class="color-picker-box-handle"
+                                tabindex=1
+                            ></div>
+                        </div>
+                        <div class="span2">
+                            <div
+                                data-dojo-attach-point="hue"
+                                class="color-picker-hue"
+                                data-dojo-attach-event="ondijitclick: onHueClick"
+                            ></div>
+                            <div
+                                data-dojo-attach-point="hueHandle"
+                                data-dojo-attach-event="
+                                    ondijitclick: onHueHandleClick,
+                                    keypress: onHueHandleKey
+                                "
+                                class="color-picker-hue-handle"
+                                tabindex=2
+                            ></div>
+                        </div>
                     </div>
-                    <div class="span2">
-                        <div
-                            data-dojo-attach-point="hue"
-                            class="color-picker-hue"
-                            data-dojo-attach-event="ondijitclick: onHueClick"
-                        ></div>
-                        <div
-                            data-dojo-attach-point="hueHandle"
-                            data-dojo-attach-event="
-                                ondijitclick: onHueHandleClick,
-                                keypress: onHueHandleKey
-                            "
-                            class="color-picker-hue-handle"
-                            tabindex=2
-                        ></div>
+                    <div class="row-fluid">
+                        <input
+                            data-dojo-type="Sds/Form/HexColor"
+                            data-dojo-attach-point="hex"
+                            tabindex=3
+                            data-dojo-props="
+                                focusNodeClass: 'span10',
+                                suppressValidationMessages: {preActivity: true, postActivity: true}
+                            "/>
                     </div>
-                </div>
-                <div class="row-fluid">
-                    <input
-                        data-dojo-type="Sds/Form/HexColor"
-                        data-dojo-attach-point="hex"
-                        tabindex=3
-                        data-dojo-props="
-                            focusNodeClass: 'span10',
-                            suppressValidationMessages: {preActivity: true, postActivity: true}
-                        "/>
-                </div>
-            </div>                       
-        </div> 
+                </div>                       
+            </div>
+        </div>
     </div>
 </div>

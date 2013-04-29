@@ -52,43 +52,43 @@
                 registry,
                 MemoryStore
             ){
-                parser.parse().then(function(){
+                parser.parse();
 
-                    dom.byId('dropdown1Value').innerHTML = registry.byId('dropdown1').get('value');
-                    registry.byId('dropdown1').watch('value', function(p, o, newValue){
-                        dom.byId('dropdown1Value').innerHTML = newValue;
-                    });
-
-                    var data = [
-                        {ref: 'TN', name: 'Tennessee'},
-                        {ref: 'VA', name: 'Virginia'},
-                        {ref: 'WA', name: 'Washington'},
-                        {ref: 'FL', name: 'Florida'},
-                        {ref: 'CA', name: 'California'}
-                    ];
-
-                    var stateStore = new MemoryStore({
-                        idProperty: 'ref',
-                        data: data
-                    });
-
-                    var input;
-
-                    input = registry.byId('dropdown6');
-                    input.set('storeLabel', 'name');
-                    input.set('store', stateStore);
-
-                    input = registry.byId('dropdown7');
-                    input.set('storeLabel', 'name');
-                    input.set('query', {name: /^.*i.*$/});
-                    input.set('store', stateStore);
-
-                    input = registry.byId('dropdown8');
-                    input.set('storeLabel', 'name');
-                    input.set('query', {name: /^.*i.*$/});
-                    input.set('store', stateStore);
-                    input.set('query', {name: /^.*g.*$/});
+                dom.byId('dropdown1Value').innerHTML = registry.byId('dropdown1').get('value');
+                registry.byId('dropdown1').watch('value', function(p, o, newValue){
+                    dom.byId('dropdown1Value').innerHTML = newValue;
                 });
+
+                var data = [
+                    {ref: 'TN', name: 'Tennessee'},
+                    {ref: 'VA', name: 'Virginia'},
+                    {ref: 'WA', name: 'Washington'},
+                    {ref: 'FL', name: 'Florida'},
+                    {ref: 'CA', name: 'California'}
+                ];
+
+                var stateStore = new MemoryStore({
+                    idProperty: 'ref',
+                    data: data
+                });
+
+                var input;
+
+                input = registry.byId('dropdown6');
+                input.set('storeLabel', 'name');
+                input.set('store', stateStore);
+
+                input = registry.byId('dropdown7');
+                input.set('storeLabel', 'name');
+                input.set('query', {name: /^.*i.*$/});
+                input.set('store', stateStore);
+
+                input = registry.byId('dropdown8');
+                input.set('storeLabel', 'name');
+                input.set('query', {name: /^.*i.*$/});
+                input.set('store', stateStore);
+                input.set('query', {name: /^.*g.*$/});
+
             })
 		</script>
 	</head>
@@ -120,6 +120,7 @@
 
             <p>Dropdown, programatic options. Should default to 'California'.</p>
             <select id="dropdown3" data-dojo-type="Sds/Form/Dropdown" data-dojo-props="
+                value: 'CA',
                 options: {
                     TN: 'Tennessee',
                     VA: 'Virginia',
@@ -127,7 +128,6 @@
                     FL: 'Florida',
                     CA: 'California'
                 },
-                value: 'CA',
                 label: 'State'
             ">
             </select>

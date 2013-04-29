@@ -441,6 +441,31 @@
                         return deferredTest;
                     },
 
+                    function spreadArrayTest(){
+                        var moduleManager = new ModuleManager(config.moduleManager);
+
+                        var deferredTest = new doh.Deferred;
+
+                        when(moduleManager.get('zooWithSpreadArray'), function(zoo){
+
+                            doh.assertTrue(lang.isArray(zoo.animals));
+
+                            doh.assertEqual('cobra', zoo.animals[0]);
+                            doh.assertEqual('crocodile', zoo.animals[1]);
+                            doh.assertEqual('lucy', zoo.animals[2].name);
+                            doh.assertEqual('liz', zoo.animals[3].name);
+
+                            doh.assertTrue(zoo.animals[4].isInstanceOf(Proxy));
+                            doh.assertEqual('Josh', zoo.animals[4].name);
+                            zoo.animals[4].makeSound().then(function(sound){
+                                doh.assertEqual('roar', sound);
+                                deferredTest.callback(true);
+                            });
+                        });
+
+                        return deferredTest;
+                    },
+
                     function moduleManagerAwareTest(){
 
                         var moduleManager = new ModuleManager(config.moduleManager);

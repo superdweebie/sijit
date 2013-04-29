@@ -19,7 +19,7 @@ define([
         utils
     ) {
         // module:
-        //		Sds/ModuleManager/ModuleManager
+        //        	Sds/ModuleManager/ModuleManager
 
         return declare
         (
@@ -362,7 +362,11 @@ define([
                     var injectGet = lang.hitch(this, function(getIdentifier, attrGet){
                         var getDeferred = new Deferred;
                         when(this._get(getIdentifier), function(injectionObject){
-                            object[attrGet] = injectionObject;
+                            if (lang.isArray(injectionObject) && lang.isArray(object[attrGet])){
+                                object[attrGet].push.apply(object[attrGet], injectionObject);
+                            } else {
+                                object[attrGet] = injectionObject;
+                            }
                             getDeferred.resolve();
                         });
                         return getDeferred;
@@ -373,8 +377,14 @@ define([
                     }
 
                     //Inject proxies
+                    var injectionProxy;
                     for (attr in config.proxies){
-                        object[attr] = this._proxy(config.proxies[attr]);
+                        injectionProxy = this._proxy(config.proxies[attr]);
+                        if (lang.isArray(injectionProxy) && lang.isArray(object[attr])){
+                            object[attr].push.apply(object[attr], injectionProxy);
+                        } else {
+                            object[attr] = injectionProxy;
+                        }
                     }
 
                     //Inject moduleManager, if object is ModuleManagerAware
