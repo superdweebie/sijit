@@ -97,28 +97,29 @@
         <form class="form-horizontal">
 
             <p>Toggle, no explicit default</p>
-            <div id="toggle1" data-dojo-type="Sds/Form/Toggle" data-dojo-props="label: 'State'">
+            <select id="toggle1" data-dojo-type="Sds/Form/Toggle" data-dojo-props="label: 'State'">
                 <option value="TN">Tennessee</option>
                 <option value="VA">Virginia</option>
                 <option value="WA">Washington</option>
                 <option value="FL">Florida</option>
                 <option value="CA">California</option>
-            </div>
+            </select>
 
             <p>Toggle Value: <pre id="toggle1Value"></pre></p>
 
 
-            <p>Toggle, with default and help message</p>
-            <div id="toggle2" data-dojo-type="Sds/Form/Toggle" data-dojo-props="label: 'State', helpMessages: 'Please select a state'">
+            <p>Toggle, with default and help message (selected value should be 'Virginia')</p>
+            <select id="toggle2" data-dojo-type="Sds/Form/Toggle" data-dojo-props="label: 'State', helpMessages: 'Please select a state'">
                 <option value="TN">Tennessee</option>
                 <option value="VA" selected="selected">Virginia</option>
                 <option value="WA">Washington</option>
                 <option value="FL">Florida</option>
                 <option value="CA">California</option>
-            </div>
+            </select>
 
-            <p>Toggle, programatic options</p>
-            <div id="toggle3" data-dojo-type="Sds/Form/Toggle" data-dojo-props="
+            <p>Toggle, programatic options (selected value should be 'California')</p>
+            <select id="toggle3" data-dojo-type="Sds/Form/Toggle" data-dojo-props="
+                value: 'CA',
                 options: {
                     TN: 'Tennessee',
                     VA: 'Virginia',
@@ -126,37 +127,36 @@
                     FL: 'Florida',
                     CA: 'California'
                 },
-                value: 'CA',
                 label: 'State'
             ">
-            </div>
+            </select>
 
             <p>Toggle, using data store</p>
-            <div
+            <select
                 id="toggle6"
                 data-dojo-type="Sds/Form/Toggle"
                 data-dojo-props="label: 'State'"
             >
-            </div>
+            </select>
 
             <p>Toggle, using data store with query (any name with an 'i')</p>
-            <div
+            <select
                 id="toggle7"
                 data-dojo-type="Sds/Form/Toggle"
                 data-dojo-props="label: 'State'"
             >
-            </div>
+            </select>
 
             <p>Single line toggle, using data store with query change (any name with a 'g')</p>
-            <div
+            <select
                 id="toggle8"
                 data-dojo-type="Sds/Form/Toggle"
                 data-dojo-props="label: 'State'"
             >
-            </div>
+            </select>
 
             <p>Toggle, using data from storeManager</p>
-            <div
+            <select
                 id="toggle10"
                 data-dojo-type="Sds/Form/Toggle"
                 data-dojo-props="
@@ -164,7 +164,7 @@
                     store: 'statesStore',
                     storeLabel: 'name'"
             >
-            </div>
+            </select>
         </form>
 	</body>
 </html>
