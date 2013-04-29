@@ -1,19 +1,16 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/_base/event',
     'dojo/keys',
     'dojo/dom-style',
-    'dojo/dom-class',
     'dojo/dom-geometry',
-    'dojo/dom-attr',    
     'dijit/focus',
     '../Dnd/Moveable',
     'dojox/color/_base',
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'Sds/Widget/_WidgetsInTemplateMixin',
-    'dijit/_FocusMixin',     
+    'dijit/_FocusMixin',
     'dijit/form/_FormValueMixin',
     './_LabelMixin',
     './_HelpMessagesMixin',
@@ -24,19 +21,16 @@ define([
 function (
     declare,
     lang,
-    event,
     keys,
     domStyle,
-    domClass,
     domGeom,
-    domAttr,
     focus,
     Moveable,
     color,
     Widget,
     TemplatedMixin,
     WidgetsInTemplateMixin,
-    FocusMixin,     
+    FocusMixin,
     FormValueMixin,
     LabelMixin,
     HelpMessagesMixin,
@@ -44,12 +38,12 @@ function (
 ){
     return declare(
         [
-            Widget, 
-            TemplatedMixin, 
-            WidgetsInTemplateMixin, 
-            FocusMixin, 
-            FormValueMixin, 
-            LabelMixin, 
+            Widget,
+            TemplatedMixin,
+            WidgetsInTemplateMixin,
+            FocusMixin,
+            FormValueMixin,
+            LabelMixin,
             HelpMessagesMixin
         ],
         {
@@ -57,17 +51,17 @@ function (
             value: '#CCCCCC',
 
             templateString: template,
-            
+
             hidden: true,
 
             //color: undefined,
 
             //preEditValue: undefined,
-            
+
             startup: function(){
-                
-                this.inherited(arguments);                
-                
+
+                this.inherited(arguments);
+
                 //set up watch on textbox
                 var hexWatch;
                 this.hex.on('focus', lang.hitch(this, function(){
@@ -80,16 +74,12 @@ function (
                 this.hex.on('blur', function(){
                     hexWatch.unwatch();
                 });
-                
-                this.dropdown.on('cancel', lang.hitch(this, function(){
-console.debug(2);                    
-                }));
-                
+
                 this.dropdown.watch('hidden', lang.hitch(this, function(p, o, n){
                     if (n == true){
                         return;
                     }
-                    
+
                     var huePosition = this.get('huePosition'),
                         boxPosition = this.get('boxPosition'),
                         dndHueHandle = new Moveable(this.hueHandle),
@@ -142,111 +132,11 @@ console.debug(2);
                         }
                         this.inherited('onMove', [mover, leftTop]);
                     }
-                    this.preEditValue = this.value;                
-                    this.set('value', this.value); 
-                    focus.focus(this.boxHandle);                         
+                    this.preEditValue = this.value;
+                    this.set('value', this.value);
+                    focus.focus(this.boxHandle);
                 }));
             },
-            
-//            toggle: function(e){
-//                this.set('hidden', ! this.get('hidden'));
-//
-//                if(e){
-//                    event.stop(e);
-//                }
-//                return false;                              
-//            },
-//                                  
-//            _setHiddenAttr: function(value){
-//                if (value){
-//                    domClass.remove(this.dropdownContainer, 'open');                                                               
-//                    this._set('hidden', value);   
-//                    return;
-//                }
-//                
-//                if (domClass.contains(this.dropdownToggle, "disabled") || domAttr.get(this.dropdownToggle, "disabled")) {
-//                    return;
-//                }
-//                
-//                domClass.add(this.dropdownContainer, 'open'); 
-//                this.positionPickerContainer();
-//                this._set('hidden', value);                     
-//
-//                var huePosition = this.get('huePosition'),
-//                    boxPosition = this.get('boxPosition'),
-//                    dndHueHandle = new Moveable(this.hueHandle),
-//                    dndBoxHandle = new Moveable(this.boxHandle);
-//
-//                dndHueHandle.on('moveStop', lang.hitch(this, function(mover){
-//                    //change value after hue drag
-//                    this.set(
-//                        'value',
-//                        {
-//                            h: 359 * (1 - (mover.node.offsetTop - huePosition.min) / (huePosition.h)),
-//                            s: this.color.s,
-//                            v: this.color.v
-//                        }
-//                    );
-//                }));
-//                dndHueHandle.onMove = function(mover, leftTop){
-//                    //enforce hue drag boundaries
-//                    if (leftTop.t < huePosition.min){
-//                        leftTop.t = huePosition.min;
-//                    } else if (leftTop.t > huePosition.max){
-//                        leftTop.t = huePosition.max;
-//                    }
-//                    this.inherited('onMove', [mover, {l: huePosition.left, t: leftTop.t}]);
-//                }
-//
-//                //create dnd pointer handle
-//                dndBoxHandle.on('moveStop', lang.hitch(this, function(mover){
-//                    //change value after pointer drag
-//                    this.set(
-//                        'value',
-//                        {
-//                            h: this.color.h,
-//                            s: 100 * ((mover.node.offsetLeft - boxPosition.minLeft) / boxPosition.w),
-//                            v: 100 * (1 - (mover.node.offsetTop - boxPosition.minTop) / boxPosition.h)
-//                        }
-//                    );
-//                }));
-//                dndBoxHandle.onMove = function(mover, leftTop){
-//                    //enforce pointer drag boundaries
-//                    if (leftTop.t < boxPosition.minTop){
-//                        leftTop.t = boxPosition.minTop;
-//                    } else if (leftTop.t > boxPosition.maxTop){
-//                        leftTop.t = boxPosition.maxTop;
-//                    }
-//                    if (leftTop.l < boxPosition.minLeft){
-//                        leftTop.l = boxPosition.minLeft;
-//                    } else if (leftTop.l > boxPosition.maxLeft){
-//                        leftTop.l = boxPosition.maxLeft;
-//                    }
-//                    this.inherited('onMove', [mover, leftTop]);
-//                }
-//                this.preEditValue = this.value;                
-//                this.set('value', this.value); 
-//                focus.focus(this.boxHandle);                
-//            },
-//            
-//            positionPickerContainer: function() {
-//                domStyle.set(this.pickerContainer, 'top', (this.dropdownToggle.offsetTop + this.dropdownToggle.offsetHeight) + 'px');
-//                domStyle.set(this.pickerContainer, 'left', this.dropdownToggle.offsetLeft + 'px');
-//            },
-//            
-//            onBlur: function(){
-//                this.set('hidden', true);  
-//            },
-//            
-//            onPickerKey: function(e){
-//                switch(e.keyCode){
-//                    case keys.ESCAPE:
-//                        this.set('value', this.preEditValue);
-//                    case keys.ENTER:
-//                        event.stop(e);
-//                        this.set('hidden', true);
-//                }
-//            },
 
             onHueHandleClick: function(){
                 focus.focus(this.hueHandle);
@@ -346,14 +236,14 @@ console.debug(2);
                 }
                 this.color = hsv;
                 this._set('value', value);
-                               
+
                 //update the swatch
                 domStyle.set(this.swatch, 'backgroundColor', value);
 
                 if (this.dropdown.get('hidden')){
                     return;
                 }
-                
+
                 //update hex textbox
                 if (this.hex && this.hex.get('value') != value){
                     this.hex.set('value', value);
@@ -391,8 +281,8 @@ console.debug(2);
                     (boxPosition.minTop + boxPosition.h * (1 - hsv.v / 100)) + 'px'
                 );
             },
-            
-            _setFocusNodeClassAttr: { node: "focusNode", type: "class" }            
+
+            _setFocusNodeClassAttr: { node: "focusNode", type: "class" }
         }
     );
 });
