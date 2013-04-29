@@ -5,12 +5,12 @@ define([
     'dojo/_base/window',
     'dojo/dom-style',
     'dojo/dom-class',
-    'dojo/dom-attr',    
+    'dojo/dom-attr',
     'dojo/dom-construct',
     'dojo/dom-geometry',
-    'dojo/on',    
+    'dojo/on',
     'dojo/keys',
-    'dijit/focus',    
+    'dijit/focus',
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_FocusMixin',
@@ -35,7 +35,7 @@ function (
     template
 ){
     // module:
-    //		Sds/Widget/Dropdown
+    //    	Sds/Widget/Dropdown
 
     return declare(
         [Widget, TemplatedMixin, FocusMixin],
@@ -43,15 +43,13 @@ function (
             templateString: template,
 
             hidden: true,
-            
+
             //target: undefined,
-            
-            //targetSignal: undefined,
-            
+
             //dropdown: undefined,
-            
+
             startup: function(){
-                this.inherited(arguments); 
+                this.inherited(arguments);
 
                 this.dropdown = this.containerNode.firstElementChild;
                 if ( ! this.target){
@@ -62,73 +60,69 @@ function (
                 if (!domAttr.has(this.dropdown, 'tabindex')){
                     domAttr.set(this.dropdown, 'tabindex', 1);
                 }
-                on(this.target, 'click', lang.hitch(this, function(e){
-                    if (this.oldFocus == this.dropdown && this.newFocus == this.target){
-                        delete(this.oldFocus);
-                        delete(this.newFocus);
-                        return;
-                    }
-                    this.toggle(e);
-                }))
-                                
-                focus.watch("curNode", lang.hitch(this, function(name, oldValue, newValue){
-                  this.oldFocus = oldValue;
-                  this.newFocus = newValue;
-                }));                
+                on(this.target, 'click', lang.hitch(this, this.onClick));
             },
-            
-            toggle: function(e){
-                if(e){
-                    event.stop(e);
-                } 
-                this.set('hidden', ! this.get('hidden'));               
+
+            toggle: function(){
+                this.set('hidden', ! this.get('hidden'));
             },
-                        
-            _setHiddenAttr: function(value){              
-                if (value){                  
-                    domClass.remove(this.domNode, 'open'); 
+
+            _setHiddenAttr: function(value){
+                if (value){
+                    domClass.remove(this.domNode, 'open');
                     domClass.add(this.domNode, 'hidden');
-                    focus.focus(this.target);                    
+                    focus.focus(this.target);
                     this._set('hidden', value);
                     return;
                 }
-                
+
                 if (domClass.contains(this.target, "disabled") || domAttr.get(this.target, "disabled")) {
                     return;
-                }     
-                
-                this.keySingnal = on(win.body(), 'keypress', lang.hitch(this, this.onKey));                
+                }
+
+                this.keySignal = on(win.body(), 'keypress', lang.hitch(this, this.onKey));
                 domConstruct.place(this.domNode, win.body(), 'last');
-                domClass.remove(this.domNode, 'hidden');                
+                domClass.remove(this.domNode, 'hidden');
                 domClass.add(this.domNode, 'open');
                 this.position();
                 focus.focus(this.dropdown);
-                this._set('hidden', value);                  
+                this._set('hidden', value);
             },
-            
+
             onKey: function(e){
-                event.stop(e);                
+                event.stop(e);
                 switch(e.keyCode){
                     case keys.ESCAPE:
                         this.set('hidden', true);
                         this.emit('cancel', {});
-                    case keys.ENTER:                        
+                    case keys.ENTER:
                         this.set('hidden', true);
                 }
-                this.keySingnal.remove();                
-                delete(this.oldFocus);
-                delete(this.newFocus);                
+                this.keySignal.remove();
             },
-            
+
+            onClick: function(e){
+                if(e){
+                    event.stop(e);
+                }
+                if (!this.blurDelay){
+                    this.set('hidden', false);
+                }
+            },
+
             position: function() {
                 var pos = domGeom.position(this.target);
                 domStyle.set(this.dropdown, 'top', (pos.y + pos.h) + 'px');
                 domStyle.set(this.dropdown, 'left', pos.x + 'px');
             },
-            
-            onBlur: function(){ 
-                this.set('hidden', true);                               
-            }            
+
+            onBlur: function(){
+                this.set('hidden', true);
+                this.blurDelay = true;
+                setTimeout(lang.hitch(this, function(){
+                    delete(this.blurDelay);
+                }), 200);
+            }
         }
     );
 });
