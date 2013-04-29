@@ -6,7 +6,7 @@ define([
     './_LabelMixin',
     './_HelpMessagesMixin',
     'dijit/form/_FormValueMixin',
-    './_RequiredStarMixin',       
+    './_RequiredStarMixin',
     'get!../Store/storeManager'
 ],
 function (
@@ -24,7 +24,7 @@ function (
         [LabelMixin, HelpMessagesMixin, FormValueMixin, RequiredStarMixin],
         {
             // store: dojo/store/api/Store
-            //		A store to use for getting our list of options - rather than reading them
+            //    	A store to use for getting our list of options - rather than reading them
             //		from the `<option>` html tags.
 
             // query: object
@@ -42,18 +42,18 @@ function (
 
             buildRendering: function(){
                 this.inherited(arguments);
-                              
+
                 // Add options tags if not using store
                 if (this.get('store')){
                     this._updateOptionsFromStore();
                 } else {
-                    var source = this.srcNodeRef;                    
+                    var source = this.srcNodeRef;
                     if(source && source.options){
                         array.forEach(source.options, lang.hitch(this, function(option){
                             this.addOption(option.value, option.text);
                         }));
                         if ( !this.value){
-                            this.set('value', source.value);                        
+                            this.set('value', source.value);
                         }
                     }
                 }
@@ -129,6 +129,7 @@ function (
                 for (var value in options){
                     this.addOption(value, options[value]);
                 }
+                this.set('value', this.value);
             },
 
             //_getOptionsAttr: function(){
