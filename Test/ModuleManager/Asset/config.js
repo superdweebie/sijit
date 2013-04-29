@@ -302,6 +302,28 @@ define(
                             }
                         ]
                     }
+                },
+
+                //Array injections can be spread across params, gets and proxies
+                'zooWithSpreadArray': {
+                    base: 'Sds/Test/ModuleManager/Asset/Zoo',
+                    params: {
+                        animals: [
+                            'cobra',
+                            'crocodile'
+                        ]
+                    },
+                    gets: {
+                        animals: [
+                            'lion1',
+                            'lion2'
+                        ]
+                    },
+                    proxies: {
+                        animals: [
+                            'tigerWithProxyMethods'
+                        ]
+                    }
                 }
             }
         }
