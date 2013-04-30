@@ -15,8 +15,12 @@ function(
     return declare(
         [Base],
         {
-            filters: [],
+            //filters: [],
 
+            constructor: function(){
+                this.filters = [];
+            },
+            
             filter: function(value){
                 return this._loop(value, 0);
             },
