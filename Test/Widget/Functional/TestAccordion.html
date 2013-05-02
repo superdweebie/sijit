@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <title>Testing Sds/Widget/Accordion</title>
+       	<style type="text/css">
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
+        </style>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+        <script type="text/javascript">
+            require([
+                'dojo/parser',
+                'Sds/Widget/Accordion',
+                'dojo/domReady!'                
+            ],
+            function(
+                parser
+            ) {
+                parser.parse();
+            });
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="jumbotron">
+                <h1>Testing Sds/Widget/Accordion</h1>
+            </div>
+            <div class="row">
+                <p>Accordion</p>
+                <ol data-dojo-type="Sds/Widget/Accordion">
+                    <li data-dojo-type="Sds/Widget/AccordionItem" data-dojo-props="title: 'Heading 1'">
+                        Contents of item 1
+                    </li>
+                    <li data-dojo-type="Sds/Widget/AccordionItem" data-dojo-props="title: 'Heading 2'">
+                        Contents of item 2
+                    </li>                    
+                </ol>
+            </div>   
+        </div>
+    </body>
+</html>
