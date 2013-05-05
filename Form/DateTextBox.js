@@ -1,6 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/_base/window',    
     'dojo/dom-construct',
     'dojo/dom-style',
     'dojo/on',
@@ -11,6 +12,7 @@ define([
 function (
     declare,
     lang,
+    win,
     domConstruct,
     domStyle,
     on,
@@ -35,7 +37,7 @@ function (
                 this.inherited(arguments);
                 this._datepicker = new Datepicker(this.textbox, {format: dateLocale._parseInfo().bundle['dateFormat-' + this.formatLength]});
                 //append to body to avoid relative parent containers
-                domConstruct.place(this._datepicker.picker, document.body);
+                domConstruct.place(this._datepicker.picker, win.body());
                 domStyle.set(this._datepicker.picker, {
                     zIndex:9999
                 });
