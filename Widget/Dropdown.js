@@ -8,6 +8,7 @@ define([
     'dojo/dom-attr',
     'dojo/dom-construct',
     'dojo/dom-geometry',
+    'dojo/window',
     'dojo/on',
     'dojo/keys',
     'dijit/focus',
@@ -20,12 +21,13 @@ function (
     declare,
     lang,
     event,
-    win,
+    baseWin,
     domStyle,
     domClass,
     domAttr,
     domConstruct,
     domGeom,
+    win,
     on,
     keys,
     focus,
@@ -80,8 +82,8 @@ function (
                     return;
                 }
 
-                this.keySignal = on(win.body(), 'keypress', lang.hitch(this, this.onKey));
-                domConstruct.place(this.domNode, win.body(), 'last');
+                this.keySignal = on(baseWin.body(), 'keypress', lang.hitch(this, this.onKey));
+                domConstruct.place(this.domNode, baseWin.body(), 'last');
                 domClass.remove(this.domNode, 'hidden');
                 domClass.add(this.domNode, 'open');
                 this.position();
@@ -111,9 +113,18 @@ function (
             },
 
             position: function() {
-                var pos = domGeom.position(this.target);
-                domStyle.set(this.dropdown, 'top', (pos.y + pos.h) + 'px');
-                domStyle.set(this.dropdown, 'left', pos.x + 'px');
+                var targetPos = domGeom.position(this.target),
+                    dropdownPos = domGeom.position(this.dropdown),
+                    box = win.getBox(),
+                    top;
+      
+                if (targetPos.y + targetPos.h + dropdownPos.h > box.h){
+                    top = targetPos.y - dropdownPos.h - 5; //TODO remove the -5 fudge
+                } else {
+                    top = targetPos.y + targetPos.h;
+                }
+                domStyle.set(this.dropdown, 'top', top + 'px');
+                domStyle.set(this.dropdown, 'left', targetPos.x + 'px');
             },
 
             onBlur: function(){

@@ -2,30 +2,31 @@
     "http://www.w3.org/TR/html4/strict.dtd">
 <html>
     <head>
-        <title>Testing Sds/Widget/Tooltip</title>
+        <title>Testing Sds/Widget/Dropdown</title>
        	<style type="text/css">
             @import "../../../themes/bootstrap/css/bootstrap.css";
             @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
-
-            .tooltip.inverse .tooltip-inner {
-                background: #0088CC;
-                color: #fff;
-            }
-            .tooltip.inverse .tooltip-arrow {
-                border-top-color: #0088CC;
-            }
         </style>
         <script type="text/javascript" src="../../testconfig.js"></script>
         <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
         <script type="text/javascript">
             require([
                 'dojo/parser',
+                'dojo/dom',
+                'dojo/dom-style',
+                'dojo/window',
+                'Sds/Widget/Dropdown',                
                 'dojo/domReady!'
             ],
             function(
-                parser
+                parser,
+                dom,
+                domStyle,
+                win
             ) {
                 parser.parse();
+                
+                domStyle.set(dom.byId('button2'), 'top',(win.getBox().h - 30) + 'px');
             });
         </script>
     </head>
@@ -35,8 +36,8 @@
                 <h1>Testing Sds/Widget/Dropdown</h1>
             </div>
             <div class="row">
-                <p>Dropdown</p>
-                <button class="btn btn-mini dropdown-toggle">Click me</button>
+                <p>Standard Dropdown</p>
+                <button id="button1" class="btn btn-mini dropdown-toggle">Click me</button>
                 <div data-dojo-type="Sds/Widget/Dropdown">
                     <ul>
                         <li><a href="1">Item 1</a></li>
@@ -45,5 +46,14 @@
                 </div>
             </div>   
         </div>
+        <button id="button2" class="btn btn-mini dropdown-toggle" style="position: absolute">dropdown at bottom of window</button>
+        <div data-dojo-type="Sds/Widget/Dropdown">
+            <ul>
+                <li><a href="1">Item 1</a></li>
+                <li><a href="2">Item 2</a></li>
+                <li><a href="3">Item 3</a></li>
+                <li><a href="4">Item 4</a></li>                
+            </ul>
+        </div>        
     </body>
 </html>
