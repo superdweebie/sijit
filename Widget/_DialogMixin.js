@@ -8,7 +8,7 @@ define([
     'dojo/dom-prop',
     'dojo/dom-class',
     'dojo/dom-construct',
-    '../utils',
+    '../string',
     '../Form/_FormMixin',
     'dijit/_OnDijitClickMixin',
     'bootstrap/Modal'
@@ -23,7 +23,7 @@ function (
     domProp,
     domClass,
     domConstruct,
-    utils,
+    string,
     FormMixin,
     OnDijitClickMixin,
     Modal
@@ -91,7 +91,7 @@ function (
             },
 
             _addClickHandler: function(name){
-                var functionName = 'on' + utils.ucFirst(name) + 'Click';
+                var functionName = 'on' + string.ucFirst(name) + 'Click';
                 if (! this[functionName]){
                     this[functionName] = function(){
                         this.set('button', name);
@@ -112,7 +112,7 @@ function (
                             ((evt.charCode || evt.keyCode) == key)
                         ){
                             event.stop(evt);
-                            this['on' + utils.ucFirst(button.name) + 'Click']();
+                            this['on' + string.ucFirst(button.name) + 'Click']();
                         }
                     }));
                 })))

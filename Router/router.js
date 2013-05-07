@@ -6,9 +6,8 @@ define([
     'dojo/string',
     'dojo/i18n!../nls/routerMessages',
     'dojo/query',
-    '../utils',
-    '../ExceptionModule/throwEx',
-    '../Router/Exception/RouteNotFoundException',
+    '../is',
+    './Exception/RouteNotFound',
     'dojox/NodeList/delegate'
 ],
 function (
@@ -19,9 +18,8 @@ function (
     string,
     routerMessages,
     query,
-    utils,
-    throwEx,
-    RouteNotFoundException
+    is,
+    RouteNotFound
 ){
     return {
 
@@ -29,9 +27,11 @@ function (
         // url when the router is started
         //baseUrl: undefined,
 
+        // dojo's base url must be modified sometimes so that AMD modules can still
+        // be found and loaded
         //dojoBaseUrl: undefined,
 
-        dojoRelativeBaseUrl: false,
+        //dojoRelativeBaseUrl: false,
 
         // routes: object
         //    This should be an object defineing the routes to controllers. eg:
@@ -55,6 +55,7 @@ function (
         //    the configured controller instances will be pulled from.
         //controllerManager: undefined,
 
+        //the currently active route
         //active: undefined,
 
         resolve: function(route){
@@ -66,61 +67,72 @@ function (
 
             var resultDeferred = new Deferred,
                 pieces = route.split('/'),
-                config = this.routes[pieces[0]];
+                config = this.routes[pieces[0]],
+                method,
+                args = [],
+                i;
 
             if (config){
-                var method;
+                //identify the correct method
                 if (pieces[1]){
                     if (config.methods[pieces[1]]){
                         method = config.methods[pieces[1]];
                     } else {
-                        resultDeferred.reject(throwEx(new RouteNotFoundException(string.substitute(
+                        throw new RouteNotFound(string.substitute(
                             routerMessages.methodNotConfigured,
                             {method: pieces[1], controller: config.controller}
-                        ))));
-                        return resultDeferred;
+                        ));
                     }
                 } else if (config.defaultMethod) {
                     method = config.defaultMethod;
                 } else {
-                    resultDeferred.reject(throwEx(new RouteNotFoundException(string.substitute(
+                    throw new RouteNotFound(string.substitute(
                         routerMessages.noDefaultMethod,
                         {controller: config.controller}
-                    ))));
+                    ));
+                }
+                if (typeof(method) == 'string'){
+                    method = {enter: method};
+                    if (config.defaultMethod.hasOwnProperty('exit')){
+                        method.exit = config.defaultMethod.exit;
+                    }
+                } else if (typeof(method) != 'object') {
+                    // method is an integer. history.go should be used, rather than calling a controller.
+                    resultDeferred.resolve({
+                        route: method
+                    });
                     return resultDeferred;
                 }
 
-                var args = [];
-                for (var i = 2; i < pieces.length; i++){
+                for (i = 2; i < pieces.length; i++){
                     args.push(pieces[i]);
                 }
+
+                //load the correct controller
                 when(this.controllerManager.get(config.controller), function(controller){
-                    if (typeof(method) == 'string'){
-                        method = {enter: method}
-                    }
+
                     if (controller[method.enter]){
                         resultDeferred.resolve(lang.mixin({route: route, controller: controller, args: args}, method));
                     } else {
-                        resultDeferred.reject(throwEx(new RouteNotFoundException(string.substitute(
+                        throw new RouteNotFound(string.substitute(
                             routerMessages.noMethod,
                             {method: method, controller: config.controller}
-                        ))));
+                        ));
                     }
                 });
                 return resultDeferred;
             }
 
-            resultDeferred.reject(throwEx(new RouteNotFoundException(string.substitute(
+            throw new RouteNotFound(string.substitute(
                 routerMessages.noConfig,
                 {controller: pieces[0]}
-            ))));
-            return resultDeferred;
+            ));
         },
 
         startup: function(){
             if ( ! this.baseUrl){
                 var base = window.location.href.split('/');
-                this.routes[base.pop()] = {controller: 'Sds/Router/DoNothingController', defaultMethod: 'doNothing'};
+                base.pop();
                 this.baseUrl = base.join('/');
             }
 
@@ -150,8 +162,8 @@ function (
             this.go(window.location.href);
         },
 
-        go: function(route){
-            // route may be a string, which will be routed, or a number which will history.go
+        go: function(route, surpressPushState){
+            // route may be a string, which will be routed, or a number which move to a relative point in history
 
             if (typeof(route) != 'string'){
                 history.go(route);
@@ -165,8 +177,16 @@ function (
 
             this.resolve(route).then(
                 lang.hitch(this, function(result){
+
+                    if (typeof(result.route) != 'string'){
+                        history.go(result.route);
+                        return;
+                    }
+
                     //Route resolved correctly - pushState and call the controller
-                    history.pushState({route: result.route}, '', this.baseUrl + '/' + result.route);
+                    if ( ! surpressPushState){
+                        history.pushState({route: result.route}, '', this.baseUrl + '/' + result.route);
+                    }
 
                     //If dojo base is a relative path, it may need to be modified
                     if (this.dojoRelativeBaseUrl){
@@ -180,21 +200,12 @@ function (
                         require.baseUrl = prepend + this.dojoBaseUrl;
                     }
 
-                    if (this.active && this.active.leave){
-                        this.active.controller[this.active.leave]();
+                    if (this.active && this.active.exit){
+                        this.active.controller[this.active.exit]();
                     }
 
                     this.active = result;
-                    var enter = result.controller[result.enter].apply(result.controller, result.args);
-                    if (enter && utils.isDeferred(enter)){
-                        //If the enter method returns a deferred, then route
-                        //when the deferred resolves
-                        enter.then(lang.hitch(this, function(){
-                            if (result.onEnterResolveRoute != undefined){
-                                this.go(result.onEnterResolveRoute);
-                            }
-                        }));
-                    }
+                    result.controller[result.enter].apply(result.controller, result.args);
                 }),
                 function(err){
                     //Route didn't resolve, just go to the url

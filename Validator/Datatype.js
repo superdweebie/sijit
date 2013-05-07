@@ -3,7 +3,7 @@ define([
     'dojo/_base/lang',
     'dojo/string',
     'dojo/i18n!../nls/validatorMessages',
-    '../utils',
+    '../is',
     './Base'
 ],
 function(
@@ -11,7 +11,7 @@ function(
     lang,
     string,
     validatorMessages,
-    utils,
+    is,
     Base
 ){
 
@@ -48,12 +48,12 @@ function(
                     case datatypes.BOOLEAN:
                         break;
                     case datatypes.INT:
-                        if ( ! utils.isInt(value)){
+                        if ( ! is.isInt(value)){
                             result = false;
                         }
                         break;
                     case datatypes.FLOAT:
-                        if ( ! utils.isFloat(value)){
+                        if ( ! is.isFloat(value)){
                             result = false;
                         }
                         break;

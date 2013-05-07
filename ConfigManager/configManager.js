@@ -3,14 +3,18 @@ define ([
         'dojo/_base/array',
         'dojo/Deferred',
         'dojo/DeferredList',
-        '../utils'
+        '../lang',
+        '../is',
+        './Exception/ConfigNotStatic'
     ],
     function (
         dojoConfig,
         array,
         Deferred,
         DeferredList,
-        utils
+        lang,
+        is,
+        ConfigNotStatic
     ) {
         // module:
         //		Sds/ConfigManager/configManager
@@ -59,7 +63,7 @@ define ([
             }
 
             mergeDone.then(function(mergedConfig){
-                target = utils.mixinDeep(target, mergedConfig);
+                target = lang.mixinDeep(target, mergedConfig);
                 targetMerged.resolve(target);
             });
 
@@ -95,7 +99,11 @@ define ([
             var mergedConfig = {};
 
             for (var index in unmergedConfigs) {
-                mergedConfig = utils.mixinDeep(mergedConfig, unmergedConfigs[index][1]);
+                if (is.isStatic(unmergedConfigs[index][1])){
+                    mergedConfig = lang.mixinDeep(mergedConfig, unmergedConfigs[index][1]);
+                } else {
+                    throw new ConfigNotStatic;
+                }
             }
             return mergedConfig;
         }

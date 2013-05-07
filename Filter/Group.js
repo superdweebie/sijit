@@ -2,25 +2,21 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/Deferred',
-    '../utils',
+    '../is',
     './Base'
 ],
 function(
     declare,
     lang,
     Deferred,
-    utils,
+    is,
     Base
 ){
     return declare(
         [Base],
         {
-            //filters: [],
+            filters: [],
 
-            constructor: function(){
-                this.filters = [];
-            },
-            
             filter: function(value){
                 return this._loop(value, 0);
             },
@@ -42,7 +38,7 @@ function(
                 var filter = this.filters[index],
                     filteredValue = this._getFilteredValue(filter, value);
 
-                if (utils.isDeferred(filteredValue)){
+                if (is.isDeferred(filteredValue)){
 
                     var resultDeferred = new Deferred;
 

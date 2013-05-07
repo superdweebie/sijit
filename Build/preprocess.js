@@ -4,7 +4,7 @@ define([
     'dojo/json',
     'util/build/fs',
     'Sds/ConfigManager/configManager',
-    'Sds/utils'
+    'Sds/lang'
 ],
 function(
     require,
@@ -12,7 +12,7 @@ function(
     json,
     fs,
     configManager,
-    utils
+    lang
 ){
 
 	// host-dependent environment initialization
@@ -112,7 +112,7 @@ function(
         var profile = argv.args.profiles[0];
 
         // inject extra build plugin resolvers
-        profile = utils.mixinDeep(profile, sdsplugins);
+        profile = lang.mixinDeep(profile, sdsplugins);
 
         // add amd aliases
         if ( ! profile.defaultConfig){
@@ -172,14 +172,14 @@ function(
 
         //add test layer for maxi builds
         if ( ! profile.mini){
-            profile.layers = utils.mixinDeep(profile.layers, testLayer);
+            profile.layers = lang.mixinDeep(profile.layers, testLayer);
         }
 
         // merge configs into the defaultConfig
         if (profile.defaultConfig.mergeConfigs){
             var mergedConfig = {};
             configManager.merge(profile.defaultConfig.mergeConfigs, mergedConfig).then(function(mergedConfig){
-                profile.defaultConfig = utils.mixinDeep(profile.defaultConfig, mergedConfig);
+                profile.defaultConfig = lang.mixinDeep(profile.defaultConfig, mergedConfig);
                 delete(profile.defaultConfig.mergeConfigs);
                 fs.writeFileSync(filename, 'var profile = ' + json.stringify(profile, null, '    '));
                 console.log('Preprocessed build profile written to: ' + filename);

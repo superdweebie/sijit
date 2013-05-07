@@ -9,7 +9,7 @@ function(
     BaseException
 ){
 	return create(
-        "RouteNotFoundException",
+        "ConfigNotStatic",
         function(message, options){
 
             this.display = false;

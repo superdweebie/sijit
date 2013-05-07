@@ -2,14 +2,14 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/json',
-    '../utils',
+    '../is',
     'dojo/Stateful'
 ],
 function(
     declare,
     lang,
     json,
-    utils,
+    is,
     Stateful
 ){
     // module:
@@ -89,7 +89,7 @@ function(
             _addToCache: function(valueString, resultObject){
 
                 var cacheResult = lang.hitch(this, function(resultObject){
-                    if (utils.isDeferred(resultObject.result)){
+                    if (is.isDeferred(resultObject.result)){
                         resultObject.result.then(function(resultObject){
                             cacheResult(resultObject);
                         });
