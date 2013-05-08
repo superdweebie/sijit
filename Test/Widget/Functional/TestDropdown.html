@@ -14,18 +14,29 @@
                 'dojo/parser',
                 'dojo/dom',
                 'dojo/dom-style',
+                'dojo/query',
                 'dojo/window',
-                'Sds/Widget/Dropdown',                
+                'dijit/registry',
+                'Sds/Widget/Dropdown',
+                'Sds/Form/Textbox',
                 'dojo/domReady!'
             ],
             function(
                 parser,
                 dom,
                 domStyle,
-                win
+                query,
+                win,
+                registry
             ) {
                 parser.parse();
-                
+
+                query('a').on('click', function(e){
+                    e.preventDefault();
+                    var dropdown = registry.getEnclosingWidget(e.target);
+                    dropdown.set('hidden', true);
+                });
+
                 domStyle.set(dom.byId('button2'), 'top',(win.getBox().h - 30) + 'px');
             });
         </script>
@@ -44,7 +55,7 @@
                         <li><a href="2">Item 2</a></li>
                     </ul>
                 </div>
-            </div>   
+            </div>
         </div>
         <button id="button2" class="btn btn-mini dropdown-toggle" style="position: absolute">dropdown at bottom of window</button>
         <div data-dojo-type="Sds/Widget/Dropdown">
@@ -52,8 +63,17 @@
                 <li><a href="1">Item 1</a></li>
                 <li><a href="2">Item 2</a></li>
                 <li><a href="3">Item 3</a></li>
-                <li><a href="4">Item 4</a></li>                
+                <li><a href="4">Item 4</a></li>
             </ul>
-        </div>        
+        </div>
+        <div class="well">
+            <input
+                data-dojo-type="Sds/Form/Textbox"
+                data-dojo-props="
+                    label: 'test typing',
+                    helpMessages: 'dropdown key stroke listener was blocking key events. This is to test that the bug is gone.'
+                "
+            />
+        </div>
     </body>
 </html>
