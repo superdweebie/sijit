@@ -1,23 +1,14 @@
 define([
-    'dojo/_base/lang',
     'dojo/errors/create',
-    '../../ExceptionModule/Base'
+    '../../Base'
 ],
-function(
-    lang,
-    create,
-    BaseException
-){
-	return create(
-        "InvalidArgumentException",
-        function(message, options){
+function(create, Base){
 
-            this.display = true;
+	// module:
+	//		Sds/IdentityClient/Exception/InvalidArgument
 
-            this.log = false;
-
-            lang.mixin(this, options);
-        },
-        BaseException
-    )
+	return create("InvalidArgument", null, Base, {
+		message: "Invalid Argument",
+        consoleLog: true
+	});
 });

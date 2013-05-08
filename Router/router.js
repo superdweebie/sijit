@@ -6,7 +6,6 @@ define([
     'dojo/string',
     'dojo/i18n!../nls/routerMessages',
     'dojo/query',
-    '../is',
     './Exception/RouteNotFound',
     'dojox/NodeList/delegate'
 ],
@@ -18,7 +17,6 @@ function (
     string,
     routerMessages,
     query,
-    is,
     RouteNotFound
 ){
     return {
@@ -57,6 +55,39 @@ function (
 
         //the currently active route
         //active: undefined,
+
+        startup: function(){
+            if ( ! this.baseUrl){
+                var base = window.location.href.split('/');
+                base.pop();
+                this.baseUrl = base.join('/');
+            }
+
+            this.dojoBaseUrl = require.baseUrl;
+            if (this.dojoBaseUrl.indexOf('http://') != 0){
+                this.dojoRelativeBaseUrl = true;
+            }
+
+            on(window, 'popstate', lang.hitch(this, function(e){
+                if (e.state){
+                    this.go(e.state.route, true);
+                } else {
+                    this.go(window.location.href);
+                }
+            }));
+
+            // Catch click events on anchor tags
+            query('body').delegate('a', 'onclick', lang.hitch(this, function(e){
+                var route = e.target.attributes['href'].nodeValue;
+                if (route){
+                    e.preventDefault();
+                    this.go(route);
+                }
+            }));
+
+            // Go to inital route
+            this.go(window.location.href);
+        },
 
         resolve: function(route){
 
@@ -127,39 +158,6 @@ function (
                 routerMessages.noConfig,
                 {controller: pieces[0]}
             ));
-        },
-
-        startup: function(){
-            if ( ! this.baseUrl){
-                var base = window.location.href.split('/');
-                base.pop();
-                this.baseUrl = base.join('/');
-            }
-
-            this.dojoBaseUrl = require.baseUrl;
-            if (this.dojoBaseUrl.indexOf('http://') != 0){
-                this.dojoRelativeBaseUrl = true;
-            }
-
-            on(window, 'popstate', lang.hitch(this, function(e){
-                if (e.state){
-                    this.go(e.state.route, true);
-                } else {
-                    this.go(window.location.href);
-                }
-            }));
-
-            // Catch click events on anchor tags
-            query('body').delegate('a', 'onclick', lang.hitch(this, function(e){
-                var route = e.target.attributes['href'].nodeValue;
-                if (route){
-                    e.preventDefault();
-                    this.go(route);
-                }
-            }));
-
-            // Go to inital route
-            this.go(window.location.href);
         },
 
         go: function(route, surpressPushState){

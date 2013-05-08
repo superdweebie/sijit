@@ -20,14 +20,7 @@ var profile = {
         async: true,
         debug: false,
         mergeConfigs: [
-            'Sds/Validator/config',
-            'Sds/Filter/config',
-            'Sds/ExceptionModule/config',
-            'Sds/Router/config',
-            'Sds/Store/config',
-            'Sds/Mongo/config',
-            'Sds/IdentityModule/config',
-            'Sds/AuthenticationModule/config'
+            'Sds/config'
         ]
     },
     timestampLayers: true,

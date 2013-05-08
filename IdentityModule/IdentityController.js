@@ -10,8 +10,7 @@ define([
     './Exception/InvalidArgument',
     'proxy!./View/ForgotCredentialCreateToken',
     'proxy!./View/ForgotCredentialUpdateToken',
-    'proxy!./View/CreateIdentity',
-    '../ExceptionModule/throwEx'
+    'proxy!./View/CreateIdentity'
 ],
 function(
     declare,
@@ -25,8 +24,7 @@ function(
     InvalidArgumentException,
     forgotCredentialCreateTokenView,
     forgotCredentialUpdateTokenView,
-    createIdentityView,
-    throwEx
+    createIdentityView
 ){
     return declare
     (
@@ -186,14 +184,14 @@ function(
 
             _handleException: function(exception, deferred){
 
-                throwEx(exception).then(lang.hitch(this, function(standardizedException){
-                    // Update status
-                    this.set('status', new Status(exception.message, Status.icon.ERROR, 5000));
+                throw exception;
+                
+                // Update status
+                this.set('status', new Status(exception.message, Status.icon.ERROR, 5000));
 
-                    if (deferred && (! deferred.isFulfilled())){
-                        deferred.reject(standardizedException);
-                    }
-                }));
+                if (deferred && (! deferred.isFulfilled())){
+                    deferred.reject(exception);
+                }
             }
         }
     );

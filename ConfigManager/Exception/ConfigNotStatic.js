@@ -1,23 +1,14 @@
 define([
-    'dojo/_base/lang',
     'dojo/errors/create',
-    '../../ExceptionModule/Base'
+    '../../Exception/Base'
 ],
-function(
-    lang,
-    create,
-    BaseException
-){
-	return create(
-        "ConfigNotStatic",
-        function(message, options){
+function(create, Base){
 
-            this.display = false;
+	// module:
+	//		Sds/ConfigManager/Exception/ConfigNotStatic
 
-            this.log = true;
-
-            lang.mixin(this, options);
-        },
-        BaseException
-    )
+	return create("ConfigNotStatic", null, Base, {
+		message: "Merged config properties cannot be objects",
+        consoleLog: true
+	});
 });

@@ -3,30 +3,20 @@ define(
     function(){
         return {
             moduleManager: {
-                'Sds/ExceptionModule/ExceptionController': {
-                    proxyMethods: [
-                        'handle',
-                        'standardize',
-                        'get',
-                        'set',
-                        'watch'
-                    ],
-                    params: {
-                        serverUrl: 'http://localhost/ZendSkeletonApplication/exception/log',
-                        registeredExceptions: {}
+                'Sds/Exception/Handler': {
+                    gets: {
+                        consoleLogRenderer: 'Sds/Exception/ConsoleLogRenderer'
                     },
                     proxies: {
-                        exceptionView: {
-                            base: 'Sds/ExceptionModule/View',
+                        userNotifyRenderer: {
+                            base: 'Sds/Exception/UserNotifyRenderer',
                             proxyMethods: [
-                                'activate',
-                                'reset',
-                                'get',
-                                'set',
-                                'watch'
+                                'render'
                             ]
-                        }
-                    }
+                        },
+                        serverLogRenderer: 'Sds/ExceptionClient/ServerLogRenderer'
+                    },
+                    proxyMethods: ['set', 'handle']
                 }
             }
         }

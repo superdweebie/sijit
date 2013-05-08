@@ -48,13 +48,6 @@ function(){
                         }
                     }
                 }
-            },
-            'Sds/ExceptionModule/ExceptionController': {
-                params: {
-                    registeredExceptions: {
-                        'Sds/AuthenticationModule/Exception/LoginFailedException': 'Sds\\AuthenticationModule\\Exception\\LoginFailedException'
-                    }
-                }
             }
         }
     }

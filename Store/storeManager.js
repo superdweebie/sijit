@@ -8,7 +8,7 @@ define([], function(){
 
     return {
 
-        stores: undefined,
+        //stores: undefined,
 
         get: function(ref){
             // Will return an object based on the ref given
