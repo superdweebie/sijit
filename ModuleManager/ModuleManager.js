@@ -4,9 +4,9 @@ define([
         'dojo/Deferred',
         'dojo/DeferredList',
         'dojo/when',
-        'dojo/_base/lang',
+        '../lang',
         './Proxy',
-        '../utils'
+        '../is'
     ],
     function (
         declare,
@@ -16,10 +16,10 @@ define([
         when,
         lang,
         Proxy,
-        utils
+        is
     ) {
         // module:
-        //        	Sds/ModuleManager/ModuleManager
+        //		Sds/ModuleManager/ModuleManager
 
         return declare
         (
@@ -276,7 +276,7 @@ define([
 
                     //check to see if the object alredy exists in cache
                     var object = this._getCached(identifier);
-                    if (object && ! utils.isDeferred(object)){
+                    if (object && ! is.isDeferred(object)){
                         return object;
                     }
 
@@ -359,11 +359,14 @@ define([
                     lang.mixin(object, config.params);
 
                     //Inject gets
-                    var injectGet = lang.hitch(this, function(getIdentifier, attrGet){
+                    var i,
+                    injectGet = lang.hitch(this, function(getIdentifier, attrGet){
                         var getDeferred = new Deferred;
                         when(this._get(getIdentifier), function(injectionObject){
                             if (lang.isArray(injectionObject) && lang.isArray(object[attrGet])){
-                                object[attrGet].push.apply(object[attrGet], injectionObject);
+                                for (i = 0; i < injectionObject.length; i++){
+                                    object[attrGet].push(injectionObject[i]);
+                                }
                             } else {
                                 object[attrGet] = injectionObject;
                             }
@@ -381,7 +384,9 @@ define([
                     for (attr in config.proxies){
                         injectionProxy = this._proxy(config.proxies[attr]);
                         if (lang.isArray(injectionProxy) && lang.isArray(object[attr])){
-                            object[attr].push.apply(object[attr], injectionProxy);
+                            for (i = 0; i < injectionProxy.length; i++){
+                                object[attr].push(injectionProxy[i]);
+                            }
                         } else {
                             object[attr] = injectionProxy;
                         }
@@ -419,7 +424,7 @@ define([
                     // summary:
                     //     Merge a config object with the existing config object.
 
-                    this._config = utils.mixinDeep(this._config, merge);
+                    this._config = lang.mixinDeep(this._config, merge);
                 },
 
                 getConfig: function(){

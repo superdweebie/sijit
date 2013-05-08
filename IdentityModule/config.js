@@ -65,13 +65,6 @@ function(){
                         }
                     }
                 }
-            },
-            'Sds/ExceptionModule/ExceptionController': {
-                params: {
-                    registeredExceptions: {
-                        'Sds/IdentityModule/Exception/InvalidArgumentException': 'Sds\\IdentityModule\\Exception\\InvalidArgumentException'
-                    }
-                }
             }
         }
     }

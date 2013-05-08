@@ -1,18 +1,16 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/_base/array',
+    '../array',
     'dojo/dom-class',
-    'dojo/dom-construct',
-    '../utils'
+    'dojo/dom-construct'
 ],
 function (
     declare,
     lang,
     array,
     domClass,
-    domConstruct,
-    utils
+    domConstruct
 ){
     return declare(
         [],
@@ -33,10 +31,10 @@ function (
             //messagesNode: undefined,
 
             maxMessageId: 0,
-                       
+
             updateMessages: function(messagesToAdd, messageObjectsToRemove){
 
-                this.messageObjects = utils.arraySubtract(this.messageObjects, messageObjectsToRemove);
+                this.messageObjects = array.subtract(this.messageObjects, messageObjectsToRemove);
 
                 if ( typeof messagesToAdd == 'string'){
                     messagesToAdd = [messagesToAdd];
@@ -69,11 +67,11 @@ function (
                         return {id: this.maxMessageId, message: message};
                     }));
 
-                    this.messageObjects = messageObjects.concat(this.messageObjects);                    
+                    this.messageObjects = messageObjects.concat(this.messageObjects);
                 }
 
                 this._renderMessages();
-                this.emit('messages-updated', {objects: this.messageObjects, node: this.messagesNode});                
+                this.emit('messages-updated', {objects: this.messageObjects, node: this.messagesNode});
                 return messageObjects;
             },
 

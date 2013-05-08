@@ -1,11 +1,11 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/_base/array',
+    '../array',
     'dojo/when',
     'dojo/Deferred',
     'dojo/dom-class',
-    '../utils',
+    '../is',
     '../Validator/Base',
     'get!ValidatorFactory',
     'dijit/_FocusMixin'
@@ -17,7 +17,7 @@ function (
     when,
     Deferred,
     domClass,
-    utils,
+    is,
     ValidatorBase,
     ValidatorFactory,
     FocusMixin
@@ -56,7 +56,7 @@ function (
 
             //Set to true to stop all validation. Set to falsey to allow validation
             //suppressValidation: undefined,
-            
+
             delayTimeout: 350,
 
             _setValueTimestamp: 0,
@@ -81,13 +81,13 @@ function (
             _setSuppressValidationAttr: function(value){
                 if (this.suppressValidation && !value){
                     var doValidation = true;
-                }                
+                }
                 this._set('suppressValidation', value);
                 if (doValidation){
                     this._validateNow();
                 }
             },
-            
+
             _setPostActivityAttr: function(value){
 
                 if (this.postActivity != value){
@@ -167,7 +167,7 @@ function (
                     array.forEach(apply, function(item){
                         domClass.add(styleNode, item);
                     }, this);
-                    array.forEach(utils.arraySubtract(this._appliedStyle, apply), function(item){
+                    array.forEach(array.subtract(this._appliedStyle, apply), function(item){
                         domClass.remove(styleNode, item);
                     }, this);
                     this._appliedStyle = apply;
@@ -210,7 +210,7 @@ function (
                 if (this.suppressValidation){
                     return;
                 }
-                
+
                 var processResult = lang.hitch(this, function(resultObject, timestamp){
 
                     if (this._setValueTimestamp > timestamp){
@@ -228,7 +228,7 @@ function (
                         case (result === false):
                             state = 'Error';
                             break;
-                        case utils.isDeferred(result):
+                        case is.isDeferred(result):
                             result.then(function(resultObject){
                                 processResult(resultObject, timestamp);
                             });

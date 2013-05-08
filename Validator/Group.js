@@ -2,25 +2,21 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/Deferred',
-    '../utils',
+    '../is',
     './Base'
 ],
 function(
     declare,
     lang,
     Deferred,
-    utils,
+    is,
     Base
 ){
     return declare(
         [Base],
         {
-            //validators: [],
+            validators: [],
 
-            constructor: function(){
-                this.validators = [];
-            },
-            
             hasInstanceOf: function(Constructor){
                 for (var item in this.validators){
                     if (this.validators[item].isInstanceOf(Constructor)){
@@ -28,7 +24,7 @@ function(
                     }
                 }
             },
-            
+
             _isValid: function(value){
                 return this._concatResultObjectList(this._loop(value, 0, []));
             },
@@ -54,7 +50,7 @@ function(
 
                     var resultObject = this._getResultObject(validator, value);
 
-                    if (utils.isDeferred(resultObject.result)){
+                    if (is.isDeferred(resultObject.result)){
 
                         var resultDeferred = new Deferred;
                         resultObjectList[index] = {result: resultDeferred, messages: resultObject.messages};
@@ -115,7 +111,7 @@ function(
                         case resultObjectList[index].result == false:
                             result = false;
                             break;
-                        case utils.isDeferred(resultObjectList[index].result):
+                        case is.isDeferred(resultObjectList[index].result):
                             result = resultObjectList[index].result;
                             return result;
                     }

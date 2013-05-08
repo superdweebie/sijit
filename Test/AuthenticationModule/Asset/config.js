@@ -18,13 +18,6 @@ define([], function(){
                     'watch'
                 ]
             },
-            'Sds/Test/AuthenticationModule/Asset/MockIdentityController': {
-                base: {},
-                params: {
-                    register: function(){console.debug('register')},
-                    forgotCredential: function(){console.debug('forgotCredential')}
-                }
-            },
             'Sds/Store/storeManager': {
                 proxies: {
                     stores: [

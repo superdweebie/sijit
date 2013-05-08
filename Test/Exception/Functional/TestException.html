@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/Exception</title>
+		<style type="text/css">
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
+		</style>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			require([
+                'dojo/dom',
+                'dojo/on',
+                'Sds/Test/Exception/Asset/TestException',
+                'dojo/dom-prop',
+                'dojo/domReady!',
+                'Sds/Exception/startedHandler!'
+            ],
+            function(
+                dom,
+                on,
+                TestException,
+                domProp
+            ){
+                domProp.set(dom.byId('applicationExceptionButton'), 'disabled', false);
+                domProp.set(dom.byId('notifyUserExceptionButton'), 'disabled', false);
+                domProp.set(dom.byId('consoleLogExceptionButton'), 'disabled', false);
+                domProp.set(dom.byId('serverLogExceptionButton'), 'disabled', false);
+
+                on(dom.byId('applicationExceptionButton'), 'click', function(){
+                    throw new Error();
+                });
+
+                on(dom.byId('notifyUserExceptionButton'), 'click', function(){
+                    throw new TestException('test exception', {notifyUser: true, consoleLog: false, serverLog: false});
+                });
+
+                on(dom.byId('consoleLogExceptionButton'), 'click', function(){
+                    throw new TestException('test exception', {notifyUser: false, consoleLog: true, serverLog: false});
+                });
+
+                on(dom.byId('serverLogExceptionButton'), 'click', function(){
+                    throw new TestException('test exception', {notifyUser: false, consoleLog: false, serverLog: true});
+                });
+            })
+		</script>
+	</head>
+	<body>
+        <h1>Functional Testing Sds/Exception</h1>
+        <p><button class="btn btn-primary" disabled="true" id="applicationExceptionButton">Application Exception</button></p>
+        <p><button class="btn btn-primary" disabled="true" id="notifyUserExceptionButton">Notify User Exception</button></p>
+        <p><button class="btn btn-primary" disabled="true" id="consoleLogExceptionButton">Console Log Exception</button></p>
+        <p><button class="btn btn-primary" disabled="true" id="serverLogExceptionButton">Server Log Exception</button></p>
+	</body>
+</html>

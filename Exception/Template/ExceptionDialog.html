@@ -1,0 +1,21 @@
+<div class="modal-scroll hide fade">
+    <div class="modal">
+        <div class="modal-header">
+            <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+                data-dojo-attach-event="ondijitclick: onOkClick"
+            >
+                &times;
+            </button>
+            <h3 data-dojo-attach-point="titleNode"></h3>
+        </div>
+        <div data-dojo-attach-point="messageNode" class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" data-dojo-attach-point="okNode" data-dojo-attach-event="ondijitclick: onOkClick">Ok</button>
+        </div>
+    </div>
+</div>

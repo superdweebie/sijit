@@ -22,18 +22,24 @@
 	<body>
         <h1>Functional Testing Sds/Router/router</h1>
         <br />
-        <a href="test/clear" alt="asdf">test/clear</a>
-        <a href="test">test</a>
-        <a href="test/test1">test/test1</a>
-        <a href="test/test2/1/10">test/test2/1/10</a>
-        <a href="test/altTest2/4/15">test/altTest2/4/15</a>
-        <a href="badController/function">badController/function</a>
-        <a href="test/badFunction">test/badFunction</a>
+        Go to: <a href="test/clear" alt="asdf">test/clear</a> (Should clear both result boxes)</br>
+        Go to: <a href="test">test</a> (should call default method which is test1)</br>
+        Go to: <a href="test/test1">test/test1</a> (should call test1)</br>
+        Go to: <a href="test/test2/1/10">test/test2/1/10</a> (should call test2 with arguments a = 1, b = 10)</br>
+        Go to: <a href="test/altTest2/4/15">test/altTest2/4/15</a> (should call test2 with arguments a = 4, b = 15)</br>
+        Go to: <a href="badController/function">badController/function</a> (should log a RouteNotFound error in the console)</br>
+        Go to: <a href="test/badFunction">test/badFunction</a> (should log a RouteNotFound error in the console)</br>
+        Go: <a href="back">back</a> (should go back one in history)</br>
+        Go: <a href="forward">forward</a> (should go forward one in history)</br>
 
-        <h3>Test1Action result:</h3>
-        <pre><p id="test1Result"></p></pre>
+        <h3>Test1Action:</h3>
+        <pre><p id="test1"></p></pre>
 
-        <h3>Test2Action result:</h3>
-        <pre><p id="test2Result"></p></pre>
+        <h3>Test2Action:</h3>
+        <pre><p id="test2"></p></pre>
+
+        <h3>Exit:</h3>
+        <pre><p id="exit"></p></pre>
+
 	</body>
 </html>

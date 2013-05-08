@@ -1,7 +1,7 @@
 define([
     'dojo/_base/lang',
     'dojo/errors/create',
-    '../../ExceptionModule/Base'
+    '../../Exception/Base'
 ],
 function(
     lang,
@@ -9,13 +9,8 @@ function(
     BaseException
 ){
 	return create(
-        "MongoConnectionException",
+        "RouteNotFoundException",
         function(message, options){
-
-            this.display = false;
-
-            this.log = true;
-
             lang.mixin(this, options);
         },
         BaseException

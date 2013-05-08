@@ -5,8 +5,7 @@ define([
     'dojo/Deferred',
     '../Status',
     'dojo/Stateful',
-    'get!../Store/storeManager',
-    '../ExceptionModule/throwEx'
+    'get!../Store/storeManager'
 ],
 function (
     declare,
@@ -15,8 +14,7 @@ function (
     Deferred,
     Status,
     Stateful,
-    storeManager,
-    throwEx
+    storeManager
 ){
     return declare(
         [Stateful],
@@ -175,33 +173,24 @@ function (
             },
 
             _loginException: function(exception){
-                throwEx(exception).then(lang.hitch(this, function(standardizedException){
-                    this._handleException(standardizedException);
-
-                    if (this._loginDeferred && (! this._loginDeferred.isFulfilled())){
-                        this._loginDeferred.reject(standardizedException);
-                    }
-                }));
+                throw exception;
+                if (this._loginDeferred && (! this._loginDeferred.isFulfilled())){
+                    this._loginDeferred.reject(exception);
+                }
             },
 
             _logoutException: function(exception){
-                throwEx(exception).then(lang.hitch(this, function(standardizedException){
-                    this._handleException(standardizedException);
-
-                    if (this._logutDeferred && (! this._logoutDeferred.isFulfilled())){
-                        this._logoutDeferred.reject(standardizedException);
-                    }
-                }));
+                throw exception;
+                if (this._logutDeferred && (! this._logoutDeferred.isFulfilled())){
+                    this._logoutDeferred.reject(exception);
+                }
             },
 
             _getIdentityException: function(exception){
-                throwEx(exception).then(lang.hitch(this, function(standardizedException){
-                    this._handleException(standardizedException);
-
-                    if (this._getIdentityDeferred && (! this._getIdentityDeferred.isFulfilled())){
-                        this._getIdentityDeferred.reject(standardizedException);
-                    }
-                }));
+                throw exception;
+                if (this._getIdentityDeferred && (! this._getIdentityDeferred.isFulfilled())){
+                    this._getIdentityDeferred.reject(exception);
+                }
             },
 
             _handleException: function(exception){
