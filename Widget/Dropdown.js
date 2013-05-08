@@ -74,6 +74,7 @@ function (
                     domClass.remove(this.domNode, 'open');
                     domClass.add(this.domNode, 'hidden');
                     focus.focus(this.target);
+                    this.removeKeyListener();
                     this._set('hidden', value);
                     return;
                 }
@@ -82,7 +83,7 @@ function (
                     return;
                 }
 
-                this.keySignal = on(baseWin.body(), 'keypress', lang.hitch(this, this.onKey));
+                this.addKeyListener();
                 domConstruct.place(this.domNode, baseWin.body(), 'last');
                 domClass.remove(this.domNode, 'hidden');
                 domClass.add(this.domNode, 'open');
@@ -91,6 +92,17 @@ function (
                 this._set('hidden', value);
             },
 
+            addKeyListener: function(){
+                this.keySignal = on(baseWin.body(), 'keypress', lang.hitch(this, this.onKey));                
+            },
+            
+            removeKeyListener: function(){
+                if (this.keyListener){
+                    this.keyListener.remove();
+                    delete(this.keyListener);
+                }
+            },
+            
             onKey: function(e){
                 event.stop(e);
                 switch(e.keyCode){
@@ -100,7 +112,7 @@ function (
                     case keys.ENTER:
                         this.set('hidden', true);
                 }
-                this.keySignal.remove();
+                this.removeKeyListener();
             },
 
             onClick: function(e){
