@@ -176,6 +176,7 @@ function (
             },
 
             onFocus: function(){
+                this.inherited(arguments);                
                 this._onFocusValue = this._getValueToValidate();
             },
 

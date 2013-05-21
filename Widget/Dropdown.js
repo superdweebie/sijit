@@ -1,7 +1,6 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/_base/event',
     'dojo/_base/window',
     'dojo/dom-style',
     'dojo/dom-class',
@@ -20,7 +19,6 @@ define([
 function (
     declare,
     lang,
-    event,
     baseWin,
     domStyle,
     domClass,
@@ -93,19 +91,19 @@ function (
             },
 
             addKeyListener: function(){
-                this.keySignal = on(baseWin.body(), 'keypress', lang.hitch(this, this.onKey));                
+                this.keyListener = on(baseWin.body(), 'keypress', lang.hitch(this, this.onKey));
             },
-            
+
             removeKeyListener: function(){
                 if (this.keyListener){
                     this.keyListener.remove();
                     delete(this.keyListener);
                 }
             },
-            
-            onKey: function(e){
-                event.stop(e);
-                switch(e.keyCode){
+
+            onKey: function(event){
+                event.preventDefault();
+                switch(event.keyCode){
                     case keys.ESCAPE:
                         this.set('hidden', true);
                         this.emit('cancel', {});
@@ -115,10 +113,8 @@ function (
                 this.removeKeyListener();
             },
 
-            onClick: function(e){
-                if(e){
-                    event.stop(e);
-                }
+            onClick: function(event){
+                event.preventDefault();
                 if (!this.blurDelay){
                     this.set('hidden', false);
                 }
@@ -129,7 +125,7 @@ function (
                     dropdownPos = domGeom.position(this.dropdown),
                     box = win.getBox(),
                     top;
-      
+
                 if (targetPos.y + targetPos.h + dropdownPos.h > box.h){
                     top = targetPos.y - dropdownPos.h - 5; //TODO remove the -5 fudge
                 } else {

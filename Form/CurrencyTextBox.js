@@ -103,11 +103,16 @@ function (
                 }
                 value.push(new PadCurrencyFilter({currency: this.currency}));
                 this.inherited(arguments, [value]);
-            },
+            }//,
             
-            _getValueToValidate: function(){
-                return this.textbox.value;
-            }            
+//            _getValueToValidate: function(){
+//                var value = this.get('value');
+//                if (value == null){
+//                    return 0;
+//                }
+//                return
+//                return this.textbox.value;
+//            }            
         }
     );
 });
