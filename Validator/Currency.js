@@ -15,20 +15,18 @@ function(
         [Base],
         {
             // summary:
-            //		Validator that will check that the supplied string contains
-            //		no more than two decimal places. This validator is not
-            //      for validating loacalised currency strings.
+            //      Note that this validator isn't much good for general purpose currency
+            //      checking. It is designed to work in concert with the PadCurrency
+            //      filter and the CurrencyTextbox.
            
-            regEx: /^\d+\.?\d{0,2}$/,
-
             _isValid: function(value){
 
                 var messages = [],
                     result = true;
 
-                if (value != null && value != undefined && value != '' && ! this.regEx.test(value)){
+                if (isNaN(value)){
                     result = false;
-                    messages.push(validatorMessages.currency);
+                    messages.push(validatorMessages.currency);                    
                 }
 
                 return {result: result, messages: messages};

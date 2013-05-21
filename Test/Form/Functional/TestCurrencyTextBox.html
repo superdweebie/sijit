@@ -29,7 +29,11 @@
 
                 dom.byId('currencyTextBox1Value').innerHTML = json.stringify(registry.byId('currencyTextBox1').get('value'));
                 registry.byId('currencyTextBox1').watch('value', function(p, o, newValue){
-                    dom.byId('currencyTextBox1Value').innerHTML = json.stringify(newValue);
+                    if (newValue == null){
+                        dom.byId('currencyTextBox1Value').innerHTML = 'null';                        
+                    } else {
+                        dom.byId('currencyTextBox1Value').innerHTML = newValue;
+                    }
                 });
             })
 		</script>
