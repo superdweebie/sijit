@@ -11,7 +11,11 @@
         }
     ],
     "require": {
-        "xsokev/dojo-bootstrap": "v1.2",        
+        "xsokev/dojo-bootstrap": "v1.2",
+        "dojo/dojo": "1.9",
+        "dojo/dojox": "1.9",
+        "dojo/dijit": "1.9",
+        "dojo/util": "1.9",
         "composer/installers": "~1.0"
     }
 }
