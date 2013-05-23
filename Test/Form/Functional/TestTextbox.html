@@ -14,21 +14,13 @@
 		<script type="text/javascript">
 			require([
                 'dojo/parser',
-                'dojo/on',
-                'dijit/registry',
                 'Sds/Form/TextBox',
                 'dojo/domReady!'
             ],
             function(
-                parser,
-                on,
-                registry
+                parser
             ){
-                parser.parse().then(function(){
-                    on(registry.byId('textBox8').domNode, 'appendage-click', function(event){
-                        alert('Clicked ' + event.button);
-                    });
-                });
+                parser.parse()
             })
 		</script>
 	</head>
@@ -69,35 +61,6 @@
                 value="Toby"
                 data-dojo-props="label: 'Name', focusNodeClass: 'span2'"
                 id="textBox5"
-            />
-
-            <p>Appendage text shorthand</p>
-            <input data-dojo-type="Sds/Form/TextBox"
-                value="Toby"
-                data-dojo-props="label: 'Name', prepend: ['pre1', 'pre2'], append: ['app1', 'app2']"
-                id="textBox6"
-            />
-
-            <p>Appendage text longhand</p>
-            <input data-dojo-type="Sds/Form/TextBox"
-                value="Toby"
-                data-dojo-props="
-                    label: 'Name',
-                    prepend: [{type: 'text', innerHTML: 'pre1'}, {type: 'text', innerHTML: 'pre2'}],
-                    append: [{type: 'text', innerHTML: 'app1'}, {type: 'text', innerHTML: 'app2'}]
-                "
-                id="textBox7"
-            />
-
-            <p>Appendage button (clickable)</p>
-            <input data-dojo-type="Sds/Form/TextBox"
-                value="Toby"
-                data-dojo-props="
-                    label: 'Name',
-                    prepend: [{type: 'button', innerHTML: 'pre1', clickMixin: {button: 'pre1'}}],
-                    append: [{type: 'button', innerHTML: 'app1', clickMixin: {button: 'app1'}}]
-                "
-                id="textBox8"
             />
         </form>
 	</body>
