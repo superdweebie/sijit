@@ -1,6 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
+    'dojo/_base/array',
     'dojo/on',
     'dojo/dom-construct',
     'dojo/dom-class'
@@ -8,6 +9,7 @@ define([
 function (
     declare,
     lang,
+    array,
     on,
     domConstruct,
     domClass
@@ -64,32 +66,40 @@ function (
 
             _setPrependAttr: function(value){
 
+                var index;
+
                 if ( ! lang.isArray(value)){
                     value = [value];
                 }
 
-                var index;
                 for (index in value){
                     value[index] = this._createDefinition(value[index], true);
                 }
-                this.prepend = value;
 
-                this._appendageDifference(value);
+                this._removeAppendages(true);
+                for (index in value){
+                    this._addAppendage(value[index]);
+                }
+                this._set('prepend', value);
             },
 
             _setAppendAttr: function(value){
 
+                var index;
+
                 if ( ! lang.isArray(value)){
                     value = [value];
                 }
 
-                var index;
                 for (index in value){
                     value[index] = this._createDefinition(value[index], false);
                 }
-                this.append = value;
 
-                this._appendageDifference(value);
+                this._removeAppendages(false);
+                for (index in value){
+                    this._addAppendage(value[index]);
+                }
+                this._set('append', value);
             },
 
             _createAppendagesWrapper: function(){
@@ -98,58 +108,33 @@ function (
             },
 
             _createDefinition: function(value, isPrepend){
-                var definition = value;
                 if (typeof(value) == 'string'){
-                    definition = {
+                    value = {
                         type: 'text',
-                        innerHTML: definition
+                        innerHTML: value
                     }
                 }
-                if (isPrepend){
-                    definition.isPrepend = true;
-                } else {
-                    definition.isPrepend = false;
-                }
-                return definition;
+                value.isPrepend = !!isPrepend;
+
+                return value;
             },
 
-            _appendageDifference: function(definitions){
-                var index;
-                var index2;
-                var add = [];
-                var remove = [];
+            _removeAppendages: function(isPrepend){
 
-                for(index in definitions){
-                    add.push(index);
-                }
+                var index,
+                    item;
 
                 for(index in this._appendageNodes){
-                    for(index2 in definitions){
-                        if (this._appendageNodes[index].definition.innerHTML == definitions[index2].innerHTML &&
-                            this._appendageNodes[index].definition.isPrepend == definitions[index2].isPrepend &&
-                            this._appendageNodes[index].definition.type == definitions[index2].type
-                        ){
-                            delete(add[index2]);
-                        } else {
-                            remove.push(index);
+                    item = this._appendageNodes[index];
+                    if (item.definition.isPrepend == isPrepend){
+                        if (item.handler){
+                            item.handler.remove();
                         }
+                        domConstruct.destroy(item.node);
+                        delete(this._appendageNodes[index]);
                     }
                 }
-
-                var item;
-                for(index in remove){
-                    item = this._appendageNodes.splice(remove[index], 1);
-                    if (item.handler){
-                        item.handler.remove();
-                    }
-                    domConstruct.destroy(item.node);
-                }
-
-                for(index in add){
-                    if (add[index]){
-                        this._addAppendage(definitions[index]);
-                    }
-                }
+                this._appendageNodes = array.filter(this._appendageNodes, function(item){return item});
             },
 
             _addAppendage: function(definition){
@@ -164,8 +149,10 @@ function (
                     domClass.add(this.appendagesWrapper,'input-append');
                 }
 
-                var tag;
-                var properties = {'class': 'add-on'};
+                var tag,
+                    properties = {'class': 'add-on'},
+                    node,
+                    handler;
 
                 switch (definition.type){
                     case 'text':
@@ -179,26 +166,14 @@ function (
                 }
                 properties.innerHTML = definition.innerHTML;
 
-
-                var node;
-                if (definition.isPrepend){
-                    node = domConstruct.create(
-                        tag,
-                        properties,
-                        this.textbox,
-                        'before'
-                    );
-                } else {
-                    node = domConstruct.create(
-                        tag,
-                        properties,
-                        this.textbox,
-                        'after'
-                    );
-                }
+                node = domConstruct.create(
+                    tag,
+                    properties,
+                    this.textbox,
+                    definition.isPrepend ? 'before' : 'after'
+                );
 
                 //attach button event listener
-                var handler;
                 if (definition.type == 'button'){
                     handler = on(node, 'click', lang.hitch(this, function(){
                         this.emit('appendage-click', definition.clickMixin);
