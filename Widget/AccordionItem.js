@@ -26,6 +26,8 @@ function(
             
             //accordion: undefined,
             
+            //title: undefined,
+            
             templateString: template,
                         
             click: function(e){
