@@ -2,7 +2,6 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
-    'dojo/_base/event',
     'dojo/Deferred',
     'dojo/on',
     'dojo/dom-prop',
@@ -17,7 +16,6 @@ function (
     declare,
     lang,
     array,
-    event,
     Deferred,
     on,
     domProp,
@@ -111,7 +109,7 @@ function (
                             (typeof key == 'object' && (evt.charCode || evt.keyCode) == key.code && evt.ctrlKey == key.ctrl) ||
                             ((evt.charCode || evt.keyCode) == key)
                         ){
-                            event.stop(evt);
+                            evt.preventDefault();
                             this['on' + string.ucFirst(button.name) + 'Click']();
                         }
                     }));

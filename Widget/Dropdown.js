@@ -1,7 +1,6 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/_base/window',
     'dojo/dom-style',
     'dojo/dom-class',
     'dojo/dom-attr',
@@ -19,7 +18,6 @@ define([
 function (
     declare,
     lang,
-    baseWin,
     domStyle,
     domClass,
     domAttr,
@@ -82,7 +80,7 @@ function (
                 }
 
                 this.addKeyListener();
-                domConstruct.place(this.domNode, baseWin.body(), 'last');
+                domConstruct.place(this.domNode, document.body, 'last');
                 domClass.remove(this.domNode, 'hidden');
                 domClass.add(this.domNode, 'open');
                 this.position();
@@ -91,7 +89,7 @@ function (
             },
 
             addKeyListener: function(){
-                this.keyListener = on(baseWin.body(), 'keypress', lang.hitch(this, this.onKey));
+                this.keyListener = on(document.body, 'keypress', lang.hitch(this, this.onKey));
             },
 
             removeKeyListener: function(){

@@ -1,0 +1,35 @@
+<div class="modal-scroll hide fade">
+    <div class="modal">
+        <div class="modal-header">
+            <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+                data-dojo-attach-event="ondijitclick: onCancelClick"
+            >
+                &times;
+            </button>
+            <h3 data-dojo-attach-point="titleNode"></h3>
+        </div>
+        <div data-dojo-attach-point="containerNode" class="modal-body">
+            <div>Please login.</div>
+            <br />
+            <input data-dojo-type="Sds/IdentityClient/DataModel/Identity/IdentityName/Input" />
+            <input data-dojo-type="Sds/IdentityClient/DataModel/Identity/Credential/Input" />
+            <input
+                data-dojo-type="Sds/Form/CheckBox" data-dojo-attach-point="rememberMe"
+                data-dojo-props="
+                    name     : 'rememberMe',
+                    label    : 'Remember me:'
+                "
+            />
+            <a href="${forgotCredentialRoute}" data-dojo-attach-event="ondijitclick: onForgotCredentialClick">Forgot Password?</a>
+            <a href="${registerRoute}" data-dojo-attach-event="ondijitclick: onRegisterClick">Register</a>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dojo-attach-event="ondijitclick: onCancelClick">Close</button>
+            <button class="btn btn-primary" data-dojo-attach-point="okNode" data-dojo-attach-event="ondijitclick: onOkClick">Ok</button>
+        </div>
+    </div>
+</div>

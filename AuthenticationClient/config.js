@@ -2,7 +2,7 @@ define([],
 function(){
     return {
         moduleManager: {
-            'Sds/AuthenticationModule/Store/AuthenticatedIdentity': {
+            'Sds/AuthenticationClient/Store/AuthenticatedIdentity': {
                 base: 'Sds/Mvc/JsonRest',
                 params: {
                     name: 'AuthenticatedIdentity',
@@ -32,17 +32,15 @@ function(){
             'Sds/Router/router': {
                 params: {
                     routes: {
-                        authentication: {
-                            controller: 'Sds/AuthenticationModule/AuthenticationController',
+                        'authentication': {
+                            controller: 'Sds/AuthenticationClient/AuthenticationController',
                             methods: {
                                 login: {
                                     enter: 'login',
-                                    leave: 'cancelLogin',
-                                    onEnterResolveRoute: -1
+                                    exit: 'exitLogin'
                                 },
                                 logout: {
-                                    enter: 'logout',
-                                    onEnterResolveRoute: -1
+                                    enter: 'logout'
                                 }
                             }
                         }

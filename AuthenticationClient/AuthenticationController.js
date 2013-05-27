@@ -5,6 +5,7 @@ define([
     'dojo/Deferred',
     '../Status',
     'dojo/Stateful',
+    './LoginView',
     'get!../Store/storeManager'
 ],
 function (
@@ -14,6 +15,7 @@ function (
     Deferred,
     Status,
     Stateful,
+    LoginView,
     storeManager
 ){
     return declare(
@@ -28,14 +30,8 @@ function (
 
             //loggedIn: boolean
             //    Indicates if there is a logged in identity
-            loggedIn: false,
+            //loggedIn: false,
 
-            //status: Sds/Status
-            //    An object indicating the current status
-            //status: undefined,
-
-            // loginView: Sds/Mvc/BaseView
-            //     This form is shown to prompt login
             //loginView: undefined,
 
             //enableRememberMe: undefined,

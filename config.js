@@ -12,7 +12,7 @@ define(
                 'Sds/Router/config',
                 'Sds/Store/config',
                 'Sds/IdentityModule/config',
-                'Sds/AuthenticationModule/config'
+                'Sds/AuthenticationClient/config'
             ]
         }
     }

@@ -1,14 +1,12 @@
 define([
     'dojo/_base/declare',
-    'dojo/_base/event',
-    'dojo/dom-class',    
+    'dojo/dom-class',
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dojo/text!./Template/AccordionItem.html'
 ],
 function(
     declare,
-    event,
     domClass,
     Widget,
     TemplatedMixin,
@@ -23,29 +21,29 @@ function(
         {
             // summary:
             //		A widget to populate Sds/Widget/Accordion
-            
+
             //accordion: undefined,
-            
+
             //title: undefined,
-            
+
             templateString: template,
-                        
+
             click: function(e){
                 if (e){
-                    event.stop(e);
+                    e.preventDefault();
                 }
                 this.set('hidden', false);
             },
-                        
+
             _setHiddenAttr: function(value){
                 if (value){
                     domClass.add(this.containerNode, 'hide');
                 } else {
-                    domClass.remove(this.containerNode, 'hide');                    
+                    domClass.remove(this.containerNode, 'hide');
                 }
                 this._set('hidden', value);
             },
-            
+
             _getHiddentAttr: function(){
                 return domClass.contains(this.containerNode, 'hide');
             }

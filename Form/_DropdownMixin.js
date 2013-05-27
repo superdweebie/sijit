@@ -1,6 +1,5 @@
 define([
     'dojo/_base/declare',
-    'dojo/_base/event',
     'dojo/_base/lang',
     'dojo/_base/array',
     'dojo/on',
@@ -11,7 +10,6 @@ define([
 ],
 function (
     declare,
-    event,
     lang,
     array,
     on,
@@ -82,7 +80,7 @@ function (
 
                 domConstruct.place(newA, newLI, 'only');
                 on(newA, 'click', lang.hitch(this, function(e){
-                    event.stop(e);
+                    e.preventDefault();
                     this.set('value', value);
                     this.dropdown.set('hidden', true);
                 }));

@@ -2,7 +2,6 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
-    'dojo/_base/event',
     'dojo/on',
     'dojo/dom-construct',
     'dojo/dom-class',
@@ -12,7 +11,6 @@ function (
     declare,
     lang,
     array,
-    event,
     on,
     domConstruct,
     domClass,
@@ -43,7 +41,7 @@ function (
                     }
 
                     on(node, 'click', lang.hitch(this, function(e){
-                        event.stop(e);
+                        e.preventDefault();
                         this.set('value', e.target.value);
                     }))
                 }
