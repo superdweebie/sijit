@@ -35,6 +35,24 @@
                         dom.byId('currencyTextBox1Value').innerHTML = newValue;
                     }
                 });
+
+                dom.byId('currencyTextBox2Value').innerHTML = json.stringify(registry.byId('currencyTextBox2').get('value'));
+                registry.byId('currencyTextBox2').watch('value', function(p, o, newValue){
+                    if (newValue == null){
+                        dom.byId('currencyTextBox2Value').innerHTML = 'null';
+                    } else {
+                        dom.byId('currencyTextBox2Value').innerHTML = newValue;
+                    }
+                });
+
+                dom.byId('currencyTextBox3Value').innerHTML = json.stringify(registry.byId('currencyTextBox3').get('value'));
+                registry.byId('currencyTextBox3').watch('value', function(p, o, newValue){
+                    if (newValue == null){
+                        dom.byId('currencyTextBox3Value').innerHTML = 'null';
+                    } else {
+                        dom.byId('currencyTextBox3Value').innerHTML = newValue;
+                    }
+                });
             })
 		</script>
 	</head>
@@ -54,6 +72,26 @@
                 id="currencyTextBox1"
             />
             <p>Currency Box Value: <pre id="currencyTextBox1Value"></pre></p>
+
+            <p><bold>Currency Box with preset float value</bold></p>
+            <input data-dojo-type="Sds/Form/CurrencyTextBox"
+                data-dojo-props="
+                    label:'Cost',
+                    value: 2.2
+                "
+                id="currencyTextBox2"
+            />
+            <p>Currency Box Value: <pre id="currencyTextBox2Value"></pre></p>
+
+            <p><bold>Currency Box with preset string value</bold></p>
+            <input data-dojo-type="Sds/Form/CurrencyTextBox"
+                data-dojo-props="
+                    label:'Cost',
+                    value: '2.2'
+                "
+                id="currencyTextBox3"
+            />
+            <p>Currency Box Value: <pre id="currencyTextBox3Value"></pre></p>
 
             <p><bold>Multiple Currency Boxes</bold></p>
             <input data-dojo-type="Sds/Form/CurrencyTextBox"
