@@ -11,7 +11,7 @@ define(
                 'Sds/ExceptionClient/config',
                 'Sds/Router/config',
                 'Sds/Store/config',
-                'Sds/IdentityModule/config',
+                'Sds/IdentityClient/config',
                 'Sds/AuthenticationClient/config'
             ]
         }

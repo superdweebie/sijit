@@ -3,13 +3,15 @@ define([
     'dojo/_base/lang',
     'dojo/keys',
     'dojo/dom-class',
+    'dojo/i18n!../nls/authenticationClient',
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
+    '../Widget/_WidgetsInTemplateMixin',
     '../Widget/_DialogMixin',
-    'dojo/text!./Template/LoginView.html',
+    'dojo/text!./Template/Login.html',
     '../Router/baseUrl!',
-    '../IdentityClient/DataModel/Identity/IdentityName/Input',
-    '../IdentityClient/DataModel/Identity/Credential/Input',
+    '../IdentityClient/Identity/IdentityName/Input',
+    '../IdentityClient/Identity/Credential/Input',
     '../Form/CheckBox'
 ],
 function (
@@ -17,8 +19,10 @@ function (
     lang,
     keys,
     domClass,
+    uiStrings,
     Widget,
     TemplatedMixin,
+    WidgetsInTemplateMixin,
     DialogMixin,
     template,
     baseUrl
@@ -40,7 +44,7 @@ function (
     });
 
     var Login = declare(
-        [Widget, TemplatedMixin, DialogMixin],
+        [Widget, TemplatedMixin, WidgetsInTemplateMixin, DialogMixin],
         {
             // templateString: string
             templateString: template,
@@ -55,7 +59,9 @@ function (
 
             enableRememberMe: true,
 
-            _setTitleAttr: { node: "titleNode", type: "innerHTML" },
+            title: uiStrings.loginTitle,
+
+            description: uiStrings.loginDescription,
 
             _setEnableRememberMeAttr: function(value){
                 this.enableRememberMe = value;

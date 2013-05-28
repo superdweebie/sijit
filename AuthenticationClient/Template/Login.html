@@ -10,13 +10,13 @@
             >
                 &times;
             </button>
-            <h3 data-dojo-attach-point="titleNode"></h3>
+            <h3>${title}</h3>
         </div>
         <div data-dojo-attach-point="containerNode" class="modal-body">
-            <div>Please login.</div>
+            <div>${description}</div>
             <br />
-            <input data-dojo-type="Sds/IdentityClient/DataModel/Identity/IdentityName/Input" />
-            <input data-dojo-type="Sds/IdentityClient/DataModel/Identity/Credential/Input" />
+            <input data-dojo-type="Sds/IdentityClient/Identity/IdentityName/Input" />
+            <input data-dojo-type="Sds/IdentityClient/Identity/Credential/Input" />
             <input
                 data-dojo-type="Sds/Form/CheckBox" data-dojo-attach-point="rememberMe"
                 data-dojo-props="

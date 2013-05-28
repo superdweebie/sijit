@@ -33,15 +33,16 @@ define([], function(){
             },
             'Sds/Router/router': {
                 params: {
-                    routes: {
-                        identity: {
+                    routes: [
+                        {
+                            regex: /identity/,
                             controller: 'Sds/Test/AuthenticationModule/Asset/MockIdentityController',
                             methods: {
                                 register: 'register',
                                 forgotCredential: 'forgotCredential'
                             }
                         }
-                    }
+                    ]
                 }
             }
         }

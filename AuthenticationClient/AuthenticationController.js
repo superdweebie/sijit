@@ -5,7 +5,7 @@ define([
     'dojo/Deferred',
     '../Status',
     'dojo/Stateful',
-    './LoginView',
+    '../Router/startedRouter!',
     'get!../Store/storeManager'
 ],
 function (
@@ -15,7 +15,7 @@ function (
     Deferred,
     Status,
     Stateful,
-    LoginView,
+    router,
     storeManager
 ){
     return declare(
@@ -32,52 +32,38 @@ function (
             //    Indicates if there is a logged in identity
             //loggedIn: false,
 
-            //loginView: undefined,
+            //loginForm: proxy,
 
-            //enableRememberMe: undefined,
+            //enableRememberMe: true,
 
-            storeName: 'AuthenticatedIdentity',
+            //storeName: 'AuthenticatedIdentity',
 
             login: function()
             {
                 // summary:
                 //		Prompt for login details, and process
-                // returns: Deferred
-                //      Returned deferred will resolve when the whole login
-                //      process is complete.
 
-                this._loginDeferred = new Deferred();
+                this.loginForm.set('enableRememberMe', this.enableRememberMe);
 
-                this.loginView.set('enableRememberMe', this.enableRememberMe);
-                this.loginView.activate().then(lang.hitch(this, function(result){
+                this.loginForm.show().then(lang.hitch(this, function(value){
 
                     // Do nothing if form not valid.
-                    if (result.state != ''){
-                        this._loginDeferred.resolve();
+                    if (this.loginForm.get('state') != ''){
+                        router.go(''); //go to router basePath
                         return;
                     }
 
-                    // Update status
-                    this.set('status', new Status('logging in', Status.icon.SPINNER));
-
                     // Send data to server
-                    var formValue = result.value;
-                    if (formValue.rememberMe){
-                        formValue.rememberMe = Boolean(formValue['rememberMe'].length);
+                    if (value.rememberMe){
+                        value.rememberMe = Boolean(value['rememberMe'].length);
                     }
 
-                    when(storeManager.getStore(this.storeName).put(formValue),
+                    when(storeManager.getStore(this.storeName).put(value),
                         lang.hitch(this, '_loginComplete'),
                         lang.hitch(this, '_loginException')
                     );
                     this.loginView.set('value', null);
                 }));
-
-                return this._loginDeferred;
-            },
-
-            cancelLogin: function(){
-                this.loginView.deactivate();
             },
 
             logout: function()

@@ -47,8 +47,9 @@ function(){
             },
             'Sds/Router/router': {
                 params: {
-                    routes: {
-                        identity: {
+                    routes: [
+                        {
+                            regex: /identity/,
                             controller: 'Sds/IdentityModule/IdentityController',
                             methods: {
                                 identity: {
@@ -63,7 +64,7 @@ function(){
                                 }
                             }
                         }
-                    }
+                    ]
                 }
             }
         }

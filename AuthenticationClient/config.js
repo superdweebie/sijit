@@ -10,41 +10,42 @@ function(){
                     target: 'http://test.com/authenticatedIdentity'
                 },
                 gets: {
-                    model: 'Sds/IdentityModule/DataModel/Identity'
+                    model: 'Sds/IdentityClient/Identity/Model'
                 },
                 proxyMethods: ['get', 'put', 'add', 'remove', 'query']
             },
-            'Sds/AuthenticationModule/AuthenticationController': {
+            'Sds/AuthenticationClient/AuthenticationController': {
                 params: {
-                    enableRememberMe: true
+                    enableRememberMe: true,
+                    storeName: 'AuthenticatedIdentity'
                 },
                 proxies: {
-                    loginView: 'Sds/AuthenticationModule/View/Login'
+                    loginForm: 'Sds/AuthenticationClient/Login'
                 }
+            },
+            'Sds/AuthenticationClient/Login': {
+                proxyMethods: ['get', 'set', 'show', 'hide']
             },
             'Sds/Store/storeManager': {
                 proxies: {
                     stores: [
-                        'Sds/AuthenticationModule/Store/AuthenticatedIdentity'
+                        'Sds/AuthenticationClient/Store/AuthenticatedIdentity'
                     ]
                 }
             },
             'Sds/Router/router': {
                 params: {
-                    routes: {
-                        'authentication': {
+                    routes: [
+                        {
+                            regex: /authentication/,
                             controller: 'Sds/AuthenticationClient/AuthenticationController',
+                            defaultMethod: 'login',
                             methods: {
-                                login: {
-                                    enter: 'login',
-                                    exit: 'exitLogin'
-                                },
-                                logout: {
-                                    enter: 'logout'
-                                }
+                                login: 'login',
+                                logout: 'logout'
                             }
                         }
-                    }
+                    ]
                 }
             }
         }

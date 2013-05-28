@@ -4,8 +4,9 @@ function(){
         moduleManager: {
             'Sds/Router/router': {
                 params: {
-                    routes: {
-                        test: {
+                    routes: [
+                        {
+                            regex: /test/,
                             controller: 'Sds/Test/Router/Asset/TestController',
                             defaultMethod: {
                                 enter: 'test1',
@@ -22,14 +23,15 @@ function(){
                                 ready: 'ready'
                             }
                         },
-                        'TestRouter.html': {
+                        {
+                            regex: /[a-zA-Z][a-zA-Z0-9/_-]+.html/,
                             controller: 'Sds/Test/Router/Asset/TestController',
                             defaultMethod: {
                                 enter: 'ready',
                                 exit: 'exit'
                             }
                         }
-                    }
+                    ]
                 }
             }
         }

@@ -1,17 +1,14 @@
 define([
     'dojo/_base/lang',
-    'dojo/Deferred',
     'dojo/on',
     'dojo/when',
     'dojo/string',
     'dojo/i18n!../nls/routerMessages',
     'dojo/query',
-    './Exception/RouteNotFound',
-    'dojox/NodeList/delegate'
+    './Exception/RouteNotFound'
 ],
 function (
     lang,
-    Deferred,
     on,
     when,
     string,
@@ -25,28 +22,9 @@ function (
         // url when the router is started
         //baseUrl: undefined,
 
-        // dojo's base url must be modified sometimes so that AMD modules can still
-        // be found and loaded
-        //dojoBaseUrl: undefined,
-
-        //dojoRelativeBaseUrl: false,
-
-        // routes: object
-        //    This should be an object defineing the routes to controllers. eg:
-        //       {
-        //             'authentication': {
-        //                 controller: 'Sds/AuthenticationModule/AuthenticationController',
-        //                 methods: {
-        //                     login: 'login'
-        //                 }
-        //             }
-        //       }
-        //    Pushing the followning state: baseUrl + '/authenticaiton/login' will then
-        //    get the instance of 'Sds/AuthenticationModule/AuthenticationController'
-        //    from the controllerManager, and call the login
-        //    function.
+        // routes: array
         //
-        routes: {},
+        routes: [],
 
         // controllerManager: Sds/ModuleManager/ModuleManager
         //    This must be an instance of the ModuleManager. This is where
@@ -57,15 +35,11 @@ function (
         //active: undefined,
 
         startup: function(){
+
             if ( ! this.baseUrl){
                 var base = window.location.href.split('/');
                 base.pop();
                 this.baseUrl = base.join('/');
-            }
-
-            this.dojoBaseUrl = require.baseUrl;
-            if (this.dojoBaseUrl.indexOf('http://') != 0){
-                this.dojoRelativeBaseUrl = true;
             }
 
             on(window, 'popstate', lang.hitch(this, function(e){
@@ -77,7 +51,7 @@ function (
             }));
 
             // Catch click events on anchor tags
-            query('body').delegate('a', 'onclick', lang.hitch(this, function(e){
+            query('a').on('click', lang.hitch(this, function(e){
                 var route = e.target.attributes['href'].nodeValue;
                 if (route){
                     e.preventDefault();
@@ -96,68 +70,67 @@ function (
                 route = route.substring(this.baseUrl.length + 1);
             }
 
-            var resultDeferred = new Deferred,
-                pieces = route.split('/'),
-                config = this.routes[pieces[0]],
+            // check for absolute url - these are not routed
+            if (route.indexOf('http://') == 0){
+                return ({ignore: true});
+            }
+
+            var pieces = route.split('/'),
+                config,
                 method,
                 args = [],
                 i;
 
-            if (config){
-                //identify the correct method
-                if (pieces[1]){
-                    if (config.methods[pieces[1]]){
-                        method = config.methods[pieces[1]];
-                    } else {
-                        throw new RouteNotFound(string.substitute(
-                            routerMessages.methodNotConfigured,
-                            {method: pieces[1], controller: config.controller}
-                        ));
-                    }
-                } else if (config.defaultMethod) {
-                    method = config.defaultMethod;
-                } else {
-                    throw new RouteNotFound(string.substitute(
-                        routerMessages.noDefaultMethod,
-                        {controller: config.controller}
-                    ));
+            //Check routes in reverse order - first registerd means last checked
+            for (i = this.routes.length - 1; i >= 0; i--){
+                if (this.routes[i].regex.test(pieces[0])){
+                    config = this.routes[i];
+                    break;
                 }
-                if (typeof(method) == 'string'){
-                    method = {enter: method};
-                    if (config.defaultMethod.hasOwnProperty('exit')){
-                        method.exit = config.defaultMethod.exit;
-                    }
-                } else if (typeof(method) != 'object') {
-                    // method is an integer. history.go should be used, rather than calling a controller.
-                    resultDeferred.resolve({
-                        route: method
-                    });
-                    return resultDeferred;
-                }
-
-                for (i = 2; i < pieces.length; i++){
-                    args.push(pieces[i]);
-                }
-
-                //load the correct controller
-                when(this.controllerManager.get(config.controller), function(controller){
-
-                    if (controller[method.enter]){
-                        resultDeferred.resolve(lang.mixin({route: route, controller: controller, args: args}, method));
-                    } else {
-                        throw new RouteNotFound(string.substitute(
-                            routerMessages.noMethod,
-                            {method: method, controller: config.controller}
-                        ));
-                    }
-                });
-                return resultDeferred;
+            }
+            if (!config){
+                throw new RouteNotFound(string.substitute(
+                    routerMessages.noConfig,
+                    {controller: pieces[0]}
+                ));
+            }
+            if (config.ignore){
+                return ({ignore: true});
             }
 
-            throw new RouteNotFound(string.substitute(
-                routerMessages.noConfig,
-                {controller: pieces[0]}
-            ));
+            //identify the correct method
+            if (pieces[1]){
+                if (config.methods[pieces[1]]){
+                    method = config.methods[pieces[1]];
+                } else {
+                    throw new RouteNotFound(string.substitute(
+                        routerMessages.methodNotConfigured,
+                        {method: pieces[1], controller: config.controller}
+                    ));
+                }
+            } else if (config.defaultMethod) {
+                method = config.defaultMethod;
+            } else {
+                throw new RouteNotFound(string.substitute(
+                    routerMessages.noDefaultMethod,
+                    {controller: config.controller}
+                ));
+            }
+            if (typeof(method) == 'string'){
+                method = {enter: method};
+                if (config.defaultMethod.hasOwnProperty('exit')){
+                    method.exit = config.defaultMethod.exit;
+                }
+            } else if (typeof(method) != 'object') {
+                // method is an integer. history.go should be used, rather than calling a controller.
+                return {route: method};
+            }
+
+            for (i = 2; i < pieces.length; i++){
+                args.push(pieces[i]);
+            }
+
+            return lang.mixin({route: route, controller: config.controller, args: args}, method);
         },
 
         go: function(route, surpressPushState){
@@ -173,43 +146,46 @@ function (
                 return;
             }
 
-            this.resolve(route).then(
-                lang.hitch(this, function(result){
+            var routeMatch = this.resolve(route);
 
-                    if (typeof(result.route) != 'string'){
-                        history.go(result.route);
-                        return;
-                    }
+            if (routeMatch.ignore){
+                window.location.href = route;
+                return;
+            }
+            if (typeof(routeMatch.route) != 'string'){
+                history.go(routeMatch.route);
+                return;
+            }
 
-                    //Route resolved correctly - pushState and call the controller
-                    if ( ! surpressPushState){
-                        history.pushState({route: result.route}, '', this.baseUrl + '/' + result.route);
-                    }
+            //load the correct controller
+            when(this.controllerManager.get(routeMatch.controller), lang.hitch(this, function(controller){
 
-                    //If dojo base is a relative path, it may need to be modified
-                    if (this.dojoRelativeBaseUrl){
-                        var num = result.route.split('/').length - 1,
-                            prepend = '',
-                            i;
-
-                        for (i = 0; i < num; i++){
-                            prepend += '../';
-                        }
-                        require.baseUrl = prepend + this.dojoBaseUrl;
-                    }
-
-                    if (this.active && this.active.exit){
-                        this.active.controller[this.active.exit]();
-                    }
-
-                    this.active = result;
-                    result.controller[result.enter].apply(result.controller, result.args);
-                }),
-                function(err){
-                    //Route didn't resolve, just go to the url
-                    window.location.href = route;
+                if (! controller[routeMatch.enter]){
+                    throw new RouteNotFound(string.substitute(
+                        routerMessages.noMethod,
+                        {method: routeMatch.enter, controller: routeMatch.controller}
+                    ));
                 }
-            );
+                if (routeMatch.exit && ! controller[routeMatch.exit]){
+                    throw new RouteNotFound(string.substitute(
+                        routerMessages.noMethod,
+                        {method: routeMatch.exit, controller: routeMatch.controller}
+                    ));
+                }
+
+                //Route resolved correctly - pushState and call the controller
+                if ( ! surpressPushState){
+                    history.pushState({route: routeMatch.route}, '', this.baseUrl + '/' + routeMatch.route);
+                }
+
+                if (this.active && this.active.exit){
+                    this.active.controller[this.active.exit]();
+                }
+
+                routeMatch.controller = controller;
+                this.active = routeMatch;
+                controller[routeMatch.enter].apply(routeMatch.controller, routeMatch.args);
+            }));
         }
     }
 });
