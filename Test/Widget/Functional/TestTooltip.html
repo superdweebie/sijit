@@ -6,56 +6,54 @@
        	<style type="text/css">
             @import "../../../themes/bootstrap/css/bootstrap.css";
             @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
-            @import "../../../themes/bootstrap/css/dialog.css";
 
             .tooltip.inverse .tooltip-inner {
                 background: #0088CC;
                 color: #fff;
             }
-            .tooltip.inverse .tooltip-arrow {
-                border-top-color: #0088CC;
-            }
+
         </style>
-        <link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.min.css" rel="stylesheet" type="text/css">   
+        <link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <script type="text/javascript" src="../../testconfig.js"></script>
         <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
         <script type="text/javascript">
             require([
                 'dojo/dom',
                 'dojo/parser',
-                'dojo/query',
                 'dojo/dom-construct',
                 'dojo/on',
                 'Sds/Widget/Tooltip',
                 'dojo/domReady!'
             ],
-                    function(
-                            dom,
-                            parser,
-                            query,
-                            domConstruct,
-                            on,
-                            Tooltip
-                            ) {
-                        parser.parse();
-                        var t1 = new Tooltip();
-                        var t2 = new Tooltip({selector: 'a[rel=tooltip-inverse]', nodeClass: 'inverse'});
-                        var t2 = new Tooltip({selector: 'a[rel=tooltip-click]', eventShow: 'click'});
+            function(
+                dom,
+                parser,
+                domConstruct,
+                on,
+                Tooltip
+            ) {
+                parser.parse();
 
-                        on(dom.byId('add'), 'click', function() {
-                            var p = domConstruct.create('p', {
-                                innerHTML: 'Something '
-                            });
-                            var a = domConstruct.create('a', {
-                                rel: 'tooltip',
-                                title: 'second tooltip',
-                                href: '#',
-                                innerHTML: '<i class="icon-small icon-minus-sign"></i>'
-                            });
-                            p.appendChild(a);
-                            dom.byId('container').appendChild(p);
+                var counter = 2;
+
+                on(dom.byId('add'), 'click', function() {
+                    var i = domConstruct.create('i', {
+                            'class': 'icon-small icon-minus-sign'
+                        }),
+                        p = domConstruct.create('p', {
+                            innerHTML: 'Something '
+                        }),
+                        tip = new Tooltip({
+                            target: i,
+                            content: 'tooltip ' + counter
                         });
-                    });
+
+                    p.appendChild(i);
+                    dom.byId('container').appendChild(p);
+                    tip.startup();
+                    counter++;
+                })
+            });
         </script>
     </head>
     <body>
@@ -65,8 +63,17 @@
             </div>
             <div class="row">
                 <div class="well">
-                    <p>Default tooltip with delegated events</p>
-                    <p>Something <a href="#" rel="tooltip" title="first tooltip"><i class="icon-small icon-minus-sign"></i></a></p>
+                    <p>Tooltip placement</p>
+                    <p>Top <i class="icon-small icon-minus-sign"></i><span data-dojo-type="Sds/Widget/Tooltip" data-dojo-props="placement: 'top'" class="hidden">top</span></p>
+                    <p>Bottom <i class="icon-small icon-minus-sign"></i><span data-dojo-type="Sds/Widget/Tooltip" data-dojo-props="placement: 'bottom'" class="hidden">bottom</span></p>
+                    <p>Left <i class="icon-small icon-minus-sign"></i><span data-dojo-type="Sds/Widget/Tooltip" data-dojo-props="placement: 'left'" class="hidden">left</span></p>
+                    <p>Right <i class="icon-small icon-minus-sign"></i><span data-dojo-type="Sds/Widget/Tooltip" data-dojo-props="placement: 'right'" class="hidden">right</span></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="well">
+                    <p>Tooltip creation</p>
+                    <p>Something <i class="icon-small icon-minus-sign"></i><span data-dojo-type="Sds/Widget/Tooltip" class="hidden">tooltip 1</span></p>
                     <div id="container"></div>
                     <button id="add">Add new tooltip</button>
                 </div>
@@ -74,13 +81,13 @@
             <div class="row">
                 <div class="well">
                     <p>Tooltip with user defined class</p>
-                    <p>Something <a href="#" rel="tooltip-inverse" title="inverse tooltip"><i class="icon-small icon-plus-sign"></i></a></p>
+                    <p>Something <i class="icon-small icon-plus-sign"></i><span data-dojo-type="Sds/Widget/Tooltip" class="inverse hidden">inverse tooltip</span></p>
                 </div>
             </div>
             <div class="row">
                 <div class="well">
-                    <p>Tooltip with user defined event</p>
-                    <p>Something <a href="#" rel="tooltip-click" title="inverse tooltip"><i class="icon-small icon-plus-sign"></i></a></p>
+                    <p>Tooltip with user defined event (click to show)</p>
+                    <p>Something <i class="icon-small icon-plus-sign"></i><span data-dojo-type="Sds/Widget/Tooltip" class="inverse hidden" data-dojo-props="eventShow: 'click'">show tooltip on click</span></p>
                 </div>
             </div>
         </div>
