@@ -7,7 +7,7 @@ define([
     '../Validator/Base',
     '../Validator/Currency',
     '../Validator/Group',
-    '../Filter/PadCurrency'
+    '../Filter/Currency'
 ],
 function (
     declare,
@@ -18,7 +18,7 @@ function (
     BaseValidator,
     CurrencyValidator,
     GroupValidator,
-    PadCurrencyFilter
+    CurrencyFilter
 ){
     return declare(
         [ValidationTextBox, NumberTextBoxMixin],
@@ -101,18 +101,9 @@ function (
                 if ( ! lang.isArray(value)){
                     value = [value];
                 }
-                value.push(new PadCurrencyFilter({currency: this.currency}));
+                value.push(new CurrencyFilter({currency: this.currency}));
                 this.inherited(arguments, [value]);
-            }//,
-            
-//            _getValueToValidate: function(){
-//                var value = this.get('value');
-//                if (value == null){
-//                    return 0;
-//                }
-//                return
-//                return this.textbox.value;
-//            }            
+            }                      
         }
     );
 });

@@ -2,8 +2,10 @@ define([
     'dojo/_base/declare',
     'dojo/keys',
     'dojo/on',
+    'dojo/when',
     'dojo/_base/lang',
     'dojo/dom-prop',
+    '../is',
     './_LabelMixin',
     './_FilterMixin',
     './_HelpMessagesMixin',
@@ -15,8 +17,10 @@ function (
     declare,
     keys,
     on,
+    when,
     lang,
     domProp,
+    is,
     LabelMixin,
     FilterMixin,
     HelpMessagesMixin,
@@ -104,6 +108,14 @@ function (
             _skipFocusFormat: false,
 
             _setValueAttr: function(value){
+
+                var filteredValue = this.applyFilter(value);
+                if (is.isDeferred(filteredValue)){
+                    filteredValue.then(lang.hitch(this, function(){
+                        this._setValueAttr(value);
+                    }));
+                    return;
+                }
                 if (this.focused){
                     if (!this._skipFocusFormat){
                         this.textbox.value = this.focusFormat(value, this.constraints);
@@ -111,7 +123,7 @@ function (
                 } else {
                     this.textbox.value = this.blurFormat(value, this.constraints);
                 }
-                this.inherited(arguments, [this.parse(this.applyFilter(value), this.constraints)]);
+                this.inherited(arguments, [this.parse(filteredValue, this.constraints)]);                
             },
 
             _setFocusNodeClassAttr: { node: "focusNode", type: "class" },

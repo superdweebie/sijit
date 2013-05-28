@@ -13,7 +13,7 @@ function(
     Base
 ){
     // module:
-    //		Sds/Filter/PadCurrency
+    //		Sds/Filter/Currency
 
     return declare(
         [Base],
