@@ -4550,3 +4550,6 @@ a.thumbnail:focus {
 .tooltip.inverse .tooltip-arrow {
   border-top-color: #999999;
 }
+.accordion-body {
+  overflow: auto;
+}

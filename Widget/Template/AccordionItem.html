@@ -1,7 +1,9 @@
-<li>
-    <div>
-        <h4 data-dojo-attach-event="ondijitclick: click">${title}</h4>
+<div class="accordion-group">
+    <div class="accordion-heading">
+        <a class="accordion-toggle" data-dojo-attach-event="ondijitclick: click">${title}</a>
     </div>
-    <div class="hide" data-dojo-attach-point="containerNode">
+    <div class="accordion-body" data-dojo-attach-point="accordionBody">
+        <div class="accordion-inner" data-dojo-attach-point="containerNode">
+        </div>
     </div>
-</li>
+</div>
