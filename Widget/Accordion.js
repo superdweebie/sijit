@@ -2,6 +2,7 @@ define([
     'dojo/_base/declare',
     'dojo/_base/array',
     'dojo/_base/lang',
+    'dojo/dom-geometry',
     'dijit/registry',
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
@@ -12,6 +13,7 @@ function (
     declare,
     array,
     lang,
+    domGeom,
     registry,
     Widget,
     TemplatedMixin,
@@ -55,6 +57,15 @@ function (
                 if ( ! inStartup){
                     this.containerNode.appendChild(item.domNode);
                 }
+
+                //adjust AccordionItem boby height.
+                var selectedBodyHeight = domGeom.getContentBox(this.domNode).h;
+                array.forEach(this.items, function(item){
+                    selectedBodyHeight -= domGeom.getMarginBox(item.heading).h;
+                });
+                array.forEach(this.items, function(item){
+                    item.set('selectedBodyHeight', selectedBodyHeight);
+                });
 
                 var self = this;
                 item.watch('hidden', lang.hitch(item, function(property, oldValue, newValue){

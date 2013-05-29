@@ -34,7 +34,7 @@ function(
 
             templateString: template,
 
-            bodyHeight: 300,
+            //selectedBodyHeight: undefined,
 
             click: function(e){
                 e.preventDefault();
@@ -44,16 +44,16 @@ function(
             _setHiddenAttr: function(value){
                 if (value){
                     fx.animateProperty({
-                        node: this.accordionBody,
+                        node: this.body,
                         properties: {
                             height: 0
                         }
                     }).play();
                 } else {
                     fx.animateProperty({
-                        node: this.accordionBody,
+                        node: this.body,
                         properties: {
-                            height: this.bodyHeight
+                            height: this.selectedBodyHeight
                         }
                     }).play();
                 }
