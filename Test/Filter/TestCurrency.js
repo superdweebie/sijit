@@ -1,15 +1,15 @@
 define([
         'doh/main',
-        'Sds/Filter/PadCurrency'
+        'Sds/Filter/Currency'
     ],
     function(
         doh,
         PadCurrency
     ){
-        doh.register("Sds/Test/Filter/TestPadCurrency", [
+        doh.register("Sds/Test/Filter/TestCurrency", [
 
             function FilterTest(doh){
-                var filter = new PadCurrency;
+                var filter = new Currency;
                 filter.currency = 'USD';
                 
                 var testArray = [

@@ -55,8 +55,15 @@ function (
 
             applyFilter: function(value){
 
-                if (! this._filterSet || ! this._started){
-                    return value;
+                if (! this._filterSet){
+                    var filteredValueDeferred = new Deferred;
+                    this.watch('_filterSet', lang.hitch(this, function(p, o, n){
+                        if (n){
+                            filteredValueDeferred.resolve(this.filter.filter(value));
+                        }
+                    }))
+                    
+                    return filteredValueDeferred;
                 }
 
                 return this.filter.filter(value);
