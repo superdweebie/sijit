@@ -1,7 +1,6 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/_base/window',
     'dojo/on',
     'dojo/dom-style',
     'dojo/dom-construct',
@@ -16,7 +15,6 @@ define([
 function(
         declare,
         lang,
-        win,
         on,
         domStyle,
         domConstruct,
@@ -42,7 +40,7 @@ function(
             //target: undefined,
 
             //content: undefined,
-            
+
             hidden: true,
 
             placement: 'top',
@@ -62,10 +60,10 @@ function(
                     this.target = this.domNode.previousElementSibling;
                 }
 
-                on(this.target, this.eventShow, lang.hitch(this, function(e){
+                this.showSignal = on(this.target, this.eventShow, lang.hitch(this, function(e){
                     this.set('hidden', false)
                 }));
-                on(this.target, this.eventHide, lang.hitch(this, function(e){
+                this.hideSignal = on(this.target, this.eventHide, lang.hitch(this, function(e){
                     this.set('hidden', true)
                 }));
             },
@@ -82,7 +80,7 @@ function(
                     return;
                 }
 
-                domConstruct.place(this.domNode, win.body(), 'last');
+                domConstruct.place(this.domNode, document.body, 'last');
                 domClass.remove(this.domNode, 'hidden');
                 domClass.add(this.domNode, 'in ' + this.placement);
                 this.position();

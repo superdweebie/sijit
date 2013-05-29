@@ -5,15 +5,7 @@
         <title>Testing Sds/Widget/Tooltip</title>
        	<style type="text/css">
             @import "../../../themes/bootstrap/css/bootstrap.css";
-            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
-
-            .tooltip.inverse .tooltip-inner {
-                background: #0088CC;
-                color: #fff;
-            }
-
         </style>
-        <link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <script type="text/javascript" src="../../testconfig.js"></script>
         <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
         <script type="text/javascript">
@@ -37,18 +29,18 @@
                 var counter = 2;
 
                 on(dom.byId('add'), 'click', function() {
-                    var i = domConstruct.create('i', {
-                            'class': 'icon-small icon-minus-sign'
+                    var b = domConstruct.create('b', {
+                            innerHTML: 'X'
                         }),
                         p = domConstruct.create('p', {
                             innerHTML: 'Something '
                         }),
                         tip = new Tooltip({
-                            target: i,
+                            target: b,
                             content: 'tooltip ' + counter
                         });
 
-                    p.appendChild(i);
+                    p.appendChild(b);
                     dom.byId('container').appendChild(p);
                     tip.startup();
                     counter++;
@@ -64,16 +56,16 @@
             <div class="row">
                 <div class="well">
                     <p>Tooltip placement</p>
-                    <p>Top <i class="icon-small icon-minus-sign"></i><span data-dojo-type="Sds/Widget/Tooltip" data-dojo-props="placement: 'top'" class="hidden">top</span></p>
-                    <p>Bottom <i class="icon-small icon-minus-sign"></i><span data-dojo-type="Sds/Widget/Tooltip" data-dojo-props="placement: 'bottom'" class="hidden">bottom</span></p>
-                    <p>Left <i class="icon-small icon-minus-sign"></i><span data-dojo-type="Sds/Widget/Tooltip" data-dojo-props="placement: 'left'" class="hidden">left</span></p>
-                    <p>Right <i class="icon-small icon-minus-sign"></i><span data-dojo-type="Sds/Widget/Tooltip" data-dojo-props="placement: 'right'" class="hidden">right</span></p>
+                    <p>Top <b>X</b><span data-dojo-type="Sds/Widget/Tooltip" data-dojo-props="placement: 'top'" class="hidden">top</span></p>
+                    <p>Bottom <b>X</b><span data-dojo-type="Sds/Widget/Tooltip" data-dojo-props="placement: 'bottom'" class="hidden">bottom</span></p>
+                    <p>Left <b>X</b><span data-dojo-type="Sds/Widget/Tooltip" data-dojo-props="placement: 'left'" class="hidden">left</span></p>
+                    <p>Right <b>X</b><span data-dojo-type="Sds/Widget/Tooltip" data-dojo-props="placement: 'right'" class="hidden">right</span></p>
                 </div>
             </div>
             <div class="row">
                 <div class="well">
                     <p>Tooltip creation</p>
-                    <p>Something <i class="icon-small icon-minus-sign"></i><span data-dojo-type="Sds/Widget/Tooltip" class="hidden">tooltip 1</span></p>
+                    <p>Something <b>X</b><span data-dojo-type="Sds/Widget/Tooltip" class="hidden">tooltip 1</span></p>
                     <div id="container"></div>
                     <button id="add">Add new tooltip</button>
                 </div>
@@ -81,13 +73,13 @@
             <div class="row">
                 <div class="well">
                     <p>Tooltip with user defined class</p>
-                    <p>Something <i class="icon-small icon-plus-sign"></i><span data-dojo-type="Sds/Widget/Tooltip" class="inverse hidden">inverse tooltip</span></p>
+                    <p>Something <b>X</b><span data-dojo-type="Sds/Widget/Tooltip" class="inverse hidden">inverse tooltip</span></p>
                 </div>
             </div>
             <div class="row">
                 <div class="well">
                     <p>Tooltip with user defined event (click to show)</p>
-                    <p>Something <i class="icon-small icon-plus-sign"></i><span data-dojo-type="Sds/Widget/Tooltip" class="inverse hidden" data-dojo-props="eventShow: 'click'">show tooltip on click</span></p>
+                    <p>Something <b>X</b><span data-dojo-type="Sds/Widget/Tooltip" class="inverse hidden" data-dojo-props="eventShow: 'click'">show tooltip on click</span></p>
                 </div>
             </div>
         </div>

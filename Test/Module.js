@@ -3,7 +3,6 @@ define([
     'Sds/Test/TestIs',
     'Sds/Test/TestLang',
     'Sds/Test/TestString',
-    'Sds/Test/TestSubscribeMixin',
     'Sds/Test/AuthenticationModule/Module',
     'Sds/Test/IdentityModule/Module',
     'Sds/Test/ConfigManager/Module',
