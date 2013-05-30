@@ -14,6 +14,7 @@
 			require([
                 'dojox/mobile/parser',
                 'dojo/json',
+                'dojo/on',
                 'dojo/dom',
                 'dijit/registry',
                 'Sds/Form/CurrencyTextBox',
@@ -22,15 +23,21 @@
             function(
                 parser,
                 json,
+                on,
                 dom,
                 registry
             ){
                 parser.parse();
 
+                on(dom.byId('programaticSet'), 'click', function(e){
+                    e.preventDefault();
+                    registry.byId('currencyTextBox1').set('value', 5.2);
+                });
+
                 dom.byId('currencyTextBox1Value').innerHTML = json.stringify(registry.byId('currencyTextBox1').get('value'));
                 registry.byId('currencyTextBox1').watch('value', function(p, o, newValue){
                     if (newValue == null){
-                        dom.byId('currencyTextBox1Value').innerHTML = 'null';                        
+                        dom.byId('currencyTextBox1Value').innerHTML = 'null';
                     } else {
                         dom.byId('currencyTextBox1Value').innerHTML = newValue;
                     }
@@ -61,63 +68,69 @@
         <br />
         <form class="form-horizontal">
 
+            <h3>Single Currency Box</h3>
+            <div class="well">
+                <input data-dojo-type="Sds/Form/CurrencyTextBox"
+                    data-dojo-props="
+                        label:'Cost'
+                    "
+                    id="currencyTextBox1"
+                />
+                <p>Currency Box Value: <pre id="currencyTextBox1Value"></pre></p>
+                <button id="programaticSet" class="btn">Do currencyTextBox1.set('value', 5.2);</button>
+            </div>
 
-            <h3>Sds/Form/CurrencyTextBox</h3>
+            <h3>Currency Box with preset float value</h3>
+            <div class="well">
+                <input data-dojo-type="Sds/Form/CurrencyTextBox"
+                    data-dojo-props="
+                        label:'Cost',
+                        value: 2.2
+                    "
+                    id="currencyTextBox2"
+                />
+                <p>Currency Box Value: <pre id="currencyTextBox2Value"></pre></p>
+            </div>
 
-            <p><bold>Single Currency Box</bold></p>
-            <input data-dojo-type="Sds/Form/CurrencyTextBox"
-                data-dojo-props="
-                    label:'Cost'
-                "
-                id="currencyTextBox1"
-            />
-            <p>Currency Box Value: <pre id="currencyTextBox1Value"></pre></p>
+            <h3>Currency Box with preset string value</h3>
+            <div class="well">
+                <input data-dojo-type="Sds/Form/CurrencyTextBox"
+                    data-dojo-props="
+                        label:'Cost',
+                        value: '2.2'
+                    "
+                    id="currencyTextBox3"
+                />
+                <p>Currency Box Value: <pre id="currencyTextBox3Value"></pre></p>
+            </div>
 
-            <p><bold>Currency Box with preset float value</bold></p>
-            <input data-dojo-type="Sds/Form/CurrencyTextBox"
-                data-dojo-props="
-                    label:'Cost',
-                    value: 2.2
-                "
-                id="currencyTextBox2"
-            />
-            <p>Currency Box Value: <pre id="currencyTextBox2Value"></pre></p>
-
-            <p><bold>Currency Box with preset string value</bold></p>
-            <input data-dojo-type="Sds/Form/CurrencyTextBox"
-                data-dojo-props="
-                    label:'Cost',
-                    value: '2.2'
-                "
-                id="currencyTextBox3"
-            />
-            <p>Currency Box Value: <pre id="currencyTextBox3Value"></pre></p>
-
-            <p><bold>Multiple Currency Boxes</bold></p>
-            <input data-dojo-type="Sds/Form/CurrencyTextBox"
-                name="fullPrice"
-                data-dojo-props="
-                label:'Full price',
-                focusNodeClass: ['span2'],
-                validator: 'Required'"
-                id="fullPrice"
-            />
-            <input data-dojo-type="Sds/Form/CurrencyTextBox"
-                name="salePrice"
-                data-dojo-props="
-                label:'Sale price',
-                focusNodeClass: ['span2'],
-                validator: 'NotRequired'"
-                id="salePrice"
-            />
-            <input data-dojo-type="Sds/Form/CurrencyTextBox"
-                name="wholesalePrice"
-                data-dojo-props="
-                label:'Wholesale price',
-                focusNodeClass: ['span2'],
-                validator: 'NotRequired'"
-                id="wholesalePrice"
-            />
+            <h3>Multiple Currency Boxes</h3>
+            <div class="well">
+                <input data-dojo-type="Sds/Form/CurrencyTextBox"
+                    name="fullPrice"
+                    data-dojo-props="
+                    label:'Full price',
+                    focusNodeClass: ['span2'],
+                    validator: 'Required'"
+                    id="fullPrice"
+                />
+                <input data-dojo-type="Sds/Form/CurrencyTextBox"
+                    name="salePrice"
+                    data-dojo-props="
+                    label:'Sale price',
+                    focusNodeClass: ['span2'],
+                    validator: 'NotRequired'"
+                    id="salePrice"
+                />
+                <input data-dojo-type="Sds/Form/CurrencyTextBox"
+                    name="wholesalePrice"
+                    data-dojo-props="
+                    label:'Wholesale price',
+                    focusNodeClass: ['span2'],
+                    validator: 'NotRequired'"
+                    id="wholesalePrice"
+                />
+            </div>
         </form>
 	</body>
 </html>

@@ -27,19 +27,19 @@ function(
                 if (!value){
                     return value
                 }
-                
+
                 var places = monetary.getData(this.currency).places;
 
-                var pieces = value.split(localNumber.decimal);
+                var pieces = ('' + value).split(localNumber.decimal);
                 if (pieces.length > 1) {
                     if (pieces[1].length < places) {
-                        return '' + value + '0000000'.substr(0, places - pieces[1].length);                        
+                        return '' + value + '0000000'.substr(0, places - pieces[1].length);
                     }
                     if (pieces[1].length > places) {
                         return number.round(value, places);
                     }
                 }
-                
+
                 return value;
             }
         }
