@@ -60,10 +60,10 @@ function(
                     this.target = this.domNode.previousElementSibling;
                 }
 
-                this.showSignal = on(this.target, this.eventShow, lang.hitch(this, function(e){
+                on(this.target, this.eventShow, lang.hitch(this, function(e){
                     this.set('hidden', false)
                 }));
-                this.hideSignal = on(this.target, this.eventHide, lang.hitch(this, function(e){
+                on(this.target, this.eventHide, lang.hitch(this, function(e){
                     this.set('hidden', true)
                 }));
             },
@@ -83,11 +83,11 @@ function(
                 domConstruct.place(this.domNode, document.body, 'last');
                 domClass.remove(this.domNode, 'hidden');
                 domClass.add(this.domNode, 'in ' + this.placement);
-                this.position();
+                this._position();
                 this._set('hidden', value);
             },
 
-            position: function() {
+            _position: function() {
                 var targetPos = domGeom.position(this.target),
                     tooltipPos = domGeom.position(this.domNode),
                     left,

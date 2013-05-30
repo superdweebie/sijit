@@ -4538,6 +4538,12 @@ a.thumbnail:focus {
 .overlay-overlay {
   opacity: 0.75;
   position: absolute;
+  background-color: #333333;
+  cursor: wait;
+}
+.overlay-content {
+  color: #eeeeee;
+  position: absolute;
   cursor: wait;
 }
 .tooltip.hidden {

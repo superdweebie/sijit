@@ -687,7 +687,8 @@ a.thumbnail:hover,a.thumbnail:focus{border-color:#08c;-webkit-box-shadow:0 1px 4
 .modal-scroll{bottom:0;left:0;overflow-x:auto;overflow-y:scroll;position:fixed;right:0;top:0;z-index:9999}
 .modal-scroll .modal{position:static;overflow:hidden;z-index:2;top:100px;margin:20px auto !important}
 .modal-body{max-height:none;overflow:hidden}
-.overlay-overlay{opacity:.75;position:absolute;cursor:wait}
+.overlay-overlay{opacity:.75;position:absolute;background-color:#333;cursor:wait}
+.overlay-content{color:#eee;position:absolute;cursor:wait}
 .tooltip.hidden{display:none}
 .tooltip.inverse .tooltip-inner{background:#999;color:#000}
 .tooltip.inverse .tooltip-arrow{border-top-color:#999}
