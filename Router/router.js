@@ -4,7 +4,6 @@ define([
     'dojo/when',
     'dojo/string',
     'dojo/i18n!../nls/routerMessages',
-    'dojo/query',
     './Exception/RouteNotFound'
 ],
 function (
@@ -13,7 +12,6 @@ function (
     when,
     string,
     routerMessages,
-    query,
     RouteNotFound
 ){
     return {
@@ -51,11 +49,13 @@ function (
             }));
 
             // Catch click events on anchor tags
-            query('a').on('click', lang.hitch(this, function(e){
-                var route = e.target.attributes['href'].nodeValue;
-                if (route){
-                    e.preventDefault();
-                    this.go(route);
+            on(document.body, 'click', lang.hitch(this, function(e){
+                if (e.target.nodeType == 1 && e.target.nodeName == 'A'){
+                    var route = e.target.attributes['href'].nodeValue;
+                    if (route){
+                        e.preventDefault();
+                        this.go(route);
+                    }
                 }
             }));
 

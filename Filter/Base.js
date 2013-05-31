@@ -1,9 +1,11 @@
 define([
     'dojo/_base/declare',
+    '../is',
     'dojo/Stateful'
 ],
 function(
     declare,
+    is,
     Stateful
 ){
     // module:
@@ -15,9 +17,9 @@ function(
         }
     );
 
-    Base.isFilter = function(filter){
+    is.isFilter = function(filter){
         //summary:
-        //     Helper method to determine if a filter is an instance of Base filter
+        //     Extend Sds/is with helper method to determine if a filter is an instance of Base filter
         //
         // returns:
         //     boolean

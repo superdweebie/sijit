@@ -1,9 +1,11 @@
 define([
         'doh/main',
+        'Sds/is',
         'Sds/Filter/Base'
     ],
     function(
         doh,
+        is,
         Base
     ){
         doh.register("Sds/Test/Filter/TestBase", [
@@ -12,8 +14,8 @@ define([
 
                 var filter = new Base;
 
-                doh.assertTrue(Base.isFilter(filter));
-                doh.assertFalse(Base.isFilter({}));
+                doh.assertTrue(is.isFilter(filter));
+                doh.assertFalse(is.isFilter({}));
             }
         ]);
     }

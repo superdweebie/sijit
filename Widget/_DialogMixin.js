@@ -126,7 +126,7 @@ function (
                 //     Enables and disables the buttons when the state is changed
 
                 for (var index in this.disableStateButtons){
-                    if(this.state == '') {
+                    if(this.get('state') == '') {
                         domProp.set(this[this.disableStateButtons[index] + 'Node'], 'disabled', false);
                     } else {
                         domProp.set(this[this.disableStateButtons[index] + 'Node'], 'disabled', true);

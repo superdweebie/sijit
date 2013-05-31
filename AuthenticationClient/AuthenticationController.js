@@ -3,7 +3,6 @@ define([
     'dojo/_base/lang',
     'dojo/when',
     'dojo/Deferred',
-    '../Status',
     'dojo/Stateful',
     '../Router/startedRouter!',
     'get!../Store/storeManager'
@@ -13,7 +12,6 @@ function (
     lang,
     when,
     Deferred,
-    Status,
     Stateful,
     router,
     storeManager
@@ -82,9 +80,6 @@ function (
                         return;
                     }
 
-                    // Update status
-                    this.set('status', new Status('logging out', Status.icon.SPINNER));
-
                     // Send message to server
                     storeManager.getStore(this.storeName).remove(this.identity.id).then(
                         lang.hitch(this, '_logoutComplete'),
@@ -114,9 +109,6 @@ function (
                 // summary:
                 //		Cleanup after login
 
-                // Update status
-                this.set('status', new Status('login complete', Status.icon.SUCCESS, 5000));
-
                 //Set the identity
                 this._getIdentityComplete(data);
                 this._loginDeferred.resolve(true);
@@ -125,9 +117,6 @@ function (
             _logoutComplete: function(data){
                 // summary:
                 //		Cleanup after logout
-
-                // Update status
-                this.set('status', new Status('logout complete', Status.icon.SUCCESS, 5000));
 
                 // Set identity
                 this._getIdentityComplete(data);
@@ -176,9 +165,6 @@ function (
             },
 
             _handleException: function(exception){
-
-                // Update status
-                this.set('status', new Status(exception.message, Status.icon.ERROR, 5000));
 
                 // If the error has not happened on a get('identity') call,
                 // refresh the identity from the server. Otherwise, just clear the

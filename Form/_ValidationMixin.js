@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    '../array',
+    'dojo/_base/array',
     'dojo/when',
     'dojo/Deferred',
     'dojo/dom-class',
@@ -27,11 +27,17 @@ function (
         [FocusMixin],
         {
             // state: [readonly] String
-            //		Shows current state (ie, validation result) of input (""=Normal, Incomplete, Error, Validating)
-            state: '',
+            //		Shows current state (ie, validation result) of input ('' | Incomplete | Error | Validating)
+            //		An empty string indicates successful validation.
+            //      State will start as `Validating` until validation has executed the first time.
+            state: 'Validating',
 
+            // Indicates if the ui element has had user interaction
+            // postActivity will be set to true after the first blur event or
+            // after the state first changes to an invalid value
             //postActivity: undefined,
 
+            // Indicates the classes to apply in different validation states
             validationStyle: {
                 preActivity: {
                     //valid: [], //A list of classes to apply when valid
@@ -43,39 +49,52 @@ function (
                 }
             },
 
-            //_appliedStyle: undefined,
-
             // validator: an instance of Sds/Validator/Base.
             //validator: undefined,
-
-            //_onFocusValue: undefined,
-
-            //lastResult: undefined,
-
-            //_delayTimer: undefined,
 
             //Set to true to stop all validation. Set to falsey to allow validation
             //suppressValidation: undefined,
 
-            delayTimeout: 350,
+            //How long to delay validation after user input in milliseconds. Prevents validation on
+            //every single keystroke.
+            delay: 350,
+
+            //_appliedStyle: undefined,
+
+            //_onFocusValue: undefined,
+
+            //_delayTimer: undefined,
 
             _setValueTimestamp: 0,
 
             startup: function(){
                 this.inherited(arguments);
 
-                this.watch('state', lang.hitch(this, function(p, o, newValue){
-                    if (newValue == '' ||
-                        (newValue != '' &&
-                        this._onFocusValue != undefined &&
-                        this._onFocusValue != '' &&
-                        this.get('focused'))
-                    ){
-                        this.set('postActivity', true);
-                    }
-                }));
+                //Set watchers
+                this.watch('state', lang.hitch(this, '_stateWatcher'));
+                this.watch('postActivity', lang.hitch(this, '_postActivityWatcher'));
 
-                this._startValidateTimer();
+                //Trigger first validation
+                this.validateNow();
+            },
+
+            _stateWatcher: function(property, oldValue, newValue){
+                //Watch the state if the state changes from valid to invalid,
+                //while in focus,
+                //and the value was not empty on focus,
+                //then postActivity should be set to true
+                if (newValue != '' &&
+                    this._onFocusValue != undefined &&
+                    this._onFocusValue != '' &&
+                    this.get('focused')
+                ){
+                    this.set('postActivity', true);
+                }
+            },
+
+            _postActivityWatcher: function(property, oldValue, newValue){
+                //re-apply styles which may change postActivity
+                this.set('validationStyle', this.validationStyle);
             },
 
             _setSuppressValidationAttr: function(value){
@@ -84,29 +103,11 @@ function (
                 }
                 this._set('suppressValidation', value);
                 if (doValidation){
-                    this._validateNow();
-                }
-            },
-
-            _setPostActivityAttr: function(value){
-
-                if (this.postActivity != value){
-                    this.postActivity = value;
-                    this.set('validationStyle', this.validationStyle);
-                    this.set('lastResult', this.lastResult);
-                }
-            },
-
-            _setLastResultAttr: function(value){
-                this.lastResult = value;
-                if (value){
-                    this.set('validationMessages', value.messages);
+                    this.validateNow();
                 }
             },
 
             _setValueAttr: function(){
-                // summary:
-                //		Hook so set('value', ...) works.
                 this._setValueTimestamp = new Date().getTime();
                 this.set('state', 'Validating');
                 this.inherited(arguments);
@@ -128,9 +129,9 @@ function (
                 //     The definition will be passed to Sds/Validator/factory.create(). The validator property
                 //     will be set to the returned instance of Sds/Validator/Base
 
-                if (ValidatorBase.isValidator(value)){
+                if (is.isValidator(value)){
                     this._set('validator', value);
-                    this._startValidateTimer();
+                    this.validateNow();
                     return;
                 }
 
@@ -147,43 +148,59 @@ function (
             _setValidationStyleAttr: function(value){
                 if (this._started){
 
-                    var styleNode = this.styleNode ?
-                        this.styleNode :
-                        this.containerNode ?
-                            this.containerNode :
-                            this.domNode,
-                        apply = typeof value == 'array' ?
-                            value :
-                            typeof value == 'string' ?
-                                [value] :
-                                this.postActivity ?
-                                    this.state == '' ?
-                                        value.postActivity.valid :
-                                        value.postActivity.invalid
-                                    : this.state == '' ?
-                                        value.preActivity.value :
-                                        value.preActivity.invalid;
+                    //Determine which node the style classes should be applied to
+                    var styleNode;
+                    if (this.styleNode){
+                        styleNode = this.styleNode
+                    } else if (this.containerNode){
+                        styleNode = this.continerNode;
+                    } else {
+                        styleNode = this.domNode;
+                    }
 
+                    //Determine which style classes to apply
+                    var apply;
+                    if (typeof value == 'array'){
+                        apply = value;
+                    } else if (typeof value == 'string'){
+                        apply = [value];
+                    } else if (this.postActivity && this.state == ''){
+                        apply = value.postActivity.valid;
+                    } else if (this.postActivity && this.state != ''){
+                        apply = value.postActivity.invalid;
+                    } else if (!this.postActivity && this.state == ''){
+                        apply = value.preActivity.valid;
+                    } else if (!this.postActivity && this.state != ''){
+                        apply = value.preActivity.invalid;
+                    } else {
+                        apply = [];
+                    }
+
+                    // remove any previously applied styles
+                    array.forEach(this._appliedStyle, function(item){
+                        domClass.remove(styleNode, item);
+                    }, this);
+
+                    // add the new styles
                     array.forEach(apply, function(item){
                         domClass.add(styleNode, item);
                     }, this);
-                    array.forEach(array.subtract(this._appliedStyle, apply), function(item){
-                        domClass.remove(styleNode, item);
-                    }, this);
+
                     this._appliedStyle = apply;
                 }
-                this.inherited(arguments);
+
+                this._set('validationStyle', value);
             },
 
             onFocus: function(){
-                this.inherited(arguments);                
-                this._onFocusValue = this._getValueToValidate();
+                this.inherited(arguments);
+                this._onFocusValue = this.get('value');
             },
 
             onBlur: function(){
                 this.set('postActivity', true);
                 this.inherited(arguments);
-                this._validateNow();
+                this.validateNow(); //Force immediate validation on blur, no need to wait for the delay timer.
             },
 
             _startValidateTimer: function(){
@@ -191,19 +208,14 @@ function (
                 //Delay timer. Don't validate every single value change
                 clearTimeout(this._delayTimer);
                 this._delayTimer = setTimeout(lang.hitch(this, function(){
-                    this._validateNow();
-                }), this.delayTimeout);
+                    this.validateNow();
+                }), this.delay);
             },
 
-            _validateNow: function(){
-
-                if (ValidatorBase.isValidator(this.validator) && this._started){
-                    // Stop the delay timer and force an immediate validation
-                    clearTimeout(this._delayTimer);
-                    this._validate();
-                } else {
-                    this.set('state', '');
-                }
+            validateNow: function(){
+                // Stop the delay timer and force an immediate validation
+                clearTimeout(this._delayTimer);
+                this._validate();
             },
 
             _validate: function(){
@@ -212,43 +224,41 @@ function (
                     return;
                 }
 
-                var processResult = lang.hitch(this, function(resultObject, timestamp){
-
-                    if (this._setValueTimestamp > timestamp){
-                        // _validate has been called with a fresh value, so don't update the ui
-                        return null;
-                    }
-
-                    var result = resultObject.result;
-                    var state;
-
-                    switch (true){
-                        case (result === true):
-                            state = this._getChildrenState();
-                            break;
-                        case (result === false):
-                            state = 'Error';
-                            break;
-                        case is.isDeferred(result):
-                            result.then(function(resultObject){
-                                processResult(resultObject, timestamp);
-                            });
-                            state = 'Validating';
-                            break;
-                    }
-
-                    this.set('state', state);
-                    this.set('lastResult', resultObject);
-                    this.set('validationStyle', this.validationStyle);
-                    return null;
-                });
-
-                var value = this._getValueToValidate();
-                processResult(this.validator.isValid(value), new Date().getTime());
+                if (is.isValidator(this.validator)){
+                    var timestamp = new Date().getTime();
+                    this._processValidationResult(this.validator.isValid(this.get('value')), timestamp);
+                }
             },
 
-            _getValueToValidate: function(){
-                return this.get('value');
+            _processValidationResult: function(resultObject, timestamp){
+
+                if (this._setValueTimestamp > timestamp){
+                    // _validate has been called with a fresh value, so don't update the ui
+                    return null;
+                }
+
+                var result = resultObject.result,
+                    state;
+
+                switch (true){
+                    case (result === true):
+                        state = this._getChildrenState();
+                        break;
+                    case (result === false):
+                        state = 'Error';
+                        break;
+                    case is.isDeferred(result):
+                        result.then(lang.hitch(this, function(resultObject){
+                            this._processValidationResult(resultObject, timestamp);
+                        }));
+                        state = 'Validating';
+                        break;
+                }
+
+                this.set('state', state);
+                this.set('validationMessages', resultObject.messages);
+                this.set('validationStyle', this.validationStyle);
+                return null;
             },
 
             _getChildrenState: function(){
@@ -257,17 +267,36 @@ function (
                     return '';
                 }
 
-                var states = array.map(this._descendants, function(w){
-                    return w.get("state") || "";
+                var states = array.map(this._descendants, function(widget){
+                    return widget.get("state") || "";
                 });
 
-                return array.indexOf(states, "Error") >= 0 ? "Error" :
-                    array.indexOf(states, "Incomplete") >= 0 ? "Incomplete" : "";
-            },
+                if (array.indexOf(states, "Error") >= 0){
+                    return 'Error';
+                }
+                if (array.indexOf(states, "Validating") >= 0){
+                    return "Validating";
+                }
+                if (array.indexOf(states, 'Incomplete') >= 0){
+                    return 'Incomplete';
+                }
 
-            _getState: function(){
-                return this.state;
-            }
+                if (array.filter(states, function(state){
+                        return (state != '');
+                    }).length > 0
+                ){
+                    return 'Invalid';
+                }
+
+                return '';
+
+//                return array.indexOf(states, "Error") >= 0 ? "Error" :
+//                    array.indexOf(states, "Incomplete") >= 0 ? "Incomplete" : "";
+            }//,
+//
+//            _getState: function(){
+//                return this.state;
+//            }
         }
     );
 });

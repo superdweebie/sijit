@@ -1,9 +1,11 @@
 define([
         'doh/main',
+        'Sds/is',
         'Sds/Validator/Base'
     ],
     function(
         doh,
+        is,
         Base
     ){
         doh.register("Sds/Test/Validator/TestBase", [
@@ -12,8 +14,8 @@ define([
 
                 var validator = new Base;
 
-                doh.assertTrue(Base.isValidator(validator));
-                doh.assertFalse(Base.isValidator({}));
+                doh.assertTrue(is.isValidator(validator));
+                doh.assertFalse(is.isValidator({}));
             }
         ]);
     }

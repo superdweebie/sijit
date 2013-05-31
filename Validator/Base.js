@@ -106,9 +106,9 @@ function(
         }
     );
 
-    Base.isValidator = function(validator){
+    is.isValidator = function(validator){
         //summary:
-        //     Helper method to determine if a validator is an instance of Base validator
+        //     Extend Sds/is with helper method to determine if a validator is an instance of Base validator
         //
         // returns:
         //     boolean

@@ -5,11 +5,9 @@
 		<title>Functional Testing Sds/Form/ValidationTextbox</title>
 		<style type="text/css">
             @import "../../../themes/bootstrap/css/bootstrap.css";
-            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
 		</style>
         <script type="text/javascript" src="../../testconfig.js"></script>
         <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
-        <script type="text/javascript" src="../../Built.js"></script>
 		<script type="text/javascript">
 			require([
                 'dojo/parser',
@@ -32,7 +30,7 @@
                     registry.byId('validationTextBox12').set('suppressValidation', true);
                 });
                 on(dom.byId('dontSuppress'), 'click', function(e){
-                    event.stop(e);
+                    e.preventDefault();
                     registry.byId('validationTextBox12').set('suppressValidation', false);
                 });
                 on(registry.byId('validationTextBox12'), 'messages-updated', function(e){
