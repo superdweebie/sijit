@@ -28,8 +28,26 @@
                 on(dom.byId('button1'), 'click', function(e){
                     e.preventDefault();
                     var overlay = registry.byId('overlay1');
-                    overlay.set('hidden', !overlay.get('hidden'));
-                })
+                    overlay.toggle();
+                });
+
+                on(dom.byId('button2'), 'click', function(e){
+                    e.preventDefault();
+                    var overlay = registry.byId('overlay2');
+                    overlay.toggle();
+                });
+
+                on(dom.byId('button3'), 'click', function(e){
+                    e.preventDefault();
+                    var overlay = registry.byId('overlay3');
+                    overlay.show();
+                });
+
+                on(dom.byId('button4'), 'click', function(e){
+                    e.preventDefault();
+                    var overlay = registry.byId('overlay3');
+                    overlay.hide();
+                });
             });
         </script>
     </head>
@@ -39,9 +57,21 @@
                 <h1>Testing Sds/Widget/Overlay</h1>
             </div>
 
+            <h3>Overlay</h3>
             <p>Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</p>
             <span id="overlay1" data-dojo-type="Sds/Widget/Overlay" data-dojo-props="hidden: false">This is overlayed</span>
-            <button id="button1" class="btn">Toggle overlay 1</button>
+            <button id="button1" class="btn">Toggle overlay</button>
+
+            <h3>Overlay with wait cursor</h3>
+            <p>Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</p>
+            <span id="overlay2" class="overlay-wait" data-dojo-type="Sds/Widget/Overlay" data-dojo-props="hidden: false">Has wait cursor</span>
+            <button id="button2" class="btn">Toggle overlay</button>
+
+            <h3>Overlay whole window</h3>
+            <span id="overlay3" data-dojo-type="Sds/Widget/Overlay" data-dojo-props="target: document.body">
+                <button id="button4" class="btn">Hide overlay</button>
+            </span>
+            <button id="button3" class="btn">Show overlay</button>
         </div>
     </body>
 </html>

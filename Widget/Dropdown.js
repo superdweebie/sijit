@@ -13,6 +13,7 @@ define([
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
     'dijit/_FocusMixin',
+    './_HideableMixin',
     'dojo/text!./Template/Dropdown.html'
 ],
 function (
@@ -30,29 +31,29 @@ function (
     Widget,
     TemplatedMixin,
     FocusMixin,
+    HideableMixin,
     template
 ){
     // module:
     //    	Sds/Widget/Dropdown
 
     return declare(
-        [Widget, TemplatedMixin, FocusMixin],
+        [Widget, TemplatedMixin, FocusMixin, HideableMixin],
         {
             templateString: template,
-
-            hidden: true,
 
             //target: undefined,
 
             //dropdown: undefined,
 
             startup: function(){
-                this.inherited(arguments);
-
-                this.dropdown = this.containerNode.firstElementChild;
                 if ( ! this.target){
                     this.target = this.domNode.previousElementSibling;
                 }
+
+                this.inherited(arguments);
+
+                this.dropdown = this.containerNode.firstElementChild;
 
                 domClass.add(this.dropdown, 'dropdown-menu');
                 if (!domAttr.has(this.dropdown, 'tabindex')){
@@ -61,31 +62,20 @@ function (
                 on(this.target, 'click', lang.hitch(this, this.onClick));
             },
 
-            toggle: function(){
-                this.set('hidden', ! this.get('hidden'));
-            },
-
-            _setHiddenAttr: function(value){
-                if (value){
-                    domClass.remove(this.domNode, 'open');
-                    domClass.add(this.domNode, 'hidden');
-                    focus.focus(this.target);
-                    this.removeKeyListener();
-                    this._set('hidden', value);
-                    return;
-                }
-
-                if (domClass.contains(this.target, "disabled") || domAttr.get(this.target, "disabled")) {
-                    return;
-                }
-
+            _show: function(){
                 this.addKeyListener();
                 domConstruct.place(this.domNode, document.body, 'last');
                 domClass.remove(this.domNode, 'hidden');
                 domClass.add(this.domNode, 'open');
                 this.position();
                 focus.focus(this.dropdown);
-                this._set('hidden', value);
+            },
+
+            _hide: function(){
+                domClass.remove(this.domNode, 'open');
+                domClass.add(this.domNode, 'hidden');
+                focus.focus(this.target);
+                this.removeKeyListener();
             },
 
             addKeyListener: function(){

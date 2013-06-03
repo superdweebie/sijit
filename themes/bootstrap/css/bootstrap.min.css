@@ -684,11 +684,14 @@ a.thumbnail:hover,a.thumbnail:focus{border-color:#08c;-webkit-box-shadow:0 1px 4
 .color-picker .control-group{margin:0}
 .color-picker .controls{margin:0}
 .no-scroll{overflow:hidden}
-.modal-scroll{bottom:0;left:0;overflow-x:auto;overflow-y:scroll;position:fixed;right:0;top:0;z-index:9999}
-.modal-scroll .modal{position:static;overflow:hidden;z-index:2;top:100px;margin:20px auto !important}
+.modal-scroll{bottom:0;left:0;overflow-x:auto;overflow-y:scroll;position:fixed;right:0;top:0}
+.modal-backdrop{opacity:.8;position:absolute;background-color:#000;z-index:auto}
+.modal-scroll .modal{position:static;margin:10% auto !important}
 .modal-body{max-height:none;overflow:hidden}
-.overlay-overlay{opacity:.75;position:absolute;background-color:#333;cursor:wait}
-.overlay-content{color:#eee;position:absolute;cursor:wait}
+.overlay-wait{cursor:wait}
+.overlay-document-body{position:fixed;top:0;bottom:0;left:0;right:0}
+.overlay-overlay{opacity:.8;position:absolute;background-color:#000}
+.overlay-content{color:#eee;position:absolute}
 .tooltip.hidden{display:none}
 .tooltip.inverse .tooltip-inner{background:#999;color:#000}
 .tooltip.inverse .tooltip-arrow{border-top-color:#999}

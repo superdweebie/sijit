@@ -5,12 +5,11 @@ define([
     'dojo/dom-style',
     'dojo/dom-construct',
     'dojo/dom-class',
-    'dojo/dom-attr',
     'dojo/dom-geometry',
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
-    'dojo/text!./Template/Tooltip.html',
-    'dojo/query'
+    './_HideableMixin',
+    'dojo/text!./Template/Tooltip.html'
 ],
 function(
         declare,
@@ -19,17 +18,17 @@ function(
         domStyle,
         domConstruct,
         domClass,
-        domAttr,
         domGeom,
         Widget,
         TemplatedMixin,
+        HideableMixin,
         template
         ) {
     // module:
     //		Sds/Widget/Tooltip
 
     return declare(
-        [Widget, TemplatedMixin],
+        [Widget, TemplatedMixin, HideableMixin],
         {
             templateString: template,
 
@@ -40,8 +39,6 @@ function(
             //target: undefined,
 
             //content: undefined,
-
-            hidden: true,
 
             placement: 'top',
 
@@ -54,11 +51,12 @@ function(
             },
 
             startup: function(){
-                this.inherited(arguments);
 
                 if ( ! this.target){
                     this.target = this.domNode.previousElementSibling;
                 }
+
+                this.inherited(arguments);
 
                 on(this.target, this.eventShow, lang.hitch(this, function(e){
                     this.set('hidden', false)
@@ -68,23 +66,16 @@ function(
                 }));
             },
 
-            _setHiddenAttr: function(value){
-                if (value){
-                    domClass.add(this.domNode, 'hidden');
-                    domClass.remove(this.domNode, 'in top bottom left right');
-                    this._set('hidden', value);
-                    return;
-                }
-
-                if (domClass.contains(this.target, "disabled") || domAttr.get(this.target, "disabled")) {
-                    return;
-                }
-
+            _show: function(){
                 domConstruct.place(this.domNode, document.body, 'last');
                 domClass.remove(this.domNode, 'hidden');
                 domClass.add(this.domNode, 'in ' + this.placement);
                 this._position();
-                this._set('hidden', value);
+            },
+
+            _hide: function(){
+                domClass.add(this.domNode, 'hidden');
+                domClass.remove(this.domNode, 'in top bottom left right');
             },
 
             _position: function() {

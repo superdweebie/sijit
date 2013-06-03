@@ -35,6 +35,10 @@
                         dom.byId('State').innerHTML = newValue;
                     });
 
+                    registry.byId('testDialog').watch('button', function(property, oldValue, newValue){
+                        dom.byId('Button').innerHTML = newValue;
+                    });
+
                     on(dom.byId('showDialog'), 'click', function(){
                         when(registry.byId('testDialog').show(), function(result){
                             dom.byId('ReturnValue').innerHTML = json.stringify(result, null, '    ');
@@ -62,6 +66,9 @@
         <br />
         <h3>State</h3>
         <p><pre id="State"></pre></p>
+
+        <h3>Button</h3>
+        <p><pre id="Button"></pre></p>
 
         <div id="testDialog" data-dojo-type="Sds/Widget/Dialog" title="Test Dialog">
             <div>This is a dialog test message.</div>

@@ -4522,29 +4522,39 @@ a.thumbnail:focus {
   position: fixed;
   right: 0;
   top: 0;
-  z-index: 9999;
+}
+.modal-backdrop {
+  opacity: 0.8;
+  position: absolute;
+  background-color: #000000;
+  z-index: auto;
 }
 .modal-scroll .modal {
   position: static;
-  overflow: hidden;
-  z-index: 2;
-  top: 100px;
-  margin: 20px auto !important;
+  margin: 10% auto !important;
 }
 .modal-body {
   max-height: none;
   overflow: hidden;
 }
-.overlay-overlay {
-  opacity: 0.75;
-  position: absolute;
-  background-color: #333333;
+.overlay-wait {
   cursor: wait;
+}
+.overlay-document-body {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.overlay-overlay {
+  opacity: 0.8;
+  position: absolute;
+  background-color: #000000;
 }
 .overlay-content {
   color: #eeeeee;
   position: absolute;
-  cursor: wait;
 }
 .tooltip.hidden {
   display: none;

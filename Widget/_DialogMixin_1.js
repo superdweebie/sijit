@@ -8,6 +8,7 @@ define([
     'dojo/dom-class',
     'dojo/dom-construct',
     '../string',
+    './Overlay',
     '../Form/_FormMixin',
     './_HideableMixin'
 ],
@@ -21,6 +22,7 @@ function (
     domClass,
     domConstruct,
     string,
+    Overlay,
     FormMixin,
     HideableMixin
 ){
@@ -70,8 +72,11 @@ function (
             },
 
             startup: function(){
+                this._overlay = new Overlay({target: document.body});
+                this._overlay.startup();
                 this.inherited(arguments);
 
+                on(this._overlay, 'click', lang.hitch(this, 'onBackdropClick'));
                 this.watch('state', lang.hitch(this, '_updateDisableStateButtons'));
             },
 
@@ -133,13 +138,11 @@ function (
                 }
             },
 
-            onBackdropClick: function(e){
+            onBackdropClick: function(){
                 // summary:
                 //    Event called by the template when the backdrop is clicked.
-                if (e.target == this.backdrop){
-                    this.set('button', buttons.BACKDROP_CANCEL);
-                    this.hide();
-                }
+                this.set('button', buttons.BACKDROP_CANCEL);
+                this.hide();
             },
 
             show: function(/*object*/value)
@@ -193,6 +196,7 @@ function (
                 domClass.add(document.body, 'no-scroll');
                 domClass.remove(this.domNode, 'hide');
 
+                //this._overlay.show();
                 this._updateDisableStateButtons();
             },
 
@@ -203,8 +207,10 @@ function (
                 });
                 this._keyPressHandlers = [];
 
+                this._modal.hide();
                 domClass.remove(document.body, 'no-scroll');
                 domClass.add(this.domNode, 'hide');
+                this._overlay.hide();
             }
         }
     );

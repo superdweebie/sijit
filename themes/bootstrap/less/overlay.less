@@ -1,16 +1,25 @@
 //
 //   Less for Sds/Widget/Overlay
 //
+.overlay-wait {
+    cursor:wait;
+}
+
+.overlay-document-body {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
 
 .overlay-overlay {
-    opacity: 0.75;
+    opacity: 0.8;
     position: absolute;
-    background-color: @grayDark;
-    cursor:wait;
+    background-color: @black;
 }
 
 .overlay-content {
     color: @grayLighter;
     position: absolute;
-    cursor:wait;
 }
