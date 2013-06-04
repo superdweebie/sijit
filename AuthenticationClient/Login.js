@@ -6,7 +6,7 @@ define([
     'dojo/i18n!../nls/authenticationClient',
     'dijit/_Widget',
 	'dijit/_TemplatedMixin',
-    '../Widget/_WidgetsInTemplateMixin',
+    'dijit/_WidgetsInTemplateMixin',
     '../Widget/_DialogMixin',
     'dojo/text!./Template/Login.html',
     '../Router/baseUrl!',

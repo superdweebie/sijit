@@ -4572,3 +4572,13 @@ a.thumbnail:focus {
 .accordion-body {
   overflow: auto;
 }
+.alert.alert-no-close .close {
+  display: none;
+}
+.input-select input[readonly] {
+  background-color: #EEEEEE;
+  cursor: pointer;
+}
+.input-append .add-on .caret {
+  vertical-align: middle;
+}

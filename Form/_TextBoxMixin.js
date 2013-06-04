@@ -2,7 +2,6 @@ define([
     'dojo/_base/declare',
     'dojo/keys',
     'dojo/on',
-    'dojo/when',
     'dojo/_base/lang',
     'dojo/dom-prop',
     '../is',
@@ -17,7 +16,6 @@ function (
     declare,
     keys,
     on,
-    when,
     lang,
     domProp,
     is,
@@ -123,7 +121,7 @@ function (
                 } else {
                     this.textbox.value = this.blurFormat(value, this.constraints);
                 }
-                this.inherited(arguments, [this.parse(filteredValue, this.constraints)]);                
+                this.inherited(arguments, [this.parse(filteredValue, this.constraints)]);
             },
 
             _setFocusNodeClassAttr: { node: "focusNode", type: "class" },

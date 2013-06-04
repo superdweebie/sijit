@@ -697,3 +697,6 @@ a.thumbnail:hover,a.thumbnail:focus{border-color:#08c;-webkit-box-shadow:0 1px 4
 .tooltip.inverse .tooltip-arrow{border-top-color:#999}
 .accordion{height:400px}
 .accordion-body{overflow:auto}
+.alert.alert-no-close .close{display:none}
+.input-select input[readonly]{background-color:#eee;cursor:pointer}
+.input-append .add-on .caret{vertical-align:middle}

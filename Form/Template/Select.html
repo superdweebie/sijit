@@ -1,6 +1,17 @@
 <div class="control-group">
-    <div class="controls">
-        <select id="${id}" data-dojo-attach-point="select, focusNode">
-        </select>
+    <div class="controls input-select">
+        <div class="input-append">
+            <input id="${id}"
+                type="text"
+                readonly="true"
+                data-dojo-attach-point="textbox"
+            />
+            <button class="btn"
+                type="button"
+                data-dojo-attach-point="focusNode"
+            >
+                <span class="caret"></span>
+            </button>
+        </div>
     </div>
 </div>

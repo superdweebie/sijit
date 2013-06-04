@@ -1,13 +1,9 @@
 define([
-    'dojo/_base/declare',
-    'dojo/dom-class',
-    'dojo/dom-attr'
+    'dojo/_base/declare'
 ],
 function(
-        declare,
-        domClass,
-        domAttr
-        ) {
+    declare
+) {
     // module:
     //		Sds/Widget/_HideableMixin
 

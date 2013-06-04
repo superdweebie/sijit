@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<title>Functional Testing Sds/Widget/Alert</title>
+		<style type="text/css">
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+		</style>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+		<script type="text/javascript">
+			require([
+                'dojo/dom',
+                'dojo/on',
+                'dojox/mobile/parser',
+                'dijit/registry',
+                'Sds/Widget/Alert',
+                'dojo/domReady!'
+            ],
+            function(
+                dom,
+                on,
+                parser,
+                registry
+            ){
+                parser.parse();
+            })
+		</script>
+	</head>
+	<body>
+        <h1>Functional Testing Sds/Widget/Alert</h1>
+        <div class="well">
+            <div data-dojo-type="Sds/Widget/Alert" data-dojo-props="hidden: false">
+                <strong>Warning!</strong> Best check yo self, you're not looking too good.
+            </div>
+            <div data-dojo-type="Sds/Widget/Alert" class="alert-block" data-dojo-props="hidden: false">
+                <h4>Warning!</h4>
+                Best check yo self, you're not looking too good. Nulla vitae elit libero, a pharetra augue. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
+            </div>
+            <div data-dojo-type="Sds/Widget/Alert" class="alert-error" data-dojo-props="hidden: false">
+                <strong>Oh snap!</strong> Change a few things up and try submitting again.
+            </div>
+            <div data-dojo-type="Sds/Widget/Alert" class="alert-success" data-dojo-props="hidden: false">
+                <strong>Well done!</strong> You successfully read this important alert message.
+            </div>
+            <div data-dojo-type="Sds/Widget/Alert" class="alert-info" data-dojo-props="hidden: false">
+                <strong>Heads up!</strong> This alert needs your attention, but it's not super important.
+            </div>
+            <div data-dojo-type="Sds/Widget/Alert" class="alert-no-close" data-dojo-props="hidden: false">
+                <strong>Warning!</strong> You can't clear this one. No close button. Ha!
+            </div>
+        </div>
+	</body>
+</html>

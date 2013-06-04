@@ -2,9 +2,14 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
-    'dojo/on',    
+    'dojo/on',
     'dojo/dom-construct',
-    './_OptionsMixin'
+    'dojo/dom-attr',
+    'dojo/dom-prop',
+    'dojo/dom-style',
+    './_OptionsMixin',
+    'dijit/_FocusMixin',
+    '../Widget/Dropdown'
 ],
 function (
     declare,
@@ -12,62 +17,122 @@ function (
     array,
     on,
     domConstruct,
-    OptionsMixin
+    domAttr,
+    domProp,
+    domStyle,
+    OptionsMixin,
+    FocusMixin,
+    Dropdown
 ){
     return declare(
-        [OptionsMixin],
+        [FocusMixin, OptionsMixin],
         {
+
+            // placeholder: string
+            //placeholder: undefined,
+
+            buildRendering: function(){
+                this.dropdown = new Dropdown({content: '<ul class="dropdown-menu"></ul>'});
+                this.inherited(arguments);
+                this.dropdown.set('target', this.textbox.parentElement);
+            },
 
             startup: function(){
                 this.inherited(arguments);
-                on(this.select, 'change', lang.hitch(this, function(e){
-                    this.set('value', e.target.value);
-                }));
+                this.set('placeholder');
+                this.dropdown.startup();
+                this.dropdown.watch('hidden', lang.hitch(this, '_dropdownWatcher'));
             },
-            
+
+            _dropdownWatcher: function(property, oldValue, newValue){
+                if (!newValue){
+                    domStyle.set(this.dropdown.dropdown, 'width', domStyle.get(this.textbox.parentElement, 'width') + 'px');
+                }
+            },
+
+            _setPlaceholderAttr: function(value) {
+                this.placeholder = value;
+
+                if(this.placeholder) {
+                    domProp.set(this.textbox, 'placeholder', this.placeholder);
+                } else if (this.label){
+                    domProp.set(this.textbox, 'placeholder', this.get('label'));
+                }
+            },
+
             addOption: function(value, label){
-                var existingOptions = this.get('options');
-                if ( ! existingOptions[value]){
-                    if (this.sortByLabel){
-                        var created = false;
-                        array.forEach(this.select.options, lang.hitch(this, function(option){
-                            if ( ! created && option.text > label){
-                                domConstruct.create('option',{value: value, innerHTML: label}, option, 'before');
-                                created = true;
-                            }
-                        }));
-                        if ( ! created){
-                            domConstruct.create('option',{value: value, innerHTML: label}, this.select, 'last');
+                var existingOptions = this.get('options'),
+                    option,
+                    newA,
+                    newLI,
+                    i;
+
+                if (existingOptions[value]){
+                    return;
+                }
+
+                newA = domConstruct.create('A', {href: value, innerHTML: label});
+
+                if (this.sortByLabel){
+                    for (i = 0; i < this.dropdown.dropdown.childNodes.length; i++){
+                        option = this.dropdown.dropdown.childNodes[i];
+                        if (option.nodeName == 'LI' && option.childNodes[0].innerHTML > label){
+                            newLI = domConstruct.create(
+                                'LI',
+                                null,
+                                option,
+                                'before'
+                            );
+                            break;
                         }
-                    } else {
-                        domConstruct.create('option',{value: value, innerHTML: label}, this.select, 'last');
                     }
                 }
+                if (!newLI){
+                    newLI = domConstruct.create(
+                        'LI',
+                        null,
+                        this.dropdown.dropdown,
+                        'last'
+                    );
+                }
+
+                domConstruct.place(newA, newLI, 'only');
+                on(newA, 'click', lang.hitch(this, function(e){
+                    e.preventDefault();
+                    this.set('value', value);
+                    this.dropdown.set('hidden', true);
+                }));
             },
 
             removeOption: function(value){
                 var i, option;
-                for (i = 0; i < this.select.options.length; i++){
-                    option = this.select.options[i];
-                    if (option && option.value == value){
+                for (i = 0; i < this.dropdown.dropdown.childNodes.length; i++){
+                    option = this.dropdown.dropdown.childNodes[i];
+                    if (option.nodeName == 'LI' && domAttr.get(option.childNodes[0], 'href') == value){
                         domConstruct.destroy(option);
                         break;
-                    }                    
-                }                
+                    }
+                }
+            },
+
+            _getOptionsAttr: function(){
+                var options = {};
+                array.forEach(this.dropdown.dropdown.childNodes, lang.hitch(this, function(option){
+                    if (option.nodeName == 'LI'){
+                        options[domAttr.get(option.childNodes[0], 'href')] = option.childNodes[0].innerHTML;
+                    }
+                }));
+                return options;
             },
 
             _setValueAttr: function(value){
-                this.inherited(arguments);
-                this.select.value = value;
+                if (value){
+                    this.textbox.value = this.get('options')[value];
+                }
+                this._set('value', value);
             },
             
-            _getOptionsAttr: function(){
-                var options = {};
-                array.forEach(this.select.options, lang.hitch(this, function(option){
-                    options[option.value] = option.text;
-                }));
-                return options;
-            }
+            _setFocusNodeClassAttr: { node: "textbox", type: "class" }
         }
     )
 });

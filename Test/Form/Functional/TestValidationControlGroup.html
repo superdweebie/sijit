@@ -2,17 +2,15 @@
 	"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<title>Functional Testing Sds/ValidationControlGroup</title>
+		<title>Functional Testing Sds/Form/ValidationControlGroup</title>
 		<style type="text/css">
             @import "../../../themes/bootstrap/css/bootstrap.css";
-            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
 		</style>
         <script type="text/javascript" src="../../testconfig.js"></script>
         <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
-        <script type="text/javascript" src="../../Built.js"></script>
 		<script type="text/javascript">
 			require([
-                'dojo/parser',
+                'dojox/mobile/parser',
                 'dojo/on',
                 'dojo/dom',
                 'dijit/registry',
@@ -26,15 +24,15 @@
                 dom,
                 registry
             ){
-                parser.parse().then(function(){
-                    on(dom.byId('listInvalidButton'), 'click', function(){
-                        var widgets = registry.byId('controlGroup1').get('invalidWidgets');
-                        var ids = [];
-                        for (var index in widgets){
-                            ids.push(widgets[index].get('id'));
-                        }
-                        dom.byId('invalidWidgetsList').innerHTML = ids.toString();
-                    });
+                parser.parse();
+
+                on(dom.byId('listInvalidButton'), 'click', function(){
+                    var widgets = registry.byId('controlGroup1').get('invalidWidgets');
+                    var ids = [];
+                    for (var index in widgets){
+                        ids.push(widgets[index].get('id'));
+                    }
+                    dom.byId('invalidWidgetsList').innerHTML = ids.toString();
                 });
             })
 		</script>
@@ -45,11 +43,11 @@
 
         <h3>ValidationControlGroup holding two ValidationTextBoxes</h3>
         <div
+            class="well"
             id="controlGroup1"
             data-dojo-type="Sds/Form/ValidationControlGroup"
-            data-dojo-props="validator: {base: 'Sds/Test/Form/Asset/MultiFieldValidator'}"
+            data-dojo-props="validator: 'Sds/Test/Form/Asset/MultiFieldValidator'"
         >
-
             <input
                 id="username1"
                 data-dojo-type="Sds/Form/ValidationTextBox"

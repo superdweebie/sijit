@@ -12,9 +12,8 @@
 			require([
                 'dojo/dom',
                 'dojo/on',
-                'dojo/when',
                 'dojo/json',
-                'dojo/parser',
+                'dojox/mobile/parser',
                 'dijit/registry',
                 'Sds/Widget/Dialog',
                 'Sds/Form/TextBox',
@@ -24,34 +23,26 @@
             function(
                 dom,
                 on,
-                when,
                 json,
                 parser,
                 registry
             ){
-                parser.parse().then(function(){
+                parser.parse();
 
-                    registry.byId('testDialog').watch('state', function(property, oldValue, newValue){
-                        dom.byId('State').innerHTML = newValue;
-                    });
+                registry.byId('testDialog').watch('value', function(property, oldValue, newValue){
+                    dom.byId('Value').innerHTML = json.stringify(newValue, null, '    ');
+                });
 
-                    registry.byId('testDialog').watch('button', function(property, oldValue, newValue){
-                        dom.byId('Button').innerHTML = newValue;
-                    });
+                registry.byId('testDialog').watch('state', function(property, oldValue, newValue){
+                    dom.byId('State').innerHTML = newValue;
+                });
 
-                    on(dom.byId('showDialog'), 'click', function(){
-                        when(registry.byId('testDialog').show(), function(result){
-                            dom.byId('ReturnValue').innerHTML = json.stringify(result, null, '    ');
-                        });
-                    });
+                registry.byId('testDialog').watch('button', function(property, oldValue, newValue){
+                    dom.byId('Button').innerHTML = newValue;
+                });
 
-                    on(dom.byId('validState'), 'click', function(){
-                        registry.byId('testDialog').set('state', '');
-                    });
-
-                    on(dom.byId('invalidState'), 'click', function(){
-                        registry.byId('testDialog').set('state', 'bad');
-                    });
+                on(dom.byId('showDialog'), 'click', function(){
+                    registry.byId('testDialog').show();
                 });
             })
 		</script>
@@ -62,7 +53,7 @@
         <button class="btn btn-primary btn-large" id="showDialog">Show Dialog</button>
 
         <h3>Return value</h3>
-        <p><pre id="ReturnValue"></pre></p>
+        <p><pre id="Value"></pre></p>
         <br />
         <h3>State</h3>
         <p><pre id="State"></pre></p>
@@ -73,10 +64,15 @@
         <div id="testDialog" data-dojo-type="Sds/Widget/Dialog" title="Test Dialog">
             <div>This is a dialog test message.</div>
             <p>
-                <button id="validState" class="btn">set valid state</button>
-                <button id="invalidState" class="btn">set invalid state</button>
+                <input id="hello"
+                   data-dojo-type="Sds/Form/ValidationTextBox"
+                   name="requiredInput"
+                   data-dojo-props="
+                       label: 'Required',
+                       validator: 'Required'
+                   "
+                />
             </p>
-            <p><input id="hello" data-dojo-type="Sds/Form/TextBox" value="hello" name="helloInput"/></p>
             <p>
                 <input id="date"
                     data-dojo-type="Sds/Form/DateTextBox"
@@ -136,7 +132,6 @@
             Lots of content ...
             </br />
             The End
->>>>>>> new
         </div>
 	</body>
 </html>

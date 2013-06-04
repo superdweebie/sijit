@@ -71,14 +71,15 @@ function (
                 this.inherited(arguments);
 
                 //Set watchers
-                this.watch('state', lang.hitch(this, '_stateWatcher'));
-                this.watch('postActivity', lang.hitch(this, '_postActivityWatcher'));
+                this.watch('value', lang.hitch(this, '_triggerValidate'));
+                this.watch('state', lang.hitch(this, '_updateActivityFromState'));
+                this.watch('postActivity', lang.hitch(this, '_updateValidationStyle'));
 
                 //Trigger first validation
                 this.validateNow();
             },
 
-            _stateWatcher: function(property, oldValue, newValue){
+            _updateActivityFromState: function(property, oldValue, newValue){
                 //Watch the state if the state changes from valid to invalid,
                 //while in focus,
                 //and the value was not empty on focus,
@@ -92,9 +93,15 @@ function (
                 }
             },
 
-            _postActivityWatcher: function(property, oldValue, newValue){
+            _updateValidationStyle: function(){
                 //re-apply styles which may change postActivity
                 this.set('validationStyle', this.validationStyle);
+            },
+
+            _triggerValidate: function(property, oldValue, newValue){
+                this._setValueTimestamp = new Date().getTime();
+                this.set('state', 'Validating');
+                this._startValidateTimer();
             },
 
             _setSuppressValidationAttr: function(value){
@@ -105,13 +112,6 @@ function (
                 if (doValidation){
                     this.validateNow();
                 }
-            },
-
-            _setValueAttr: function(){
-                this._setValueTimestamp = new Date().getTime();
-                this.set('state', 'Validating');
-                this.inherited(arguments);
-                this._startValidateTimer();
             },
 
             _setValidatorAttr: function(value){
@@ -150,8 +150,10 @@ function (
 
                     //Determine which node the style classes should be applied to
                     var styleNode;
-                    if (this.styleNode){
-                        styleNode = this.styleNode
+                    if (this.styleNode && this.styleNode.domNode){ //if the styleNode is a widget
+                        styleNode = this.styleNode.domNode;
+                    } else if (this.styleNode){
+                        styleNode = this.styleNode;
                     } else if (this.containerNode){
                         styleNode = this.continerNode;
                     } else {
@@ -257,7 +259,7 @@ function (
 
                 this.set('state', state);
                 this.set('validationMessages', resultObject.messages);
-                this.set('validationStyle', this.validationStyle);
+                this._updateValidationStyle();
                 return null;
             },
 
@@ -289,14 +291,7 @@ function (
                 }
 
                 return '';
-
-//                return array.indexOf(states, "Error") >= 0 ? "Error" :
-//                    array.indexOf(states, "Incomplete") >= 0 ? "Incomplete" : "";
-            }//,
-//
-//            _getState: function(){
-//                return this.state;
-//            }
+            }
         }
     );
 });

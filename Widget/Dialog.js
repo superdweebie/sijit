@@ -1,5 +1,6 @@
 define([
     'dojo/_base/declare',
+    'dojo/_base/array',
     'dojo/_base/lang',
     'dojo/keys',
     'dijit/_Widget',
@@ -9,6 +10,7 @@ define([
 ],
 function (
     declare,
+    array,
     lang,
     keys,
     Widget,
@@ -19,7 +21,7 @@ function (
     // module:
     //		Sds/Widget/Dialog
 
-    var buttons = lang.mixin(DialogMixin.Buttons, {
+    var buttons = lang.mixin(DialogMixin.buttons, {
         // summary:
         //		Possible values of the button property in the return object.
         //
@@ -40,7 +42,16 @@ function (
 
             buttons: buttons,
 
-            disableStateButtons: ['ok'],
+            onOkClick: function(){
+                if (this.get('state') == ''){
+                    this.set('button', buttons.OK);
+                    this.hide();
+                } else {
+                    array.forEach(this.get('invalidWidgets'), function(widget){
+                        widget.set('postActivity', true);
+                    });
+                }
+            },
 
             _setTitleAttr: { node: "titleNode", type: "innerHTML" }
         }

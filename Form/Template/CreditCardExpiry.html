@@ -1,25 +1,30 @@
-<div data-dojo-attach-point="containerNode" class="control-group">
-    <div class="row-fluid">
-        <select data-dojo-type="Sds/Form/Select"
-            name="month"
-            data-dojo-props="
-                label: 'Expiry Month',
-                sortByLabel: false,
-                'class': 'span6',
-                focusNodeClass: 'span12'
-            "
-            data-dojo-attach-point="month"
-        >
-        </select>
-        <select data-dojo-type="Sds/Form/Select"
-            name="year"
-            data-dojo-props="
-                label: 'Expiry Year',
-                'class': 'span6',
-                focusNodeClass: 'span12'
-            "
-            data-dojo-attach-point="year"
-        >
-        </select>
+<div class="control-group">
+    <div data-dojo-type="Sds/Widget/Alert" class="alert-no-close" data-dojo-attach-point="alert, styleNode">
+        <span data-dojo-attach-point="messagesNode"></span>
+    </div>
+    <div data-dojo-attach-point="containerNode">
+        <div class="row-fluid">
+            <select data-dojo-type="Sds/Form/Select"
+                name="month"
+                data-dojo-props="
+                    label: 'Expiry Month',
+                    sortByLabel: false,
+                    'class': 'span6',
+                    focusNodeClass: 'span12'
+                "
+                data-dojo-attach-point="month"
+            >
+            </select>
+            <select data-dojo-type="Sds/Form/Select"
+                name="year"
+                data-dojo-props="
+                    label: 'Expiry Year',
+                    'class': 'span6',
+                    focusNodeClass: 'span12'
+                "
+                data-dojo-attach-point="year"
+            >
+            </select>
+        </div>
     </div>
 </div>

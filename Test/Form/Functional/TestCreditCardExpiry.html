@@ -5,12 +5,10 @@
 		<title>Functional Testing Sds/Form/CreditCardExpiry</title>
 		<style type="text/css">
             @import "../../../themes/bootstrap/css/bootstrap.css";
-            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
             @import "../../../../bootstrap/assets/datepicker.css";
 		</style>
         <script type="text/javascript" src="../../testconfig.js"></script>
         <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
-        <script type="text/javascript" src="../../Built.js"></script>
 		<script type="text/javascript">
 			require([
                 'dojo/parser',
@@ -49,9 +47,11 @@
 
             <h3>Sds/Form/CreditCardExpiry</h3>
 
-            <input data-dojo-type="Sds/Form/CreditCardExpiry"
-                id="creditCardExpiry1"
-            />
+            <div class='well'>
+                <input data-dojo-type="Sds/Form/CreditCardExpiry"
+                    id="creditCardExpiry1"
+                />
+            </div>
 
             <p>State: <pre id="creditCardExpiry1State"></pre></p>
             <p>Value: <pre id="creditCardExpiry1Value"></pre></p>

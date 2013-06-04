@@ -20,7 +20,6 @@ function(
 
             // Adds a validation messages to form inputs
 
-
             // Should validation messages be suppressed or not?
             suppressValidationMessages: {
                 preActivity: true //,
@@ -42,20 +41,11 @@ function(
                 this.inherited(arguments);
 
                 //Set watchers
-                this.watch('postActivity', lang.hitch(this, '_postActivityWatcher'));
-                this.watch('_activeSuppressValidationMessages', lang.hitch(this, '_activeSuppressValidationMessagesWatcher'));
+                this.watch('postActivity', lang.hitch(this, '_updateValidationMessages'));
             },
 
-            _postActivityWatcher: function(property, oldValue, newValue){
-                if (newValue){
-                    this.set('_activeSuppressValidationMessages', this.suppressValidationMessages.postActivity);
-                } else {
-                    this.set('_activeSuppressValidationMessages', this.suppressValidationMessages.preActivity);
-                }
-            },
-
-            _activeSuppressValidationMessagesWatcher: function(property, oldValue, newValue){
-                this.set('validationMessages', this._validationMessages); //trigger a messages re-render
+            _updateValidationMessages: function(){
+                this.set('validationMessages', this._messages); //trigger rerender
             },
 
             _setValidationMessagesAttr: function(messages) {
@@ -72,11 +62,12 @@ function(
             },
 
             formatValidationMessage: function(message){
-                if (this._activeSuppressValidationMessages){
+                if ((this.postActivity && this.suppressValidationMessages.postActivity) ||
+                    (!this.postActivity && this.suppressValidationMessages.preActivity)
+                ){
                     return null;
-                } else {
-                    return message;
                 }
+                return message;
             },
 
             _setSuppressValidationMessagesAttr: function(value){
@@ -86,14 +77,8 @@ function(
                         postActivity: !!value
                     }
                 }
-
                 this._set('suppressValidationMessages', value);
-
-                if (this.postActivity){
-                    this.set('_activeSuppressValidationMessages', value.postActivity);
-                } else {
-                    this.set('_activeSuppressValidationMessages', value.preActivity);
-                }
+                this._updateValidationMessages();
             }
         }
     );

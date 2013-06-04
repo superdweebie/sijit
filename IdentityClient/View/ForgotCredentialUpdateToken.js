@@ -3,7 +3,7 @@ define([
     'dojo/_base/lang',
     'dijit/_Widget',
     'dijit/_TemplatedMixin',
-    '../../Widget/_WidgetsInTemplateMixin',
+    'dijit/_WidgetsInTemplateMixin',
     '../../Mvc/BaseView',
     'dojo/text!./Template/ForgotCredentialUpdateToken.html',
     '../../Widget/Dialog',

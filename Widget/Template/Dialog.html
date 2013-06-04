@@ -3,15 +3,7 @@
     <div class="modal-scroll" data-dojo-attach-point="backdrop" data-dojo-attach-event="ondijitclick: onBackdropClick">
         <div class="modal">
             <div class="modal-header">
-                <button
-                    type="button"
-                    class="close"
-                    data-dismiss="modal"
-                    aria-hidden="true"
-                    data-dojo-attach-event="ondijitclick: onCancelClick"
-                >
-                    &times;
-                </button>
+                ${!closeButtonTemplate}
                 <h3 data-dojo-attach-point="titleNode"></h3>
             </div>
             <div data-dojo-attach-point="containerNode" class="modal-body">

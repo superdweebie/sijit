@@ -9,7 +9,8 @@ define([
     'dojo/dom-construct',
     '../string',
     '../Form/_FormMixin',
-    './_HideableMixin'
+    './_HideableMixin',
+    'dojo/text!./Template/CloseButton.html'
 ],
 function (
     declare,
@@ -22,7 +23,8 @@ function (
     domConstruct,
     string,
     FormMixin,
-    HideableMixin
+    HideableMixin,
+    closeButtonTemplate
 ){
     // module:
     //		Sds/Widget/_DialogMixin
@@ -33,7 +35,7 @@ function (
         //
         // description:
         //      BACKDROP_CANCEL: indicates that the overlay was clicked to dismiss the dialog
-        BACKDROP_CANCEL: 'backdropCancel'
+        BACKDROP_CANCEL: 'backdrop'
     };
 
     var dialog = declare(
@@ -54,9 +56,7 @@ function (
             //     A value from the buttons array indicating which button was pressed to dismiss the dialog.
             button: undefined,
 
-            // diableStateButtons: array
-            //     An array of button nodes that should be disabled when the state is invalid
-            disableStateButtons: undefined,
+            closeButtonTemplate: closeButtonTemplate,
 
             _keypressHandlers: [],
 
@@ -71,8 +71,6 @@ function (
 
             startup: function(){
                 this.inherited(arguments);
-
-                this.watch('state', lang.hitch(this, '_updateDisableStateButtons'));
             },
 
             resetActivity: function(){
@@ -86,10 +84,23 @@ function (
             _addClickHandler: function(name){
                 var functionName = 'on' + string.ucFirst(name) + 'Click';
                 if (! this[functionName]){
-                    this[functionName] = function(){
+                    this[functionName] = function(e){
+                        e.preventDefault();
+                        e.stopPropagation();
                         this.set('button', name);
                         this.hide();
                     }
+                }
+            },
+
+            onBackdropClick: function(e){
+                // summary:
+                //    Event called by the template when the backdrop is clicked.
+                if (e.target == this.backdrop){
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.set('button', buttons.BACKDROP_CANCEL);
+                    this.hide();
                 }
             },
 
@@ -111,34 +122,12 @@ function (
                 })))
             },
 
-            _updateDisableStateButtons: function(){
-                // summary:
-                //     Enables and disables the buttons when the state is changed
-
-                for (var index in this.disableStateButtons){
-                    if(this.get('state') == '') {
-                        domProp.set(this[this.disableStateButtons[index] + 'Node'], 'disabled', false);
-                    } else {
-                        domProp.set(this[this.disableStateButtons[index] + 'Node'], 'disabled', true);
-                    }
-                }
-            },
-
             _setContentAttr: function(content){
                 if (content.domNode){
                     domConstruct.empty(this.containerNode);
                     this.containerNode.appendChild(content.domNode);
                 } else {
                     this.containerNode.innerHTML = content;
-                }
-            },
-
-            onBackdropClick: function(e){
-                // summary:
-                //    Event called by the template when the backdrop is clicked.
-                if (e.target == this.backdrop){
-                    this.set('button', buttons.BACKDROP_CANCEL);
-                    this.hide();
                 }
             },
 
@@ -192,8 +181,6 @@ function (
 
                 domClass.add(document.body, 'no-scroll');
                 domClass.remove(this.domNode, 'hide');
-
-                this._updateDisableStateButtons();
             },
 
             _hide: function(){

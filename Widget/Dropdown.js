@@ -46,12 +46,12 @@ function (
 
             //dropdown: undefined,
 
-            startup: function(){
-                if ( ! this.target){
-                    this.target = this.domNode.previousElementSibling;
-                }
-
+            buildRendering: function(){
                 this.inherited(arguments);
+
+                if (this.content){
+                    this.containerNode.innerHTML = this.content;
+                }
 
                 this.dropdown = this.containerNode.firstElementChild;
 
@@ -59,6 +59,15 @@ function (
                 if (!domAttr.has(this.dropdown, 'tabindex')){
                     domAttr.set(this.dropdown, 'tabindex', 1);
                 }
+            },
+
+            startup: function(){
+                if ( ! this.target){
+                    this.target = this.domNode.previousElementSibling;
+                }
+
+                this.inherited(arguments);
+
                 on(this.target, 'click', lang.hitch(this, this.onClick));
             },
 
@@ -68,13 +77,14 @@ function (
                 domClass.remove(this.domNode, 'hidden');
                 domClass.add(this.domNode, 'open');
                 this.position();
+                this._priorFocus = focus.curNode;
                 focus.focus(this.dropdown);
             },
 
             _hide: function(){
                 domClass.remove(this.domNode, 'open');
                 domClass.add(this.domNode, 'hidden');
-                focus.focus(this.target);
+                focus.focus(this._priorFocus);
                 this.removeKeyListener();
             },
 
@@ -93,10 +103,10 @@ function (
                 event.preventDefault();
                 switch(event.keyCode){
                     case keys.ESCAPE:
-                        this.set('hidden', true);
+                        this.hide();
                         this.emit('cancel', {});
                     case keys.ENTER:
-                        this.set('hidden', true);
+                        this.hide();
                 }
                 this.removeKeyListener();
             },
@@ -104,16 +114,20 @@ function (
             onClick: function(event){
                 event.preventDefault();
                 if (!this.blurDelay){
-                    this.set('hidden', false);
+                    this.toggle();
                 }
             },
 
             position: function() {
-                var targetPos = domGeom.position(this.target),
-                    dropdownPos = domGeom.position(this.dropdown),
+                var targetPos = domGeom.position(this.target, true),
+                    dropdownPos = domGeom.position(this.dropdown, true),
                     box = win.getBox(),
+                    scroll = domGeom.docScroll(),
                     top;
 
+                    box.w += scroll.x;
+                    box.h += scroll.y;
+                    
                 if (targetPos.y + targetPos.h + dropdownPos.h > box.h){
                     top = targetPos.y - dropdownPos.h - 5; //TODO remove the -5 fudge
                 } else {
@@ -124,7 +138,7 @@ function (
             },
 
             onBlur: function(){
-                this.set('hidden', true);
+                this.hide();
                 this.blurDelay = true;
                 setTimeout(lang.hitch(this, function(){
                     delete(this.blurDelay);

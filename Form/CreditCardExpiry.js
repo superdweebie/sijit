@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
     './ValidationControlGroup',
-    '../Widget/_WidgetsInTemplateMixin',
+    'dijit/_WidgetsInTemplateMixin',
     '../Validator/CreditCardExpiry',
     'dojo/text!./Template/CreditCardExpiry.html',
     './Select'
@@ -23,6 +23,8 @@ function (
             postCreate: function(){
 
                 var i = new Date().getUTCFullYear(),
+                    thisyear = i,
+                    thismonth = new Date().getMonth() + 1,
                     limit = i + 10,
                     years = {},
                     months = {};
@@ -32,12 +34,14 @@ function (
                     years[i] = ('' + i).substr(2,2);
                 }
                 this.year.set('options', years);
+                this.year.set('value', thisyear);
 
                 //Create months
                 for (i = 1; i < 13; i++){
                     months[i] = i < 10 ? '0' + i : '' + i;
                 }
                 this.month.set('options', months);
+                this.month.set('value', thismonth);
 
                 this.inherited(arguments);
             }
