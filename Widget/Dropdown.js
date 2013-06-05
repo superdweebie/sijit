@@ -46,6 +46,8 @@ function (
 
             //dropdown: undefined,
 
+            placement: 'left', //left || right
+
             buildRendering: function(){
                 this.inherited(arguments);
 
@@ -127,14 +129,19 @@ function (
 
                     box.w += scroll.x;
                     box.h += scroll.y;
-                    
+
                 if (targetPos.y + targetPos.h + dropdownPos.h > box.h){
                     top = targetPos.y - dropdownPos.h - 5; //TODO remove the -5 fudge
                 } else {
                     top = targetPos.y + targetPos.h;
                 }
                 domStyle.set(this.dropdown, 'top', top + 'px');
-                domStyle.set(this.dropdown, 'left', targetPos.x + 'px');
+
+                if (this.placement == 'left'){
+                    domStyle.set(this.dropdown, 'left', targetPos.x + 'px');
+                } else if (this.placement == 'right') {
+                    domStyle.set(this.dropdown, 'left', (targetPos.x + targetPos.w - dropdownPos.w) + 'px');
+                }
             },
 
             onBlur: function(){

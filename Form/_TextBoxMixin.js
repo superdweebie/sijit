@@ -45,7 +45,7 @@ function (
             //placeholder: undefined,
 
             _setPlaceholderAttr: function(value) {
-                this.placeholder = value;
+                this._set('placeholder', value);
 
                 if(this.placeholder) {
                     domProp.set(this.textbox, 'placeholder', this.placeholder);

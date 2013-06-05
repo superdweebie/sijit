@@ -1,0 +1,16 @@
+<div class="hidden datepicker" data-dojo-attach-point="containerNode">
+    <div>
+        <table class=" table-condensed">
+            <thead>
+                <tr>
+                    <th class="prev" data-dojo-attach-event="ondijitclick: onPrev"><i class="icon-arrow-left"/></th>
+                    <th colspan="5" class="switch" data-dojo-attach-point="header" data-dojo-attach-event="ondijitclick: onHeader"></th>
+                    <th class="next" data-dojo-attach-event="ondijitclick: onNext"><i class="icon-arrow-right"/></th>
+                </tr>
+                <tr data-dojo-attach-point="dow">
+                </tr>
+            </thead>
+            <tbody data-dojo-attach-point="body" data-dojo-attach-event="ondijitclick: onSelect"></tbody>
+        </table>
+    </div>
+</div>

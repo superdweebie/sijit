@@ -5,12 +5,9 @@
 		<title>Functional Testing Sds/Form/DateTextBox</title>
 		<style type="text/css">
             @import "../../../themes/bootstrap/css/bootstrap.css";
-            @import "../../../themes/bootstrap/css/bootstrap-responsive.css";
-            @import "../../../../bootstrap/assets/datepicker.css";
 		</style>
         <script type="text/javascript" src="../../testconfig.js"></script>
         <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
-        <script type="text/javascript" src="../../Built.js"></script>
 		<script type="text/javascript">
 			require([
                 'dojo/parser',
@@ -46,7 +43,7 @@
 
             <h3>Sds/Form/DateTextBox</h3>
 
-            <p>Date Box</p>
+            <p>Date Box in day mode</p>
             <input data-dojo-type="Sds/Form/DateTextBox"
                 data-dojo-props="
                     label:'Date'
@@ -55,7 +52,7 @@
             />
             <p>Date Value: <pre id="dateTextBox1Value"></pre></p>
 
-            <p>Date Box with validator (must be greater than today)</p>
+            <p>Date Box in day mode with validator (must be greater than today)</p>
             <input data-dojo-type="Sds/Form/DateTextBox"
                 data-dojo-props="
                     label:'Date',
@@ -64,7 +61,6 @@
                 id="dateTextBox2"
             />
             <p>Date Box Value: <pre id="dateTextBox2Value"></pre></p>
-
         </form>
 	</body>
 </html>

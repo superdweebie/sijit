@@ -34,19 +34,19 @@ function (
             buildRendering: function(){
                 this.dropdown = new Dropdown({content: '<ul class="dropdown-menu"></ul>'});
                 this.inherited(arguments);
-                this.dropdown.set('target', this.textbox.parentElement);
+                this.dropdown.set('target', this.dropdownTarget);
             },
 
             startup: function(){
                 this.inherited(arguments);
-                this.set('placeholder');
+                this.set('placeholder', this.placeholder);
                 this.dropdown.startup();
                 this.dropdown.watch('hidden', lang.hitch(this, '_dropdownWatcher'));
             },
 
             _dropdownWatcher: function(property, oldValue, newValue){
                 if (!newValue){
-                    domStyle.set(this.dropdown.dropdown, 'width', domStyle.get(this.textbox.parentElement, 'width') + 'px');
+                    domStyle.set(this.dropdown.dropdown, 'width', domStyle.get(this.dropdownTarget, 'width') + 'px');
                 }
             },
 
@@ -131,7 +131,7 @@ function (
                 }
                 this._set('value', value);
             },
-            
+
             _setFocusNodeClassAttr: { node: "textbox", type: "class" }
         }
     )

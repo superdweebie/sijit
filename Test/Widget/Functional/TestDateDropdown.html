@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <title>Testing Sds/Widget/DateDropdown</title>
+       	<style type="text/css">
+            @import "../../../themes/bootstrap/css/bootstrap.css";
+        </style>
+        <script type="text/javascript" src="../../testconfig.js"></script>
+        <script type="text/javascript" src="../../../../dojo/dojo.js"></script>
+        <script type="text/javascript">
+            require([
+                'dojo/parser',
+                'dojo/query',
+                'dijit/registry',
+                'Sds/Widget/DateDropdown',
+                'Sds/Form/Textbox',
+                'dojo/domReady!'
+            ],
+            function(
+                parser,
+                query,
+                registry
+            ) {
+                parser.parse();
+
+                query('a').on('click', function(e){
+                    e.preventDefault();
+                    var dropdown = registry.getEnclosingWidget(e.target);
+                    dropdown.set('hidden', true);
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="jumbotron">
+                <h1>Testing Sds/Widget/DateDropdown</h1>
+            </div>
+            <div class="row">
+                <p>Date Dropdown</p>
+                <button id="button1" class="btn dropdown-toggle">Click me</button>
+                <div data-dojo-type="Sds/Widget/DateDropdown"
+                ></div>
+            </div>
+        </div>
+    </body>
+</html>

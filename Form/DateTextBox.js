@@ -6,7 +6,8 @@ define([
     'dojo/on',
     'dojo/date/locale',
     './ValidationTextBox',
-    'bootstrap/Datepicker'
+    'dojo/text!./Template/DateTextBox.html',
+    '../Widget/DateDropdown'
 ],
 function (
     declare,
@@ -16,53 +17,53 @@ function (
     on,
     dateLocale,
     ValidationTextBox,
-    Datepicker
+    template,
+    DateDropdown
 ){
     return declare(
         [ValidationTextBox],
         {
-            placeholder: {format: ''},
 
-            formatLength: 'short',
+            templateString: template,
 
-            //_datepicker: undefined,
+            formatLength: 'short', // short | long
 
-            // there is no typing for this input, so the delay timer can be removed
-            // to make it feel more snappy
-            delayTimeout: 0,
-
-            postCreate: function(){
+            buildRendering: function(){
+                this.dateDropdown = new DateDropdown({placement: 'right'});
                 this.inherited(arguments);
-                this._datepicker = new Datepicker(this.textbox, {format: dateLocale._parseInfo().bundle['dateFormat-' + this.formatLength]});
-                //append to body to avoid relative parent containers
-                domConstruct.place(this._datepicker.picker, document.body);
-                domStyle.set(this._datepicker.picker, {
-                    zIndex:9999
-                });
-                this._datepicker.setValue = lang.hitch(this, function(){
-                    this.set('value', dateLocale.format(this._datepicker.date, {selector: 'date', formatLength: this.formatLength}));
-                });
-                on(this.domNode, 'click', function(e){
-                    //if allowed to propogate, it will hide the datepicker
-                    e.stopPropagation();
-                });
+                this.dateDropdown.set('target', this.dropdownTarget);
             },
 
-            onFocus: function(){
-                this._datepicker.show();
+            startup: function(){
                 this.inherited(arguments);
+                this.set('placeholder', this.placeholder);
+                this.dateDropdown.startup();
+                this.dateDropdown.watch('hidden', lang.hitch(this, '_dateDropdownWatcher'));
+            },
+
+            _dateDropdownWatcher: function(property, oldValue, newValue){
+                if (newValue){
+                    this.set('value', this.dateDropdown.get('value'));
+                } else {
+                    this.dateDropdown.set('value', this.get('value'));
+                }
             },
 
             _setPlaceholderAttr: function(value){
-                if (value.hasOwnProperty('format')){
+                if (!value){
                     value = dateLocale._parseInfo().bundle['dateFormat-' + this.formatLength];
                 }
                 this.inherited(arguments, [value]);
             },
 
-            parse: function(value, constraints){
-                return dateLocale.parse(value, lang.mixin({selector: 'date', formatLength: this.formatLength}, constraints));
+            blurFormat: function(value) {
+                return dateLocale.format(value, {selector: 'date', formatLength: this.formatLength});
             }
+
+
+//            parse: function(value, constraints){
+//                return dateLocale.parse(value, lang.mixin({selector: 'date', formatLength: this.formatLength}, constraints));
+//            }
         }
     );
 });
