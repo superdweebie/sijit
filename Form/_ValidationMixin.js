@@ -6,7 +6,6 @@ define([
     'dojo/Deferred',
     'dojo/dom-class',
     '../is',
-    '../Validator/Base',
     'get!ValidatorFactory',
     'dijit/_FocusMixin'
 ],
@@ -18,7 +17,6 @@ function (
     Deferred,
     domClass,
     is,
-    ValidatorBase,
     ValidatorFactory,
     FocusMixin
 ){
@@ -229,6 +227,9 @@ function (
                 if (is.isValidator(this.validator)){
                     var timestamp = new Date().getTime();
                     this._processValidationResult(this.validator.isValid(this.get('value')), timestamp);
+                } else {
+                    //no validator set, so process an empty result to clear any old messages or styles
+                    this._processValidationResult({result: true, messages: []}, new Date().getTime());
                 }
             },
 

@@ -46,11 +46,13 @@ function (
             },
 
             _show: function(){
+                this.opening = true; //this is a hook for Sds/Form/DateTextBox:onBlur to delay postActivity
                 this._mode = 'Day';
                 this.openTo = new Date(this.get('value').getTime());
 
                 this._fill();
                 this.inherited(arguments);
+                delete(this.opening);
             },
 
             onPrev: function(e){
@@ -85,6 +87,12 @@ function (
                     this._mode = 'Month';
                     this._fill();
                 } else {
+                    if (domClass.contains(e.target, 'old')){
+                        this.openTo.setMonth(this.openTo.getMonth() - 1);
+                    }
+                    if (domClass.contains(e.target, 'new')){
+                        this.openTo.setMonth(this.openTo.getMonth() + 1);
+                    }
                     this.openTo.setDate(e.target.innerHTML);
                     this.set('value', this.openTo);
                     this.hide();

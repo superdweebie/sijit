@@ -121,7 +121,7 @@ function (
                 } else {
                     this.textbox.value = this.blurFormat(value, this.constraints);
                 }
-                this.inherited(arguments, [this.parse(filteredValue, this.constraints)]);
+                this._set('value', this.parse(filteredValue, this.constraints));
             },
 
             _setFocusNodeClassAttr: { node: "focusNode", type: "class" },

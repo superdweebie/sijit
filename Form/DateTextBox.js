@@ -1,9 +1,6 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/dom-construct',
-    'dojo/dom-style',
-    'dojo/on',
     'dojo/date/locale',
     './ValidationTextBox',
     'dojo/text!./Template/DateTextBox.html',
@@ -12,9 +9,6 @@ define([
 function (
     declare,
     lang,
-    domConstruct,
-    domStyle,
-    on,
     dateLocale,
     ValidationTextBox,
     template,
@@ -26,7 +20,9 @@ function (
 
             templateString: template,
 
-            formatLength: 'short', // short | long
+            formatLength: 'medium', // short | medium | long and more. See dojo/cldr/nls
+
+            placeholder: 'dd/mm/yyyy',
 
             buildRendering: function(){
                 this.dateDropdown = new DateDropdown({placement: 'right'});
@@ -49,21 +45,30 @@ function (
                 }
             },
 
-            _setPlaceholderAttr: function(value){
-                if (!value){
-                    value = dateLocale._parseInfo().bundle['dateFormat-' + this.formatLength];
+            onBlur: function(){
+                if (!this.dateDropdown.opening){
+                    this.inherited(arguments);
                 }
-                this.inherited(arguments, [value]);
+                //this.set('postActivity', true);
+
+                //this.validateNow(); //Force immediate validation on blur, no need to wait for the delay timer.
             },
 
             blurFormat: function(value) {
-                return dateLocale.format(value, {selector: 'date', formatLength: this.formatLength});
+                if (typeof value == 'string'){
+                    return value;
+                } else {
+                    return dateLocale.format(value, {selector: 'date', formatLength: this.formatLength});
+                }
+            },
+
+            parse: function(value){
+                if (typeof value == 'string'){
+                    return dateLocale.parse(value, lang.mixin({selector: 'date', formatLength: this.formatLength}));
+                } else {
+                    return value;
+                }
             }
-
-
-//            parse: function(value, constraints){
-//                return dateLocale.parse(value, lang.mixin({selector: 'date', formatLength: this.formatLength}, constraints));
-//            }
         }
     );
 });
