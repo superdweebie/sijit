@@ -16,16 +16,6 @@ Using composer, add this to your root composer.json:
         "dojo/Sds": "dev-master"
     }
 
-Some UI compoents also require dojo/bootstrap, which can be installed the same way:
-
-    git clone http://github.com/xsokev/Dojo-Bootstrap dojo/bootstrap
-
-or
-    "repositories": [{ "type": "composer", "url": "https://raw.github.com/superdweebie/dojo/master" }],
-    "require": {
-        "dojo/bootstrap": "dev-master"
-    }
-
 #Components
 
 For more information on how to use each of the components listed below, see the docs folder.

@@ -2,15 +2,14 @@ define([
     'dojo/_base/declare',
     './ValidationControlGroup',
     'dijit/_WidgetsInTemplateMixin',
-    '../Validator/CreditCardExpiry',
     'dojo/text!./Template/CreditCardExpiry.html',
-    './Select'
+    './Select',
+    '../Validator/CreditCardExpiry'
 ],
 function (
     declare,
     ValidationControlGroup,
     WidgetsInTemplateMixin,
-    CreditCardExpiryValidator,
     template
 ){
     return declare(
@@ -18,7 +17,7 @@ function (
         {
             templateString: template,
 
-            validator: new CreditCardExpiryValidator,
+            validator: 'CreditCardExpiry',
 
             postCreate: function(){
 

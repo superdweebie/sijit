@@ -41,15 +41,15 @@ function(
                     this._show();
                 }
                 this._set('hidden', value);
-            },
-
-            _show: function(){
-
-            },
-
-            _hide: function(){
-
             }
+
+//            _show: function(){
+//                //Override in child module
+//            },
+//
+//            _hide: function(){
+//                //Override in child module
+//            }
         }
     );
 });

@@ -75,17 +75,20 @@
                     select = registry.byId('select6');
                     select.set('storeLabel', 'name');
                     select.set('store', stateStore);
-
+                    select.updateOptions();
+                    
                     select = registry.byId('select7');
                     select.set('storeLabel', 'name');
                     select.set('query', {name: /^.*i.*$/});
                     select.set('store', stateStore);
+                    select.updateOptions();
 
                     select = registry.byId('select8');
                     select.set('storeLabel', 'name');
                     select.set('query', {name: /^.*i.*$/});
                     select.set('store', stateStore);
                     select.set('query', {name: /^.*g.*$/});
+                    select.updateOptions();
                 });
             })
 		</script>

@@ -178,9 +178,7 @@ define([
                             }
 
                             when(this._inject(object, config), lang.hitch(this, function(injectedObject){
-                                when(this._inject(object, config), lang.hitch(this, function(injectedObject){
-                                    resolveObject(injectedObject);
-                                }));
+                                resolveObject(injectedObject);
                             }));
                         }
                     }));

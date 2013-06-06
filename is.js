@@ -13,25 +13,23 @@ function (Deferred) {
 
         isInt: function(value) {
             // summary:
-            //		Checks if a value is an integer
+            //		Checks if a value is an integer or can be cast into an integer
 
-            if((parseFloat(value) == parseInt(value)) && !isNaN(value))
-            {
-                return true;
-            } else {
-                return false;
-            }
+            return ((parseFloat(value) == parseInt(value)) && !isNaN(value));
         },
 
         isFloat: function(value) {
             // summary:
-            //      Checks if a value is a float
+            //      Checks if a value is a float or can be cast into an integer
 
-            if ((parseFloat(value) || parseInt(value) === 0) && !isNaN(value)){
-                return true;
-            } else {
-                return false;
-            }
+            return ((parseFloat(value) || parseInt(value) === 0) && !isNaN(value));
+        },
+
+        isDate: function(value) {
+            // summary:
+            //      Checks if a value is a date object. Will not attempt to cast a string
+            //      into a date. If you need to cast strings to dates, look at dojo/date
+            return value instanceof Date;
         },
 
         isDeferred: function(/*object*/object){
@@ -41,13 +39,7 @@ function (Deferred) {
             // returns:
             //     boolean
 
-            if (object instanceof Deferred){
-                return true;
-            }
-            if (object && object.isInstanceOf && object.isInstanceOf(Deferred)){
-                return true;
-            }
-            return false;
+            return (object instanceof Deferred || (object && object.isInstanceOf && object.isInstanceOf(Deferred)));
         },
 
         isStatic: function(/*object*/value){

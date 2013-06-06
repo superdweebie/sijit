@@ -2,38 +2,38 @@
 	"http://www.w3.org/TR/html4/strict.dtd">
 <html>
 	<head>
-		<title>Testing Sds/Validator/Datatype</title>
+		<title>Testing Sds/Validator/Is</title>
         <script type="text/javascript" src="../testconfig.js"></script>
         <script type="text/javascript" src="../../../dojo/dojo.js"></script>
 		<script type="text/javascript">
             require([
                     'doh/main',
-                    'Sds/Validator/Datatype',
+                    'Sds/Validator/Is',
                     'dojo/domReady!'
                 ],
                 function(
                     doh,
-                    Datatype
+                    Is
                 ){
 
-                    doh.register("Sds/Test/Validator/TestDatatype", [
+                    doh.register("Sds/Test/Validator/TestIs", [
 
                         function StringTest(doh){
-                            var validator = new Datatype({requiredType: Datatype.STRING});
+                            var validator = new Is({type: Is.STRING});
 
                             doh.assertTrue(validator.isValid('password1').result);
                             doh.assertFalse(validator.isValid(1).result);
                         },
 
                         function BooleanTest(doh){
-                            var validator = new Datatype({requiredType: Datatype.BOOLEAN});
+                            var validator = new Is({type: Is.BOOLEAN});
 
                             doh.assertTrue(validator.isValid(true).result);
                             doh.assertTrue(validator.isValid(false).result);
                         },
 
                         function IntTest(doh){
-                            var validator = new Datatype({requiredType: Datatype.INT});
+                            var validator = new Is({type: Is.INT});
 
                             doh.assertTrue(validator.isValid(1).result);
                             doh.assertTrue(validator.isValid('1').result);
@@ -44,7 +44,7 @@
                         },
 
                         function FloatTest(doh){
-                            var validator = new Datatype({requiredType: Datatype.FLOAT});
+                            var validator = new Is({type: Is.FLOAT});
 
                             doh.assertTrue(validator.isValid(1).result);
                             doh.assertTrue(validator.isValid('1').result);
@@ -63,6 +63,6 @@
 		</script>
 	</head>
 	<body>
-        <h1>Testing Sds/Validator/Datatype</h1>
+        <h1>Testing Sds/Validator/Is</h1>
 	</body>
 </html>

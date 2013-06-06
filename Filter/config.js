@@ -6,6 +6,11 @@ define ([], function (){
                 gets: {
                     manager: 'Sds/ModuleManager/Shared/getModuleManager!'
                 }
+            },
+            'Sds/Filter/Group': {
+                directives: {
+                    cache: false
+                }
             }
         }
     };

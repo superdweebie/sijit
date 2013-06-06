@@ -1,7 +1,7 @@
 define([
     'dojo/_base/declare',
     'dojo/_base/lang',
-    'dojo/string',
+    '../string',
     'dojo/i18n!../nls/validatorMessages',
     '../is',
     './Base'
@@ -15,22 +15,19 @@ function(
     Base
 ){
 
-    // These are the possible datatypes that can be tested for
-    var datatypes = {
+    // These are the possible things that can be tested for
+    var types = {
         STRING: 'string',
         BOOLEAN: 'boolean',
         INT: 'int',
         FLOAT: 'float',
-        HASH: 'hash',
-        DATE: 'date',
-        TIMESTAMP: 'timestamp',
-        BIN: 'bin'
+        DATE: 'date'
     };
 
     var validator = declare(
         [Base],
         {
-            requiredType: datatypes.STRING,
+            type: types.STRING,
 
             _isValid: function(value){
                 // Will return true if the value is the required type.
@@ -39,30 +36,29 @@ function(
                 var messages = [],
                     result = true;
 
-                switch (this.requiredType) {
-                    case datatypes.STRING:
+                switch (this.type) {
+                    case types.STRING:
                         if (typeof value != 'string'){
                             result = false;
                         }
                         break;
-                    case datatypes.BOOLEAN:
+                    case types.BOOLEAN:
                         break;
-                    case datatypes.INT:
-                        if ( ! is.isInt(value)){
-                            result = false;
-                        }
+                    case types.INT:
+                        result = is.isInt(value);
                         break;
-                    case datatypes.FLOAT:
-                        if ( ! is.isFloat(value)){
-                            result = false;
-                        }
+                    case types.FLOAT:
+                        result = is.isFloat(value);
+                        break;
+                    case types.DATE:
+                        result = is.isDate(value);
                         break;
                 }
 
                 if ( ! result){
                     messages.push(string.substitute(
-                        validatorMessages.dataType,
-                        {requiredType: this.requiredType}
+                        validatorMessages.is,
+                        {type: this.type}
                     ))
                 }
 
@@ -71,7 +67,7 @@ function(
         }
     );
 
-    lang.mixin(validator, datatypes);
+    lang.mixin(validator, types);
 
     return validator;
 });

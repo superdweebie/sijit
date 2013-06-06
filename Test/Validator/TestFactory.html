@@ -23,7 +23,7 @@
 
                             var testDeferred = new doh.Deferred;
 
-                            when(validatorFactory.create({base: 'Sds/Validator/Datatype', params: {requiredType: 'string'}}), function(validator){
+                            when(validatorFactory.create({base: 'Sds/Validator/Is', params: {type: 'string'}}), function(validator){
 
                                 var testArray = [
                                     [true, 'username'],
@@ -49,9 +49,9 @@
 
                             var testDeferred = new doh.Deferred;
 
-                            when(validatorFactory.create('Sds/Validator/Datatype'), function(validator){
+                            when(validatorFactory.create('Sds/Validator/Is'), function(validator){
 
-                                validator.requiredType = 'string';
+                                validator.type = 'string';
 
                                 var testArray = [
                                     [true, 'username'],
@@ -79,8 +79,8 @@
 
                             when(validatorFactory.create([
                                 {
-                                    base: 'Sds/Validator/Datatype',
-                                    params: {requiredType: 'string'}
+                                    base: 'Sds/Validator/Is',
+                                    params: {type: 'string'}
                                 },
                                 'Sds/Validator/Identifier'
                             ]), function(validator){
@@ -113,8 +113,8 @@
                             when(validatorFactory.create('Sds/Validator/Identifier'), function(identifierValidator){
                                 when(validatorFactory.create([
                                     {
-                                        base: 'Sds/Validator/Datatype',
-                                        params: {requiredType: 'string'}
+                                        base: 'Sds/Validator/Is',
+                                        params: {type: 'string'}
                                     },
                                     identifierValidator
                                 ]), function(validator){

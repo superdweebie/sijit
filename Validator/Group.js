@@ -15,7 +15,9 @@ function(
     return declare(
         [Base],
         {
-            validators: [],
+            constructor: function(){
+                this.validators = [];
+            },
 
             hasInstanceOf: function(Constructor){
                 for (var item in this.validators){

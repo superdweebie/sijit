@@ -6,7 +6,6 @@ define([
     'Sds/Test/Validator/TestCreditCardExpiry',
     'Sds/Test/Validator/TestCreditCard',
     'Sds/Test/Validator/TestCurrency',
-    'Sds/Test/Validator/TestDatatype',
     'Sds/Test/Validator/TestDateInequality',
     'Sds/Test/Validator/TestEmailAddress',
     'Sds/Test/Validator/TestHexColor',
@@ -15,6 +14,7 @@ define([
     'Sds/Test/Validator/TestIdentifierArray',
     'Sds/Test/Validator/TestIdentifier',
     'Sds/Test/Validator/TestInequality',
+    'Sds/Test/Validator/TestIs',
     'Sds/Test/Validator/TestRequired',
     'Sds/Test/Validator/TestGroup',
     'Sds/Test/Validator/TestFactory'

@@ -8,7 +8,7 @@
 		<script type="text/javascript">
             require([
                     'doh/main',
-                    'Sds/Validator/Datatype',
+                    'Sds/Validator/Is',
                     'Sds/Validator/Identifier',
                     'Sds/Validator/Group',
                     'Sds/Test/Validator/Asset/DeferredValidator',
@@ -16,7 +16,7 @@
                 ],
                 function(
                     doh,
-                    Datatype,
+                    Is,
                     Identifier,
                     Group,
                     DeferredValidator
@@ -26,7 +26,7 @@
                         function ValidatorTest(doh){
 
                             var validator = new Group({validators: [
-                                new Datatype({requiredType: Datatype.STRING}),
+                                new Is({type: Is.STRING}),
                                 new Identifier()
                             ]});
 
@@ -52,7 +52,7 @@
 
                             var validator = new Group({validators: [
                                 new DeferredValidator(),
-                                new Datatype({requiredType: Datatype.STRING}),
+                                new Is({type: Is.STRING}),
                             ]});
 
                             validator.isValid('awesome').result.then(function(resultObject){
@@ -69,7 +69,7 @@
 
                             var validator = new Group({validators: [
                                 new DeferredValidator(),
-                                new Datatype({requiredType: Datatype.STRING}),
+                                new Is({type: Is.STRING}),
                             ]});
 
                             validator.isValid(1233456).result.then(function(resultObject){

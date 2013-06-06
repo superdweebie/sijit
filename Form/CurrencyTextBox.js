@@ -4,7 +4,7 @@ define([
     'dojo/currency',
     './ValidationTextBox',
     './_NumberTextBoxMixin',
-    '../Validator/Base',
+    '../is',
     '../Validator/Currency',
     '../Validator/Group',
     '../Filter/Currency'
@@ -15,7 +15,7 @@ function (
     currency,
     ValidationTextBox,
     NumberTextBoxMixin,
-    BaseValidator,
+    is,
     CurrencyValidator,
     GroupValidator,
     CurrencyFilter
@@ -27,11 +27,11 @@ function (
 
             placeholder: {format: 0},
 
-            validator: [],
-
             _formatter: currency.format,
 
             _parser: currency.parse,
+
+            validator: 'Currency',
 
             _setCurrencyAttr: function(value){
                 this.set('prepend', currency._mixInDefaults({currency: value}).symbol);
@@ -71,24 +71,24 @@ function (
 
             _setValidatorAttr: function(value){
 
-                if (BaseValidator.isValidator(value) && (value.isInstanceOf(CurrencyValidator) ||
-                            value.isInstanceOf(GroupValidator) && value.hasInstanceOf(CurrencyValidator))
+                if (is.isValidator(value) && (value.isInstanceOf(CurrencyValidator) ||
+                    value.isInstanceOf(GroupValidator) && value.hasInstanceOf(CurrencyValidator))
                 ) {
-                    this.inherited(arguments);                              
+                    this.inherited(arguments);
                     return;
                 }
-                      
+
                 if ( ! lang.isArray(value)){
                     value = [value];
                 }
-                
+
                 for (var index in value){
                     if (value[index].isInstanceOf && value[index].isInstanceOf(CurrencyValidator)){
                         var has = true;
                         break;
                     }
                 }
-                
+
                 if ( ! has){
                     value.push(new CurrencyValidator);
                 }
@@ -103,7 +103,7 @@ function (
                 }
                 value.push(new CurrencyFilter({currency: this.currency}));
                 this.inherited(arguments, [value]);
-            }                      
+            }
         }
     );
 });

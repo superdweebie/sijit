@@ -40,10 +40,6 @@ var profile = {
     {
         "name":"Sds",
         "location":"vendor/dojo/Sds"
-    },
-    {
-        "name":"bootstrap",
-        "location":"vendor/dojo/bootstrap"
     }
     ],
     "layers":{

@@ -8,7 +8,6 @@ define({ root:
     currency: 'Must be currency format.',
     creditCardExpiry: 'Must be a valid credit card expiry date.',
     creditCard: 'Must be a valid credit card number.',
-    dataType: 'Value must be a ${requiredType}.',
     email: 'Must be a valid email address.',
     hexColor: 'Must be a valid RGB color hex.',
     identifierArray: '${name} not valid. ${message}',
@@ -18,6 +17,7 @@ define({ root:
     inequalityGreaterThan: 'Must be greater than ${compareValue}.',
     inequalityGreaterThanOrEqual: 'Must be greater than or equal to ${compareValue}.',
     inequalityNotEqual: 'Must not be equal to ${compareValue}.',
+    is: 'Value must be a ${type}.',
     length: 'Must be between ${min} and ${max} characters long.',
     required: 'This value is required.'
 })

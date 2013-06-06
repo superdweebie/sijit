@@ -18,15 +18,15 @@ function(
             //      Note that this validator isn't much good for general purpose currency
             //      checking. It is designed to work in concert with the PadCurrency
             //      filter and the CurrencyTextbox.
-           
+
             _isValid: function(value){
 
                 var messages = [],
                     result = true;
 
-                if (isNaN(value)){
+                if (isNaN(value) && typeof value != 'undefined'){
                     result = false;
-                    messages.push(validatorMessages.currency);                    
+                    messages.push(validatorMessages.currency);
                 }
 
                 return {result: result, messages: messages};

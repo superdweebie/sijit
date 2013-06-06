@@ -2,7 +2,9 @@ define([
     'dojo/_base/declare',
     'dojo/_base/lang',
     'dojo/_base/array',
+    'dojo/Deferred',
     'dojo/when',
+    'dojo/store/Memory',
     './_LabelMixin',
     './_HelpMessagesMixin',
     'dijit/form/_FormValueMixin',
@@ -13,7 +15,9 @@ function (
     declare,
     lang,
     array,
+    Deferred,
     when,
+    Memory,
     LabelMixin,
     HelpMessagesMixin,
     FormValueMixin,
@@ -35,38 +39,45 @@ function (
 
             // storeLabel: string
             //		The entries in the drop down list come from this attribute in the dojo.store items.
-            //		If ``store`` is set, labelAttr must be set too.
+            //		If ``store`` is set, storeLabel must be set too.
+            storeLabel: 'label',
 
             // sortByLabel: Boolean
             sortByLabel: true,
 
+            //_currentOptions: [],
+
+            //addOption: function(value, label){
+                //override
+            //},
+
+            //removeOption: function(value){
+                //override
+            //},
+
             buildRendering: function(){
+
+                this._currentOptions = {};
+
                 this.inherited(arguments);
 
-                // Add options tags if not using store
-                if (this.get('store')){
-                    this._updateOptionsFromStore();
-                } else {
-                    var source = this.srcNodeRef;
-                    if(source && source.options){
-                        array.forEach(source.options, lang.hitch(this, function(option){
-                            this.addOption(option.value, option.text);
-                        }));
-                        if ( !this.value){
-                            this.set('value', source.value);
-                        }
+                if ( !this.value && this.source){
+                    this.value = this.srcNodeRef.value;
+                }
+
+                if ( !this.get('store')){
+                    if (this.srcNodeRef && this.srcNodeRef.options) {
+                        //store doesn't exist, so create it from the options inside srcNode
+                        this.store = new Memory({data: array.map(this.srcNodeRef.options, lang.hitch(this, function(option){
+                            if (option.selected){
+                                this.value = option.value;
+                            }
+                            return {id: option.value, label: option.text};
+                        }))});
+                    } else {
+                        this.store = new Memory;
                     }
                 }
-            },
-
-            _setStoreLabelAttr: function(storeLabel){
-                this.storeLabel = storeLabel;
-                this._updateOptionsFromStore();
-            },
-
-            _setStoreAttr: function(store){
-                this.store = store;
-                this._updateOptionsFromStore();
             },
 
             _getStoreAttr: function(){
@@ -78,65 +89,55 @@ function (
                 return this.store;
             },
 
-            _setQueryAttr: function(query){
-                this.query = query;
-                this._updateOptionsFromStore();
-            },
+            updateOptions: function(){
 
-            _updateOptionsFromStore: function(){
-                if (this.store && this.storeLabel){
-                    when(this.store.query(this.query, this.queryOptions), lang.hitch(this, function(data){
-                        var existingOptions = this.get('options');
-                        var idProperty = this.store.idProperty;
+                var doneDeferred = new Deferred;
+                when(this.store.query(this.query, this.queryOptions), lang.hitch(this, function(data){
 
-                        var addOptions = data.filter(function(option){
-                            if (existingOptions[option[idProperty]]){
-                                return false;
-                            } else {
-                                return true;
-                            }
-                        });
+                    var i,
+                        newOptions = {},
+                        oldOptions = this._currentOptions,
+                        idProperty = this.store.idProperty,
+                        storeLabel = this.storeLabel;
 
-                        var removeOptions = lang.clone(existingOptions);
-                        data.forEach(function(option){
-                            if (existingOptions[option[idProperty]]){
-                                delete removeOptions[option[idProperty]];
-                            }
-                        });
+                    array.forEach(data, function(option){
+                        newOptions[option[idProperty]] = option[storeLabel];
+                    });
 
-                        for (var index in removeOptions){
-                            this.removeOption(index);
+                    for (i in oldOptions){
+                        if (!newOptions[i]){
+                            this.removeOption(i, oldOptions[i]);
                         }
+                    }
+                    for (i in newOptions){
+                        if (!oldOptions[i]){
+                            this.addOption(i, newOptions[i]);
+                        }
+                    }
 
-                        array.forEach(addOptions, lang.hitch(this, function(option){
-                            this.addOption(option[idProperty], option[this.storeLabel]);
-                        }));
-                        //reset value once items have been added. This allows Ajax values to be returned before setting the select value
-                        this.set('value', this.value);
-                    }));
-                }
+                    this._currentOptions = newOptions;
+
+                    //reset value once items have been added. This allows Ajax values to be returned before setting the select value
+                    this.set('value', this.value);
+
+                    doneDeferred.resolve();
+                }));
+
+                return doneDeferred;
             },
-
-            //addOption: function(value, label){
-                //override
-            //},
-
-            //removeOption: function(value){
-                //override
-            //},
 
             _setOptionsAttr: function(options){
-                for (var value in options){
-                    this.addOption(value, options[value]);
+                var data = [],
+                    value;
+                for (value in options){
+                    data.push({id: value, label: options[value]});
                 }
-                this.set('value', this.value);
+                this.set('store', new Memory({data: data}));
             },
 
-            //_getOptionsAttr: function(){
-                //overide
-            //},
-
-            _setFocusNodeClassAttr: { node: "focusNode", type: "class" }
+            _getOptionsAttr: function(){
+                return this._currentOptions;
+            }
         }
     )
 });

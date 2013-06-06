@@ -44,7 +44,7 @@ function (
 
             onOkClick: function(){
                 if (this.get('state') == ''){
-                    this.set('button', buttons.OK);
+                    this.set('button', buttons.OK.name);
                     this.hide();
                 } else {
                     array.forEach(this.get('invalidWidgets'), function(widget){

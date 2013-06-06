@@ -4,14 +4,14 @@ define([
     ],
     function(
         doh,
-        PadCurrency
+        Currency
     ){
         doh.register("Sds/Test/Filter/TestCurrency", [
 
             function FilterTest(doh){
                 var filter = new Currency;
                 filter.currency = 'USD';
-                
+
                 var testArray = [
                     [null, null],
                     ['1', '1'],
@@ -19,8 +19,8 @@ define([
                     ['1.00', '1.00'],
                     ['1.00', '1.000'],
                     ['1.01', '1.008'],
-                    ['1.00', '1.002'],                    
-                    ['2.00', '1.995'],                      
+                    ['1.00', '1.002'],
+                    ['2.00', '1.995'],
                 ];
 
                 var index;
