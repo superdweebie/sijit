@@ -19,8 +19,7 @@ function(
 
             filter: function(value){
                 if (typeof value == 'string'){
-//                    return lang.trim(value);
-                    return value;
+                    return lang.trim(value);
                 }
                 return value;
             }
