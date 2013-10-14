@@ -247,7 +247,7 @@ function (
                     if(faux._wasConsumed){ return; } // if preventDefault was called
                     this.defer(function(){ this._onInput(faux); }); // widget notification after key has posted
                 };
-                this.own(on(this.textbox, "keydown, keypress, paste, cut, input, compositionend", lang.hitch(this, handleEvent)));
+                this.own(on(this.textbox, "keydown, keypress, keyup, paste, cut, input, compositionend", lang.hitch(this, handleEvent)));
             }
         }
     );
