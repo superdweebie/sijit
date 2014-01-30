@@ -77,6 +77,11 @@ function (
 
                 this._startValidateTimer();
             },
+            
+            destroy: function(){
+                clearTimeout(this._delayTimer);
+                this.inherited(arguments);
+            }, 
 
             _setSuppressValidationAttr: function(value){
                 if (this.suppressValidation && !value){
